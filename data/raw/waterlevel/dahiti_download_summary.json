@@ -1,0 +1,13 @@
+{
+  "downloaded_at": "2026-09-02 04:49",
+  "stations": {
+    "TanChau": {
+      "dahiti_id": 627,
+      "target_name": "Mekong, River"
+    },
+    "MyTho": {
+      "dahiti_id": 3316,
+      "target_name": "Unnamed, River"
+    }
+  }
+}

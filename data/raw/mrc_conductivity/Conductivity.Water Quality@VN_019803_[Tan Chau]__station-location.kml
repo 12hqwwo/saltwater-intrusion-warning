@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+<Placemark>
+  <name>VN_019803_[Tan Chau]</name>
+  <description>Tan Chau</description>
+  <Point>
+    <coordinates>105.2480164,10.80062008,0</coordinates>
+  </Point>
+</Placemark>
+</Document>
+</kml>

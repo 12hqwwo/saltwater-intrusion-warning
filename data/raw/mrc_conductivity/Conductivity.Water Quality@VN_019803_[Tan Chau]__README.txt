@@ -1,0 +1,20 @@
+# Time series identifier: Conductivity.Water Quality@VN_019803_[Tan Chau]
+# Location identifier: VN_019803_[Tan Chau]
+# UTC offset: (UTC+07:00)
+# Value units: mS/m
+# Value parameter: Conductivity
+# Value label: Water Quality
+#
+# Location identifier: VN_019803_[Tan Chau]
+# Location name: Tan Chau
+# Country: N/A
+# River: N/A
+# Latitude: 10.80062008
+# Longitude: 105.2480164
+#
+# Disclaimer: The Mekong River Commission make no warranties about this data and disclaim all responsibility and liability for all expenses, losses, damages and costs which may be incurred as a result of the data being inaccurate or incomplete in any way and for any reason. The data contained herein do not imply the expression of any opinion whatsoever on the part of the Mekong River Commission concerning the legal status of any country, territory, city or area or of its authorities, or concerning the delineation of its frontiers or boundaries.
+#
+# Export options: Corrected signal from 1985-05-14T17:00:00Z to 2023-12-14T17:00:00Z
+#
+# Generated at 2026-09-01T02:43:33+07
+#
