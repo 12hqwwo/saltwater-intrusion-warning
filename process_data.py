@@ -82,7 +82,8 @@ def get_glofas():
             var_name = [v for v in ds.data_vars if v != 'crs'][0]  # lay bien chinh phai la data
             
             # Xu ly theo chieu thoi gian
-            df_nc = ds[var_name].mean(dim=['lat', 'lon']).to_dataframe().reset_index()
+            dims = [d for d in ds.dims if d in ('lat', 'lon', 'latitude', 'longitude')]
+            df_nc = ds[var_name].mean(dim=dims).to_dataframe().reset_index()
             # Rename cho chuan
             df_nc = df_nc.rename(columns={'time': 'date', "valid_time": "date", var_name: "glofas_discharge_m3s"})
             
