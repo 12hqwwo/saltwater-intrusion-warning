@@ -1,7 +1,4 @@
 .env
 __pycache__/
-*.parquet
-*.nc
-data/raw/waterlevel/glofas_tanchau/
 *.tmp
 .DS_Store
