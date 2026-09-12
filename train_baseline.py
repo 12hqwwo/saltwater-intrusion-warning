@@ -11,12 +11,14 @@ PROCESSED_DIR = DATA_DIR / "processed"
 MASTER_CSV = PROCESSED_DIR / "master_timeseries.csv"
 
 def prepare_data(df, target_col='conductivity_mS_per_m', lag_months=1):
-    # Lấy dữ liệu Mỹ Tho
+    # Lấy dữ liệu Mỹ Tho, Tân Châu và Vũng Tàu
     df_mytho = df[df['station'] == 'MyTho'][['month_start', target_col]].dropna()
     df_tanchau = df[df['station'] == 'TanChau'][['month_start', 'glofas_discharge_m3s']].dropna()
+    df_vungtau = df[df['station'] == 'VungTau'][['month_start', 'tide_max_m']].dropna()
     
-    # Merge
-    merged = pd.merge(df_mytho, df_tanchau, on='month_start', how='inner').sort_values('month_start')
+    # Merge tất cả lại
+    merged = pd.merge(df_mytho, df_tanchau, on='month_start', how='inner')
+    merged = pd.merge(merged, df_vungtau, on='month_start', how='inner').sort_values('month_start')
     merged.set_index('month_start', inplace=True)
     
     # Tạo lag features
@@ -40,7 +42,7 @@ def main():
 
     # Giả định độ trễ lý tưởng là 2 tháng (dựa theo kết quả cross-correlation)
     # Có thể điều chỉnh lại sau khi chạy cross_correlation.py
-    best_lag = 2
+    best_lag = 1
     data = prepare_data(df, lag_months=best_lag)
     
     if data.empty:
@@ -62,7 +64,7 @@ def main():
     print(f"[Baseline Naive] RMSE: {rmse_naive:.4f}")
 
     # --- 2. Random Forest ---
-    features = [f'discharge_lag_{best_lag}', 'salinity_lag_1']
+    features = [f'discharge_lag_{best_lag}', 'salinity_lag_1', 'tide_max_m']
     rf = RandomForestRegressor(n_estimators=100, random_state=42)
     rf.fit(train[features], train['conductivity_mS_per_m'])
     
@@ -71,9 +73,9 @@ def main():
     print(f"[Random Forest] RMSE: {rmse_rf:.4f}")
 
     # --- 3. SARIMA ---
-    # Exogenous variable là discharge
-    exog_train = train[[f'discharge_lag_{best_lag}']]
-    exog_test = test[[f'discharge_lag_{best_lag}']]
+    # Exogenous variable là discharge và đỉnh triều cực đại (tide_max)
+    exog_train = train[[f'discharge_lag_{best_lag}', 'tide_max_m']]
+    exog_test = test[[f'discharge_lag_{best_lag}', 'tide_max_m']]
     
     try:
         # Order cơ bản (1,0,0) - (0,1,1,12) cho chuỗi tháng

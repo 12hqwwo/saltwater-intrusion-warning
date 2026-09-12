@@ -2,7 +2,7 @@ import sys, os, time
 from pathlib import Path
 import cdsapi
 
-ENV_PATH = Path(".env")
+ENV_PATH = Path(__file__).parent.parent / ".env"
 if ENV_PATH.exists():
     for line in ENV_PATH.read_text().splitlines():
         line = line.strip()

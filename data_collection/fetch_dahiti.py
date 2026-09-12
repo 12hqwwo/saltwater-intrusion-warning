@@ -10,7 +10,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Load .env
-ENV_PATH = Path(__file__).parent / ".env"
+ENV_PATH = Path(__file__).parent.parent / ".env"
 for line in ENV_PATH.read_text().splitlines():
     line = line.strip()
     if line and not line.startswith("#") and "=" in line:

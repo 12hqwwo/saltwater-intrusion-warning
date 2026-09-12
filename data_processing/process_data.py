@@ -113,11 +113,29 @@ def get_glofas():
         return df_all.groupby(['station', 'month_start']).mean().reset_index()
     return pd.DataFrame()
 
+# 5. Ham xu ly Vung Tau Tide Max (Daily -> Monthly Max)
+def get_tide():
+    print("Loading Vung Tau Tide Max...")
+    dfs = []
+    for f in glob.glob(str(DATA_DIR / "raw" / "waterlevel" / "*VungTau*.csv")):
+        df = pd.read_csv(f)
+        if df.empty: continue
+        df['date'] = pd.to_datetime(df['date'])
+        df['month_start'] = df['date'].dt.to_period('M').dt.to_timestamp()
+        
+        # Thủy triều thì quan trọng nhất là MAX theo tháng
+        df_month = df.groupby(['station', 'month_start']).agg(
+            tide_max_m=('tide_max_m', 'max')
+        ).reset_index()
+        dfs.append(df_month)
+    return pd.concat(dfs, ignore_index=True) if dfs else pd.DataFrame()
+
 def main():
     cond = get_conductivity()
     meteo = get_meteo()
     water = get_dahiti()
     disch = get_glofas()
+    tide = get_tide()
     
     print("\nMerging data...")
     # Ta dung outer merge kieu full de co matrix day du
@@ -138,6 +156,12 @@ def main():
     else:
         master['glofas_discharge_m3s'] = np.nan
         
+    # 4. Merge voi Tide (Thủy triều Vũng Tàu)
+    if not tide.empty:
+        master = pd.merge(master, tide, on=['station', 'month_start'], how='outer')
+    else:
+        master['tide_max_m'] = np.nan
+        
     master = master.sort_values(['station', 'month_start']).reset_index(drop=True)
     
     out_csv = PROCESSED_DIR / "master_timeseries.csv"
@@ -152,6 +176,7 @@ def main():
     print(f"Meteo: {meteo.shape}")
     print(f"Dahiti: {water.shape}")
     print(f"Glofas: {disch.shape}")
+    print(f"Tide: {tide.shape}")
     print(f"Master: {master.shape}")
     print("\nDate range per station:")
     print(master.groupby('station')['month_start'].agg(['min', 'max', 'count']))
