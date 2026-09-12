@@ -4,7 +4,7 @@ import numpy as np
 import xarray as xr
 from pathlib import Path
 
-DATA_DIR = Path(r"d:\Study\TLCN\data")
+DATA_DIR = Path("data")
 PROCESSED_DIR = DATA_DIR / "processed"
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -97,6 +97,7 @@ def get_glofas():
                 glofas_discharge_m3s=('glofas_discharge_m3s', 'mean')
             ).reset_index()
             df_month['station'] = 'TanChau'  # Danh rieng cho Tan Chau
+            df_month['system_version'] = ds.attrs.get('system_version', 'version_unknown')
             dfs.append(df_month)
         except Exception as e:
             print(f"  Error reading {f}: {e}")
@@ -104,6 +105,11 @@ def get_glofas():
     if dfs:
         df_all = pd.concat(dfs, ignore_index=True)
         # Vi co the trung lap giua cac file NC (do request chong cheo), group lai luon
+        # uu tien version moi nhat bang cach sort theo system_version roi lay last/first
+        if 'system_version' in df_all.columns:
+            df_all = df_all.sort_values(['station', 'month_start', 'system_version'])
+            df_all = df_all.drop_duplicates(subset=['station', 'month_start'], keep='last')
+            df_all = df_all.drop(columns=['system_version'])
         return df_all.groupby(['station', 'month_start']).mean().reset_index()
     return pd.DataFrame()
 

@@ -2,7 +2,7 @@ import sys, os, time
 from pathlib import Path
 import cdsapi
 
-ENV_PATH = Path(r"d:\Study\TLCN\.env")
+ENV_PATH = Path(".env")
 if ENV_PATH.exists():
     for line in ENV_PATH.read_text().splitlines():
         line = line.strip()
@@ -14,7 +14,7 @@ API_KEY = os.environ.get("CDS_API_KEY")
 URL = "https://ewds.climate.copernicus.eu/api"
 c = cdsapi.Client(url=URL, key=API_KEY)
 
-RAW_WATER = Path(r"d:\Study\TLCN\data\raw\waterlevel")
+RAW_WATER = Path("data/raw/waterlevel")
 out_dir = RAW_WATER / "glofas_tanchau"
 out_dir.mkdir(parents=True, exist_ok=True)
 area = [10.9, 105.1, 10.7, 105.3]
@@ -27,7 +27,7 @@ groups = [
 
 print("Downloading GloFAS Discharge Tan Chau 1985-2023...")
 
-for y in range(1985, 2024):
+for y in range(1985, 2027):
     y_str = str(y)
     
     for g_name, months, d_limit in groups:
