@@ -30,7 +30,6 @@ def main():
         left_index=True, right_index=True, how='inner'
     )
     
-    df_merged['salinity_ppt'] = df_merged['conductivity_mS_per_m'] * 0.64
     df_merged['month'] = df_merged.index.month
 
     # 1. Line plot 
@@ -43,8 +42,8 @@ def main():
     
     ax2 = ax1.twinx()  
     color = 'tab:red'
-    ax2.set_ylabel('Độ mặn Mỹ Tho (ppt)', color=color, fontsize=12, fontweight='bold')  
-    ax2.plot(df_merged.index, df_merged['salinity_ppt'], color=color, linewidth=1.5, linestyle='--', alpha=0.8)
+    ax2.set_ylabel('Độ dẫn điện Mỹ Tho (mS/m)', color=color, fontsize=12, fontweight='bold')  
+    ax2.plot(df_merged.index, df_merged['conductivity_mS_per_m'], color=color, linewidth=1.5, linestyle='--', alpha=0.8)
     ax2.tick_params(axis='y', labelcolor=color)
     
     plt.title('Đối chiếu Biến động Lưu lượng Tân Châu và Độ mặn Mỹ Tho (1985-2023)', fontsize=15, fontweight='bold')
@@ -54,16 +53,16 @@ def main():
 
     # 2. Boxplot
     plt.figure(figsize=(12, 6))
-    sns.boxplot(x='month', y='salinity_ppt', data=df_merged, palette='coolwarm')
-    plt.title('Phân bố Độ mặn Mỹ Tho theo tháng (Chu kỳ Mùa vụ)', fontsize=15, fontweight='bold')
+    sns.boxplot(x='month', y='conductivity_mS_per_m', data=df_merged, palette='coolwarm')
+    plt.title('Phân bố Độ dẫn điện EC Mỹ Tho theo tháng (Chu kỳ Mùa vụ)', fontsize=15, fontweight='bold')
     plt.xlabel('Tháng trong năm', fontsize=12)
-    plt.ylabel('Độ mặn (ppt)', fontsize=12)
+    plt.ylabel('Độ dẫn điện EC (mS/m)', fontsize=12)
     plt.tight_layout()
     plt.savefig(OUT_DIR / 'boxplot.png', dpi=300)
     plt.close()
 
     # 3. Heatmap
-    corr_cols = ['precipitation_sum', 'glofas_discharge_m3s', 'tide_max_m', 'temperature_mean', 'evapotranspiration_sum', 'salinity_ppt']
+    corr_cols = ['precipitation_sum', 'glofas_discharge_m3s', 'tide_max_m', 'temperature_mean', 'evapotranspiration_sum', 'conductivity_mS_per_m']
     corr_matrix = df_merged[corr_cols].corr()
     plt.figure(figsize=(10, 8))
     sns.heatmap(corr_matrix, annot=True, cmap='RdBu', vmin=-1, vmax=1, fmt=".2f", linewidths=.5)
@@ -74,11 +73,11 @@ def main():
 
     # 4. Scatter
     plt.figure(figsize=(9, 6))
-    sns.scatterplot(x='glofas_discharge_m3s', y='salinity_ppt', hue='month', palette='viridis', data=df_merged, s=60, alpha=0.7)
+    sns.scatterplot(x='glofas_discharge_m3s', y='conductivity_mS_per_m', hue='month', palette='viridis', data=df_merged, s=60, alpha=0.7)
     plt.axvline(x=10000, color='red', linestyle='--', linewidth=1.5, label='Ngưỡng lưu lượng cạn (10.000 m³/s)')
-    plt.title('Scatter Plot: Tương quan Lưu lượng Thượng nguồn và Nồng độ Mặn', fontsize=15, fontweight='bold')
+    plt.title('Scatter Plot: Tương quan Lưu lượng Thượng nguồn và Độ dẫn điện EC', fontsize=15, fontweight='bold')
     plt.xlabel('Lưu lượng Tân Châu (m³/s)', fontsize=12)
-    plt.ylabel('Độ mặn Mỹ Tho (ppt)', fontsize=12)
+    plt.ylabel('Độ dẫn điện EC Mỹ Tho (mS/m)', fontsize=12)
     plt.legend()
     plt.tight_layout()
     plt.savefig(OUT_DIR / 'scatter.png', dpi=300)

@@ -23,7 +23,7 @@ def prepare_data(df, target_col='conductivity_mS_per_m', lag_months=1):
     
     # Tạo lag features
     merged[f'discharge_lag_{lag_months}'] = merged['glofas_discharge_m3s'].shift(lag_months)
-    merged['salinity_lag_1'] = merged[target_col].shift(1)
+    merged['ec_lag_1'] = merged[target_col].shift(1)
     
     merged.dropna(inplace=True)
     return merged
@@ -64,7 +64,7 @@ def main():
     print(f"[Baseline Naive] RMSE: {rmse_naive:.4f}")
 
     # --- 2. Random Forest ---
-    features = [f'discharge_lag_{best_lag}', 'salinity_lag_1', 'tide_max_m']
+    features = [f'discharge_lag_{best_lag}', 'ec_lag_1', 'tide_max_m']
     rf = RandomForestRegressor(n_estimators=100, random_state=42)
     rf.fit(train[features], train['conductivity_mS_per_m'])
     

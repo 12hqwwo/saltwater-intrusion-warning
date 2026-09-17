@@ -17,12 +17,12 @@
 | wind_max_ms | m/s | Ngay | Thang (TB) | Open-Meteo | 2026-09-02 | 1985-01 -> 2026-08 |
 | rh_pct | % | Ngay | Thang (TB) | Open-Meteo | 2026-09-02 | 1985-01 -> 2026-08 |
 | radiation_mj | MJ/m2 | Ngay | Thang (tong) | Open-Meteo | 2026-09-02 | 1985-01 -> 2026-08 |
-| water_level_m | m | -- | -- | DAHITI altimetry | MISSING (xem PLACEHOLDER) | -- |
-
+| water_level_m | m | Ngay | Thang (TB) | DAHITI altimetry | 2026-09-17 | 1985-01 -> 2026-08 |
+| glofas_discharge_m3s | m³/s | Ngay | Thang (TB) | Copernicus GloFAS | 2026-09-17 | 1985-01 -> 2026-08 |
+| tide_max_m | m | Ngay | Thang (Max) | UHSLC Vung Tau | 2026-09-17 | 1985-01 -> 2026-08 |
 
 ## Ghi chu ky thuat
-- Temporal alignment: conductivity la thang -> meteo downsample ve thang
-- Oulier conductivity: gia tri > 80 mS/m co the la loi cam bien (kiem tra 1998)
+- Temporal alignment: conductivity la thang -> meteo/water downsample ve thang
 - Open-Meteo nguon: ERA5-Land reanalysis (5 km resolution)
 - Timezone: UTC+07:00
 

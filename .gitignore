@@ -1,4 +1,49 @@
+# Secrets – KHÔNG BAO GIỜ commit file .env thật
 .env
+
+# Python
 __pycache__/
-*.tmp
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data – file nhị phân / dữ liệu lớn (giữ CSV nhỏ, bỏ binary)
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.rar
+*.zip
+gadm*.json
+data/raw/waterlevel/
+data/processed/*.parquet
+
+# Model artifacts
+*.pkl
+*.joblib
+*.model
+models/
+
+# OS
 .DS_Store
+*.tmp
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+*.suo
+*.user
+
+# Log
+*.log
+logs/

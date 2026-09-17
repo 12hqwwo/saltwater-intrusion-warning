@@ -1,0 +1,87 @@
+{
+    "type": "FeatureCollection",
+    "name": "monitoring_stations_synthetic_demo",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "station_id": "VN_SIM_001",
+                "station_name": "Gò Công Đông (Giả lập)",
+                "station_name_en": "Go Cong Dong (Simulated)",
+                "province": "Tiền Giang (nay thuộc Đồng Tháp mới)",
+                "river": "Cửa Tiểu / Gò Công ven biển",
+                "parameter": "Conductivity",
+                "unit": "mS/m",
+                "data_start": null,
+                "data_end": null,
+                "resolution": "monthly",
+                "source": "Dữ liệu giả lập (simulated) để thử nghiệm IDW",
+                "source_url": null,
+                "notes": "ĐIỂM GIẢ LẬP - dùng để IDW có đủ điểm phân bố không gian. Xóa/thay bằng trạm thật khi có dữ liệu từ Đài KTTV tỉnh Tiền Giang."
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.6700,
+                    10.3700
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "station_id": "VN_SIM_002",
+                "station_name": "Tân Phú Đông (Giả lập)",
+                "station_name_en": "Tan Phu Dong (Simulated)",
+                "province": "Tiền Giang (nay thuộc Đồng Tháp mới)",
+                "river": "Cửa Đại / Biển Đông",
+                "parameter": "Conductivity",
+                "unit": "mS/m",
+                "data_start": null,
+                "data_end": null,
+                "resolution": "monthly",
+                "source": "Dữ liệu giả lập (simulated) để thử nghiệm IDW",
+                "source_url": null,
+                "notes": "ĐIỂM GIẢ LẬP - cù lao Tân Phú Đông nằm giữa cửa Tiểu và cửa Đại, vùng chịu ảnh hưởng mặn rất cao. Thay bằng trạm thật khi có."
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.5500,
+                    10.2800
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "station_id": "VN_SIM_003",
+                "station_name": "Cao Lãnh (Giả lập)",
+                "station_name_en": "Cao Lanh (Simulated)",
+                "province": "Đồng Tháp",
+                "river": "Sông Tiền (trung lưu)",
+                "parameter": "Conductivity",
+                "unit": "mS/m",
+                "data_start": null,
+                "data_end": null,
+                "resolution": "monthly",
+                "source": "Dữ liệu giả lập (simulated)",
+                "source_url": null,
+                "notes": "ĐIỂM GIẢ LẬP - nội địa tỉnh Đồng Tháp cũ, EC thấp hơn nhiều. Dùng để IDW thể hiện gradient từ nội đồng ra biển."
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    105.6300,
+                    10.4600
+                ]
+            }
+        }
+    ]
+}

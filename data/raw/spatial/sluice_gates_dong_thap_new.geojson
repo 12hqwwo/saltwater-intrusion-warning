@@ -1,0 +1,306 @@
+{
+  "type": "FeatureCollection",
+  "name": "sluice_gates_dong_thap_new",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.547889,
+          10.302
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG001",
+        "gate_name": "Cống Vàm Giồng",
+        "legacy_area": "Vĩnh Hựu, Gò Công Tây, Tiền Giang cũ",
+        "coordinate_status": "direct_published",
+        "confidence": "High",
+        "coordinate_method": "Tọa độ công bố trực tiếp trong tài liệu quan trắc; đối chiếu mạng Kênh 14/Rạch Vàm Giồng.",
+        "salinity_relevance": "Điểm theo dõi/vận hành ngăn mặn; liên quan trực tiếp vùng Gò Công.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – mạng thủy lợi",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – địa danh thủy văn Tiền Giang",
+        "verification_note": "Có thể dùng ngay làm điểm tham chiếu; vẫn nên soi ảnh vệ tinh trước khi khóa vị trí tâm công trình.",
+        "latitude": 10.302,
+        "longitude": 106.547889
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.648889,
+          10.354444
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG002",
+        "gate_name": "Cống Gò Công",
+        "legacy_area": "Long Chánh, Gò Công, Tiền Giang cũ",
+        "coordinate_status": "derived_endpoint",
+        "confidence": "High-derived",
+        "coordinate_method": "Ghép điểm cuối Rạch Vàm Giồng với hồ sơ thủy lợi ghi tuyến Sông Tiền → Cống Gò Công.",
+        "salinity_relevance": "Nút kiểm soát nước quan trọng trong vùng ngọt hóa Gò Công.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 12/2023/QĐ-UBND Tiền Giang – danh mục công trình thủy lợi",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – tọa độ hai đầu Rạch Vàm Giồng",
+        "verification_note": "Tọa độ suy ra từ đầu tuyến thủy văn, không phải mốc trắc địa tâm cống.",
+        "latitude": 10.354444,
+        "longitude": 106.648889
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.705,
+          10.322778
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG003",
+        "gate_name": "Cống Long Uông",
+        "legacy_area": "Gò Công Đông, Tiền Giang cũ",
+        "coordinate_status": "derived_endpoint",
+        "confidence": "High-derived",
+        "coordinate_method": "Điểm cuối Kênh Salisette; hồ sơ thủy lợi ghi Rạch Vàm Giồng → Cống Long Uông.",
+        "salinity_relevance": "Thuộc mạng kiểm soát nước phía Đông vùng Gò Công.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – mạng kênh/cống",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – tọa độ Kênh Salisette",
+        "verification_note": "Nên căn chỉnh tâm cống bằng ảnh vệ tinh khi digitize chính thức.",
+        "latitude": 10.322778,
+        "longitude": 106.705
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.734444,
+          10.275556
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG004",
+        "gate_name": "Cống Tân Thành",
+        "legacy_area": "Tân Thành, Gò Công Đông, Tiền Giang cũ",
+        "coordinate_status": "derived_endpoint",
+        "confidence": "High-derived",
+        "coordinate_method": "Điểm cuối Kênh Champeaux; hồ sơ thủy lợi ghi Kênh Salisette → Cống Tân Thành.",
+        "salinity_relevance": "Cống phía ven biển, phù hợp bài toán ngăn mặn/lấy ngọt.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – mạng kênh/cống",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – tọa độ Kênh Champeaux",
+        "verification_note": "Tọa độ đầu tuyến; cần đối chiếu ảnh vệ tinh trước khi coi là tâm công trình.",
+        "latitude": 10.275556,
+        "longitude": 106.734444
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.755444,
+          10.404611
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG005",
+        "gate_name": "Cống Cần Lộc",
+        "legacy_area": "Gò Công Đông, Tiền Giang cũ",
+        "coordinate_status": "direct_published",
+        "confidence": "High",
+        "coordinate_method": "Tọa độ công bố trực tiếp cho Cống Cần Lộc trong báo cáo quan trắc môi trường: 10°24′16,6″N; 106°45′19,6″E.",
+        "salinity_relevance": "Gần khu vực cửa sông/ven biển, có ý nghĩa kiểm soát xâm nhập mặn.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – mạng kênh/cống",
+        "source_2": "Báo cáo kết quả quan trắc môi trường 2020 – điểm NM32 Cống Cần Lộc",
+        "verification_note": "Tọa độ công bố trực tiếp; vẫn nên đối chiếu ảnh vệ tinh để đặt marker đúng tâm thân cống.",
+        "latitude": 10.404611,
+        "longitude": 106.755444
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.684444,
+          10.395
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG006",
+        "gate_name": "Cống Sơn Qui",
+        "legacy_area": "Gò Công, Tiền Giang cũ",
+        "coordinate_status": "derived_endpoint",
+        "confidence": "High-derived",
+        "coordinate_method": "Điểm cuối Sông Sơn Quy; hồ sơ thủy lợi ghi Sông Gò Công → Cống Sơn Qui.",
+        "salinity_relevance": "Thuộc mạng điều tiết nước vùng Gò Công.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 12/2023/QĐ-UBND Tiền Giang – danh mục tuyến/cống",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – tọa độ Sông Sơn Quy",
+        "verification_note": "Tọa độ suy ra theo quan hệ tuyến; cần kiểm tra hình thái công trình trên basemap.",
+        "latitude": 10.395,
+        "longitude": 106.684444
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.658611,
+          10.310556
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG007",
+        "gate_name": "Cống Rạch Già",
+        "legacy_area": "Gò Công Đông/Gò Công Tây, Tiền Giang cũ",
+        "coordinate_status": "derived_endpoint",
+        "confidence": "High-derived",
+        "coordinate_method": "Chọn đầu Rạch Già đối diện phía Kênh Salisette; hồ sơ ghi Kênh Salisette → Cống Rạch Già.",
+        "salinity_relevance": "Thuộc mạng cống điều tiết vùng hạ lưu Gò Công.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – mạng kênh/cống",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – tọa độ Rạch Già",
+        "verification_note": "Nên kiểm tra lại đúng phía đầu cống trên ảnh vệ tinh.",
+        "latitude": 10.310556,
+        "longitude": 106.658611
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.667222,
+          10.286111
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG008",
+        "gate_name": "Cống Bà Tài",
+        "legacy_area": "Tân Phú Đông, Tiền Giang cũ",
+        "coordinate_status": "derived_endpoint",
+        "confidence": "High-derived",
+        "coordinate_method": "Đầu Rạch Bà Tài phía Sông Tiền; hồ sơ ghi Cống Bà Tài (Sông Tiền) → tuyến Bà Tài–Cả Thu.",
+        "salinity_relevance": "Đã được sử dụng để đóng ngăn mặn bảo vệ sản xuất tại Tân Phú Đông.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – mạng thủy lợi Tân Phú Đông",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – tọa độ Rạch Bà Tài",
+        "verification_note": "Phù hợp làm case study; nên xác nhận tâm cống trên satellite.",
+        "latitude": 10.286111,
+        "longitude": 106.667222
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.693056,
+          10.281667
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG009",
+        "gate_name": "Cống Bà Lắm",
+        "legacy_area": "Tân Phú Đông, Tiền Giang cũ",
+        "coordinate_status": "derived_endpoint",
+        "confidence": "High-derived",
+        "coordinate_method": "Đầu Rạch Bà Lắm phía Sông Tiền; hồ sơ ghi Cống Bà Lắm (Sông Tiền) → Cầu Bà Lắm.",
+        "salinity_relevance": "Đã được sử dụng trong vận hành ngăn mặn tại Tân Phú Đông.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – mạng thủy lợi Tân Phú Đông",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – tọa độ Rạch Bà Lắm",
+        "verification_note": "Phù hợp case study mặn; cần kiểm tra satellite để snap chính xác.",
+        "latitude": 10.281667,
+        "longitude": 106.693056
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.659722,
+          10.253056
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG010",
+        "gate_name": "Cống Rạch Mương",
+        "legacy_area": "Tân Phú Đông, Tiền Giang cũ",
+        "coordinate_status": "derived_endpoint",
+        "confidence": "High-derived",
+        "coordinate_method": "Ghép chuỗi Rạch Mương–Rạch Quẹo; hồ sơ ghi Cống Rạch Mương ở đầu tuyến phía Sông Cửa Trung.",
+        "salinity_relevance": "Cống trực tiếp trên khu vực chịu tác động nước mặn Tân Phú Đông.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – mạng thủy lợi Tân Phú Đông",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – tọa độ Rạch Mương/Rạch Quẹo",
+        "verification_note": "Đầu tuyến được suy luận từ cấu trúc liên thông; cần xác nhận ảnh vệ tinh.",
+        "latitude": 10.253056,
+        "longitude": 106.659722
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.688333,
+          10.238056
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG011",
+        "gate_name": "Cống Lý Quàn",
+        "legacy_area": "Tân Phú Đông, Tiền Giang cũ",
+        "coordinate_status": "derived_endpoint",
+        "confidence": "Medium",
+        "coordinate_method": "Hồ sơ ghi Cống Lý Quàn tại Sông Cửa Trung; chọn đầu Rạch Lý Quàn gần hành lang Cửa Trung hơn.",
+        "salinity_relevance": "Thuộc mạng cống ven khu vực Cửa Trung/Tân Phú Đông.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – mạng thủy lợi Tân Phú Đông",
+        "source_2": "Thông tư 18/2017/TT-BTNMT – tọa độ Rạch Lý Quàn/Sông Cửa Trung",
+        "verification_note": "Bắt buộc rà lại trên ảnh vệ tinh trước khi dùng trong Decision Logic.",
+        "latitude": 10.238056,
+        "longitude": 106.688333
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.760389,
+          10.408083
+        ]
+      },
+      "properties": {
+        "gate_id": "DTG012",
+        "gate_name": "Cống Vàm Tháp",
+        "legacy_area": "Gò Công Đông, Tiền Giang cũ",
+        "coordinate_status": "direct_published",
+        "confidence": "High",
+        "coordinate_method": "Tọa độ công bố trực tiếp cho Cống Vàm Tháp trong báo cáo quan trắc môi trường: 10°24′29,1″N; 106°45′37,4″E.",
+        "salinity_relevance": "Thuộc mạng cống vùng Gò Công nhưng tọa độ tâm cống chưa được xác nhận trực tiếp.",
+        "crs": "EPSG:4326",
+        "source_1": "Quyết định 04/2019/QĐ-UBND Tiền Giang – tuyến đến Cống Vàm Tháp",
+        "source_2": "Báo cáo kết quả quan trắc môi trường 2020 – điểm NM33 Cống Vàm Tháp",
+        "verification_note": "Tọa độ công bố trực tiếp; thay thế hoàn toàn tọa độ proxy ở bản nháp trước.",
+        "latitude": 10.408083,
+        "longitude": 106.760389
+      }
+    }
+  ]
+}
