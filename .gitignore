@@ -2,3 +2,8 @@
 __pycache__/
 *.tmp
 .DS_Store
+.venv/
+
+frontend/node_modules/
+data/biengioi/
+__pycache__/

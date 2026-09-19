@@ -1,0 +1,12 @@
+pandas
+numpy
+xarray
+netCDF4
+matplotlib
+seaborn
+scikit-learn
+statsmodels
+fastapi
+uvicorn
+cdsapi
+pyarrow
