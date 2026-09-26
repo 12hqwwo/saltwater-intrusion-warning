@@ -1,0 +1,6 @@
+﻿file,original_filename,sha256,byte_count
+mrc_mytho.csv,Conductivity.Water Quality@VN_019805_[My Tho].csv,2cee9c9c1cb8e29e67ea5379391fca507419385cd4fac990edf5119634b65997,52090
+mrc_tanchau.csv,Conductivity.Water Quality@VN_019803_[Tan Chau].csv,bd4cf100cb4782e37b355d94f15911c1bab2c4a9d4ad69d2fa2c3b4c5d590ba7,52168
+master_timeseries.csv,master_timeseries.csv,f9b2de085a265a13e21779aa7c95b8d0caaed9335ae61d820475f54e519eac71,116134
+tanchau_location.kml,Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml,0059e16ddb527081958707e10c5e62c8fb2fe3df1511dc9c0ab7f12776550867,301
+mytho_location.kml,Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml,a1dc49953943d14d78cb0afff426289d7558c9dc37ea01b4e5c2fd09c33c0644,297
