@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT      = Path(__file__).parent.parent
 GADM_PATH = ROOT / "gadm41_VNM_1.json"
-OUT_PATH  = ROOT / "data" / "raw" / "spatial" / "dong_thap_boundary.geojson"
+OUT_PATH  = ROOT / "data" / "raw" / "gis" / "spatial" / "dong_thap_boundary.geojson"
 
 print("Đọc GADM...")
 with open(GADM_PATH, "r", encoding="utf-8") as f:

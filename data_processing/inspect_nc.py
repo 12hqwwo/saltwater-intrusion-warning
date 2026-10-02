@@ -30,12 +30,12 @@ if __name__ == "__main__":
         nc_file = sys.argv[1]
     else:
         import glob
-        files = glob.glob(r"data/raw/waterlevel/glofas_tanchau/*.nc")
+        files = glob.glob(r"data/raw/glofas/tanchau/*.nc")
         if files:
             nc_file = files[0]
             print(f"Không truyền tên file, tự động chọn file đầu tiên tìm thấy: {nc_file}")
         else:
-            print("Không tìm thấy file .nc nào trong thư mục data/raw/waterlevel/glofas_tanchau/")
+            print("Không tìm thấy file .nc nào trong thư mục data/raw/glofas/tanchau/")
             sys.exit(1)
             
     inspect_nc(nc_file)

@@ -44,7 +44,7 @@ def download_with_resume(url, file_path):
             time.sleep(3)
 
 def main():
-    RAW_WATER = Path(r"d:\Study\TLCN\data\raw\waterlevel")
+    RAW_WATER = Path(__file__).resolve().parents[1] / "data" / "raw" / "tide" / "uhslc"
     RAW_WATER.mkdir(parents=True, exist_ok=True)
     
     out_file = RAW_WATER / "uhslc_tides_VungTau_id142_daily.csv"
@@ -72,7 +72,8 @@ def main():
         daily_max.rename(columns={'sea_level_m': 'tide_max_m'}, inplace=True)
         daily_max['station'] = 'VungTau'
         
-        daily_max['tide_max_m'] = daily_max['tide_max_m'].astype(float).interpolate()
+        # Preserve missing observations; do not interpolate across unknown gaps.
+        daily_max['tide_max_m'] = daily_max['tide_max_m'].astype(float)
         daily_max = daily_max[daily_max['date'].dt.year >= 1985].reset_index(drop=True)
         
         daily_max.to_csv(out_file, index=False)

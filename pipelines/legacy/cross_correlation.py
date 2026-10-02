@@ -6,7 +6,7 @@ from pathlib import Path
 
 # Paths
 DATA_DIR = Path("data")
-PROCESSED_DIR = DATA_DIR / "processed"
+PROCESSED_DIR = DATA_DIR / "archive" / "legacy_analysis"
 MASTER_CSV = PROCESSED_DIR / "master_timeseries.csv"
 OUT_PLOT = PROCESSED_DIR / "cross_correlation_plot.png"
 

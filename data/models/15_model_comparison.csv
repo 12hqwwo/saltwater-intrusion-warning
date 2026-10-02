@@ -1,0 +1,7 @@
+﻿model,station,n_test,MAE,RMSE,train_n,validation_n,test_window_rows,train_end,validation_end,test_end,evaluation_protocol,feature_count,run_status,better_than_baseline,accepted
+SeasonalNaive,TanChau,23,2.3117,3.1515,387,35,24,2018-12,2021-12,2023-12,time_split_rolling_one_step_features,1,OK,False,False
+SARIMA,TanChau,23,1.8111,2.1748,387,35,24,2018-12,2021-12,2023-12,time_split_rolling_one_step_features,1,OK,True,True
+RandomForest,TanChau,23,1.8488,2.4616,387,35,24,2018-12,2021-12,2023-12,time_split_rolling_one_step_features,9,OK,True,True
+SeasonalNaive,MyTho,17,4.2759,5.6285,321,23,24,2018-12,2021-12,2023-12,time_split_rolling_one_step_features,1,OK,False,False
+SARIMA,MyTho,17,3.2989,4.3584,321,23,24,2018-12,2021-12,2023-12,time_split_rolling_one_step_features,1,OK,True,True
+RandomForest,MyTho,17,3.4725,4.8042,321,23,24,2018-12,2021-12,2023-12,time_split_rolling_one_step_features,9,OK,True,True

@@ -1,0 +1,7 @@
+numpy>=2.0
+pandas>=3.0
+xarray>=2025.0
+netCDF4>=1.7
+openpyxl>=3.1
+scikit-learn>=1.7
+statsmodels>=0.14

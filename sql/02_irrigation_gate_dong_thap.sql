@@ -1,6 +1,6 @@
 -- =============================================================================
 -- Migration 02: Nạp danh sách 15 cống thủy lợi vào public.irrigation_gate
--- Nguồn: sluice_gates_dong_thap_new.geojson + README_sluice_gates.md
+-- Nguồn: sluice_gates_dong_thap_new.geojson + docs/gis/README_sluice_gates.md
 -- CRS:   EPSG:4326 / WGS84
 -- Ngày:  2026-09-26
 --
@@ -41,7 +41,7 @@ VALUES (
   'SLICEGATE_DONGTHAPMOI_2026',
   'Danh muc cong thuy loi Dong Thap moi – TLCN 2026',
   'RESEARCH',
-  'GeoJSON tong hop tu QD 04/2019/QD-UBND TG, QD 12/2023/QD-UBND TG, TT 18/2017/TT-BTNMT; phuong phap suy ra ghi trong README_sluice_gates.md',
+  'GeoJSON tong hop tu QD 04/2019/QD-UBND TG, QD 12/2023/QD-UBND TG, TT 18/2017/TT-BTNMT; phuong phap suy ra ghi trong docs/gis/README_sluice_gates.md',
   false
 )
 ON CONFLICT (source_code) DO NOTHING;

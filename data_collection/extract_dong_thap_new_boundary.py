@@ -2,7 +2,7 @@
 Script: extract_dong_thap_new_boundary.py
 Mục đích: Từ GADM Level 1 (toàn quốc VN), trích xuất và gộp ranh giới
           tỉnh Đồng Tháp (cũ) + Tiền Giang (cũ) thành 1 polygon "Đồng Tháp mới"
-          rồi lưu vào data/raw/spatial/dong_thap_boundary.geojson
+          rồi lưu vào data/raw/gis/spatial/dong_thap_boundary.geojson
 
 Yêu cầu: pip install geopandas shapely
 """
@@ -13,7 +13,7 @@ from pathlib import Path
 # ─── Đường dẫn ───────────────────────────────────────────────────────────────
 ROOT = Path(__file__).parent.parent  # thư mục gốc dự án (TLCN/)
 GADM_PATH = ROOT / "gadm41_VNM_1.json"
-OUT_PATH  = ROOT / "data" / "raw" / "spatial" / "dong_thap_boundary.geojson"
+OUT_PATH  = ROOT / "data" / "raw" / "gis" / "spatial" / "dong_thap_boundary.geojson"
 
 # ─── Đọc GADM ────────────────────────────────────────────────────────────────
 print("Đọc GADM Level 1...")

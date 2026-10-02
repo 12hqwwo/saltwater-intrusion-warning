@@ -7,8 +7,9 @@ from pathlib import Path
 def main():
     # Setup
     sns.set_theme(style='whitegrid')
-    MASTER_CSV = Path(r'd:/Study/TLCN/data/processed/master_timeseries.csv')
-    OUT_DIR = Path(r'd:/Study/TLCN/data/processed/plots')
+    root = Path(__file__).resolve().parents[1]
+    MASTER_CSV = root / 'data' / 'archive' / 'legacy_analysis' / 'master_timeseries.csv'
+    OUT_DIR = root / 'data' / 'archive' / 'legacy_analysis' / 'plots'
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(MASTER_CSV)
@@ -83,7 +84,7 @@ def main():
     plt.savefig(OUT_DIR / 'scatter.png', dpi=300)
     plt.close()
     
-    print("Đã tạo và lưu thành công 4 biểu đồ vào data/processed/plots/")
+    print("Đã tạo và lưu 4 biểu đồ legacy vào data/archive/legacy_analysis/plots/")
 
 if __name__ == '__main__':
     main()

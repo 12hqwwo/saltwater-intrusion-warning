@@ -7,7 +7,7 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 # Paths
 DATA_DIR = Path("data")
-PROCESSED_DIR = DATA_DIR / "processed"
+PROCESSED_DIR = DATA_DIR / "archive" / "legacy_analysis"
 MASTER_CSV = PROCESSED_DIR / "master_timeseries.csv"
 
 def prepare_data(df, target_col='conductivity_mS_per_m', lag_months=1):

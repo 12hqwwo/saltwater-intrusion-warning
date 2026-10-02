@@ -13,8 +13,8 @@ from pathlib import Path
 from datetime import datetime, timedelta
 
 ROOT = Path(__file__).parent.parent
-STATIONS_CSV = ROOT / "data" / "raw" / "spatial" / "sluice_gates_dong_thap_new.csv"
-OUT_CSV = ROOT / "data" / "raw" / "hydrological" / "synthetic_ec_data.csv"
+STATIONS_CSV = ROOT / "data" / "raw" / "gis" / "gates" / "sluice_gates_dong_thap_new.csv"
+OUT_CSV = ROOT / "data" / "archive" / "synthetic_demo" / "synthetic_ec_data.csv"
 
 def generate_ec_data(start_date="2024-01-01", end_date="2024-06-30", freq="h"):
     # Đọc tọa độ trạm/cống

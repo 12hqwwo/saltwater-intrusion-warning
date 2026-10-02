@@ -24,14 +24,13 @@ build/
 *.rar
 *.zip
 gadm*.json
-data/raw/waterlevel/
 data/processed/*.parquet
 
 # Model artifacts
 *.pkl
 *.joblib
 *.model
-models/
+tmp/
 
 # OS
 .DS_Store

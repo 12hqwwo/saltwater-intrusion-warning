@@ -5,14 +5,14 @@ import xarray as xr
 from pathlib import Path
 
 DATA_DIR = Path("data")
-PROCESSED_DIR = DATA_DIR / "processed"
+PROCESSED_DIR = DATA_DIR / "archive" / "legacy_analysis"
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
 # 1. Ham xu ly Conductivity (Monthly)
 def get_conductivity():
     print("Loading Conductivity...")
     dfs = []
-    for f in glob.glob(str(DATA_DIR / "interim" / "conductivity_*_monthly_clean.csv")):
+    for f in glob.glob(str(DATA_DIR / "staging" / "interim" / "conductivity_*_monthly_clean.csv")):
         df = pd.read_csv(f)
         df['date'] = pd.to_datetime(df['date'])
         df['month_start'] = df['date'].dt.to_period('M').dt.to_timestamp()
@@ -28,7 +28,7 @@ def get_conductivity():
 def get_meteo():
     print("Loading Open-Meteo...")
     dfs = []
-    for f in glob.glob(str(DATA_DIR / "raw" / "openmeteo_rainfall" / "openmeteo_*_daily.csv")):
+    for f in glob.glob(str(DATA_DIR / "raw" / "meteorology" / "openmeteo" / "openmeteo_*_daily.csv")):
         # Bo qua file all_stations hoac file cu
         if "all_stations" in f or "1985_2026" in f:
             continue
@@ -54,7 +54,7 @@ def get_meteo():
 def get_dahiti():
     print("Loading DAHITI Water Level...")
     dfs = []
-    for f in glob.glob(str(DATA_DIR / "raw" / "waterlevel" / "dahiti_waterlevel_*.csv")):
+    for f in glob.glob(str(DATA_DIR / "raw" / "dahiti" / "dahiti_waterlevel_*.csv")):
         df = pd.read_csv(f)
         if df.empty: continue
         df['date'] = pd.to_datetime(df['date'])
@@ -70,7 +70,7 @@ def get_dahiti():
 def get_glofas():
     print("Loading GloFAS Discharge NetCDF...")
     dfs = []
-    nc_files = glob.glob(str(DATA_DIR / "raw" / "waterlevel" / "glofas_tanchau" / "glofas_*.nc"))
+    nc_files = glob.glob(str(DATA_DIR / "raw" / "glofas" / "tanchau" / "glofas_*.nc"))
     if not nc_files:
         print("  Không tìm thấy file nc GloFAS")
         return pd.DataFrame()
@@ -117,7 +117,7 @@ def get_glofas():
 def get_tide():
     print("Loading Vung Tau Tide Max...")
     dfs = []
-    for f in glob.glob(str(DATA_DIR / "raw" / "waterlevel" / "*VungTau*.csv")):
+    for f in glob.glob(str(DATA_DIR / "raw" / "tide" / "uhslc" / "*VungTau*.csv")):
         df = pd.read_csv(f)
         if df.empty: continue
         df['date'] = pd.to_datetime(df['date'])
