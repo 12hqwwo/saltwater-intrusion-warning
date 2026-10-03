@@ -1,0 +1,144 @@
+{
+    "type": "FeatureCollection",
+    "name": "sluice_gates",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "gate_id": "SG_TG_001",
+                "gate_name": "Cống Xuân Hòa",
+                "province": "Tiền Giang (Đồng Tháp mới)",
+                "district": "Gò Công Tây",
+                "river_canal": "Kênh Xuân Hòa",
+                "gate_type": "Cống hở",
+                "status": "Vận hành",
+                "threshold_ppt": 1.0,
+                "purpose": "Ngăn mặn / tưới tiêu",
+                "is_simulated": false
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.5200,
+                    10.5100
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "gate_id": "SG_TG_002",
+                "gate_name": "Cống Rạch Gầm",
+                "province": "Tiền Giang (Đồng Tháp mới)",
+                "district": "Cai Lậy",
+                "river_canal": "Rạch Gầm - sông Tiền",
+                "gate_type": "Cống hở",
+                "status": "Vận hành",
+                "threshold_ppt": 1.5,
+                "purpose": "Ngăn mặn / phân lũ",
+                "is_simulated": false
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.0300,
+                    10.4200
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "gate_id": "SG_TG_003",
+                "gate_name": "Cống Bảo Định",
+                "province": "Tiền Giang (Đồng Tháp mới)",
+                "district": "Thành phố Mỹ Tho",
+                "river_canal": "Kênh Bảo Định",
+                "gate_type": "Cống hộp",
+                "status": "Vận hành",
+                "threshold_ppt": 1.0,
+                "purpose": "Ngăn mặn / cấp nước đô thị",
+                "is_simulated": false
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.3600,
+                    10.3700
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "gate_id": "SG_DT_001",
+                "gate_name": "Cống Hồng Ngự",
+                "province": "Đồng Tháp",
+                "district": "Hồng Ngự",
+                "river_canal": "Kênh Hồng Ngự",
+                "gate_type": "Cống hở",
+                "status": "Vận hành",
+                "threshold_ppt": 0.5,
+                "purpose": "Kiểm soát lũ / ngăn mặn",
+                "is_simulated": false
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    105.3100,
+                    10.9600
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "gate_id": "SG_DT_002",
+                "gate_name": "Cống Long Định",
+                "province": "Đồng Tháp",
+                "district": "Cao Lãnh",
+                "river_canal": "Kênh Nguyễn Văn Tiếp",
+                "gate_type": "Cống hộp",
+                "status": "Vận hành",
+                "threshold_ppt": 1.0,
+                "purpose": "Ngăn mặn / tưới tiêu",
+                "is_simulated": false
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    105.7900,
+                    10.3800
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "gate_id": "SG_TG_SIM_001",
+                "gate_name": "Cống Tân Phú Đông (Giả lập)",
+                "province": "Tiền Giang (Đồng Tháp mới)",
+                "district": "Tân Phú Đông",
+                "river_canal": "Cửa biển / kênh nội đồng",
+                "gate_type": "Cống cửa biển",
+                "status": "Ước tính",
+                "threshold_ppt": 2.0,
+                "purpose": "Ngăn mặn biển",
+                "is_simulated": true
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.5000,
+                    10.3200
+                ]
+            }
+        }
+    ]
+}

@@ -10,7 +10,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Load .env
-ENV_PATH = Path(__file__).parent / ".env"
+ENV_PATH = Path(__file__).parent.parent / ".env"
 for line in ENV_PATH.read_text().splitlines():
     line = line.strip()
     if line and not line.startswith("#") and "=" in line:
@@ -23,7 +23,7 @@ if not API_KEY:
     sys.exit(1)
 
 BASE_URL = "https://dahiti.dgfi.tum.de/api/v2/"
-RAW_WATER = Path(r"d:\Study\TLCN\data\raw\waterlevel")
+RAW_WATER = Path(__file__).resolve().parents[1] / "data" / "raw" / "dahiti"
 RAW_WATER.mkdir(parents=True, exist_ok=True)
 
 STATIONS = {
@@ -157,7 +157,7 @@ def download_discharge(dahiti_id, station_name):
 if __name__ == "__main__":
     print("=" * 55)
     print("TAI DU LIEU DAHITI v2 (Water Level + Discharge)")
-    print(f"API Key: {API_KEY[:8]}...{API_KEY[-4:]}")
+    print(f"API key configured: {bool(API_KEY)}")
     print("=" * 55)
 
     summary = {}

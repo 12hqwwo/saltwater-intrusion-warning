@@ -2,7 +2,7 @@
 import os, sys, json, requests
 from pathlib import Path
 
-ENV_PATH = Path(__file__).parent / ".env"
+ENV_PATH = Path(__file__).parent.parent / ".env"
 for line in ENV_PATH.read_text().splitlines():
     line = line.strip()
     if line and not line.startswith("#") and "=" in line:
@@ -10,7 +10,7 @@ for line in ENV_PATH.read_text().splitlines():
         os.environ[k.strip()] = v.strip()
 
 API_KEY = os.environ.get("DAHITI_API_KEY", "")
-print(f"Key: {API_KEY[:8]}...{API_KEY[-4:]}\n")
+print(f"API key configured: {bool(API_KEY)}\n")
 
 BASE_URL = "https://dahiti.dgfi.tum.de/api/v2/"
 

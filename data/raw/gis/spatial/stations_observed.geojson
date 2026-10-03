@@ -1,0 +1,62 @@
+{
+    "type": "FeatureCollection",
+    "name": "monitoring_stations_observed",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "station_id": "VN_019803",
+                "station_name": "Tân Châu",
+                "station_name_en": "Tan Chau",
+                "province": "An Giang",
+                "river": "Sông Tiền (Mekong - sông Tiền)",
+                "parameter": "Conductivity",
+                "unit": "mS/m",
+                "data_start": "1985-05-15",
+                "data_end": "2023-12-15",
+                "resolution": "monthly",
+                "source": "Mekong River Commission (MRC)",
+                "source_url": "https://www.mrcmekong.org/",
+                "notes": "Trạm nằm tại đầu nguồn sông Tiền. Giá trị EC đo bằng mS/m, cần quy đổi sang ‰ nếu dùng ngưỡng mặn."
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    105.2480164,
+                    10.80062008
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "station_id": "VN_019805",
+                "station_name": "Mỹ Tho",
+                "station_name_en": "My Tho",
+                "province": "Tiền Giang (nay thuộc Đồng Tháp mới)",
+                "river": "Sông Tiền (cửa sông, gần biển Đông)",
+                "parameter": "Conductivity",
+                "unit": "mS/m",
+                "data_start": "1985-05-15",
+                "data_end": "2023-12-15",
+                "resolution": "monthly",
+                "source": "Mekong River Commission (MRC)",
+                "source_url": "https://www.mrcmekong.org/",
+                "notes": "Trạm nằm gần cửa sông, chịu ảnh hưởng triều mạnh và xâm nhập mặn từ biển Đông. Giá trị EC cao hơn đáng kể so với Tân Châu, nhất là mùa khô."
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.3529997,
+                    10.35912163
+                ]
+            }
+        }
+    ]
+}

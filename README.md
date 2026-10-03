@@ -1,28 +1,70 @@
-# Saltwater Intrusion Warning / Phân tích dữ liệu Xâm nhập mặn ĐBSCL
+# WebGIS xâm nhập mặn Đồng Tháp - data pipeline
 
-Dự án thu thập và hợp nhất các dữ liệu thủy văn, khí tượng và độ mặn (Conductivity) tại ĐBSCL (trọng tâm là 2 trạm Tân Châu và Mỹ Tho). Mục lực cuối cùng là kết hợp toàn bộ features vào một Master Timeseries (theo tháng) để dùng cho các mô hình Machine Learning dự báo xâm nhập mặn.
+Pipeline chính đi theo luồng `RAW immutable -> STAGING -> QA/PROCESSED -> FEATURES -> MODELS`. Dữ liệu synthetic và pipeline cũ không được dùng để tuyên bố kết quả khoa học.
 
-## Tiến trình & Kết quả đạt được hiện tại
+## Cấu trúc
 
-1. **Dữ liệu Khí tượng (Open-Meteo ERA5):**
-   - Đã thu thập dạng CSV hàng ngày (lượng mưa, bốc hơi, gió max, nhiệt độ max/min/mean, độ ẩm, bức xạ).
+```text
+data/
+├── raw/
+│   ├── ec/mrc/
+│   ├── glofas/tanchau/
+│   ├── dahiti/
+│   ├── tide/
+│   │   ├── fes2022/
+│   │   └── uhslc/
+│   ├── meteorology/openmeteo/
+│   └── gis/
+│       ├── gates/
+│       └── spatial/
+├── staging/
+├── processed/
+│   ├── ec/
+│   ├── glofas/
+│   ├── gis/
+│   └── tide/
+├── features/
+└── models/
 
-2. **Dữ liệu Mực nước Vệ tinh (DAHITI):**
-   - Giải quyết thành công lỗi định dạng tải của DAHITI thông qua `fetch_dahiti.py`.
-   - Kết quả: Đã tải được Mực nước (Water level m) cho trạm Tân Châu (id 627) và Mỹ Tho (id 3316).
+pipelines/
+├── etl/12_etl_update.py
+├── features/13_feature_pipeline.py
+└── models/14_model_baseline.py
 
-3. **Dữ liệu Lưu lượng (GloFAS - Copernicus):**
-   - Phát triển `fetch_glofas.py` để tải Lưu lượng (Discharge m³/s) cho Tân Châu từ mô hình LISFLOOD (1985-2023).
-   - Do API có giới hạn "cost limits", script đã được tùy chỉnh để tải từng năm tự động. **Chương trình tải đang được khởi chạy ngầm**. Cần một khoảng thời gian trước khi tải hoàn thành do file NC phân giải chậm.
-
-4. **Tổng hợp Dữ liệu (Master Timeseries):**
-   - Đã viết sẵn tập lệnh `process_data.py`.
-   - Chức năng: Sau khi thư mục `data/raw` tải đầy đủ, script này tự động đọc toàn bộ CSV + NetCDF từ Conductivity, DAHITI, Open-Meteo và GloFAS, tính biến đổi lại từ Ngày (Daily) sang Tháng (Monthly) (`resample` qua pandas DataFrame) và áp dụng **Outer Join** để làm giàu bộ dataset cuối.
-   - Đầu ra xuất dưới dạng `master_timeseries.parquet` siêu nhẹ cho Model.
-
-## Hướng dẫn chạy
-Khi quá trình thu thập GloFAS hoàn tất, bạn chỉ cần mở terminal và chạy:
-```bash
-python process_data.py
+sql/migrations/11_schema_migration.sql
+docs/reports/01_data_audit.md
+docs/reports/16_IMPLEMENTATION_REPORT.md
 ```
-> *(Tham khảo `data_dictionary.md` để xem mô tả cấu trúc của file parquet thu được)*.
+
+## Chạy lại pipeline
+
+```powershell
+python pipelines/etl/12_etl_update.py
+python pipelines/features/13_feature_pipeline.py
+python pipelines/models/14_model_baseline.py
+```
+
+Các script phải được chạy theo thứ tự trên. `monthly_feature_v2` chỉ lấy EC `VERIFIED` làm target. Mỹ Tho GloFAS và toàn bộ Tide FES vẫn NULL cho đến khi có nguồn được xác minh.
+
+## Trạng thái 16 đầu ra
+
+| # | file | vị trí | trạng thái |
+|---:|---|---|---|
+| 01 | `01_data_audit.md` | `docs/reports/` | hoàn thành |
+| 02 | `02_ec_qa_report.csv` | `data/processed/ec/` | hoàn thành |
+| 03 | `03_ec_clean.csv` | `data/processed/ec/` | hoàn thành |
+| 04 | `04_tide_points.geojson` | `data/processed/tide/` | chưa tạo; thiếu điểm offshore đã xác minh |
+| 05 | `05_tide_hourly.csv` | `data/processed/tide/` | chưa tạo; thiếu FES2022b/PyFES input |
+| 06 | `06_tide_monthly.csv` | `data/processed/tide/` | chưa tạo; phụ thuộc 05 |
+| 07 | `07_glofas_mytho_daily.csv` | `data/processed/glofas/` | hoàn thành với NULL/MISSING có lý do |
+| 08 | `08_glofas_mytho_monthly.csv` | `data/processed/glofas/` | hoàn thành với NULL/MISSING có lý do |
+| 09 | `09_gate_coordinate_qa.csv` | `data/processed/gis/` | hoàn thành |
+| 10 | `10_monthly_feature_v2.csv` | `data/features/` | hoàn thành |
+| 11 | `11_schema_migration.sql` | `sql/migrations/` | đã soạn; chưa áp dụng DB |
+| 12 | `12_etl_update.py` | `pipelines/etl/` | hoàn thành |
+| 13 | `13_feature_pipeline.py` | `pipelines/features/` | hoàn thành |
+| 14 | `14_model_baseline.py` | `pipelines/models/` | hoàn thành |
+| 15 | `15_model_comparison.csv` | `data/models/` | hoàn thành |
+| 16 | `16_IMPLEMENTATION_REPORT.md` | `docs/reports/` | hoàn thành |
+
+Chi tiết lỗi, QA, schema và các phần còn NULL nằm trong hai báo cáo ở `docs/reports/`.

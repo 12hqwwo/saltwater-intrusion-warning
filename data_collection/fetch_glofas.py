@@ -2,7 +2,7 @@ import sys, os, time
 from pathlib import Path
 import cdsapi
 
-ENV_PATH = Path(".env")
+ENV_PATH = Path(__file__).parent.parent / ".env"
 if ENV_PATH.exists():
     for line in ENV_PATH.read_text().splitlines():
         line = line.strip()
@@ -14,8 +14,8 @@ API_KEY = os.environ.get("CDS_API_KEY")
 URL = "https://ewds.climate.copernicus.eu/api"
 c = cdsapi.Client(url=URL, key=API_KEY)
 
-RAW_WATER = Path("data/raw/waterlevel")
-out_dir = RAW_WATER / "glofas_tanchau"
+ROOT = Path(__file__).resolve().parents[1]
+out_dir = ROOT / "data" / "raw" / "glofas" / "tanchau"
 out_dir.mkdir(parents=True, exist_ok=True)
 area = [10.9, 105.1, 10.7, 105.3]
 

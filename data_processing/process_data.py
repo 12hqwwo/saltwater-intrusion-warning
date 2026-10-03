@@ -5,14 +5,14 @@ import xarray as xr
 from pathlib import Path
 
 DATA_DIR = Path("data")
-PROCESSED_DIR = DATA_DIR / "processed"
+PROCESSED_DIR = DATA_DIR / "archive" / "legacy_analysis"
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
 # 1. Ham xu ly Conductivity (Monthly)
 def get_conductivity():
     print("Loading Conductivity...")
     dfs = []
-    for f in glob.glob(str(DATA_DIR / "interim" / "conductivity_*_monthly_clean.csv")):
+    for f in glob.glob(str(DATA_DIR / "staging" / "interim" / "conductivity_*_monthly_clean.csv")):
         df = pd.read_csv(f)
         df['date'] = pd.to_datetime(df['date'])
         df['month_start'] = df['date'].dt.to_period('M').dt.to_timestamp()
@@ -28,7 +28,7 @@ def get_conductivity():
 def get_meteo():
     print("Loading Open-Meteo...")
     dfs = []
-    for f in glob.glob(str(DATA_DIR / "raw" / "openmeteo_rainfall" / "openmeteo_*_daily.csv")):
+    for f in glob.glob(str(DATA_DIR / "raw" / "meteorology" / "openmeteo" / "openmeteo_*_daily.csv")):
         # Bo qua file all_stations hoac file cu
         if "all_stations" in f or "1985_2026" in f:
             continue
@@ -54,7 +54,7 @@ def get_meteo():
 def get_dahiti():
     print("Loading DAHITI Water Level...")
     dfs = []
-    for f in glob.glob(str(DATA_DIR / "raw" / "waterlevel" / "dahiti_waterlevel_*.csv")):
+    for f in glob.glob(str(DATA_DIR / "raw" / "dahiti" / "dahiti_waterlevel_*.csv")):
         df = pd.read_csv(f)
         if df.empty: continue
         df['date'] = pd.to_datetime(df['date'])
@@ -70,7 +70,7 @@ def get_dahiti():
 def get_glofas():
     print("Loading GloFAS Discharge NetCDF...")
     dfs = []
-    nc_files = glob.glob(str(DATA_DIR / "raw" / "waterlevel" / "glofas_tanchau" / "glofas_*.nc"))
+    nc_files = glob.glob(str(DATA_DIR / "raw" / "glofas" / "tanchau" / "glofas_*.nc"))
     if not nc_files:
         print("  Không tìm thấy file nc GloFAS")
         return pd.DataFrame()
@@ -113,11 +113,29 @@ def get_glofas():
         return df_all.groupby(['station', 'month_start']).mean().reset_index()
     return pd.DataFrame()
 
+# 5. Ham xu ly Vung Tau Tide Max (Daily -> Monthly Max)
+def get_tide():
+    print("Loading Vung Tau Tide Max...")
+    dfs = []
+    for f in glob.glob(str(DATA_DIR / "raw" / "tide" / "uhslc" / "*VungTau*.csv")):
+        df = pd.read_csv(f)
+        if df.empty: continue
+        df['date'] = pd.to_datetime(df['date'])
+        df['month_start'] = df['date'].dt.to_period('M').dt.to_timestamp()
+        
+        # Thủy triều thì quan trọng nhất là MAX theo tháng
+        df_month = df.groupby(['station', 'month_start']).agg(
+            tide_max_m=('tide_max_m', 'max')
+        ).reset_index()
+        dfs.append(df_month)
+    return pd.concat(dfs, ignore_index=True) if dfs else pd.DataFrame()
+
 def main():
     cond = get_conductivity()
     meteo = get_meteo()
     water = get_dahiti()
     disch = get_glofas()
+    tide = get_tide()
     
     print("\nMerging data...")
     # Ta dung outer merge kieu full de co matrix day du
@@ -138,6 +156,12 @@ def main():
     else:
         master['glofas_discharge_m3s'] = np.nan
         
+    # 4. Merge voi Tide (Thủy triều Vũng Tàu)
+    if not tide.empty:
+        master = pd.merge(master, tide, on=['station', 'month_start'], how='outer')
+    else:
+        master['tide_max_m'] = np.nan
+        
     master = master.sort_values(['station', 'month_start']).reset_index(drop=True)
     
     out_csv = PROCESSED_DIR / "master_timeseries.csv"
@@ -152,6 +176,7 @@ def main():
     print(f"Meteo: {meteo.shape}")
     print(f"Dahiti: {water.shape}")
     print(f"Glofas: {disch.shape}")
+    print(f"Tide: {tide.shape}")
     print(f"Master: {master.shape}")
     print("\nDate range per station:")
     print(master.groupby('station')['month_start'].agg(['min', 'max', 'count']))

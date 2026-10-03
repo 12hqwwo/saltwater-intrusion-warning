@@ -1,0 +1,502 @@
+﻿diff --git a/backend/main.py b/backend/main.py
+index 154a8cc..1ace0b3 100644
+--- a/backend/main.py
++++ b/backend/main.py
+@@ -1,39 +1,324 @@
+-from fastapi import FastAPI, HTTPException
++"""
++Saltwater Intrusion Warning System ΓÇô API
++v0.2: EC naming corrected (SalinityRecord ΓåÆ ConductivityRecord, /salinity ΓåÆ /ec)
++      Capabilities endpoint replaces /system/mode
++      Lag analytics endpoint with full metadata
++      Tide placeholder endpoint
++"""
++
++from __future__ import annotations
++
++from enum import Enum
+ from typing import List, Optional
+-from pydantic import BaseModel
+-from datetime import datetime
+ 
+-app = FastAPI(title="Saltwater Intrusion API", version="1.0.0")
++from fastapi import Depends, FastAPI, HTTPException, Query, Security
++from fastapi.middleware.cors import CORSMiddleware
++from fastapi.security import OAuth2PasswordBearer
++from pydantic import BaseModel, Field
++
++app = FastAPI(
++    title="Saltwater Intrusion Warning API",
++    description=(
++        "API hß╗ç thß╗æng gi├ím s├ít, dß╗▒ b├ío v├á cß║únh b├ío sß╗¢m x├óm nhß║¡p mß║╖n ─Éß╗ông Th├íp. "
++        "Hiß╗çn ─æang ß╗ƒ RESEARCH MODE: dß╗» liß╗çu EC c├│ resolution monthly; "
++        "forecast 3ΓÇô10 ng├áy ch╞░a khß║ú dß╗Ñng."
++    ),
++    version="0.2.0",
++)
++
++app.add_middleware(
++    CORSMiddleware,
++    allow_origins=["*"],
++    allow_methods=["*"],
++    allow_headers=["*"],
++)
++
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++# Auth stubs (MVP ΓÇô sß║╜ thay bß║▒ng JWT + DB sau)
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
++
++
++class Role(str, Enum):
++    OPERATOR = "operator"
++    ANALYST = "analyst"
++    ADMIN = "admin"
++    # PUBLIC routes kh├┤ng cß║ºn auth ΓÇô kh├┤ng c├│ role PUBLIC
++
++
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++# Models
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++class ConductivityRecord(BaseModel):
++    """Quan trß║»c EC tß║íi mß╗Öt trß║ím. ─É╞ín vß╗ï: mS/m."""
+ 
+-# Mock data
+-class SalinityRecord(BaseModel):
+     station: str
+     date: str
+-    conductivity_mS_per_m: float
+-    
+-MOCK_DATA = [
+-    {"station": "MyTho", "date": "2024-01-01", "conductivity_mS_per_m": 105.2},
+-    {"station": "MyTho", "date": "2024-02-01", "conductivity_mS_per_m": 110.5},
+-    {"station": "MyTho", "date": "2024-03-01", "conductivity_mS_per_m": 150.0},
++    ec_ms_per_m: float = Field(..., ge=0, description="Electrical Conductivity (mS/m)")
++    quality_flag: str = "UNVERIFIED"
++    source: str = "MRC"
++
++
++class LagResult(BaseModel):
++    lag: int
++    correlation: float
++    n: int
++
++
++class CapabilityItem(BaseModel):
++    enabled: bool
++    reason_code: Optional[str] = None
++
++
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++# Mock data (sß║╜ thay bß║▒ng DB sau khi schema Tuß║ºn 4 ─æ╞░ß╗úc migrate)
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++MOCK_EC: list[dict] = [
++    {"station": "MyTho", "date": "1990-03-01", "ec_ms_per_m": 152.2,
++     "quality_flag": "VALIDATED", "source": "MRC"},
++    {"station": "MyTho", "date": "1993-04-01", "ec_ms_per_m": 535.0,
++     "quality_flag": "VALIDATED", "source": "MRC"},
++    {"station": "MyTho", "date": "2020-02-01", "ec_ms_per_m": 558.0,
++     "quality_flag": "VALIDATED", "source": "MRC"},
++    {"station": "TanChau", "date": "1985-01-01", "ec_ms_per_m": None,  # missing
++     "quality_flag": "UNVERIFIED", "source": "MRC"},
+ ]
+ 
+-@app.get("/")
+-def read_root():
+-    return {"message": "Welcome to Saltwater Intrusion API"}
++# Ng╞░ß╗íng MRC ΓÇô ─æß╗ìc tß╗½ DB (alert_threshold_profile) trong production
++MRC_WATCH_EC = 150.0    # mS/m
++MRC_SEVERE_EC = 620.0   # mS/m
++
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++# Helpers
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++def ec_risk_level(ec: float | None) -> str:
++    """Ph├ón loß║íi NORMAL/WATCH/SEVERE theo ng╞░ß╗íng MRC Mß╗╣ Tho."""
++    if ec is None:
++        return "UNKNOWN"
++    if ec >= MRC_SEVERE_EC:
++        return "SEVERE"
++    if ec >= MRC_WATCH_EC:
++        return "WATCH"
++    return "NORMAL"
+ 
+-@app.get("/salinity/history", response_model=List[SalinityRecord])
+-def get_salinity_history(station: Optional[str] = None):
++
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++# ROUTES
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++@app.get("/", include_in_schema=False)
++def root():
++    return {
++        "service": "saltwater-intrusion-api",
++        "version": "0.2.0",
++        "docs": "/docs",
++    }
++
++
++# ΓöÇΓöÇ EC History ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++@app.get(
++    "/api/v1/ec/history",
++    response_model=List[ConductivityRecord],
++    summary="Lß╗ïch sß╗¡ EC theo trß║ím",
++    tags=["EC Observations"],
++)
++def get_ec_history(
++    station: Optional[str] = Query(None, description="MyTho | TanChau"),
++    quality: Optional[str] = Query(None, description="VALIDATED | UNVERIFIED | SUSPECT"),
++):
+     """
+-    Get historical salinity data.
++    Trß║ú vß╗ü lß╗ïch sß╗¡ Electrical Conductivity (mS/m).
++    Kh├┤ng quy ─æß╗òi sang salinity (g/L hoß║╖c ppt).
+     """
++    records = [r for r in MOCK_EC if r["ec_ms_per_m"] is not None]
+     if station:
+-        filtered_data = [r for r in MOCK_DATA if r["station"].lower() == station.lower()]
+-        if not filtered_data:
+-            raise HTTPException(status_code=404, detail="Station not found")
+-        return filtered_data
+-    return MOCK_DATA
++        records = [r for r in records if r["station"].lower() == station.lower()]
++        if not records:
++            raise HTTPException(status_code=404, detail=f"No EC data for station: {station}")
++    if quality:
++        records = [r for r in records if r["quality_flag"] == quality.upper()]
++    return records
++
++
++@app.get(
++    "/api/v1/ec/risk",
++    summary="Mß╗⌐c rß╗ºi ro EC theo ng╞░ß╗íng MRC",
++    tags=["EC Observations"],
++)
++def get_ec_risk(
++    station: str = Query(..., description="M├ú trß║ím (VD: MYTHO)"),
++    ec_ms_per_m: float = Query(..., ge=0)
++):
++    """
++    Ph├ón loß║íi NORMAL/WATCH/SEVERE theo ng╞░ß╗íng MRC tß║íi Mß╗╣ Tho.
++    Ng╞░ß╗íng ─æß╗ìc tß╗½ alert_threshold_profile (hiß╗çn d├╣ng hardcode seed).
++    KH├öNG phß║úi ng╞░ß╗íng vß║¡n h├ánh cß╗æng.
++    """
++    if station.upper() != "MYTHO":
++        return {
++            "station": station.upper(),
++            "risk": "UNCLASSIFIED",
++            "reason_code": "NO_APPLICABLE_THRESHOLD_PROFILE"
++        }
++        
++    level = ec_risk_level(ec_ms_per_m)
++    return {
++        "station": "MYTHO",
++        "ec_ms_per_m": ec_ms_per_m,
++        "risk_level": level,
++        "threshold_profile": "MRC_MYTHO_REF_2023",
++        "thresholds": {
++            "watch_min_ec_ms_per_m": MRC_WATCH_EC,
++            "severe_min_ec_ms_per_m": MRC_SEVERE_EC,
++            "source_title": "MRC State of the Basin Report 2023",
++        },
++        "disclaimer": (
++            "Ng╞░ß╗íng tham chiß║┐u MRC tß║íi Mß╗╣ Tho. "
++            "Kh├┤ng tß╗▒ ─æß╗Öng ─æß╗ông ngh─⌐a vß╗¢i quyß║┐t ─æß╗ïnh mß╗ƒ/─æ├│ng cß╗æng."
++        ),
++    }
++
++
++# ΓöÇΓöÇ System Capabilities ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++@app.get(
++    "/api/v1/system/capabilities",
++    summary="Trß║íng th├íi khß║ú n─âng hß╗ç thß╗æng",
++    tags=["System"],
++)
++def get_system_capabilities():
++    """
++    Trß║ú vß╗ü danh s├ích feature v├á trß║íng th├íi enabled/disabled.
++    Frontend dß╗▒a v├áo reason_code, kh├┤ng parse text.
++    Hiß╗çn tß║íi: RESEARCH MODE (EC monthly, forecast ch╞░a khß║ú dß╗Ñng).
++    """
++    return {
++        "system_mode": "RESEARCH",
++        "capabilities": {
++            "historical_ec": {
++                "enabled": True,
++            },
++            "monthly_lag_analysis": {
++                "enabled": True,
++            },
++            "forecast_3_10d": {
++                "enabled": False,
++                "reason_code": "TARGET_RESOLUTION_INSUFFICIENT",
++                "detail": (
++                    "Daily 3ΓÇô10 day EC forecast requires daily/sub-daily EC history "
++                    "AND future covariates (GloFAS +10d, weather +10d, tide +10d)."
++                ),
++            },
++            "tide_forecast": {
++                "enabled": False,
++                "reason_code": "SOURCE_NOT_INTEGRATED",
++            },
++            "gate_recommendation_operational": {
++                "enabled": False,
++                "reason_code": "MISSING_OPERATIONAL_INPUTS",
++            },
++            "safe_water_window_public": {
++                "enabled": False,
++                "reason_code": "NO_APPROVED_OPERATION_PLAN",
++            },
++        },
++        "research_mode_note": (
++            "Simulation only. Labels show 'Kß╗ïch bß║ún m├┤ phß╗Ång', not 'Khuyß║┐n nghß╗ï vß║¡n h├ánh'."
++        ),
++    }
++
++
++# ΓöÇΓöÇ Lag Analytics ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++@app.get(
++    "/api/v1/analytics/lag",
++    summary="T╞░╞íng quan trß╗à T├ón Ch├óu ΓåÆ Mß╗╣ Tho",
++    tags=["Analytics"],
++)
++def get_lag_correlation():
++    """
++    Cross-correlation EC Mß╗╣ Tho vß╗¢i discharge T├ón Ch├óu theo lag th├íng.
++    Lag unit = MONTH (dß╗» liß╗çu monthly).
++    Kh├┤ng diß╗àn giß║úi l├á thß╗¥i gian truyß╗ün mß║╖n thß╗▒c tß║┐.
++    """
++    return {
++        "status": "PROVISIONAL",
++        "dataset_version": "1.x",
++        "requires_rebuild": True,
++        "reason": "GloFAS river-cell extraction has not yet been validated.",
++        "analysis_type": "cross_correlation",
++        "driver": "tan_chau_discharge_m3s",
++        "target": "my_tho_ec_ms_per_m",
++        "lag_unit": "month",
++        "lag_definition": "positive lag means driver leads target "
++                          "(discharge at t correlated with EC at t+lag)",
++        "method": "pearson",
++        "preprocessing": "monthly aligned, no detrending",
++        "missing_strategy": "pairwise_drop",
++        "data_resolution": "monthly",
++        "results": [
++            # Placeholder ΓÇô sß║╜ thay bß║▒ng kß║┐t quß║ú tß╗½ cross_correlation.py sau khi rebuild pipeline
++            {"lag": 0, "correlation": None, "n": None},
++        ],
++        "interpretation_limit": (
++            "Statistical association only. "
++            "Not physical travel time of salinity intrusion. "
++            "Monthly lag Γëá hourly/daily propagation speed."
++        ),
++    }
++
++
++# ΓöÇΓöÇ Tide ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++@app.get(
++    "/api/v1/tide",
++    summary="Dß╗» liß╗çu triß╗üu",
++    tags=["Tide"],
++)
++def get_tide():
++    """
++    T├¡ch hß╗úp dß╗» liß╗çu triß╗üu ch╞░a khß║ú dß╗Ñng.
++    DAHITI kh├┤ng thß╗â thay thß║┐ tide gauge (cadence 10ΓÇô35 ng├áy, trß╗à 1ΓÇô2 ng├áy).
++    Kh├┤ng sß╗¡ dß╗Ñng sß╗æ giß║ú l├ám tide input.
++    """
++    return {
++        "status": "NOT_AVAILABLE",
++        "reason": "No validated tide observation/forecast source has been integrated.",
++        "used_in_gate_recommendation": False,
++        "observed": None,
++        "forecast": None,
++    }
++
++
++# ΓöÇΓöÇ Thresholds (read-only) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++@app.get(
++    "/api/v1/thresholds",
++    summary="Danh s├ích ng╞░ß╗íng cß║únh b├ío EC",
++    tags=["Thresholds"],
++)
++def get_thresholds():
++    """
++    Trß║ú vß╗ü alert threshold profiles ─æang active.
++    ─Éß╗ìc tß╗½ alert_threshold_profile DB trong production.
++    KH├öNG phß║úi gate_rule_profile (quy tß║»c vß║¡n h├ánh cß╗æng).
++    """
++    return {
++        "profiles": [
++            {
++                "profile_code": "MRC_MYTHO_REF_2023",
++                "profile_name": "MRC Reference Thresholds ΓÇô My Tho",
++                "watch_min_ec_ms_per_m": MRC_WATCH_EC,
++                "severe_min_ec_ms_per_m": MRC_SEVERE_EC,
++                "source_title": "MRC State of the Basin Report 2023",
++                "effective_from": None,
++                "is_active": True,
++                "disclaimer": (
++                    "Ng╞░ß╗íng tham chiß║┐u MRC tß║íi Mß╗╣ Tho. "
++                    "Kh├┤ng tß╗▒ ─æß╗Öng ─æß╗ông ngh─⌐a vß╗¢i quyß║┐t ─æß╗ïnh mß╗ƒ/─æ├│ng cß╗æng."
++                ),
++            }
++        ]
++    }
++
+ 
+ if __name__ == "__main__":
+     import uvicorn
+-    # uvicorn.run(app, host="0.0.0.0", port=8000)
+-    print("Run API with command: uvicorn main:app --reload")
++    print("Run: uvicorn main:app --reload --port 8000")
++    uvicorn.run(app, host="0.0.0.0", port=8000)
+diff --git a/backend/schema.sql b/backend/schema.sql
+index 5089b31..4076d44 100644
+--- a/backend/schema.sql
++++ b/backend/schema.sql
+@@ -1,44 +1,72 @@
+--- Database Schema for Saltwater Intrusion Warning System
+--- Target Database: PostgreSQL
++-- backend/schema.sql
++-- T├ái liß╗çu tham chiß║┐u nhanh cho backend/main.py.
++-- Schema thß╗▒c tß║┐ nß║▒m ß╗ƒ sql/01_core_schema_if_new.sql v├á sql/10_extend_realdata_schema.sql.
++-- Migration mß╗¢i nhß║Ñt: sql/20_alert_threshold_gate_rule_freshness.sql
+ 
+-CREATE TABLE IF NOT EXISTS Station (
+-    id SERIAL PRIMARY KEY,
+-    name VARCHAR(255) NOT NULL,
+-    latitude DOUBLE PRECISION NOT NULL,
+-    longitude DOUBLE PRECISION NOT NULL,
+-    type VARCHAR(50) -- e.g., 'water_level', 'salinity'
+-);
++-- ΓöÇΓöÇΓöÇ Bß║úng cß╗æt l├╡i (v1) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++-- data_source, admin_boundary, salinity_station, sluice_gate
++-- salinity_observation (legacy name; bß║úng thß╗▒c d├╣ng conductivity_observation)
++-- water_level_observation
++
++-- ΓöÇΓöÇΓöÇ Bß║úng mß╗ƒ rß╗Öng (v2: 10_extend_realdata_schema) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++-- analysis_area, source_dataset, measurement_site
++-- conductivity_observation  ΓåÉ ─æß╗òi tß╗½ salinity_observation
++-- monthly_feature
+ 
+-CREATE TABLE IF NOT EXISTS WaterLevel (
+-    id SERIAL PRIMARY KEY,
+-    station_id INTEGER REFERENCES Station(id),
+-    recorded_at TIMESTAMP NOT NULL,
+-    water_level_m DOUBLE PRECISION,
+-    discharge_m3s DOUBLE PRECISION,
+-    system_version VARCHAR(50), -- For GloFAS version tracking
+-    UNIQUE(station_id, recorded_at)
++-- ΓöÇΓöÇΓöÇ Bß║úng mß╗ƒ rß╗Öng (v3: 20_alert_threshold_gate_rule_freshness) ΓöÇ
++-- Xem sql/20_alert_threshold_gate_rule_freshness.sql ─æß╗â biß║┐t chi tiß║┐t.
++
++CREATE TABLE IF NOT EXISTS alert_threshold_profile (
++    threshold_profile_id   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
++    profile_code           VARCHAR(80)  NOT NULL UNIQUE,
++    profile_name           VARCHAR(200) NOT NULL,
++    station_id             BIGINT,      -- FK ΓåÆ salinity_station
++    watch_min_ec_ms_per_m  DOUBLE PRECISION NOT NULL CHECK (watch_min_ec_ms_per_m > 0),
++    severe_min_ec_ms_per_m DOUBLE PRECISION NOT NULL CHECK (severe_min_ec_ms_per_m > 0),
++    source_title           TEXT NOT NULL,
++    source_reference       TEXT,
++    effective_from         TIMESTAMPTZ, -- NULL khi ch╞░a x├íc ─æß╗ïnh ng├áy nghiß╗çp vß╗Ñ
++    effective_to           TIMESTAMPTZ,
++    is_active              BOOLEAN NOT NULL DEFAULT TRUE,
++    created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW(),
++    CHECK (watch_min_ec_ms_per_m < severe_min_ec_ms_per_m)
+ );
++-- NORMAL  : EC < 150 mS/m
++-- WATCH   : 150 Γëñ EC < 620 mS/m
++-- SEVERE  : EC ΓëÑ 620 mS/m
++-- Nguß╗ôn: MRC State of the Basin Report 2023
+ 
+-CREATE TABLE IF NOT EXISTS Salinity (
+-    id SERIAL PRIMARY KEY,
+-    station_id INTEGER REFERENCES Station(id),
+-    recorded_at TIMESTAMP NOT NULL,
+-    conductivity_mS_per_m DOUBLE PRECISION,
+-    salinity_ppt DOUBLE PRECISION,
+-    UNIQUE(station_id, recorded_at)
++CREATE TABLE IF NOT EXISTS gate_rule_profile (
++    gate_rule_id             BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
++    gate_id                  BIGINT NOT NULL, -- FK ΓåÆ sluice_gate
++    max_ec_for_intake        DOUBLE PRECISION NOT NULL CHECK (max_ec_for_intake > 0),
++    min_safe_duration_min    INTEGER NOT NULL CHECK (min_safe_duration_min > 0),
++    tide_condition           VARCHAR(100),
++    water_level_condition    VARCHAR(200),
++    valid_from               TIMESTAMPTZ,
++    valid_to                 TIMESTAMPTZ,
++    approved_by              VARCHAR(100) NOT NULL,
++    rule_source              TEXT,
++    is_active                BOOLEAN NOT NULL DEFAULT TRUE,
++    created_at               TIMESTAMPTZ NOT NULL DEFAULT NOW()
+ );
++-- Ph├ón biß╗çt r├╡: alert_threshold_profile (cß║únh b├ío) Γëá gate_rule_profile (vß║¡n h├ánh cß╗æng)
+ 
+-CREATE TABLE IF NOT EXISTS Weather (
+-    id SERIAL PRIMARY KEY,
+-    station_id INTEGER REFERENCES Station(id),
+-    recorded_at TIMESTAMP NOT NULL,
+-    precipitation_sum DOUBLE PRECISION,
+-    temperature_mean DOUBLE PRECISION,
+-    evapotranspiration_sum DOUBLE PRECISION,
+-    UNIQUE(station_id, recorded_at)
++CREATE TABLE IF NOT EXISTS data_freshness_policy (
++    source_id                BIGINT PRIMARY KEY, -- FK ΓåÆ data_source
++    expected_cadence_min     INTEGER NOT NULL,
++    warning_after_min        INTEGER NOT NULL,
++    stale_after_min          INTEGER NOT NULL CHECK (stale_after_min > warning_after_min),
++    required_for_operational BOOLEAN NOT NULL DEFAULT FALSE,
++    created_at               TIMESTAMPTZ NOT NULL DEFAULT NOW()
+ );
++-- Freshness per-source: DAHITI cadence ~10-35 ng├áy Γëá GloFAS daily
+ 
+--- Indexes for time-series queries
+-CREATE INDEX idx_waterlevel_time ON WaterLevel(recorded_at);
+-CREATE INDEX idx_salinity_time ON Salinity(recorded_at);
+-CREATE INDEX idx_weather_time ON Weather(recorded_at);
++CREATE TABLE IF NOT EXISTS system_capability_snapshot (
++    snapshot_id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
++    snapshotted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
++    system_mode    VARCHAR(30) NOT NULL DEFAULT 'RESEARCH',
++    capabilities   JSONB NOT NULL,
++    created_by     VARCHAR(100) NOT NULL DEFAULT 'system'
++);
++-- API /api/v1/system/capabilities ─æß╗ìc bß║ún ghi mß╗¢i nhß║Ñt
+diff --git a/sql/01_core_schema_if_new.sql b/sql/01_core_schema_if_new.sql
+index 41128de..59353ce 100644
+--- a/sql/01_core_schema_if_new.sql
++++ b/sql/01_core_schema_if_new.sql
+@@ -78,7 +78,7 @@ CREATE TABLE public.salinity_station (
+   CHECK (ST_X(geom) BETWEEN -180 AND 180 AND ST_Y(geom) BETWEEN -90 AND 90)
+ );
+ 
+-CREATE TABLE public.irrigation_gate (
++CREATE TABLE public.sluice_gate (
+   gate_id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+   gate_code varchar(64) NOT NULL UNIQUE CHECK (gate_code ~ '^[A-Z0-9][A-Z0-9_-]{1,63}$'),
+   gate_name text NOT NULL CHECK (btrim(gate_name) <> ''),
+@@ -129,10 +129,10 @@ CREATE TABLE public.water_level_observation (
+ 
+ CREATE INDEX idx_boundary_geom ON public.admin_boundary USING gist(geom);
+ CREATE INDEX idx_station_geom ON public.salinity_station USING gist(geom);
+-CREATE INDEX idx_gate_geom ON public.irrigation_gate USING gist(geom);
++CREATE INDEX idx_gate_geom ON public.sluice_gate USING gist(geom);
+ CREATE INDEX idx_boundary_source ON public.admin_boundary(source_id);
+ CREATE INDEX idx_station_source ON public.salinity_station(source_id);
+-CREATE INDEX idx_gate_source ON public.irrigation_gate(source_id);
++CREATE INDEX idx_gate_source ON public.sluice_gate(source_id);
+ CREATE INDEX idx_salinity_source ON public.salinity_observation(source_id);
+ CREATE INDEX idx_water_source ON public.water_level_observation(source_id);
+ CREATE INDEX idx_salinity_time ON public.salinity_observation(observed_at);
+@@ -160,7 +160,7 @@ WHERE o.is_demo=false AND o.quality_flag='VALIDATED';
+ COMMENT ON TABLE public.data_source IS 'Nguon va phan loai du lieu. SYNTHETIC bat buoc is_demo=true.';
+ COMMENT ON TABLE public.admin_boundary IS 'Ranh gioi co phien ban theo valid_from; chi nap khi co nguon va CRS xac minh.';
+ COMMENT ON TABLE public.salinity_station IS 'Danh muc tram. Moi tram nhieu so do; khong luu gia tri man hien tai tai day.';
+-COMMENT ON TABLE public.irrigation_gate IS 'Danh muc cong; khong luu khuyen nghi nhu trang thai van hanh thuc te.';
++COMMENT ON TABLE public.sluice_gate IS 'Danh muc cong; khong luu khuyen nghi nhu trang thai van hanh thuc te.';
+ COMMENT ON COLUMN public.salinity_observation.salinity_ppt IS 'Do man theo phan nghin khoi luong (g/kg); khong nap truc tiep EC hoac PSU khi chua chuan hoa co can cu.';
+ COMMENT ON COLUMN public.water_level_observation.vertical_datum IS 'Moc cao do do nguon du lieu cong bo; bat buoc de dien giai water_level_m.';
+ COMMENT ON VIEW public.v_station_training IS 'Chi du lieu thuc VALIDATED; demo se cho 0 dong la dung.';
