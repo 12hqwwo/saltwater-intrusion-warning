@@ -1,0 +1,7 @@
+# Install into .venv-api from the repository root.
+# Versions exercised together on Python 3.12, 2026-10-03.
+fastapi==0.142.2
+uvicorn==0.54.0
+psycopg[binary]==3.3.6
+pydantic==2.13.5
+tzdata==2026.4

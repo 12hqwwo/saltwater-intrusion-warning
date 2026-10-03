@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#11383e" />
+    <meta name="description" content="Bản đồ trạm và dữ liệu quan trắc độ dẫn điện EC phục vụ nghiên cứu xâm nhập mặn tại Đồng Tháp." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23087f78'/%3E%3Cpath d='M5 12q5-5 11 0t11 0M5 20q5-5 11 0t11 0' fill='none' stroke='white' stroke-width='2.5'/%3E%3C/svg%3E" />
+    <title>Đồng Tháp · Quan trắc EC</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Đến nội dung chính</a>
+    <header class="site-header">
+      <a class="brand" href="#mainContent" aria-label="WebGIS Đồng Tháp">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M4 10q6-6 12 0t12 0M4 17q6-6 12 0t12 0M4 24q6-6 12 0t12 0" /></svg></span>
+        <span><strong>ĐỒNG THÁP</strong><small>Không gian dữ liệu nước</small></span>
+      </a>
+      <nav aria-label="Điều hướng chính"><a href="#mapSection">Bản đồ trạm</a><a href="#historySection">Lịch sử EC</a></nav>
+      <span id="connectionStatus" class="connection" role="status"><i aria-hidden="true"></i><span>Đang kết nối</span></span>
+    </header>
+
+    <main id="mainContent" class="page-shell">
+      <section class="intro" aria-labelledby="pageTitle">
+        <div><p class="eyebrow">WEBGIS / QUAN TRẮC LỊCH SỬ</p><h1 id="pageTitle">Theo dõi dữ liệu <span>nguồn nước.</span></h1><p class="intro-description">Khám phá vị trí trạm và diễn biến độ dẫn điện EC theo thời gian.</p></div>
+        <div class="scope-tag"><span class="scope-icon" aria-hidden="true">↗</span><div><strong>Độ dẫn điện · EC</strong><span>Đơn vị đo: mS/m</span></div></div>
+      </section>
+      <div id="appAlert" class="app-alert" role="alert" hidden><p id="alertText"></p><button id="retryButton" type="button">Thử tải lại</button></div>
+
+      <div class="workspace">
+        <aside class="sidebar" aria-label="Chọn trạm và dữ liệu">
+          <section class="side-section">
+            <div class="section-heading"><h2>Trạm quan trắc</h2><span id="stationCount" class="count-pill">—</span></div>
+            <p class="muted small">Chọn trạm trên bản đồ hoặc bên dưới.</p>
+            <div id="stationList" class="station-list" role="group" aria-label="Danh sách trạm"><p class="muted">Đang tải danh sách trạm…</p></div>
+          </section>
+
+          <section class="side-section data-section">
+            <label class="field-label" for="datasetSelect">Bộ dữ liệu nguồn</label>
+            <select id="datasetSelect" disabled><option value="">Chọn trạm trước</option></select>
+            <p id="datasetHint" class="muted small">Mỗi bộ dữ liệu là một phiên bản nhập riêng.</p>
+            <details id="filterDetails" class="filter-details" open>
+              <summary>Bộ lọc quan trắc<span aria-hidden="true">⌄</span></summary>
+              <form id="filterForm">
+                <fieldset id="filterFields" disabled>
+                  <legend class="sr-only">Bộ lọc lịch sử EC</legend>
+                  <div class="quick-ranges" role="group" aria-label="Khoảng thời gian nhanh"><button id="recentRange" type="button">24 tháng cuối</button><button id="fullRange" type="button">Toàn bộ</button></div>
+                  <div class="field-grid"><label>Từ ngày<input id="dateFrom" type="date" max="9999-12-30" /></label><label>Đến ngày<input id="dateTo" type="date" max="9999-12-30" /></label></div>
+                  <label>Chất lượng dữ liệu<select id="qualityFilter"><option value="">Tất cả trạng thái</option><option value="UNVERIFIED">Chưa xác minh · UNVERIFIED</option><option value="VALIDATED">Đã xác minh · VALIDATED</option><option value="SUSPECT">Cần kiểm tra · SUSPECT</option><option value="INVALID">Không hợp lệ · INVALID</option></select></label>
+                  <label>Loại số liệu<select id="kindFilter"><option value="">Quan trắc và ước tính</option><option value="O">Quan trắc · O</option><option value="E">Ước tính · E</option></select></label>
+                  <button class="primary-button" type="submit">Áp dụng bộ lọc<span aria-hidden="true">→</span></button>
+                </fieldset>
+              </form>
+            </details>
+          </section>
+
+          <details class="side-section source-details"><summary>Thông tin trạm &amp; nguồn</summary><dl><dt>Mã trạm</dt><dd id="siteCode">—</dd><dt>Vị trí (kinh độ, vĩ độ)</dt><dd id="coordinates">—</dd><dt>Trạng thái vị trí</dt><dd id="locationStatus">—</dd><dt>Nguồn vị trí</dt><dd id="locationReference">—</dd><dt>Nguồn quan trắc</dt><dd id="sourceName">—</dd><dt>Tham chiếu nguồn</dt><dd id="sourceReference">—</dd><dt>Mã bộ dữ liệu</dt><dd id="datasetCode">—</dd><dt>File nguồn</dt><dd id="sourceFilename">—</dd><dt>SHA-256</dt><dd id="datasetHash">—</dd></dl></details>
+          <div class="reading-note"><span class="note-dot" aria-hidden="true"></span><p><strong>Hiểu đúng số liệu</strong>EC là độ dẫn điện của nước. Việc suy ra độ mặn cần phương pháp quy đổi được kiểm chứng.</p></div>
+        </aside>
+
+        <div class="content-column">
+          <section id="mapSection" class="panel map-panel" aria-labelledby="mapTitle">
+            <div class="panel-heading"><div><p class="eyebrow">KHÔNG GIAN</p><h2 id="mapTitle">Vị trí các trạm</h2></div><button id="fitStations" type="button" class="secondary-button" disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="6"/><path d="M10 0v5m0 10v5M0 10h5m10 0h5"/></svg> Xem tất cả trạm</button></div>
+            <div class="map-wrap"><div id="map" tabindex="0" aria-label="Bản đồ trạm quan trắc EC. Có thể chọn trạm bằng danh sách bên cạnh."></div><span class="map-label"><i aria-hidden="true"></i><span id="mapCount">Đang tải trạm</span></span></div>
+            <div class="map-footer"><label class="checkbox-label"><input type="checkbox" id="basemapToggle" checked /> Nền OpenStreetMap</label><span><i class="legend-location" aria-hidden="true"></i> Màu điểm biểu thị trạm được chọn</span></div>
+            <p id="tileNotice" class="tile-notice" hidden>Một số ô bản đồ nền chưa tải được. Vị trí trạm và dữ liệu EC vẫn có thể xem.</p>
+          </section>
+
+          <section id="historySection" class="panel history-panel" aria-labelledby="historyTitle" aria-busy="false">
+            <div class="panel-heading"><div><p class="eyebrow">CHUỖI QUAN TRẮC</p><h2 id="historyTitle">Chọn trạm để xem EC</h2><p id="appliedRange" class="muted small">Thời gian hiển thị theo giờ Việt Nam (UTC+7).</p></div><a class="text-link" href="#tableDetails">Xem bảng số liệu ↓</a></div>
+            <div class="metrics-strip"><div><span>Số đo theo bộ lọc</span><strong id="metricCount">—</strong></div><div><span>EC trung bình <small>mS/m</small></span><strong id="metricMean">—</strong></div><div><span>EC cao nhất <small>mS/m</small></span><strong id="metricMax">—</strong></div></div>
+            <p id="loadStatus" class="load-status" role="status" aria-live="polite">Đang chuẩn bị dữ liệu…</p>
+            <div id="chart" class="chart-container"><p class="empty-chart">Biểu đồ sẽ xuất hiện sau khi chọn trạm và bộ dữ liệu.</p></div>
+            <div class="quality-legend" aria-label="Chú giải chất lượng"><span><i class="q-unverified"></i>Chưa xác minh</span><span><i class="q-validated"></i>Đã xác minh</span><span><i class="q-suspect"></i>Cần kiểm tra</span><span><i class="q-invalid"></i>Không hợp lệ</span></div>
+            <p class="chart-footnote">Di chuột lên điểm để xem số đo. Điểm rỗng là ước tính (E). Đường nối dừng tại tháng thiếu hoặc số đo INVALID.</p>
+            <div id="qualityNotice" class="quality-notice" hidden></div>
+            <details id="tableDetails" class="table-details"><summary>Bảng số liệu quan trắc<span id="tableCount">0 dòng</span></summary><div class="table-scroll"><table><caption class="sr-only">Quan trắc thuộc bộ dữ liệu và bộ lọc đang hiển thị</caption><thead><tr><th scope="col">Ngày quan trắc</th><th scope="col">EC (mS/m)</th><th scope="col">Loại</th><th scope="col">Chất lượng</th></tr></thead><tbody id="dataRows"></tbody></table></div><div class="table-pagination"><span id="pageSummary">Chưa có dữ liệu</span><div><button id="previousPage" type="button" disabled aria-label="Trang số liệu trước">← Trước</button><button id="nextPage" type="button" disabled aria-label="Trang số liệu tiếp theo">Sau →</button></div></div></details>
+          </section>
+        </div>
+      </div>
+      <footer class="page-footer"><span>WebGIS Đồng Tháp · Dữ liệu quan trắc lịch sử</span><span>Lớp ranh giới nghiên cứu và cống chưa được tích hợp trong phiên bản này.</span></footer>
+    </main>
+    <noscript>Bạn cần bật JavaScript để xem bản đồ và dữ liệu quan trắc.</noscript>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
