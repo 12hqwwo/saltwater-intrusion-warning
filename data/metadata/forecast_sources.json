@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-04",
+  "time_zone": "Asia/Ho_Chi_Minh",
+  "variables": {
+    "conductivity_mS_per_m": {
+      "unit": "mS/m",
+      "nonnegative": true,
+      "metadata_status": "MRC_UNIT_CONFIRMED_TEMPERATURE_BASIS_UNKNOWN",
+      "assumed_release_delay_days": 0,
+      "purpose": "TARGET",
+      "note": "Month labels are aggregates of supplied samples, not continuous monthly salinity. Actual publication dates unavailable; month-end is a declared retrospective assumption."
+    },
+    "precipitation_sum": {
+      "unit": "mm",
+      "nonnegative": true,
+      "metadata_status": "AGGREGATION_VERIFIED_ORIGINAL_RESPONSE_UNITS_NOT_RETAINED",
+      "assumed_release_delay_days": 5,
+      "purpose": "WEATHER",
+      "note": "Monthly sum of daily precipitation. API documentation supports mm, but original request/response metadata and revision vintages are not retained."
+    },
+    "temperature_mean": {
+      "unit": "degC",
+      "nonnegative": false,
+      "metadata_status": "AGGREGATION_VERIFIED_ORIGINAL_RESPONSE_UNITS_NOT_RETAINED",
+      "assumed_release_delay_days": 5,
+      "purpose": "WEATHER",
+      "note": "Air temperature at 2m, mean of daily means; not water temperature for EC conversion."
+    },
+    "evapotranspiration_sum": {
+      "unit": "mm",
+      "nonnegative": true,
+      "metadata_status": "AGGREGATION_VERIFIED_ORIGINAL_RESPONSE_UNITS_NOT_RETAINED",
+      "assumed_release_delay_days": 5,
+      "purpose": "WEATHER",
+      "note": "Sum of daily reference ET0; not measured river evaporation."
+    },
+    "water_level_m": {
+      "unit": "m",
+      "nonnegative": false,
+      "metadata_status": "REGIONAL_PROXY_VERTICAL_DATUM_UNCONFIRMED",
+      "assumed_release_delay_days": 30,
+      "purpose": "EXPERIMENTAL_HYDRO_PROXY",
+      "note": "DAHITI regional label; not proven co-located with MRC or gate. Thirty days is an assumption, not an established source release schedule."
+    },
+    "glofas_discharge_m3s": {
+      "unit": "m3/s",
+      "nonnegative": true,
+      "metadata_status": "REGIONAL_GRID_MEAN_PROXY_EXTRACTION_UNVERIFIED",
+      "assumed_release_delay_days": 30,
+      "purpose": "EXPERIMENTAL_HYDRO_PROXY",
+      "note": "Legacy spatial mean over the supplied GloFAS grid; not certified discharge at Tan Chau. Thirty days is an assumption."
+    }
+  },
+  "default_paths": [
+    "AR",
+    "ARX",
+    "EXOG",
+    "EXOG_DELAYED"
+  ],
+  "proxy_path_requires_explicit_flag": true,
+  "ec_temperature_basis": "UNKNOWN",
+  "source_quality": "UNVERIFIED",
+  "gate_decision_eligible": false,
+  "weather_availability_note": "Five days chosen as an experimental release-delay scenario consistent with documented ERA5/ERA5-Land latency; historical CSV model choice/timezone/request metadata are not independently confirmed.",
+  "metadata_findings": {
+    "mrc_csv_readme_xlsx": "No explicit source-series EC temperature compensation declaration found. The shared strings and document metadata of both XLSX exports were additionally searched.",
+    "weather_daily_to_monthly": "Both source CSVs have 15218 unique daily records, 1985-01-01 through 2026-08-31. All 500 months complete. Three selected weather columns reproduce the master within floating point precision.",
+    "weather_coordinates": {
+      "MYTHO": [
+        106.36,
+        10.36
+      ],
+      "TANCHAU": [
+        105.234,
+        10.804
+      ]
+    },
+    "excluded_default_weather": [
+      "windspeed_mean (mean of daily maxima; units unconfirmed)",
+      "temperature_max/temperature_min/humidity_mean/shortwave_rad_sum (not needed in the predeclared compact experiment)"
+    ],
+    "field_gate_operating_rule": "No gate-specific approved operating document and threshold set has been supplied or verified; no numeric production defaults assigned."
+  },
+  "sources": [
+    {
+      "url": "https://www.mrcmekong.org/wp-content/uploads/2024/08/TGWQ-1.pdf",
+      "finding": "Programme methods do not confirm compensation for each historical series."
+    },
+    {
+      "url": "https://portal.mrcmekong.org/monitoring/water-quality",
+      "finding": "Public retrieval requires JavaScript; no source-specific compensation confirmation obtained."
+    },
+    {
+      "url": "https://open-meteo.com/en/docs/historical-weather-api",
+      "finding": "Reanalysis products, weather unit conventions, documented ERA5/ERA5-Land delay and availability of archived forecast products."
+    },
+    {
+      "url": "https://scikit-learn.org/stable/auto_examples/applications/plot_time_series_lagged_features.html",
+      "finding": "Time-respecting evaluation and lagged-feature forecasting."
+    },
+    {
+      "url": "https://www.siwrr.org.vn/",
+      "finding": "Official regional research/forecast source; no local gate policy inferred from a general bulletin."
+    }
+  ],
+  "snapshot_hashes": {
+    "data/processed/master_timeseries.csv": "f9b2de085a265a13e21779aa7c95b8d0caaed9335ae61d820475f54e519eac71",
+    "data/raw/openmeteo_rainfall/openmeteo_MyTho_daily.csv": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+    "data/raw/openmeteo_rainfall/openmeteo_TanChau_daily.csv": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730"
+  }
+}

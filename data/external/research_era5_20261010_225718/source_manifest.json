@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "retrievals": [
+    {
+      "url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel_salinity_SONDOC_1996-2016.csv",
+      "final_url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel_salinity_SONDOC_1996-2016.csv",
+      "file": "sondoc_source.csv",
+      "bytes": 465005,
+      "sha256": "c79c658321c73f2ff0e24a154fa09eca1fe9ce6d1119cc00a29d6777eb2332e2",
+      "fetched_at": "2026-10-10T15:57:22.522071+00:00",
+      "license": "CC-BY-4.0",
+      "citation": "Apel, H.; Khiem, M.; Nguyen, H.Q.; Toan, T.Q. (2024), doi:10.5880/GFZ.4.4.2024.004"
+    },
+    {
+      "url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel-et-al_discharge_Qmonthly_TanChau_1964-2017_gaps-filled.csv",
+      "final_url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel-et-al_discharge_Qmonthly_TanChau_1964-2017_gaps-filled.csv",
+      "file": "tanchau_discharge_source.csv",
+      "bytes": 7320,
+      "sha256": "d6479cb03b7d5dc4fc3df24cbc67adabdba8606c608cc1688441b76852be0a3f",
+      "fetched_at": "2026-10-10T15:57:23.672505+00:00",
+      "license": "CC-BY-4.0",
+      "citation": "Apel, H.; Khiem, M.; Nguyen, H.Q.; Toan, T.Q. (2024), doi:10.5880/GFZ.4.4.2024.004"
+    },
+    {
+      "url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel-et-al_data-description.pdf",
+      "final_url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel-et-al_data-description.pdf",
+      "file": "gfz_description.pdf",
+      "bytes": 271198,
+      "sha256": "00c4373f3df5ddb2a92cee4003bcd95acee6a97ffe6e1011cacfcc95a7cf995d",
+      "fetched_at": "2026-10-10T15:57:25.913691+00:00",
+      "license": "CC-BY-4.0",
+      "citation": "Apel, H.; Khiem, M.; Nguyen, H.Q.; Toan, T.Q. (2024), doi:10.5880/GFZ.4.4.2024.004"
+    },
+    {
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.35912163&longitude=106.3529997&start_date=1985-01-01&end_date=2026-09-30&daily=precipitation_sum%2Ctemperature_2m_mean%2Cet0_fao_evapotranspiration&timezone=Asia%2FHo_Chi_Minh&models=era5&temperature_unit=celsius&precipitation_unit=mm",
+      "final_url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.35912163&longitude=106.3529997&start_date=1985-01-01&end_date=2026-09-30&daily=precipitation_sum%2Ctemperature_2m_mean%2Cet0_fao_evapotranspiration&timezone=Asia%2FHo_Chi_Minh&models=era5&temperature_unit=celsius&precipitation_unit=mm",
+      "file": "era5_MYTHO_response.json",
+      "bytes": 430515,
+      "sha256": "dd88d39cc96b9b37b677ca6bd28eb9736c9d6c612ec2073a38abf3eaa5da1a08",
+      "fetched_at": "2026-10-10T15:57:35.187851+00:00",
+      "request_parameters": {
+        "latitude": 10.35912163,
+        "longitude": 106.3529997,
+        "start_date": "1985-01-01",
+        "end_date": "2026-09-30",
+        "daily": "precipitation_sum,temperature_2m_mean,et0_fao_evapotranspiration",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "models": "era5",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service, distributed by Open-Meteo; https://open-meteo.com/en/docs/historical-weather-api",
+      "response_metadata": {
+        "latitude": 10.25,
+        "longitude": 106.25,
+        "generationtime_ms": 1711.567759513855,
+        "utc_offset_seconds": 25200,
+        "timezone": "Asia/Ho_Chi_Minh",
+        "timezone_abbreviation": "GMT+7",
+        "elevation": 5.0,
+        "daily_units": {
+          "time": "iso8601",
+          "precipitation_sum": "mm",
+          "temperature_2m_mean": "Â°C",
+          "et0_fao_evapotranspiration": "mm"
+        }
+      }
+    }
+  ],
+  "errors": [
+    {
+      "type": "ValueError",
+      "message": "Unexpected unit: temperature_2m_mean."
+    }
+  ],
+  "gate_decision_eligible": false,
+  "sondoc": {
+    "raw_rows": 18336,
+    "accepted_rows": 18300,
+    "rejected_rows": 36,
+    "duplicate_member_rows": 24,
+    "invalid_numeric_rows": 12,
+    "first_timestamp": "1996-02-01T01:00:00+07:00",
+    "last_timestamp": "2016-06-29T23:00:00+07:00",
+    "min_g_per_l": 0.0,
+    "max_g_per_l": 27.4,
+    "time_zone": "ASSUMPTION_ONLY",
+    "publication_vintages_available": false,
+    "sampling": "Discontinuous campaigns, generally 2-hour intervals; no interpolation performed.",
+    "location_gfz": {
+      "longitude": 106.45747,
+      "latitude": 10.06425
+    },
+    "location_warning": "A different 2026 Zenodo dataset locates Son Doc at 106.4999811, 10.0285082. Identity/location unresolved; do not merge by name.",
+    "method_warning": "2024 metadata says surface water; 2020 paper describes depth averaging. Measurement protocol needs confirmation.",
+    "license": "CC-BY-4.0",
+    "doi": "10.5880/GFZ.4.4.2024.004"
+  },
+  "discharge": {
+    "rows": 444,
+    "first_month": "1980-01-01",
+    "last_month": "2016-12-01",
+    "unit": "m3/s",
+    "unit_evidence": "CSV header and detailed CSV comment; PDF has a conflicting m/s typo.",
+    "coverage_evidence": "Actual rows, not the 1964-2017 filename.",
+    "source_counts": {
+      "REPORTED_GAUGE_MONTHLY": 252,
+      "RECONSTRUCTED_WUP_JICA": 180,
+      "TRANSITION_YEAR_SOURCE_AMBIGUOUS": 12
+    },
+    "publication_vintages_available": false,
+    "license": "CC-BY-4.0",
+    "doi": "10.5880/GFZ.4.4.2024.004"
+  }
+}

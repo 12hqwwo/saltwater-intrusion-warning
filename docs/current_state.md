@@ -1,5 +1,7 @@
 # Hiện trạng dự án — rà soát ngày 02/10/2026
 
+**Ghi chú cập nhật 08/10/2026:** phần dưới giữ nguyên kiểm kê ban đầu để đối chiếu tiến độ. Những nhận xét “backend trống”, “frontend chưa có” không còn mô tả bản mã hiện tại. API lịch sử đã có bằng chứng phản hồi do người thực hiện cung cấp; bản rà soát hiện có thêm mô hình, nguồn dữ liệu và API/giao diện phát lại. Xem [weekly_progress.md](weekly_progress.md) và [research_step07.md](research_step07.md) cho trạng thái mới nhất. Chưa trực tiếp kiểm tra lại database trên máy Windows.
+
 Phạm vi: mã nguồn và dữ liệu trong gói ZIP được cung cấp. Đợt này không kết nối PostgreSQL trên máy người thực hiện. Tiến độ ETL đã có được kế thừa; kiểm tra file không thay thế truy vấn database hiện tại.
 
 ## Các phần đã có và đã kiểm tra
