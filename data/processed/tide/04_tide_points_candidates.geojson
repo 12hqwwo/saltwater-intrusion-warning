@@ -1,0 +1,136 @@
+{
+  "type": "FeatureCollection",
+  "name": "04_tide_points_candidates",
+  "description": "Three FES2022b native-grid tide point candidates. UPDATED 2026-10-10 from latest QGIS screenshots. NOT verified for river-mouth representativeness, independent shoreline or vertical datum.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "TIDE_CUA_TIEU",
+      "properties": {
+        "point_code": "TIDE_CUA_TIEU",
+        "label": "Ứng viên ngoài khơi Cửa Tiểu",
+        "role_status": "PROPOSED_NOT_FINAL",
+        "grid_lat": 10.3,
+        "grid_lon": 106.866666667,
+        "model_name": "FES2022b",
+        "model_variant": "ocean_tide_extrapolated",
+        "model_grid_epsg": 4326,
+        "mask_code": 0,
+        "mask_class": "OCEAN_NATIVE",
+        "native_3x3": true,
+        "m2_amplitude_cm": 107.32909393310547,
+        "m2_phase_deg": -153.7666015625,
+        "m2_filename": "m2_fes2022.nc",
+        "m2_source": "QGIS Identify Results screenshots from user; re-run script 18 against local FES files",
+        "fes_four_constituents_check": "PENDING_RERUN_AFTER_COORD_CHANGE",
+        "coastline_check": "OSM_VISUAL_ONLY",
+        "coastline_verified": false,
+        "model_datum_check": "PENDING",
+        "validation_status": "REVIEW",
+        "gebco_elevation_m": -3,
+        "gebco_tid": 40,
+        "gebco_5x5_negative_cells": 25,
+        "gebco_5x5_total_cells": 25,
+        "gebco_5x5_min_elevation_m": -4,
+        "gebco_5x5_max_elevation_m": -2,
+        "gebco_source_year": 2026,
+        "gebco_source_note": "GEBCO 2026 user-provided file; TID 40 is gravity-predicted, not surveyed",
+        "bathymetry_validation": "REVIEW_NOT_IN_SITU",
+        "revision_note": "Điểm Cửa Tiểu thay mới: QGIS 10.300000 N, 106.866667 E; mask native; GEBCO seabed model ~-3 m."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.866666667,
+          10.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TIDE_MIDDLE",
+      "properties": {
+        "point_code": "TIDE_MIDDLE",
+        "label": "Ứng viên trung gian",
+        "role_status": "PROPOSED_NOT_FINAL",
+        "grid_lat": 10.2,
+        "grid_lon": 106.9,
+        "model_name": "FES2022b",
+        "model_variant": "ocean_tide_extrapolated",
+        "model_grid_epsg": 4326,
+        "mask_code": 0,
+        "mask_class": "OCEAN_NATIVE",
+        "native_3x3": true,
+        "m2_amplitude_cm": 88.66020202636719,
+        "m2_phase_deg": -160.1708526611328,
+        "m2_filename": "m2_fes2022.nc",
+        "m2_source": "QGIS Identify Results screenshots from user; re-run script 18 against local FES files",
+        "fes_four_constituents_check": "PENDING_RERUN_AFTER_COORD_CHANGE",
+        "coastline_check": "OSM_VISUAL_ONLY",
+        "coastline_verified": false,
+        "model_datum_check": "PENDING",
+        "validation_status": "REVIEW",
+        "gebco_elevation_m": -2,
+        "gebco_tid": 40,
+        "gebco_5x5_negative_cells": 25,
+        "gebco_5x5_total_cells": 25,
+        "gebco_5x5_min_elevation_m": -3,
+        "gebco_5x5_max_elevation_m": -2,
+        "gebco_source_year": 2026,
+        "gebco_source_note": "GEBCO 2026 user-provided file; TID 40 is gravity-predicted, not surveyed",
+        "bathymetry_validation": "REVIEW_NOT_IN_SITU",
+        "revision_note": "Điểm giữa theo ẢNH MỚI NHẤT: 10.200000 N, 106.900000 E. KHÁC tọa độ 10.233333 N từng gợi ý; vai trò giữa 2 cửa cần kiểm chứng."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.9,
+          10.2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TIDE_CUA_DAI",
+      "properties": {
+        "point_code": "TIDE_CUA_DAI",
+        "label": "Ứng viên ngoài khơi Cửa Đại",
+        "role_status": "PROPOSED_NOT_FINAL",
+        "grid_lat": 10.166666667,
+        "grid_lon": 106.933333333,
+        "model_name": "FES2022b",
+        "model_variant": "ocean_tide_extrapolated",
+        "model_grid_epsg": 4326,
+        "mask_code": 0,
+        "mask_class": "OCEAN_NATIVE",
+        "native_3x3": true,
+        "m2_amplitude_cm": 76.46837615966797,
+        "m2_phase_deg": -165.4377899169922,
+        "m2_filename": "m2_fes2022.nc",
+        "m2_source": "QGIS Identify Results screenshots from user; re-run script 18 against local FES files",
+        "fes_four_constituents_check": "PENDING_RERUN_AFTER_COORD_CHANGE",
+        "coastline_check": "OSM_VISUAL_ONLY",
+        "coastline_verified": false,
+        "model_datum_check": "PENDING",
+        "validation_status": "REVIEW",
+        "gebco_elevation_m": -4,
+        "gebco_tid": 40,
+        "gebco_5x5_negative_cells": 25,
+        "gebco_5x5_total_cells": 25,
+        "gebco_5x5_min_elevation_m": -6,
+        "gebco_5x5_max_elevation_m": -2,
+        "gebco_source_year": 2026,
+        "gebco_source_note": "GEBCO 2026 user-provided file; TID 40 is gravity-predicted, not surveyed",
+        "bathymetry_validation": "REVIEW_NOT_IN_SITU",
+        "revision_note": "Giữ điểm Cửa Đại cũ, chưa xác minh tính đại diện cửa sông."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.933333333,
+          10.166666667
+        ]
+      }
+    }
+  ]
+}

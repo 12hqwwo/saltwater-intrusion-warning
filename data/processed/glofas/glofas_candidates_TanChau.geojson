@@ -1,0 +1,453 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.825,
+        "grid_lon": 105.225,
+        "mean_discharge_m3s": 14342.434241500807,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 3.6971167204517608,
+        "upstream_area_m2": 756234321920.0,
+        "upstream_area_km2": 756234.32192,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.225,
+          10.825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.774999999999999,
+        "grid_lon": 105.225,
+        "mean_discharge_m3s": 0.914921140041421,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 3.7995279343079225,
+        "upstream_area_m2": 30244274.0,
+        "upstream_area_km2": 30.244274,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.225,
+          10.774999999999999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.825,
+        "grid_lon": 105.275,
+        "mean_discharge_m3s": 14341.809457600568,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 4.004365976514274,
+        "upstream_area_m2": 756264534016.0,
+        "upstream_area_km2": 756264.534016,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.275,
+          10.825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.774999999999999,
+        "grid_lon": 105.275,
+        "mean_discharge_m3s": 0.7320735923897782,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 4.0991561700062045,
+        "upstream_area_m2": 30244274.0,
+        "upstream_area_km2": 30.244274,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.275,
+          10.774999999999999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.825,
+        "grid_lon": 105.175,
+        "mean_discharge_m3s": 0.8153638703138163,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 8.423085221292219,
+        "upstream_area_m2": 30239370.0,
+        "upstream_area_km2": 30.23937,
+        "ldd_code": 4,
+        "ldd_direction": "W",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.175,
+          10.825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.774999999999999,
+        "grid_lon": 105.175,
+        "mean_discharge_m3s": 2.4738483637847515,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 8.469099210204531,
+        "upstream_area_m2": 90723016.0,
+        "upstream_area_km2": 90.723016,
+        "ldd_code": 4,
+        "ldd_direction": "W",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.175,
+          10.774999999999999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.875,
+        "grid_lon": 105.225,
+        "mean_discharge_m3s": 0.7420909681269307,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 8.644226842103645,
+        "upstream_area_m2": 30234442.0,
+        "upstream_area_km2": 30.234442,
+        "ldd_code": 8,
+        "ldd_direction": "N",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.225,
+          10.875
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.725,
+        "grid_lon": 105.225,
+        "mean_discharge_m3s": 0.9073603907785734,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 8.776438864059191,
+        "upstream_area_m2": 30249156.0,
+        "upstream_area_km2": 30.249156,
+        "ldd_code": 2,
+        "ldd_direction": "S",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.225,
+          10.725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.875,
+        "grid_lon": 105.275,
+        "mean_discharge_m3s": 11.641244504264954,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 8.780007823016355,
+        "upstream_area_m2": 543930752.0,
+        "upstream_area_km2": 543.930752,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.275,
+          10.875
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.725,
+        "grid_lon": 105.275,
+        "mean_discharge_m3s": 1.791644179128054,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 8.910271638335697,
+        "upstream_area_m2": 60493432.0,
+        "upstream_area_km2": 60.493432,
+        "ldd_code": 2,
+        "ldd_direction": "S",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.275,
+          10.725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.875,
+        "grid_lon": 105.175,
+        "mean_discharge_m3s": 14343.46377970549,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 11.488811292167547,
+        "upstream_area_m2": 756204109824.0,
+        "upstream_area_km2": 756204.109824,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.175,
+          10.875
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.725,
+        "grid_lon": 105.175,
+        "mean_discharge_m3s": 0.8434272215494243,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 11.589849665480562,
+        "upstream_area_m2": 30249156.0,
+        "upstream_area_km2": 30.249156,
+        "ldd_code": 4,
+        "ldd_direction": "W",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.175,
+          10.725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.825,
+        "grid_lon": 105.125,
+        "mean_discharge_m3s": 1.6135384855026678,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 13.706714527565518,
+        "upstream_area_m2": 60478740.0,
+        "upstream_area_km2": 60.47874,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.125,
+          10.825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.774999999999999,
+        "grid_lon": 105.125,
+        "mean_discharge_m3s": 3.2702291864118225,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 13.735747759177253,
+        "upstream_area_m2": 120967288.0,
+        "upstream_area_km2": 120.967288,
+        "ldd_code": 2,
+        "ldd_direction": "S",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.125,
+          10.774999999999999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.875,
+        "grid_lon": 105.125,
+        "mean_discharge_m3s": 0.806833414507863,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 15.77653059002912,
+        "upstream_area_m2": 30234442.0,
+        "upstream_area_km2": 30.234442,
+        "ldd_code": 8,
+        "ldd_direction": "N",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.125,
+          10.875
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_lat": 10.725,
+        "grid_lon": 105.125,
+        "mean_discharge_m3s": 213.35675026546267,
+        "valid_timesteps": 14244,
+        "total_timesteps": 14244,
+        "missing_fraction": 0.0,
+        "station": "TanChau",
+        "station_lat": 10.80062008,
+        "station_lon": 105.2480164,
+        "distance_km": 15.852102306912554,
+        "upstream_area_m2": 10992200704.0,
+        "upstream_area_km2": 10992.200704,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "discharge_available": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.125,
+          10.725
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+﻿point_code,latitude,longitude,fes_four_constituents_check,gebco_elevation_m,gebco_tid_sampled,gebco_3x3_negative_count,gebco_3x3_cell_count,gebco_bathy_screen,validation_status,notes
+TIDE_CUA_TIEU,10.3,106.866666667,PASS_FILE_SAMPLE,-3.0,40,9,9,PASS_NEGATIVE_BATHY_SAMPLE,REVIEW,"Shallow depth <=5 m; GEBCO coastal uncertainty may be material; TID 40 is modeled/satellite-gravity-guided interpolation, not direct sounding"
+TIDE_MIDDLE,10.2,106.9,PASS_FILE_SAMPLE,-2.0,40,9,9,PASS_NEGATIVE_BATHY_SAMPLE,REVIEW,"Shallow depth <=5 m; GEBCO coastal uncertainty may be material; TID 40 is modeled/satellite-gravity-guided interpolation, not direct sounding"
+TIDE_CUA_DAI,10.166666667,106.933333333,PASS_FILE_SAMPLE,-4.0,40,9,9,PASS_NEGATIVE_BATHY_SAMPLE,REVIEW,"Shallow depth <=5 m; GEBCO coastal uncertainty may be material; TID 40 is modeled/satellite-gravity-guided interpolation, not direct sounding"

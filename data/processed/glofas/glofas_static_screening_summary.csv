@@ -1,0 +1,3 @@
+﻿station,discharge_files_present,candidate_count,nearest_grid_lat,nearest_grid_lon,nearest_distance_km,nearest_upstream_area_km2,largest_grid_lat,largest_grid_lon,largest_upstream_area_km2,largest_distance_km
+TanChau,True,16,10.825,105.225,3.6971167204517608,756234.32192,10.825,105.275,756264.534016,4.004365976514274
+MyTho,False,30,10.375,106.37499999999997,2.984633950139819,30.282698,10.424999999999997,106.57499999999996,15317.409792,25.361372155891452

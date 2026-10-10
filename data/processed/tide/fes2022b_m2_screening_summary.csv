@@ -1,0 +1,16 @@
+﻿metric,value
+source,D:\Study\TLCN\data\processed\tide\m2_fes2022b_mekong_coast.nc
+mask_source,D:\Study\TLCN\data\raw\tide\fes2022b\ocean_tide_extrapolated\mask_fes2022B.nc
+grid_height,24
+grid_width,40
+amplitude_units,cm
+phase_units,degrees
+mask_0_native_ocean_cells,314
+mask_1_extrapolated_cells,646
+mask_2_land_cells,0
+mask_3_lake_cells,0
+mask_unknown_cells,0
+screening_NATIVE_REVIEW,240
+screening_EXTRAPOLATED_REVIEW,480
+screening_NEAR_LAND_OR_MASK_EDGE,240
+screening_INVALID_M2,0

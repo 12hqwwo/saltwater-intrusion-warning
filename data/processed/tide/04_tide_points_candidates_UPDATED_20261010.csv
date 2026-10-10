@@ -1,0 +1,4 @@
+﻿point_code,grid_lat,grid_lon,mask_code,native_3x3,m2_amplitude_cm,m2_phase_deg,gebco_elevation_m,gebco_tid,validation_status,fes_four_constituents_check,revision_note
+TIDE_CUA_TIEU,10.3,106.866666667,0,True,107.32909393310547,-153.7666015625,-3,40,REVIEW,PENDING_RERUN_AFTER_COORD_CHANGE,"Điểm Cửa Tiểu thay mới: QGIS 10.300000 N, 106.866667 E; mask native; GEBCO seabed model ~-3 m."
+TIDE_MIDDLE,10.2,106.9,0,True,88.66020202636719,-160.1708526611328,-2,40,REVIEW,PENDING_RERUN_AFTER_COORD_CHANGE,"Điểm giữa theo ẢNH MỚI NHẤT: 10.200000 N, 106.900000 E. KHÁC tọa độ 10.233333 N từng gợi ý; vai trò giữa 2 cửa cần kiểm chứng."
+TIDE_CUA_DAI,10.166666667,106.933333333,0,True,76.46837615966797,-165.4377899169922,-4,40,REVIEW,PENDING_RERUN_AFTER_COORD_CHANGE,"Giữ điểm Cửa Đại cũ, chưa xác minh tính đại diện cửa sông."

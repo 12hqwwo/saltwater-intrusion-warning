@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "dataset": "FES2022 tide elevations - extrapolated grids",
+  "product_version": "b",
+  "project": "FES2022",
+  "doi": "10.24400/527896/a01-2024.004",
+  "license_url": "https://www.aviso.altimetry.fr/en/data/data-access/fileadmin/documents/data/License_Aviso.pdf",
+  "documentation_url": "https://www.aviso.altimetry.fr/fileadmin/documents/data/tools/hdbk_FES2022.pdf",
+  "source_portal": "AVISO+",
+  "download_url_status": "NOT_RECORDED_IN_WORKSPACE",
+  "download_period_local": {
+    "first": "2026-10-08T22:54:55+07:00",
+    "last": "2026-10-09T13:04:20+07:00",
+    "basis": "Local timestamps of the five downloaded .nc.xz archives"
+  },
+  "extraction_completed_local": "2026-10-10T22:06:31+07:00",
+  "snapshot_note": "Local file timestamps are recorded as evidence of this workspace snapshot; they are not asserted to be server publication times.",
+  "archive_verification": "Each .nc.xz stream was decompressed and SHA-256 compared with its matching .nc file; all five pairs matched.",
+  "files": [
+    {
+      "file": "ocean_tide_extrapolated/k1_fes2022.nc",
+      "bytes": 159105789,
+      "sha256": "9f564cb7c6b6dfee8487e685747de8ea6d3e512a9f7dc67e834bbea83a8589d1",
+      "local_timestamp": "2026-10-10T22:06:25+07:00"
+    },
+    {
+      "file": "ocean_tide_extrapolated/k1_fes2022.nc.xz",
+      "bytes": 158865904,
+      "sha256": "5b31a997edd2fdf21b24ff21eb8a6f78d99d6f097a5afbc9c7f09fa968efd7b6",
+      "local_timestamp": "2026-10-08T23:47:54+07:00"
+    },
+    {
+      "file": "ocean_tide_extrapolated/m2_fes2022.nc",
+      "bytes": 163730077,
+      "sha256": "8661a73770741dfd46321df6fdd3c71f8e468c9b1eb27b7ab1668fed3a60ae33",
+      "local_timestamp": "2026-10-10T22:06:27+07:00"
+    },
+    {
+      "file": "ocean_tide_extrapolated/m2_fes2022.nc.xz",
+      "bytes": 163489712,
+      "sha256": "616562ceab5dba29a5fd52aed2b98ebc706ebf177c1e0f393907b199d394232b",
+      "local_timestamp": "2026-10-08T22:54:55+07:00"
+    },
+    {
+      "file": "ocean_tide_extrapolated/mask_fes2022B.nc",
+      "bytes": 1027081,
+      "sha256": "375fac5072b7ece1e3247845bf0238df7e076aeb101f8a52869f2173046c1576",
+      "local_timestamp": "2026-10-10T22:06:27+07:00"
+    },
+    {
+      "file": "ocean_tide_extrapolated/mask_fes2022B.nc.xz",
+      "bytes": 765988,
+      "sha256": "689b8637c9f796313b79143d6eaf6a86df97d17371a6c3afd61bd1d040dc5da7",
+      "local_timestamp": "2026-10-09T13:04:20+07:00"
+    },
+    {
+      "file": "ocean_tide_extrapolated/o1_fes2022.nc",
+      "bytes": 158418108,
+      "sha256": "cb6f75a1b0df682c0933bd5e60e5b123dc76d5184b7726604f3b52952c314caf",
+      "local_timestamp": "2026-10-10T22:06:29+07:00"
+    },
+    {
+      "file": "ocean_tide_extrapolated/o1_fes2022.nc.xz",
+      "bytes": 158175680,
+      "sha256": "a2fc85ab5cf3dc5f761283d17dd8b3f96f9edcb9d7f1c3aadfadf51ce9415ace",
+      "local_timestamp": "2026-10-09T00:13:50+07:00"
+    },
+    {
+      "file": "ocean_tide_extrapolated/s2_fes2022.nc",
+      "bytes": 164632840,
+      "sha256": "5c8b4a21dcc83448b11d8da7976aba703df4b37fd1841cf86bc569f39bbabff5",
+      "local_timestamp": "2026-10-10T22:06:31+07:00"
+    },
+    {
+      "file": "ocean_tide_extrapolated/s2_fes2022.nc.xz",
+      "bytes": 164404788,
+      "sha256": "5a2fd7c79c1883377efc67167c2c542e7ff9495f7fbba7ea3f9521efafaf5cbe",
+      "local_timestamp": "2026-10-08T23:22:08+07:00"
+    }
+  ]
+}

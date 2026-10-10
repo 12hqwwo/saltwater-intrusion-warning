@@ -1,0 +1,845 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.375,
+        "grid_lon": 106.37499999999997,
+        "distance_km": 2.984633950139819,
+        "upstream_area_m2": 30282698.0,
+        "upstream_area_km2": 30.282698,
+        "ldd_code": 9,
+        "ldd_direction": "NE",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.37499999999997,
+          10.375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.375,
+        "grid_lon": 106.32499999999996,
+        "distance_km": 3.535090530063087,
+        "upstream_area_m2": 30282698.0,
+        "upstream_area_km2": 30.282698,
+        "ldd_code": 7,
+        "ldd_direction": "NW",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.32499999999996,
+          10.375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.325000000000003,
+        "grid_lon": 106.37499999999997,
+        "distance_km": 4.493023690477952,
+        "upstream_area_m2": 30287400.0,
+        "upstream_area_km2": 30.2874,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.37499999999997,
+          10.325000000000003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.325000000000003,
+        "grid_lon": 106.32499999999996,
+        "distance_km": 4.8761315927865825,
+        "upstream_area_m2": 30287400.0,
+        "upstream_area_km2": 30.2874,
+        "ldd_code": 4,
+        "ldd_direction": "W",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.32499999999996,
+          10.325000000000003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.424999999999997,
+        "grid_lon": 106.37499999999997,
+        "distance_km": 7.710417897240938,
+        "upstream_area_m2": 30277974.0,
+        "upstream_area_km2": 30.277974,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.37499999999997,
+          10.424999999999997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.424999999999997,
+        "grid_lon": 106.32499999999996,
+        "distance_km": 7.939697436289585,
+        "upstream_area_m2": 30277974.0,
+        "upstream_area_km2": 30.277974,
+        "ldd_code": 7,
+        "ldd_direction": "NW",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.32499999999996,
+          10.424999999999997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.375,
+        "grid_lon": 106.42499999999998,
+        "distance_km": 8.070870481969953,
+        "upstream_area_m2": 121121344.0,
+        "upstream_area_km2": 121.121344,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.42499999999998,
+          10.375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.375,
+        "grid_lon": 106.275,
+        "distance_km": 8.712372005737944,
+        "upstream_area_m2": 302770176.0,
+        "upstream_area_km2": 302.770176,
+        "ldd_code": 2,
+        "ldd_direction": "S",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.275,
+          10.375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.325000000000003,
+        "grid_lon": 106.42499999999998,
+        "distance_km": 8.742261585543337,
+        "upstream_area_m2": 60574800.0,
+        "upstream_area_km2": 60.5748,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.42499999999998,
+          10.325000000000003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.325000000000003,
+        "grid_lon": 106.275,
+        "distance_km": 9.337843960079274,
+        "upstream_area_m2": 363344960.0,
+        "upstream_area_km2": 363.34496,
+        "ldd_code": 4,
+        "ldd_direction": "W",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.275,
+          10.325000000000003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.275000000000006,
+        "grid_lon": 106.37499999999997,
+        "distance_km": 9.658582212245218,
+        "upstream_area_m2": 60584156.0,
+        "upstream_area_km2": 60.584156,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.37499999999997,
+          10.275000000000006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.275000000000006,
+        "grid_lon": 106.32499999999996,
+        "distance_km": 9.842671291022167,
+        "upstream_area_m2": 30292078.0,
+        "upstream_area_km2": 30.292078,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.32499999999996,
+          10.275000000000006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.424999999999997,
+        "grid_lon": 106.42499999999998,
+        "distance_km": 10.755113244145438,
+        "upstream_area_m2": 90838648.0,
+        "upstream_area_km2": 90.838648,
+        "ldd_code": 2,
+        "ldd_direction": "S",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.42499999999998,
+          10.424999999999997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.424999999999997,
+        "grid_lon": 106.275,
+        "distance_km": 11.244430376615922,
+        "upstream_area_m2": 60560672.0,
+        "upstream_area_km2": 60.560672,
+        "ldd_code": 4,
+        "ldd_direction": "W",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.275,
+          10.424999999999997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.275000000000006,
+        "grid_lon": 106.42499999999998,
+        "distance_km": 12.228533140748628,
+        "upstream_area_m2": 242392256.0,
+        "upstream_area_km2": 242.392256,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.42499999999998,
+          10.275000000000006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.525000000000006,
+        "grid_lon": 106.42499999999998,
+        "distance_km": 20.055038657720427,
+        "upstream_area_m2": 7710377472.0,
+        "upstream_area_km2": 7710.377472,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.42499999999998,
+          10.525000000000006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.174999999999997,
+        "grid_lon": 106.37499999999997,
+        "distance_km": 20.614443637597052,
+        "upstream_area_m2": 1029742208.0,
+        "upstream_area_km2": 1029.742208,
+        "ldd_code": 2,
+        "ldd_direction": "S",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.37499999999997,
+          10.174999999999997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.525000000000006,
+        "grid_lon": 106.475,
+        "distance_km": 22.76399259767123,
+        "upstream_area_m2": 7740645888.0,
+        "upstream_area_km2": 7740.645888,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.475,
+          10.525000000000006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.474999999999994,
+        "grid_lon": 106.525,
+        "distance_km": 22.80033246473413,
+        "upstream_area_m2": 7770918912.0,
+        "upstream_area_km2": 7770.918912,
+        "ldd_code": 9,
+        "ldd_direction": "NE",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.525,
+          10.474999999999994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.575000000000003,
+        "grid_lon": 106.37499999999997,
+        "distance_km": 24.124850580993332,
+        "upstream_area_m2": 7559025664.0,
+        "upstream_area_km2": 7559.025664,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.37499999999997,
+          10.575000000000003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.174999999999997,
+        "grid_lon": 106.225,
+        "distance_km": 24.80527571743804,
+        "upstream_area_m2": 1998628864.0,
+        "upstream_area_km2": 1998.628864,
+        "ldd_code": 2,
+        "ldd_direction": "S",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.225,
+          10.174999999999997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.575000000000003,
+        "grid_lon": 106.42499999999998,
+        "distance_km": 25.262683540612635,
+        "upstream_area_m2": 7589289472.0,
+        "upstream_area_km2": 7589.289472,
+        "ldd_code": 2,
+        "ldd_direction": "S",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.42499999999998,
+          10.575000000000003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.424999999999997,
+        "grid_lon": 106.57499999999996,
+        "distance_km": 25.361372155891452,
+        "upstream_area_m2": 15317409792.0,
+        "upstream_area_km2": 15317.409792,
+        "ldd_code": 9,
+        "ldd_direction": "NE",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.57499999999996,
+          10.424999999999997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.125,
+        "grid_lon": 106.37499999999997,
+        "distance_km": 26.144242466689892,
+        "upstream_area_m2": 1090358784.0,
+        "upstream_area_km2": 1090.358784,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.37499999999997,
+          10.125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.575000000000003,
+        "grid_lon": 106.475,
+        "distance_km": 27.462323732059083,
+        "upstream_area_m2": 7062072320.0,
+        "upstream_area_km2": 7062.07232,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.475,
+          10.575000000000003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.474999999999994,
+        "grid_lon": 106.57499999999996,
+        "distance_km": 27.48580997564463,
+        "upstream_area_m2": 14984329216.0,
+        "upstream_area_km2": 14984.329216,
+        "ldd_code": 2,
+        "ldd_direction": "S",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.57499999999996,
+          10.474999999999994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.174999999999997,
+        "grid_lon": 106.17499999999998,
+        "distance_km": 28.257139092920717,
+        "upstream_area_m2": 1938026240.0,
+        "upstream_area_km2": 1938.02624,
+        "ldd_code": 6,
+        "ldd_direction": "E",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.17499999999998,
+          10.174999999999997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.224999999999994,
+        "grid_lon": 106.12499999999997,
+        "distance_km": 29.062796014727542,
+        "upstream_area_m2": 1907724928.0,
+        "upstream_area_km2": 1907.724928,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.12499999999997,
+          10.224999999999994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.125,
+        "grid_lon": 106.225,
+        "distance_km": 29.561762017397527,
+        "upstream_area_m2": 2028934784.0,
+        "upstream_area_km2": 2028.934784,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.225,
+          10.125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "station": "MyTho",
+        "station_lat": 10.35912163,
+        "station_lon": 106.3529997,
+        "grid_lat": 10.625,
+        "grid_lon": 106.32499999999996,
+        "distance_km": 29.722445432051284,
+        "upstream_area_m2": 7528761856.0,
+        "upstream_area_km2": 7528.761856,
+        "ldd_code": 3,
+        "ldd_direction": "SE",
+        "selection_status": "REVIEW",
+        "mean_discharge_m3s": null,
+        "valid_timesteps": 0,
+        "total_timesteps": 0,
+        "missing_fraction": null,
+        "discharge_available": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.32499999999996,
+          10.625
+        ]
+      }
+    }
+  ]
+}
