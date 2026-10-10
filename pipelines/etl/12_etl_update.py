@@ -188,7 +188,25 @@ def run_ec_qa() -> pd.DataFrame:
     ]
     report = full[report_columns].copy()
     report.to_csv(EC_OUTPUT_DIR / "02_ec_qa_report.csv", index=False, encoding="utf-8-sig")
-    report.to_csv(EC_OUTPUT_DIR / "03_ec_clean.csv", index=False, encoding="utf-8-sig")
+    clean_columns = [
+        "timestamp",
+        "station",
+        "station_code",
+        "clean_value",
+        "unit_raw",
+        "quality_flag",
+        "source",
+        "snapshot_id",
+        "source_approval",
+        "source_grade",
+        "obs_type",
+    ]
+    clean = report.loc[
+        report["quality_flag"].isin(["VERIFIED", "SUSPECT"])
+        & report["clean_value"].notna(),
+        clean_columns,
+    ].copy()
+    clean.to_csv(EC_OUTPUT_DIR / "03_ec_clean.csv", index=False, encoding="utf-8-sig")
     print("EC QA summary")
     print(pd.crosstab(report["station"], report["quality_flag"]).to_string())
     return report

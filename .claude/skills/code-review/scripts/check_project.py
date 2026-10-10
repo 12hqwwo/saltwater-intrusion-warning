@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[4]
 checks = [
     ("train_baseline.py", r"salinity_lag", "legacy salinity naming in model code"),
     ("data_processing/generate_nb.py", r"\*\s*0\.64", "fixed EC-to-salinity conversion"),
-    ("data_processing/process_data.py", r"\.mean\(dim=dims\)", "GloFAS bbox spatial mean"),
+    ("pipelines/legacy/data_processing/process_data.py", r"\.mean\(dim=dims\)", "GloFAS bbox spatial mean"),
     ("sql/02_irrigation_gate_dong_thap.sql", r"centroid placeholder", "fake gate centroid placeholder"),
 ]
 

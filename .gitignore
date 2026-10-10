@@ -1,5 +1,7 @@
 # Secrets – KHÔNG BAO GIỜ commit file .env thật
 .env
+.env-api
+.claude
 
 # Python
 __pycache__/
@@ -25,6 +27,9 @@ build/
 *.zip
 gadm*.json
 data/processed/*.parquet
+# FES2022b binaries stay local; README and SHA-256 manifest remain versioned.
+data/raw/tide/fes2022b/ocean_tide_extrapolated/*.nc
+data/raw/tide/fes2022b/ocean_tide_extrapolated/*.nc.xz
 
 # Model artifacts
 *.pkl
@@ -35,6 +40,14 @@ tmp/
 # OS
 .DS_Store
 *.tmp
+.DS_Store
+.venv/
+.venv-api/
+
+frontend/node_modules/
+data/biengioi/
+__pycache__/
+
 Thumbs.db
 
 # IDE
@@ -46,3 +59,5 @@ Thumbs.db
 # Log
 *.log
 logs/
+
+runs/

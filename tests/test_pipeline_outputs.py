@@ -12,6 +12,7 @@ class PipelineOutputTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.qa = pd.read_csv(ROOT / "data/processed/ec/02_ec_qa_report.csv")
+        cls.clean = pd.read_csv(ROOT / "data/processed/ec/03_ec_clean.csv")
         cls.features = pd.read_csv(ROOT / "data/features/10_monthly_feature_v2.csv")
         cls.gates = pd.read_csv(ROOT / "data/processed/gis/09_gate_coordinate_qa.csv")
         cls.models = pd.read_csv(ROOT / "data/models/15_model_comparison.csv")
@@ -22,6 +23,14 @@ class PipelineOutputTests(unittest.TestCase):
         self.assertEqual(counts[("MyTho", 19805)], 463)
         self.assertEqual(len(self.qa), 927)
         self.assertFalse(self.qa.duplicated(["station", "timestamp"]).any())
+
+    def test_ec_clean_is_a_filtered_contract_output(self) -> None:
+        self.assertNotIn("original_value", self.clean.columns)
+        self.assertNotIn("qa_reason", self.clean.columns)
+        self.assertTrue(self.clean["quality_flag"].isin(["VERIFIED", "SUSPECT"]).all())
+        self.assertTrue(self.clean["clean_value"].notna().all())
+        self.assertFalse(self.clean.duplicated(["station", "timestamp"]).any())
+        self.assertNotEqual(list(self.qa.columns), list(self.clean.columns))
 
     def test_feature_grain_and_future_targets(self) -> None:
         self.assertEqual(len(self.features), 1000)

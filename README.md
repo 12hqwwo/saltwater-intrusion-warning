@@ -11,7 +11,7 @@ data/
 │   ├── glofas/tanchau/
 │   ├── dahiti/
 │   ├── tide/
-│   │   ├── fes2022/
+│   │   ├── fes2022b/
 │   │   └── uhslc/
 │   ├── meteorology/openmeteo/
 │   └── gis/
@@ -26,10 +26,27 @@ data/
 ├── features/
 └── models/
 
+data/external/
+├── sources/
+│   ├── sondoc/
+│   └── tanchau_discharge/
+└── download_runs/
+
 pipelines/
 ├── etl/12_etl_update.py
 ├── features/13_feature_pipeline.py
-└── models/14_model_baseline.py
+├── models/
+│   ├── 14_model_baseline.py
+│   ├── run_forecast_multivariate.py
+│   └── run_sondoc_forecast.py
+├── advisory/
+│   ├── run_gate_advisor.py
+│   └── run_station_gate_link.py
+└── legacy/
+    ├── run_forecast.py
+    └── data_processing/
+
+scripts/utilities/extract_fes2022b.py
 
 sql/migrations/11_schema_migration.sql
 docs/reports/01_data_audit.md
@@ -44,7 +61,9 @@ python pipelines/features/13_feature_pipeline.py
 python pipelines/models/14_model_baseline.py
 ```
 
-Các script phải được chạy theo thứ tự trên. `monthly_feature_v2` chỉ lấy EC `VERIFIED` làm target. Mỹ Tho GloFAS và toàn bộ Tide FES vẫn NULL cho đến khi có nguồn được xác minh.
+Các script phải được chạy theo thứ tự trên. `monthly_feature_v2` chỉ lấy EC `VERIFIED` làm target. Mỹ Tho GloFAS vẫn NULL; Tide FES vẫn NULL cho đến khi điểm offshore, datum và chuỗi dự báo được xác minh.
+
+Các file trong `data/external/sources/` là bản nguồn chuẩn dùng chung. Mỗi thư mục trong `data/external/download_runs/` chỉ lưu bằng chứng riêng của một lần tải; manifest trỏ về nguồn chuẩn để tránh nhân bản dữ liệu.
 
 ## Trạng thái 16 đầu ra
 
