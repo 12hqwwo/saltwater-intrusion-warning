@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "retrievals": [
+    {
+      "url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel_salinity_SONDOC_1996-2016.csv",
+      "final_url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel_salinity_SONDOC_1996-2016.csv",
+      "file": "sondoc_source.csv",
+      "canonical_path": "data/external/sources/sondoc/sondoc_source.csv",
+      "bytes": 465005,
+      "sha256": "c79c658321c73f2ff0e24a154fa09eca1fe9ce6d1119cc00a29d6777eb2332e2",
+      "fetched_at": "2026-10-10T14:52:35.383369+00:00",
+      "license": "CC-BY-4.0",
+      "citation": "Apel, H.; Khiem, M.; Nguyen, H.Q.; Toan, T.Q. (2024), doi:10.5880/GFZ.4.4.2024.004"
+    },
+    {
+      "url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel-et-al_discharge_Qmonthly_TanChau_1964-2017_gaps-filled.csv",
+      "final_url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel-et-al_discharge_Qmonthly_TanChau_1964-2017_gaps-filled.csv",
+      "file": "tanchau_discharge_source.csv",
+      "canonical_path": "data/external/sources/tanchau_discharge/tanchau_discharge_source.csv",
+      "bytes": 7320,
+      "sha256": "d6479cb03b7d5dc4fc3df24cbc67adabdba8606c608cc1688441b76852be0a3f",
+      "fetched_at": "2026-10-10T14:52:36.486925+00:00",
+      "license": "CC-BY-4.0",
+      "citation": "Apel, H.; Khiem, M.; Nguyen, H.Q.; Toan, T.Q. (2024), doi:10.5880/GFZ.4.4.2024.004"
+    },
+    {
+      "url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel-et-al_data-description.pdf",
+      "final_url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel-et-al_data-description.pdf",
+      "file": "gfz_description.pdf",
+      "canonical_path": "data/external/sources/sondoc/gfz_description.pdf",
+      "bytes": 271198,
+      "sha256": "00c4373f3df5ddb2a92cee4003bcd95acee6a97ffe6e1011cacfcc95a7cf995d",
+      "fetched_at": "2026-10-10T14:52:38.514825+00:00",
+      "license": "CC-BY-4.0",
+      "citation": "Apel, H.; Khiem, M.; Nguyen, H.Q.; Toan, T.Q. (2024), doi:10.5880/GFZ.4.4.2024.004"
+    }
+  ],
+  "errors": [],
+  "gate_decision_eligible": false,
+  "canonical_outputs": {
+    "sondoc_observations": "data/external/sources/sondoc/sondoc_observations.csv",
+    "sondoc_quarantine": "data/external/sources/sondoc/sondoc_quarantine.csv",
+    "tanchau_discharge_monthly": "data/external/sources/tanchau_discharge/tanchau_discharge_monthly.csv"
+  },
+  "sondoc": {
+    "raw_rows": 18336,
+    "accepted_rows": 18300,
+    "rejected_rows": 36,
+    "duplicate_member_rows": 24,
+    "invalid_numeric_rows": 12,
+    "first_timestamp": "1996-02-01T01:00:00+07:00",
+    "last_timestamp": "2016-06-29T23:00:00+07:00",
+    "min_g_per_l": 0.0,
+    "max_g_per_l": 27.4,
+    "time_zone": "ASSUMPTION_ONLY",
+    "publication_vintages_available": false,
+    "sampling": "Discontinuous campaigns, generally 2-hour intervals; no interpolation performed.",
+    "location_gfz": {
+      "longitude": 106.45747,
+      "latitude": 10.06425
+    },
+    "location_warning": "A different 2026 Zenodo dataset locates Son Doc at 106.4999811, 10.0285082. Identity/location unresolved; do not merge by name.",
+    "method_warning": "2024 metadata says surface water; 2020 paper describes depth averaging. Measurement protocol needs confirmation.",
+    "license": "CC-BY-4.0",
+    "doi": "10.5880/GFZ.4.4.2024.004"
+  },
+  "discharge": {
+    "rows": 444,
+    "first_month": "1980-01-01",
+    "last_month": "2016-12-01",
+    "unit": "m3/s",
+    "unit_evidence": "CSV header and detailed CSV comment; PDF has a conflicting m/s typo.",
+    "coverage_evidence": "Actual rows, not the 1964-2017 filename.",
+    "source_counts": {
+      "REPORTED_GAUGE_MONTHLY": 252,
+      "RECONSTRUCTED_WUP_JICA": 180,
+      "TRANSITION_YEAR_SOURCE_AMBIGUOUS": 12
+    },
+    "publication_vintages_available": false,
+    "license": "CC-BY-4.0",
+    "doi": "10.5880/GFZ.4.4.2024.004"
+  }
+}
