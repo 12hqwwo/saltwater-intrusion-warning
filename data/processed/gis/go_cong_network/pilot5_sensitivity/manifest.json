@@ -1,0 +1,15 @@
+{
+  "baseline_v1_directory": "D:\\Study\\TLCN\\data\\processed\\gis\\go_cong_network\\pilot5_baselines",
+  "baseline_v1_unchanged": true,
+  "comparison": "River-Nearest vs Euclidean Nearest; Euclidean and River IDW power sensitivity",
+  "powers": [
+    1.0,
+    1.5,
+    2.0,
+    2.5,
+    3.0
+  ],
+  "validation": "Same 20 held-out-location cases as baseline v1; no p is selected or claimed as independently validated",
+  "river_nearest_rule": "Closest donor by RiverDistance; deterministic station-code tie break",
+  "unit": "mS/m"
+}

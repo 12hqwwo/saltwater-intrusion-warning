@@ -1,0 +1,10 @@
+{
+  "network": "D:\\Study\\TLCN\\data\\processed\\gis\\go_cong_network\\go_cong_user_trace_candidate_32648.gpkg",
+  "source_kml": "D:\\Study\\TLCN\\data\\raw\\gis\\user_review_20261017\\ban_do_nhanh_song_v2.kml",
+  "crs_distance": "EPSG:32648",
+  "route_count": 10,
+  "crossing_count": 15,
+  "gate_proximity_count": 8,
+  "crossing_interpretation": "Geometric line intersections noded in the approved pilot graph; no independent hydraulic verification",
+  "gate_interpretation": "Near a catalogued gate is not proof that a shortest path crosses an open gate"
+}

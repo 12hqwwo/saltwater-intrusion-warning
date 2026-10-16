@@ -1,0 +1,133 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.47922222222222,
+          10.351027777777778
+        ]
+      },
+      "properties": {
+        "site_code": "NM28",
+        "site_name_pdf": "Cầu thị trấn Vĩnh Bình – huyện Gò Công Tây",
+        "coordinate_version": "PDF_PRINTED",
+        "latitude_deg": 10.351027777777778,
+        "longitude_deg": 106.47922222222222,
+        "pdf_latitude_deg": 10.351027777777778,
+        "pdf_longitude_deg": 106.47922222222222,
+        "pdf_latitude_dms": "10°21'3,7\"",
+        "pdf_longitude_dms": "106°28'45,2\"",
+        "nearest_network_m": 159.37,
+        "nearest_component": 1,
+        "nearest_osm_waterway_m": 159.37,
+        "nearest_osm_way_id": 469912150,
+        "nearest_osm_type": "canal",
+        "nearest_osm_name": "",
+        "coordinate_evidence": "PDF p.4; printed DMS 106°28'45,2\" 10°21'3,7\"",
+        "position_verified": false,
+        "waterbody_verified": false,
+        "sluice_side_verified": "NOT_APPLICABLE",
+        "pilot_admission": "HOLD"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.57913888888889,
+          10.34525
+        ]
+      },
+      "properties": {
+        "site_code": "NM28",
+        "site_name_pdf": "Cầu thị trấn Vĩnh Bình – huyện Gò Công Tây",
+        "coordinate_version": "HYPOTHESIS_ROW_SWAP",
+        "latitude_deg": 10.34525,
+        "longitude_deg": 106.57913888888889,
+        "pdf_latitude_deg": 10.351027777777778,
+        "pdf_longitude_deg": 106.47922222222222,
+        "pdf_latitude_dms": "10°21'3,7\"",
+        "pdf_longitude_dms": "106°28'45,2\"",
+        "nearest_network_m": 169.36,
+        "nearest_component": 1,
+        "nearest_osm_waterway_m": 169.36,
+        "nearest_osm_way_id": 528938486,
+        "nearest_osm_type": "canal",
+        "nearest_osm_name": "",
+        "coordinate_evidence": "Lấy cặp số in ở dòng NM27; Phụ lục 1 đặt NM28 tại Gò Công Tây.",
+        "position_verified": false,
+        "waterbody_verified": false,
+        "sluice_side_verified": "NOT_APPLICABLE",
+        "pilot_admission": "HOLD"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.76038888888888,
+          10.408083333333334
+        ]
+      },
+      "properties": {
+        "site_code": "NM33",
+        "site_name_pdf": "Cống Vàm Tháp – xã Tân Phước – huyện Gò Công Đông",
+        "coordinate_version": "PDF_PRINTED",
+        "latitude_deg": 10.408083333333334,
+        "longitude_deg": 106.76038888888888,
+        "pdf_latitude_deg": 10.408083333333334,
+        "pdf_longitude_deg": 106.76038888888888,
+        "pdf_latitude_dms": "10°24'29,1\"",
+        "pdf_longitude_dms": "106°45'37,4\"",
+        "nearest_network_m": 393.23,
+        "nearest_component": 1,
+        "nearest_osm_waterway_m": 393.23,
+        "nearest_osm_way_id": 697666808,
+        "nearest_osm_type": "canal",
+        "nearest_osm_name": "",
+        "coordinate_evidence": "PDF p.5; printed DMS 106°45'37,4\" 10°24'29,1\"",
+        "position_verified": false,
+        "waterbody_verified": false,
+        "sluice_side_verified": false,
+        "pilot_admission": "HOLD"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.06880555555556,
+          10.413333333333334
+        ]
+      },
+      "properties": {
+        "site_code": "NM26",
+        "site_name_pdf": "Kênh Chợ Gạo (cống Đồng Sơn) – sông Tra – huyện Gò Công Tây",
+        "coordinate_version": "PDF_PRINTED",
+        "latitude_deg": 10.413333333333334,
+        "longitude_deg": 106.06880555555556,
+        "pdf_latitude_deg": 10.413333333333334,
+        "pdf_longitude_deg": 106.06880555555556,
+        "pdf_latitude_dms": "10°24'48,0\"",
+        "pdf_longitude_dms": "106°04'7,7\"",
+        "nearest_network_m": 16260.53,
+        "nearest_component": 1,
+        "nearest_osm_waterway_m": 16260.53,
+        "nearest_osm_way_id": 51199789,
+        "nearest_osm_type": "river",
+        "nearest_osm_name": "Sông Mỹ Tho",
+        "coordinate_evidence": "PDF p.4; printed DMS 106°04'7,7\" 10°24'48,0\"",
+        "position_verified": false,
+        "waterbody_verified": false,
+        "sluice_side_verified": "NOT_APPLICABLE",
+        "pilot_admission": "HOLD"
+      }
+    }
+  ]
+}

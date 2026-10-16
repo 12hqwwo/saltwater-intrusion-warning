@@ -1,0 +1,8 @@
+engine: darwin
+tide:
+  cartesian:
+    paths:
+      M2: ${FES_DATA}/m2_fes2022.nc
+      S2: ${FES_DATA}/s2_fes2022.nc
+      K1: ${FES_DATA}/k1_fes2022.nc
+      O1: ${FES_DATA}/o1_fes2022.nc

@@ -1,0 +1,21 @@
+{
+  "source_model": "FES2022b ocean_tide_extrapolated",
+  "model_constituents_present": [
+    "M2",
+    "S2",
+    "K1",
+    "O1"
+  ],
+  "full_model_constituent_count": 34,
+  "pyfes_version": "2026.5.2",
+  "pyfes_settings": "Default FESSettings: spline inference and long-period equilibrium",
+  "output_status": "SCREENING_ONLY_NOT_FULL_FES2022B_NOT_VALIDATED_AT_ESTUARY",
+  "points_status": "REVIEW; mask, 3x3 native ocean, and GEBCO screening passed; coastline, datum, and tidal representativeness not independently approved",
+  "time_evaluation": "UTC hourly; monthly aggregation Asia/Ho_Chi_Minh UTC+07:00",
+  "start_year": 1985,
+  "end_year": 2023,
+  "not_joined_to_verified_features": true,
+  "config": "D:\\Study\\TLCN\\config\\fes2022b_four_constituents.yaml",
+  "points": "D:\\Study\\TLCN\\data\\processed\\tide\\04_tide_points_checked.geojson",
+  "output": "D:\\Study\\TLCN\\data\\processed\\tide\\fes4_screening\\fes4_screening_monthly_1985_2023.csv"
+}

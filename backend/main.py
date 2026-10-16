@@ -2,8 +2,10 @@ from fastapi import FastAPI, HTTPException
 from typing import List, Optional
 from pydantic import BaseModel
 from datetime import datetime
+from backend.pilot_spatial import router as pilot_spatial_router
 
 app = FastAPI(title="Saltwater Intrusion API", version="1.0.0")
+app.include_router(pilot_spatial_router)
 
 # Mock data
 class SalinityRecord(BaseModel):

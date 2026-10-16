@@ -1,0 +1,482 @@
+{
+  "edge_count": 21736,
+  "node_count": 21447,
+  "component_count": 47,
+  "duplicate_edges_removed": 0,
+  "zero_length_edges_removed": 0,
+  "node_degree_counts": {
+    "1": 289,
+    "2": 20502,
+    "3": 445,
+    "4": 211
+  },
+  "components": [
+    {
+      "component": 1,
+      "nodes": 17918,
+      "edges": 18248,
+      "length_km": 1410.555
+    },
+    {
+      "component": 15,
+      "nodes": 410,
+      "edges": 409,
+      "length_km": 41.579
+    },
+    {
+      "component": 10,
+      "nodes": 398,
+      "edges": 397,
+      "length_km": 17.678
+    },
+    {
+      "component": 42,
+      "nodes": 374,
+      "edges": 374,
+      "length_km": 16.329
+    },
+    {
+      "component": 46,
+      "nodes": 356,
+      "edges": 355,
+      "length_km": 10.143
+    },
+    {
+      "component": 8,
+      "nodes": 114,
+      "edges": 113,
+      "length_km": 9.678
+    },
+    {
+      "component": 6,
+      "nodes": 59,
+      "edges": 58,
+      "length_km": 6.985
+    },
+    {
+      "component": 24,
+      "nodes": 69,
+      "edges": 72,
+      "length_km": 6.935
+    },
+    {
+      "component": 44,
+      "nodes": 330,
+      "edges": 329,
+      "length_km": 5.911
+    },
+    {
+      "component": 2,
+      "nodes": 51,
+      "edges": 50,
+      "length_km": 5.8
+    },
+    {
+      "component": 9,
+      "nodes": 85,
+      "edges": 84,
+      "length_km": 5.629
+    },
+    {
+      "component": 17,
+      "nodes": 134,
+      "edges": 133,
+      "length_km": 5.39
+    },
+    {
+      "component": 13,
+      "nodes": 81,
+      "edges": 80,
+      "length_km": 4.76
+    },
+    {
+      "component": 11,
+      "nodes": 30,
+      "edges": 29,
+      "length_km": 3.301
+    },
+    {
+      "component": 7,
+      "nodes": 72,
+      "edges": 71,
+      "length_km": 3.008
+    },
+    {
+      "component": 26,
+      "nodes": 86,
+      "edges": 85,
+      "length_km": 3.003
+    },
+    {
+      "component": 14,
+      "nodes": 109,
+      "edges": 108,
+      "length_km": 2.794
+    },
+    {
+      "component": 3,
+      "nodes": 31,
+      "edges": 30,
+      "length_km": 2.443
+    },
+    {
+      "component": 37,
+      "nodes": 76,
+      "edges": 75,
+      "length_km": 2.135
+    },
+    {
+      "component": 4,
+      "nodes": 30,
+      "edges": 29,
+      "length_km": 2.016
+    },
+    {
+      "component": 36,
+      "nodes": 31,
+      "edges": 30,
+      "length_km": 1.918
+    },
+    {
+      "component": 5,
+      "nodes": 6,
+      "edges": 5,
+      "length_km": 1.402
+    },
+    {
+      "component": 41,
+      "nodes": 9,
+      "edges": 8,
+      "length_km": 1.271
+    },
+    {
+      "component": 47,
+      "nodes": 37,
+      "edges": 36,
+      "length_km": 1.268
+    },
+    {
+      "component": 27,
+      "nodes": 98,
+      "edges": 97,
+      "length_km": 1.251
+    },
+    {
+      "component": 45,
+      "nodes": 94,
+      "edges": 93,
+      "length_km": 1.193
+    },
+    {
+      "component": 18,
+      "nodes": 23,
+      "edges": 22,
+      "length_km": 1.099
+    },
+    {
+      "component": 39,
+      "nodes": 33,
+      "edges": 32,
+      "length_km": 0.932
+    },
+    {
+      "component": 12,
+      "nodes": 25,
+      "edges": 24,
+      "length_km": 0.812
+    },
+    {
+      "component": 28,
+      "nodes": 15,
+      "edges": 14,
+      "length_km": 0.785
+    },
+    {
+      "component": 25,
+      "nodes": 38,
+      "edges": 37,
+      "length_km": 0.768
+    },
+    {
+      "component": 30,
+      "nodes": 36,
+      "edges": 35,
+      "length_km": 0.75
+    },
+    {
+      "component": 16,
+      "nodes": 19,
+      "edges": 18,
+      "length_km": 0.735
+    },
+    {
+      "component": 21,
+      "nodes": 13,
+      "edges": 12,
+      "length_km": 0.659
+    },
+    {
+      "component": 40,
+      "nodes": 13,
+      "edges": 12,
+      "length_km": 0.657
+    },
+    {
+      "component": 43,
+      "nodes": 23,
+      "edges": 22,
+      "length_km": 0.62
+    },
+    {
+      "component": 35,
+      "nodes": 25,
+      "edges": 24,
+      "length_km": 0.528
+    },
+    {
+      "component": 20,
+      "nodes": 12,
+      "edges": 11,
+      "length_km": 0.478
+    },
+    {
+      "component": 23,
+      "nodes": 12,
+      "edges": 11,
+      "length_km": 0.405
+    },
+    {
+      "component": 19,
+      "nodes": 8,
+      "edges": 7,
+      "length_km": 0.341
+    },
+    {
+      "component": 31,
+      "nodes": 11,
+      "edges": 10,
+      "length_km": 0.335
+    },
+    {
+      "component": 33,
+      "nodes": 15,
+      "edges": 14,
+      "length_km": 0.263
+    },
+    {
+      "component": 34,
+      "nodes": 13,
+      "edges": 12,
+      "length_km": 0.232
+    },
+    {
+      "component": 29,
+      "nodes": 17,
+      "edges": 16,
+      "length_km": 0.188
+    },
+    {
+      "component": 38,
+      "nodes": 2,
+      "edges": 1,
+      "length_km": 0.097
+    },
+    {
+      "component": 32,
+      "nodes": 4,
+      "edges": 3,
+      "length_km": 0.063
+    },
+    {
+      "component": 22,
+      "nodes": 2,
+      "edges": 1,
+      "length_km": 0.012
+    }
+  ],
+  "status": "USER_APPROVED_PILOT_NETWORK",
+  "geometry_review": "User finalized this working network on 2026-10-17; no independent hydraulic validation of crossings, barriers, or sluice operation",
+  "source_kml": "D:\\Study\\TLCN\\data\\raw\\gis\\user_review_20261017\\ban_do_nhanh_song_v2.kml",
+  "trace_count": 4,
+  "trace_length_km": 31.765,
+  "tan_hoa_trace_gaps": [
+    {
+      "from_trace": 2,
+      "to_trace": 3,
+      "gap_m": 0.74
+    },
+    {
+      "from_trace": 3,
+      "to_trace": 4,
+      "gap_m": 1.57
+    }
+  ],
+  "trace_endpoint_qa": [
+    {
+      "trace_id": 1,
+      "site_code": "NM29",
+      "name": "NM29 – Cầu Kinh Nhiễm",
+      "length_km": 1.842,
+      "vertices": 86,
+      "osm_crossing_count": 1,
+      "osm_crossing_ids": [
+        510175774
+      ],
+      "start_nearest_osm": {
+        "osm_id": 1460211460,
+        "name": "Sông Cửa Trung",
+        "waterway": "river",
+        "distance_m": 128.62
+      },
+      "end_nearest_osm": {
+        "osm_id": 510175774,
+        "name": "",
+        "waterway": "canal",
+        "distance_m": 2.79
+      }
+    },
+    {
+      "trace_id": 2,
+      "site_code": "NM31",
+      "name": "Cầu Tân Hòa",
+      "length_km": 3.728,
+      "vertices": 51,
+      "osm_crossing_count": 1,
+      "osm_crossing_ids": [
+        1224026953
+      ],
+      "start_nearest_osm": {
+        "osm_id": 541622343,
+        "name": "Sông Cửa Tiểu",
+        "waterway": "river",
+        "distance_m": 172.75
+      },
+      "end_nearest_osm": {
+        "osm_id": 1224026952,
+        "name": "",
+        "waterway": "stream",
+        "distance_m": 177.71
+      }
+    },
+    {
+      "trace_id": 3,
+      "site_code": "NM31",
+      "name": "Cầu Tân Hòa",
+      "length_km": 23.454,
+      "vertices": 195,
+      "osm_crossing_count": 11,
+      "osm_crossing_ids": [
+        469902070,
+        469903732,
+        484685762,
+        484685763,
+        510172629,
+        528938485,
+        528938486,
+        532651506,
+        1223985131,
+        1266723547,
+        1272641372
+      ],
+      "start_nearest_osm": {
+        "osm_id": 1224026952,
+        "name": "",
+        "waterway": "stream",
+        "distance_m": 178.23
+      },
+      "end_nearest_osm": {
+        "osm_id": 469902070,
+        "name": "",
+        "waterway": "canal",
+        "distance_m": 4.52
+      }
+    },
+    {
+      "trace_id": 4,
+      "site_code": "NM31",
+      "name": "Cầu Tân Hòa",
+      "length_km": 2.741,
+      "vertices": 43,
+      "osm_crossing_count": 2,
+      "osm_crossing_ids": [
+        469902070,
+        1272641937
+      ],
+      "start_nearest_osm": {
+        "osm_id": 469902070,
+        "name": "",
+        "waterway": "canal",
+        "distance_m": 3.99
+      },
+      "end_nearest_osm": {
+        "osm_id": 1272641937,
+        "name": "",
+        "waterway": "canal",
+        "distance_m": 10.42
+      }
+    }
+  ],
+  "pilot5_snap": [
+    {
+      "site_code": "NM29",
+      "site_name": "Cầu Kinh Nhiễm",
+      "osm_snap_m": 400.064155666706,
+      "kml_snap_m": 1.4048731022898933,
+      "aug_snap_m": 1.404873102217007,
+      "source_near": "USER_KML",
+      "trace_id": 1,
+      "component": 1,
+      "snap_status": "USER_APPROVED_FOR_PILOT",
+      "qa_note": "Người dùng chốt mạng làm việc; chưa có kiểm định thủy lực độc lập tại nút giao/cống."
+    },
+    {
+      "site_code": "NM30",
+      "site_name": "Cầu Long Chánh",
+      "osm_snap_m": 9.84524214550976,
+      "kml_snap_m": 527.8223975910445,
+      "aug_snap_m": 9.84524214550976,
+      "source_near": "OSM",
+      "trace_id": null,
+      "component": 1,
+      "snap_status": "BASELINE_ACCEPTED",
+      "qa_note": "Điểm đã nhận trên mạng OSM nền; giữ nguyên đánh giá trước."
+    },
+    {
+      "site_code": "NM31",
+      "site_name": "Cầu Tân Hòa",
+      "osm_snap_m": 200.04922106673362,
+      "kml_snap_m": 16.54965715537962,
+      "aug_snap_m": 16.54965715536582,
+      "source_near": "USER_KML",
+      "trace_id": 3,
+      "component": 1,
+      "snap_status": "USER_APPROVED_FOR_PILOT",
+      "qa_note": "Người dùng chốt mạng làm việc; chưa có kiểm định thủy lực độc lập tại nút giao/cống."
+    },
+    {
+      "site_code": "NM32",
+      "site_name": "Cống Cần Lộc",
+      "osm_snap_m": 1.2837806851716151,
+      "kml_snap_m": 9393.237009989005,
+      "aug_snap_m": 1.2837806851716151,
+      "source_near": "OSM",
+      "trace_id": null,
+      "component": 1,
+      "snap_status": "BASELINE_ACCEPTED",
+      "qa_note": "Điểm đã nhận trên mạng OSM nền; giữ nguyên đánh giá trước."
+    },
+    {
+      "site_code": "NM34",
+      "site_name": "Cầu Lý Quàn",
+      "osm_snap_m": 1.5098890687042128,
+      "kml_snap_m": 5149.779342942867,
+      "aug_snap_m": 1.5098890687042128,
+      "source_near": "OSM",
+      "trace_id": null,
+      "component": 1,
+      "snap_status": "BASELINE_ACCEPTED",
+      "qa_note": "Điểm đã nhận trên mạng OSM nền; giữ nguyên đánh giá trước."
+    }
+  ],
+  "warning": "KML crossings are noded geometrically, but water connectivity and barriers are not yet field-verified."
+}

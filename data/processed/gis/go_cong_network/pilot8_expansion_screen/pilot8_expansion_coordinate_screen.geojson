@@ -1,0 +1,74 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.06880555555556,
+          10.413333333333334
+        ]
+      },
+      "properties": {
+        "site_code": "NM26",
+        "site_name_pdf": "Kênh Chợ Gạo (cống Đồng Sơn) – sông Tra – huyện Gò Công Tây",
+        "pdf_lat": 10.413333333333334,
+        "pdf_lon": 106.06880555555556,
+        "nearest_network_m": 16260.53,
+        "nearest_edge_id": 71,
+        "nearest_component": 1,
+        "distance_under_100m": false,
+        "coordinate_status": "REVIEW_POSITION",
+        "decision": "HOLD_COORDINATE_QA",
+        "reason": "Kinh độ 106°04′ in trong báo cáo lệch khỏi cụm Gò Công; không dùng để tính khoảng cách trước khi xác minh."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.47922222222222,
+          10.351027777777778
+        ]
+      },
+      "properties": {
+        "site_code": "NM28",
+        "site_name_pdf": "Cầu thị trấn Vĩnh Bình – huyện Gò Công Tây",
+        "pdf_lat": 10.351027777777778,
+        "pdf_lon": 106.47922222222222,
+        "nearest_network_m": 159.37,
+        "nearest_edge_id": 1173,
+        "nearest_component": 1,
+        "distance_under_100m": false,
+        "coordinate_status": "REVIEW_POSITION",
+        "decision": "HOLD_COORDINATE_QA",
+        "reason": "Tọa độ in cách Cầu Chợ Gạo (NM25) khoảng 1,46 km; bản đồ Phụ lục 1 trang 26 đặt NM28 phía đông NM27. Khả năng hoán đổi cần xác minh."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.76038888888888,
+          10.408083333333334
+        ]
+      },
+      "properties": {
+        "site_code": "NM33",
+        "site_name_pdf": "Cống Vàm Tháp – xã Tân Phước – huyện Gò Công Đông",
+        "pdf_lat": 10.408083333333334,
+        "pdf_lon": 106.76038888888888,
+        "nearest_network_m": 393.23,
+        "nearest_edge_id": 5365,
+        "nearest_component": 1,
+        "distance_under_100m": false,
+        "coordinate_status": "REVIEW_POSITION",
+        "decision": "HOLD_COORDINATE_QA",
+        "reason": "Tọa độ in cách NM32 khoảng 0,66 km, nhưng Phụ lục 1 trang 26 đặt NM33 ở phía bắc, tách khỏi NM32; cần xác minh."
+      }
+    }
+  ]
+}

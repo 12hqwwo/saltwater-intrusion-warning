@@ -1,0 +1,6 @@
+﻿site_code,n_campaigns,nearest_mae_ms_m,river_nearest_mae_ms_m,euclidean_idw_mae_ms_m,river_idw_mae_ms_m,river_minus_euclidean_idw_mae_ms_m
+NM29,4,832.325,517.95,630.95,488.978,-141.972
+NM30,4,539.62,539.62,919.701,838.972,-80.729
+NM31,4,539.62,539.62,162.184,133.314,-28.87
+NM32,4,1871.445,1334.175,1460.31,1460.549,0.239
+NM34,4,832.325,832.325,609.221,569.268,-39.953

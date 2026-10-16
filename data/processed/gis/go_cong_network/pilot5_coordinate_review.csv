@@ -1,0 +1,6 @@
+site_code,working_name,review_lat,review_lon,coordinate_status,route_evidence,evidence_image,evidence_note
+NM29,Cầu Kinh Nhiễm,10.26788888888889,106.63872222222222,USER_LOCATED_BRIDGE,USER_CONTEXT_ONLY,nm29_mekong_context.png,"Người dùng xác định Cầu Kinh Nhiễm tại 10°16′04.4″N 106°38′19.4″E. Ảnh rộng cho thấy đường nước nhỏ giữa các nhánh Mê Kông; đường thông thủy tới sông lớn chưa được kiểm chứng."
+NM30,Cầu Long Chánh,10.361222222222222,106.67133333333334,USER_SATELLITE_BRIDGE,USER_VISUAL_WATERWAY_MATCH,nm30_long_chanh.png,"Ảnh Google Maps người dùng gửi ngày 2026-10-17 cho thấy Cầu Long Chánh bắc qua sông tại tọa độ này."
+NM31,Cầu Tân Hòa,10.320555555555556,106.70988888888888,USER_SATELLITE_BRIDGE,USER_VISUAL_WATERWAY_MATCH,nm31_tan_hoa.png,"Ảnh người dùng gửi ngày 2026-10-17 cho thấy Cầu Tân Hòa qua nhánh sông; ảnh rộng cho thấy gần nhánh Mê Kông lớn nhưng đường thông thủy cụ thể chưa được kiểm chứng."
+NM32,Cống Cần Lộc,10.403545,106.756315,USER_SATELLITE_GATE,USER_VISUAL_WATERWAY_MATCH,nm32_can_loc.png,"Ảnh Google Maps người dùng gửi ngày 2026-10-17 chỉ Cống Cần Lộc tại 10.403545 N, 106.756315 E."
+NM34,Cầu Lý Quàn,10.245803,106.697629,USER_SATELLITE_BRIDGE,USER_VISUAL_WATERWAY_MATCH,nm34_ly_quan.png,"Ảnh Google Maps người dùng gửi ngày 2026-10-17 chỉ Cầu Lý Quàn tại 10.245803 N, 106.697629 E."

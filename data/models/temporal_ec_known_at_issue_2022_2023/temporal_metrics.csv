@@ -1,0 +1,7 @@
+﻿station,model,n_test,MAE_ms_m,RMSE_ms_m,train_end,validation_end,test_end,protocol
+TanChau,SeasonalNaive,23,2.3117,3.1515,2018-12,2021-12,2023-12,rolling_one_step_previous_observed_EC
+TanChau,SARIMA,23,1.8111,2.1748,2018-12,2021-12,2023-12,rolling_one_step_previous_observed_EC
+TanChau,RandomForestPriorEC,23,1.6062,2.0961,2018-12,2021-12,2023-12,rolling_one_step_previous_observed_EC
+MyTho,SeasonalNaive,17,4.2759,5.6285,2018-12,2021-12,2023-12,rolling_one_step_previous_observed_EC
+MyTho,SARIMA,17,3.2989,4.3584,2018-12,2021-12,2023-12,rolling_one_step_previous_observed_EC
+MyTho,RandomForestPriorEC,17,3.2484,4.5253,2018-12,2021-12,2023-12,rolling_one_step_previous_observed_EC

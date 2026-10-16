@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63972912235685,
+          10.272167937727986
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "trace_id": 1,
+        "graph_node_x_cm": 67957850,
+        "graph_node_y_cm": 113596291,
+        "same_way_intersection_count": 13,
+        "scenario_b_action": "SPLIT_ALL_SAME_WAY_CROSSING_NODES"
+      }
+    }
+  ]
+}

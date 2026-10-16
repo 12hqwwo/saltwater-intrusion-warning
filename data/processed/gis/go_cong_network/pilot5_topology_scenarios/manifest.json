@@ -1,0 +1,436 @@
+{
+  "source_network": "D:\\Study\\TLCN\\data\\processed\\gis\\go_cong_network\\go_cong_user_trace_candidate_32648.gpkg",
+  "baseline_v1_unchanged": true,
+  "crossing": {
+    "osm_way": 510175774,
+    "kml_trace": 1,
+    "representative_longitude": 106.63972912235685,
+    "representative_latitude": 10.272167937727986,
+    "same_way_intersection_count": 13,
+    "incident_edges": [
+      {
+        "crossing_x_cm": 67946078,
+        "crossing_y_cm": 113631334,
+        "edge_fid": 2526,
+        "edge_id": 2526,
+        "length_m": 35.953,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67946078,
+        "crossing_y_cm": 113631334,
+        "edge_fid": 2527,
+        "edge_id": 2527,
+        "length_m": 12.678,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67947251,
+        "crossing_y_cm": 113629319,
+        "edge_fid": 2528,
+        "edge_id": 2528,
+        "length_m": 10.663,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67947251,
+        "crossing_y_cm": 113629319,
+        "edge_fid": 2529,
+        "edge_id": 2529,
+        "length_m": 32.502,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67949679,
+        "crossing_y_cm": 113624981,
+        "edge_fid": 2530,
+        "edge_id": 2530,
+        "length_m": 17.449,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67949679,
+        "crossing_y_cm": 113624981,
+        "edge_fid": 2531,
+        "edge_id": 2531,
+        "length_m": 5.12,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67949923,
+        "crossing_y_cm": 113623817,
+        "edge_fid": 2532,
+        "edge_id": 2532,
+        "length_m": 6.906,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67949923,
+        "crossing_y_cm": 113623817,
+        "edge_fid": 2533,
+        "edge_id": 2533,
+        "length_m": 24.706,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67953284,
+        "crossing_y_cm": 113615957,
+        "edge_fid": 2535,
+        "edge_id": 2535,
+        "length_m": 28.973,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67953284,
+        "crossing_y_cm": 113615957,
+        "edge_fid": 2536,
+        "edge_id": 2536,
+        "length_m": 0.832,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67953436,
+        "crossing_y_cm": 113614745,
+        "edge_fid": 2537,
+        "edge_id": 2537,
+        "length_m": 11.432,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67953560,
+        "crossing_y_cm": 113613514,
+        "edge_fid": 2538,
+        "edge_id": 2538,
+        "length_m": 12.37,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67953436,
+        "crossing_y_cm": 113614745,
+        "edge_fid": 2538,
+        "edge_id": 2538,
+        "length_m": 12.37,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67953560,
+        "crossing_y_cm": 113613514,
+        "edge_fid": 2539,
+        "edge_id": 2539,
+        "length_m": 0.833,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67954041,
+        "crossing_y_cm": 113609583,
+        "edge_fid": 2541,
+        "edge_id": 2541,
+        "length_m": 10.531,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67954041,
+        "crossing_y_cm": 113609583,
+        "edge_fid": 2542,
+        "edge_id": 2542,
+        "length_m": 14.103,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67957033,
+        "crossing_y_cm": 113604406,
+        "edge_fid": 2544,
+        "edge_id": 2544,
+        "length_m": 22.81,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67957033,
+        "crossing_y_cm": 113604406,
+        "edge_fid": 2545,
+        "edge_id": 2545,
+        "length_m": 12.831,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67958300,
+        "crossing_y_cm": 113602520,
+        "edge_fid": 2546,
+        "edge_id": 2546,
+        "length_m": 10.611,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67958300,
+        "crossing_y_cm": 113602520,
+        "edge_fid": 2547,
+        "edge_id": 2547,
+        "length_m": 13.767,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67958730,
+        "crossing_y_cm": 113601213,
+        "edge_fid": 2547,
+        "edge_id": 2547,
+        "length_m": 13.767,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67958730,
+        "crossing_y_cm": 113601213,
+        "edge_fid": 2548,
+        "edge_id": 2548,
+        "length_m": 9.984,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67958345,
+        "crossing_y_cm": 113597105,
+        "edge_fid": 2550,
+        "edge_id": 2550,
+        "length_m": 6.876,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67958345,
+        "crossing_y_cm": 113597105,
+        "edge_fid": 2551,
+        "edge_id": 2551,
+        "length_m": 9.533,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67957850,
+        "crossing_y_cm": 113596291,
+        "edge_fid": 2551,
+        "edge_id": 2551,
+        "length_m": 9.533,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67957850,
+        "crossing_y_cm": 113596291,
+        "edge_fid": 2552,
+        "edge_id": 2552,
+        "length_m": 8.264,
+        "source_side": "OSM"
+      },
+      {
+        "crossing_x_cm": 67957850,
+        "crossing_y_cm": 113596291,
+        "edge_fid": 21253,
+        "edge_id": 21253,
+        "length_m": 28.383,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67957850,
+        "crossing_y_cm": 113596291,
+        "edge_fid": 21254,
+        "edge_id": 21254,
+        "length_m": 5.857,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67958345,
+        "crossing_y_cm": 113597105,
+        "edge_fid": 21255,
+        "edge_id": 21255,
+        "length_m": 4.089,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67958345,
+        "crossing_y_cm": 113597105,
+        "edge_fid": 21256,
+        "edge_id": 21256,
+        "length_m": 17.896,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67958730,
+        "crossing_y_cm": 113601213,
+        "edge_fid": 21257,
+        "edge_id": 21257,
+        "length_m": 23.531,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67958730,
+        "crossing_y_cm": 113601213,
+        "edge_fid": 21258,
+        "edge_id": 21258,
+        "length_m": 4.813,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67958300,
+        "crossing_y_cm": 113602520,
+        "edge_fid": 21259,
+        "edge_id": 21259,
+        "length_m": 9.347,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67958300,
+        "crossing_y_cm": 113602520,
+        "edge_fid": 21260,
+        "edge_id": 21260,
+        "length_m": 2.995,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67957033,
+        "crossing_y_cm": 113604406,
+        "edge_fid": 21262,
+        "edge_id": 21262,
+        "length_m": 0.711,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67957033,
+        "crossing_y_cm": 113604406,
+        "edge_fid": 21263,
+        "edge_id": 21263,
+        "length_m": 31.623,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67954041,
+        "crossing_y_cm": 113609583,
+        "edge_fid": 21264,
+        "edge_id": 21264,
+        "length_m": 28.943,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67954041,
+        "crossing_y_cm": 113609583,
+        "edge_fid": 21265,
+        "edge_id": 21265,
+        "length_m": 1.63,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67953560,
+        "crossing_y_cm": 113613514,
+        "edge_fid": 21267,
+        "edge_id": 21267,
+        "length_m": 19.051,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67953560,
+        "crossing_y_cm": 113613514,
+        "edge_fid": 21268,
+        "edge_id": 21268,
+        "length_m": 1.206,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67953436,
+        "crossing_y_cm": 113614745,
+        "edge_fid": 21269,
+        "edge_id": 21269,
+        "length_m": 11.197,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67953284,
+        "crossing_y_cm": 113615957,
+        "edge_fid": 21270,
+        "edge_id": 21270,
+        "length_m": 12.216,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67953436,
+        "crossing_y_cm": 113614745,
+        "edge_fid": 21270,
+        "edge_id": 21270,
+        "length_m": 12.216,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67953284,
+        "crossing_y_cm": 113615957,
+        "edge_fid": 21271,
+        "edge_id": 21271,
+        "length_m": 8.027,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67949923,
+        "crossing_y_cm": 113623817,
+        "edge_fid": 21275,
+        "edge_id": 21275,
+        "length_m": 21.188,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67949923,
+        "crossing_y_cm": 113623817,
+        "edge_fid": 21276,
+        "edge_id": 21276,
+        "length_m": 0.997,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67949679,
+        "crossing_y_cm": 113624981,
+        "edge_fid": 21277,
+        "edge_id": 21277,
+        "length_m": 10.899,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67949679,
+        "crossing_y_cm": 113624981,
+        "edge_fid": 21278,
+        "edge_id": 21278,
+        "length_m": 21.83,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67947251,
+        "crossing_y_cm": 113629319,
+        "edge_fid": 21280,
+        "edge_id": 21280,
+        "length_m": 11.339,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67947251,
+        "crossing_y_cm": 113629319,
+        "edge_fid": 21281,
+        "edge_id": 21281,
+        "length_m": 4.138,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67946078,
+        "crossing_y_cm": 113631334,
+        "edge_fid": 21283,
+        "edge_id": 21283,
+        "length_m": 3.097,
+        "source_side": "KML"
+      },
+      {
+        "crossing_x_cm": 67946078,
+        "crossing_y_cm": 113631334,
+        "edge_fid": 21284,
+        "edge_id": 21284,
+        "length_m": 26.834,
+        "source_side": "KML"
+      }
+    ]
+  },
+  "scenario_a": "Approved pilot graph; KML and OSM share one crossing node",
+  "scenario_b": "All geometric crossings of KML trace 1 and OSM way 510175774 split into separate source-side nodes; no direct KML/OSM transfer at those nodes",
+  "topology_limit": "Source-coincident segments are duplicated on KML and OSM sides. This graph sensitivity is not field evidence of hydraulic disconnection",
+  "disconnected_policy": "No Euclidean substitute for RiverDistance or river prediction",
+  "metrics_policy": "Report coverage; common-four-site subset compares equal targets between scenarios",
+  "ec_unit": "mS/m",
+  "crs": "EPSG:32648"
+}

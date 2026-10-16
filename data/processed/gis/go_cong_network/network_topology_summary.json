@@ -1,0 +1,454 @@
+{
+  "edge_count": 21011,
+  "node_count": 20896,
+  "component_count": 48,
+  "duplicate_edges_removed": 0,
+  "zero_length_edges_removed": 0,
+  "node_degree_counts": {
+    "1": 285,
+    "2": 20131,
+    "3": 445,
+    "4": 35
+  },
+  "components": [
+    {
+      "component": 1,
+      "nodes": 16933,
+      "edges": 17089,
+      "length_km": 1368.204
+    },
+    {
+      "component": 15,
+      "nodes": 410,
+      "edges": 409,
+      "length_km": 41.579
+    },
+    {
+      "component": 10,
+      "nodes": 398,
+      "edges": 397,
+      "length_km": 17.678
+    },
+    {
+      "component": 43,
+      "nodes": 374,
+      "edges": 374,
+      "length_km": 16.329
+    },
+    {
+      "component": 40,
+      "nodes": 434,
+      "edges": 434,
+      "length_km": 10.584
+    },
+    {
+      "component": 47,
+      "nodes": 356,
+      "edges": 355,
+      "length_km": 10.143
+    },
+    {
+      "component": 8,
+      "nodes": 114,
+      "edges": 113,
+      "length_km": 9.678
+    },
+    {
+      "component": 6,
+      "nodes": 59,
+      "edges": 58,
+      "length_km": 6.985
+    },
+    {
+      "component": 24,
+      "nodes": 69,
+      "edges": 72,
+      "length_km": 6.935
+    },
+    {
+      "component": 45,
+      "nodes": 330,
+      "edges": 329,
+      "length_km": 5.911
+    },
+    {
+      "component": 2,
+      "nodes": 51,
+      "edges": 50,
+      "length_km": 5.8
+    },
+    {
+      "component": 9,
+      "nodes": 85,
+      "edges": 84,
+      "length_km": 5.629
+    },
+    {
+      "component": 17,
+      "nodes": 134,
+      "edges": 133,
+      "length_km": 5.39
+    },
+    {
+      "component": 13,
+      "nodes": 81,
+      "edges": 80,
+      "length_km": 4.76
+    },
+    {
+      "component": 11,
+      "nodes": 30,
+      "edges": 29,
+      "length_km": 3.301
+    },
+    {
+      "component": 7,
+      "nodes": 72,
+      "edges": 71,
+      "length_km": 3.008
+    },
+    {
+      "component": 26,
+      "nodes": 86,
+      "edges": 85,
+      "length_km": 3.003
+    },
+    {
+      "component": 14,
+      "nodes": 109,
+      "edges": 108,
+      "length_km": 2.794
+    },
+    {
+      "component": 3,
+      "nodes": 31,
+      "edges": 30,
+      "length_km": 2.443
+    },
+    {
+      "component": 37,
+      "nodes": 76,
+      "edges": 75,
+      "length_km": 2.135
+    },
+    {
+      "component": 4,
+      "nodes": 30,
+      "edges": 29,
+      "length_km": 2.016
+    },
+    {
+      "component": 36,
+      "nodes": 31,
+      "edges": 30,
+      "length_km": 1.918
+    },
+    {
+      "component": 5,
+      "nodes": 6,
+      "edges": 5,
+      "length_km": 1.402
+    },
+    {
+      "component": 42,
+      "nodes": 9,
+      "edges": 8,
+      "length_km": 1.271
+    },
+    {
+      "component": 48,
+      "nodes": 37,
+      "edges": 36,
+      "length_km": 1.268
+    },
+    {
+      "component": 27,
+      "nodes": 98,
+      "edges": 97,
+      "length_km": 1.251
+    },
+    {
+      "component": 46,
+      "nodes": 94,
+      "edges": 93,
+      "length_km": 1.193
+    },
+    {
+      "component": 18,
+      "nodes": 23,
+      "edges": 22,
+      "length_km": 1.099
+    },
+    {
+      "component": 39,
+      "nodes": 33,
+      "edges": 32,
+      "length_km": 0.932
+    },
+    {
+      "component": 12,
+      "nodes": 25,
+      "edges": 24,
+      "length_km": 0.812
+    },
+    {
+      "component": 28,
+      "nodes": 15,
+      "edges": 14,
+      "length_km": 0.785
+    },
+    {
+      "component": 25,
+      "nodes": 38,
+      "edges": 37,
+      "length_km": 0.768
+    },
+    {
+      "component": 30,
+      "nodes": 36,
+      "edges": 35,
+      "length_km": 0.75
+    },
+    {
+      "component": 16,
+      "nodes": 19,
+      "edges": 18,
+      "length_km": 0.735
+    },
+    {
+      "component": 21,
+      "nodes": 13,
+      "edges": 12,
+      "length_km": 0.659
+    },
+    {
+      "component": 41,
+      "nodes": 13,
+      "edges": 12,
+      "length_km": 0.657
+    },
+    {
+      "component": 44,
+      "nodes": 23,
+      "edges": 22,
+      "length_km": 0.62
+    },
+    {
+      "component": 35,
+      "nodes": 25,
+      "edges": 24,
+      "length_km": 0.528
+    },
+    {
+      "component": 20,
+      "nodes": 12,
+      "edges": 11,
+      "length_km": 0.478
+    },
+    {
+      "component": 23,
+      "nodes": 12,
+      "edges": 11,
+      "length_km": 0.405
+    },
+    {
+      "component": 19,
+      "nodes": 8,
+      "edges": 7,
+      "length_km": 0.341
+    },
+    {
+      "component": 31,
+      "nodes": 11,
+      "edges": 10,
+      "length_km": 0.335
+    },
+    {
+      "component": 33,
+      "nodes": 15,
+      "edges": 14,
+      "length_km": 0.263
+    },
+    {
+      "component": 34,
+      "nodes": 13,
+      "edges": 12,
+      "length_km": 0.232
+    },
+    {
+      "component": 29,
+      "nodes": 17,
+      "edges": 16,
+      "length_km": 0.188
+    },
+    {
+      "component": 38,
+      "nodes": 2,
+      "edges": 1,
+      "length_km": 0.097
+    },
+    {
+      "component": 32,
+      "nodes": 4,
+      "edges": 3,
+      "length_km": 0.063
+    },
+    {
+      "component": 22,
+      "nodes": 2,
+      "edges": 1,
+      "length_km": 0.012
+    }
+  ],
+  "near_miss_endpoints_under_5m": 9,
+  "topology_connectors_added": 9,
+  "source_way_count": 609,
+  "crs": "EPSG:32648",
+  "noding_method": "GEOS unary union; every consecutive vertex exported as an edge",
+  "gap_check_m": 5.0,
+  "source_snapshot_utc": "2026-10-16T11:48:33.937955+00:00",
+  "attribution": "© OpenStreetMap contributors; ODbL 1.0",
+  "pilot5_snap": [
+    {
+      "site_code": "NM29",
+      "site_name": "Cầu Kinh Nhiễm",
+      "pdf_name": "Cầu Rạch Nhiếm – huyện Tân Phú Đông",
+      "pdf_lon": 106.63777777777777,
+      "pdf_lat": 10.26913888888889,
+      "input_lon": 106.63872222222221,
+      "input_lat": 10.26788888888889,
+      "coord_status": "USER_LOCATED_BRIDGE",
+      "evidence": "Người dùng xác định Cầu Kinh Nhiễm tại 10°16′04.4″N 106°38′19.4″E. Ảnh rộng cho thấy đường nước nhỏ giữa các nhánh Mê Kông; đường thông thủy tới sông lớn chưa được kiểm chứng.",
+      "route_evidence": "USER_CONTEXT_ONLY",
+      "evidence_image": "nm29_mekong_context.png",
+      "coord_shift_m": 172.6866716477855,
+      "snap_m": 400.064155666706,
+      "threshold_m": 100.0,
+      "snap_status": "REJECTED_TOO_FAR",
+      "route_check": "UNNAMED_OSM_WATERWAY",
+      "near_name": "",
+      "waterway": "canal",
+      "osm_id": 510175774,
+      "edge_id": 2476,
+      "component": 1,
+      "bridge_m": 185.71770441890448,
+      "bridge_name": "",
+      "bridge_id": 897353064,
+      "qa_note": "Khoảng snap vượt ngưỡng; không dùng trong phân tích."
+    },
+    {
+      "site_code": "NM30",
+      "site_name": "Cầu Long Chánh",
+      "pdf_name": "Cầu Long Chánh – thị xã Gò Công",
+      "pdf_lon": 106.6705,
+      "pdf_lat": 10.351166666666666,
+      "input_lon": 106.67133333333334,
+      "input_lat": 10.361222222222223,
+      "coord_status": "USER_SATELLITE_BRIDGE",
+      "evidence": "Ảnh Google Maps người dùng gửi ngày 2026-10-17 cho thấy Cầu Long Chánh bắc qua sông tại tọa độ này.",
+      "route_evidence": "USER_VISUAL_WATERWAY_MATCH",
+      "evidence_image": "nm30_long_chanh.png",
+      "coord_shift_m": 1116.0005486918558,
+      "snap_m": 9.84524214550976,
+      "threshold_m": 100.0,
+      "snap_status": "ACCEPTED",
+      "route_check": "USER_IMAGE_AND_NEAR_OSM_WATERWAY",
+      "near_name": "Rạch Gò Công",
+      "waterway": "river",
+      "osm_id": 484686323,
+      "edge_id": 1795,
+      "component": 1,
+      "bridge_m": 513.6176465901023,
+      "bridge_name": "Võ Duy Linh",
+      "bridge_id": 527480523,
+      "qa_note": "Đạt ngưỡng khoảng cách và đối chiếu được tuyến/cầu từ OSM hoặc ảnh người dùng."
+    },
+    {
+      "site_code": "NM31",
+      "site_name": "Cầu Tân Hòa",
+      "pdf_name": "Cầu Tân Hòa – thị trấn Tân Hòa – huyện Gò Công Đông",
+      "pdf_lon": 106.70988888888888,
+      "pdf_lat": 10.320555555555556,
+      "input_lon": 106.70988888888888,
+      "input_lat": 10.320555555555556,
+      "coord_status": "USER_SATELLITE_BRIDGE",
+      "evidence": "Ảnh người dùng gửi ngày 2026-10-17 cho thấy Cầu Tân Hòa qua nhánh sông; ảnh rộng cho thấy gần nhánh Mê Kông lớn nhưng đường thông thủy cụ thể chưa được kiểm chứng.",
+      "route_evidence": "USER_VISUAL_WATERWAY_MATCH",
+      "evidence_image": "nm31_tan_hoa.png",
+      "coord_shift_m": 0.0,
+      "snap_m": 200.04922106673362,
+      "threshold_m": 100.0,
+      "snap_status": "REJECTED_TOO_FAR",
+      "route_check": "OSM_BRIDGE_NAME_MATCH",
+      "near_name": "Kênh Xóm Gồng",
+      "waterway": "stream",
+      "osm_id": 1223985044,
+      "edge_id": 9237,
+      "component": 1,
+      "bridge_m": 13.514160848299888,
+      "bridge_name": "Cầu Tân Hòa",
+      "bridge_id": 367990283,
+      "qa_note": "Khoảng snap vượt ngưỡng; không dùng trong phân tích."
+    },
+    {
+      "site_code": "NM32",
+      "site_name": "Cống Cần Lộc",
+      "pdf_name": "Cống Cần Lộc – huyện Gò Công Đông",
+      "pdf_lon": 106.75544444444445,
+      "pdf_lat": 10.40461111111111,
+      "input_lon": 106.756315,
+      "input_lat": 10.403545,
+      "coord_status": "USER_SATELLITE_GATE",
+      "evidence": "Ảnh Google Maps người dùng gửi ngày 2026-10-17 chỉ Cống Cần Lộc tại 10.403545 N, 106.756315 E.",
+      "route_evidence": "USER_VISUAL_WATERWAY_MATCH",
+      "evidence_image": "nm32_can_loc.png",
+      "coord_shift_m": 151.6433232172192,
+      "snap_m": 1.2837806851716151,
+      "threshold_m": 100.0,
+      "snap_status": "ACCEPTED",
+      "route_check": "USER_IMAGE_AND_NEAR_OSM_WATERWAY",
+      "near_name": "",
+      "waterway": "stream",
+      "osm_id": 697666807,
+      "edge_id": 5189,
+      "component": 1,
+      "bridge_m": 30.892356326376987,
+      "bridge_name": "",
+      "bridge_id": 896370235,
+      "qa_note": "Đạt ngưỡng khoảng cách và đối chiếu được tuyến/cầu từ OSM hoặc ảnh người dùng."
+    },
+    {
+      "site_code": "NM34",
+      "site_name": "Cầu Lý Quàn",
+      "pdf_name": "Cầu Lý Quàn – xã Phú Đông – huyện Tân Phú Đông",
+      "pdf_lon": 106.69666666666667,
+      "pdf_lat": 10.246972222222222,
+      "input_lon": 106.697629,
+      "input_lat": 10.245803,
+      "coord_status": "USER_SATELLITE_BRIDGE",
+      "evidence": "Ảnh Google Maps người dùng gửi ngày 2026-10-17 chỉ Cầu Lý Quàn tại 10.245803 N, 106.697629 E.",
+      "route_evidence": "USER_VISUAL_WATERWAY_MATCH",
+      "evidence_image": "nm34_ly_quan.png",
+      "coord_shift_m": 166.8601609755987,
+      "snap_m": 1.5098890687042128,
+      "threshold_m": 100.0,
+      "snap_status": "ACCEPTED",
+      "route_check": "OSM_BRIDGE_NAME_MATCH",
+      "near_name": "",
+      "waterway": "canal",
+      "osm_id": 510175779,
+      "edge_id": 2704,
+      "component": 1,
+      "bridge_m": 7.93194821311983,
+      "bridge_name": "Cầu Lý Quàn",
+      "bridge_id": 896876194,
+      "qa_note": "Đạt ngưỡng khoảng cách và đối chiếu được tuyến/cầu từ OSM hoặc ảnh người dùng."
+    }
+  ],
+  "accepted_snap_count": 3,
+  "pilot_candidate_components": [
+    1
+  ],
+  "all_pilot_candidates_same_component": true,
+  "topology_interpretation": "The final edge layer is noded at every intersection, contains no duplicate or zero-length edge, and includes explicit provisional automatic connectors for source endpoints separated by <=5 m. Disconnected components can be genuine isolated waterways or unmapped links and remain separate."
+}

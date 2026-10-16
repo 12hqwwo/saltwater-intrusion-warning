@@ -61,3 +61,6 @@ Thumbs.db
 logs/
 
 runs/
+
+data/raw/glofas/aux/v4/ldd_glofas_v4_0.nc
+data/raw/glofas/aux/v4/uparea_glofas_v4_0.nc

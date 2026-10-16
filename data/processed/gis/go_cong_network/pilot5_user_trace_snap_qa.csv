@@ -1,0 +1,6 @@
+﻿site_code,site_name,osm_snap_m,kml_snap_m,aug_snap_m,source_near,trace_id,component,snap_status,qa_note
+NM29,Cầu Kinh Nhiễm,400.064155666706,1.4048731022898933,1.404873102217007,USER_KML,1,1,USER_APPROVED_FOR_PILOT,Người dùng chốt mạng làm việc; chưa có kiểm định thủy lực độc lập tại nút giao/cống.
+NM30,Cầu Long Chánh,9.84524214550976,527.8223975910445,9.84524214550976,OSM,,1,BASELINE_ACCEPTED,Điểm đã nhận trên mạng OSM nền; giữ nguyên đánh giá trước.
+NM31,Cầu Tân Hòa,200.04922106673362,16.54965715537962,16.54965715536582,USER_KML,3,1,USER_APPROVED_FOR_PILOT,Người dùng chốt mạng làm việc; chưa có kiểm định thủy lực độc lập tại nút giao/cống.
+NM32,Cống Cần Lộc,1.2837806851716151,9393.237009989005,1.2837806851716151,OSM,,1,BASELINE_ACCEPTED,Điểm đã nhận trên mạng OSM nền; giữ nguyên đánh giá trước.
+NM34,Cầu Lý Quàn,1.5098890687042128,5149.779342942867,1.5098890687042128,OSM,,1,BASELINE_ACCEPTED,Điểm đã nhận trên mạng OSM nền; giữ nguyên đánh giá trước.

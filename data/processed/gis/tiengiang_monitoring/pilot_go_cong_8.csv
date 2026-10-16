@@ -1,0 +1,9 @@
+﻿site_code,site_name,longitude_dms_raw,latitude_dms_raw,longitude_deg,latitude_deg,coordinate_status,coordinate_note,pilot_go_cong,coordinate_pdf_page,ec_pdf_page,ec_I_ms_m,ec_II_ms_m,ec_III_ms_m,ec_IV_ms_m
+NM26,Kênh Chợ Gạo (cống Đồng Sơn) – sông Tra – huyện Gò Công Tây,"106°04'7,7""","10°24'48,0""",106.06880555555556,10.413333333333334,REVIEW_POSITION,Kinh độ 106°04′ in trong báo cáo lệch khỏi cụm Gò Công; không dùng để tính khoảng cách trước khi xác minh.,True,4,23,1933.0,297.0,37.8,31.9
+NM28,Cầu thị trấn Vĩnh Bình – huyện Gò Công Tây,"106°28'45,2""","10°21'3,7""",106.47922222222222,10.351027777777778,REVIEW_POSITION,"Tọa độ in cách Cầu Chợ Gạo (NM25) khoảng 1,46 km; bản đồ Phụ lục 1 trang 26 đặt NM28 phía đông NM27. Khả năng hoán đổi cần xác minh.",True,4,23,373.0,202.0,55.3,6.66
+NM29,Cầu Rạch Nhiếm – huyện Tân Phú Đông,"106°38'16,0""","10°16'8,9""",106.63777777777777,10.26913888888889,DMS_TRANSCRIBED,,True,4,23,2470.0,1858.0,885.0,381.0
+NM30,Cầu Long Chánh – thị xã Gò Công,"106°40'13,8""","10°21'4,2""",106.6705,10.351166666666666,DMS_TRANSCRIBED,,True,4,23,604.0,706.0,41.6,21.52
+NM31,Cầu Tân Hòa – thị trấn Tân Hòa – huyện Gò Công Đông,"106°42'35,6""","10°19'14,0""",106.70988888888888,10.320555555555556,DMS_TRANSCRIBED,,True,4-5,23,1770.0,1689.0,36.9,26.3
+NM32,Cống Cần Lộc – huyện Gò Công Đông,"106°45'19,6""","10°24'16,6""",106.75544444444445,10.40461111111111,DMS_TRANSCRIBED,,True,5,23,4610.0,4070.0,109.2,69.7
+NM33,Cống Vàm Tháp – xã Tân Phước – huyện Gò Công Đông,"106°45'37,4""","10°24'29,1""",106.76038888888888,10.408083333333334,REVIEW_POSITION,"Tọa độ in cách NM32 khoảng 0,66 km, nhưng Phụ lục 1 trang 26 đặt NM33 ở phía bắc, tách khỏi NM32; cần xác minh.",True,5,23,3430.0,2118.0,98.6,60.3
+NM34,Cầu Lý Quàn – xã Phú Đông – huyện Tân Phú Đông,"106°41'48,0""","10°14'49,1""",106.69666666666667,10.246972222222222,DMS_TRANSCRIBED,,True,5,23,1522.0,3300.0,233.0,93.7

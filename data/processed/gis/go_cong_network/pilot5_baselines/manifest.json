@@ -1,0 +1,33 @@
+{
+  "scenario": "USER_APPROVED_NETWORK_2026-10-17",
+  "crs": "EPSG:32648",
+  "sites": [
+    "NM29",
+    "NM30",
+    "NM31",
+    "NM32",
+    "NM34"
+  ],
+  "campaigns": [
+    "I",
+    "II",
+    "III",
+    "IV"
+  ],
+  "distance_definition": "Shortest undirected path along noded OSM + user KML centreline, between perpendicular snap positions; Euclidean distance between reviewed site coordinates",
+  "network_geometry_source": "D:\\Study\\TLCN\\data\\processed\\gis\\go_cong_network\\go_cong_user_trace_candidate_32648.gpkg",
+  "user_kml": "D:\\Study\\TLCN\\data\\raw\\gis\\user_review_20261017\\ban_do_nhanh_song_v2.kml",
+  "user_kml_sha256": "7192cfcc4f17421f20d6c62f904d60b22cc2ffdba663a70915c7f1bb67171371",
+  "ec_source": "D:\\Study\\TLCN\\data\\processed\\gis\\tiengiang_monitoring\\ec_campaigns_136.csv",
+  "ec_unit": "mS/m",
+  "validation": "Leave one location out, independently within each campaign; IDW power fixed at 2; no parameter tuning",
+  "campaign_date_known": false,
+  "interpretation_limit": "User-approved mapped connectivity; OSM and KML intersections, sluice states, direction, tide, and flow have no independent hydrological validation. Scores are internal interpolation baselines, not EC-at-gate predictive validation.",
+  "graph_nodes": 21452,
+  "all_site_pairs_connected": true,
+  "output_files": [
+    "pilot5_pairwise_distances.csv",
+    "pilot5_lolo_predictions.csv",
+    "pilot5_lolo_metrics.csv"
+  ]
+}

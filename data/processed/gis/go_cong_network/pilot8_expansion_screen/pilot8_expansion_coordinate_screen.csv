@@ -1,0 +1,4 @@
+﻿site_code,site_name_pdf,pdf_lat,pdf_lon,nearest_network_m,nearest_edge_id,nearest_component,distance_under_100m,coordinate_status,decision,reason
+NM26,Kênh Chợ Gạo (cống Đồng Sơn) – sông Tra – huyện Gò Công Tây,10.413333333333334,106.06880555555556,16260.53,71,1,False,REVIEW_POSITION,HOLD_COORDINATE_QA,Kinh độ 106°04′ in trong báo cáo lệch khỏi cụm Gò Công; không dùng để tính khoảng cách trước khi xác minh.
+NM28,Cầu thị trấn Vĩnh Bình – huyện Gò Công Tây,10.351027777777778,106.47922222222222,159.37,1173,1,False,REVIEW_POSITION,HOLD_COORDINATE_QA,"Tọa độ in cách Cầu Chợ Gạo (NM25) khoảng 1,46 km; bản đồ Phụ lục 1 trang 26 đặt NM28 phía đông NM27. Khả năng hoán đổi cần xác minh."
+NM33,Cống Vàm Tháp – xã Tân Phước – huyện Gò Công Đông,10.408083333333334,106.76038888888888,393.23,5365,1,False,REVIEW_POSITION,HOLD_COORDINATE_QA,"Tọa độ in cách NM32 khoảng 0,66 km, nhưng Phụ lục 1 trang 26 đặt NM33 ở phía bắc, tách khỏi NM32; cần xác minh."

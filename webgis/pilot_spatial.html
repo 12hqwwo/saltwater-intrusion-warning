@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gò Công · Spatial Pilot</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root{font-family:system-ui,Arial,sans-serif;color:#173042;background:#f5f8fa}
+    *{box-sizing:border-box} body{margin:0} header{padding:14px 20px;background:#123c56;color:white}
+    h1{font-size:20px;margin:0 0 4px} header p{margin:0;color:#d4e5ee;font-size:13px}
+    main{display:grid;grid-template-columns:minmax(0,1fr) 355px;height:calc(100vh - 75px)}
+    #map{height:100%;min-height:480px} aside{overflow:auto;padding:18px;background:white;border-left:1px solid #dae5ec}
+    h2{font-size:16px;margin:18px 0 8px} h2:first-child{margin-top:0}
+    p,li{line-height:1.5;font-size:13px} .note{background:#fff5dd;border-left:3px solid #db9b24;padding:10px;margin:12px 0}
+    select{width:100%;padding:8px;border:1px solid #aac0cb;border-radius:6px;background:white}
+    table{border-collapse:collapse;width:100%;font-size:12px}td,th{padding:7px 4px;text-align:left;border-bottom:1px solid #e2ebef}
+    td.num,th.num{text-align:right} .muted{color:#647a85} .pill{display:inline-block;padding:3px 7px;border-radius:12px;background:#e1f1fb;font-size:11px}
+    .error{color:#a31c24} .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;margin:8px 0}
+    .swatch{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:4px}
+    @media(max-width:850px){main{display:block;height:auto}#map{height:56vh}aside{border-left:0}}
+  </style>
+</head>
+<body>
+  <header><h1>Gò Công · Spatial Pilot</h1><p>Quan trắc EC I–IV, tuyến mạng đã chốt và thử độ nhạy giao KML–OSM 510175774</p></header>
+  <main><div id="map" role="img" aria-label="Bản đồ các điểm quan trắc và đường sông"></div>
+    <aside>
+      <h2>Kịch bản topology</h2>
+      <select id="scenario"><option value="A_connected">A · Giữ giao KML–OSM</option><option value="B_crossing_closed">B · Tách 13 nút giao cùng way</option></select>
+      <div class="note" id="scenario-note">Đang tải…</div>
+      <div class="legend"><span><i class="swatch" style="background:#167ac6"></i>5 điểm pilot</span><span><i class="swatch" style="background:#d98117"></i>Tọa độ chờ QA</span><span><i class="swatch" style="background:#bd2e35"></i>Cụm giao</span></div>
+      <h2>Sai số LOLO · p=2</h2><p class="muted">mS/m; hàng thiếu dự báo mạng được tính vào độ phủ, không tính sai số.</p>
+      <table><thead><tr><th>Phương pháp</th><th class="num">MAE</th><th class="num">RMSE</th><th class="num">Độ phủ</th></tr></thead><tbody id="metrics"></tbody></table>
+      <h2>Điểm được chọn</h2><div id="site-detail" class="muted">Bấm vào điểm xanh trên bản đồ để xem EC từng đợt.</div>
+      <h2>Giới hạn diễn giải</h2><p>13 giao là giao hình học trong graph; trạng thái thông nước chưa được kiểm định tại hiện trường. Các đợt I–IV chưa có ngày đáng tin cậy trong bộ trích PDF. NM26, NM28, NM33 chưa vào kiểm định.</p>
+    </aside>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+  const api='/pilot/spatial';
+  const map=L.map('map').setView([10.32,106.69],10);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
+  const fmt=x=>Number(x).toLocaleString('vi-VN',{maximumFractionDigits:2});
+  const get=async path=>{const r=await fetch(api+path);if(!r.ok)throw Error(path+': '+r.status);return r.json()};
+  let metrics=[];
+  function update(){
+    const s=document.getElementById('scenario').value;
+    const subset=metrics.filter(x=>x.subset==='all_eligible'&&x.campaign==='ALL'&&x.scenario===s);
+    document.getElementById('metrics').innerHTML=subset.map(x=>`<tr><td>${x.model}</td><td class="num">${x.mae_ms_m?fmt(x.mae_ms_m):'—'}</td><td class="num">${x.rmse_ms_m?fmt(x.rmse_ms_m):'—'}</td><td class="num">${x.predicted_n}/${x.eligible_n}</td></tr>`).join('');
+    document.getElementById('scenario-note').textContent=s==='A_connected'
+      ?'A: 10/10 cặp nối được trong graph đã chốt. Đây chưa phải bằng chứng thông nước.'
+      :'B: NM29 mất đường mạng đến 4 điểm còn lại. 4/20 dự báo River không xác định; không dùng khoảng cách thẳng thay thế.';
+  }
+  document.getElementById('scenario').addEventListener('change',update);
+  Promise.all([get('/sites'),get('/routes'),get('/crossings'),get('/coordinate-candidates'),get('/metrics')]).then(([sites,routes,crossings,candidates,result])=>{
+    metrics=result.rows; update();
+    L.geoJSON(routes,{style:f=>({color:f.properties.site_a==='NM29'&&f.properties.site_b==='NM34'?'#ba3541':'#506f83',weight:f.properties.site_a==='NM29'&&f.properties.site_b==='NM34'?4:2,opacity:.65}),
+      onEachFeature:(f,l)=>l.bindPopup(`${f.properties.site_a}–${f.properties.site_b}<br>RiverDistance A: ${fmt(f.properties.river_m)} m`)}).addTo(map);
+    L.geoJSON(crossings,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:3,color:'#bd2e35',fillOpacity:.9}),
+      onEachFeature:(f,l)=>l.bindPopup('Giao KML–OSM 510175774 · chưa xác minh thông nước')}).addTo(map);
+    L.geoJSON(candidates,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:5,color:'#d98117',fillColor:'#f6ae41',fillOpacity:.8}),
+      onEachFeature:(f,l)=>l.bindPopup(`${f.properties.site_code}: ${f.properties.coordinate_version}<br>Đến mạng: ${fmt(f.properties.nearest_network_m)} m<br>HOLD`)}).addTo(map);
+    const layer=L.geoJSON(sites,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:8,color:'#075580',fillColor:'#167ac6',fillOpacity:1,weight:2}),
+      onEachFeature:(f,l)=>l.on('click',()=>{let p=f.properties;
+        document.getElementById('site-detail').innerHTML=`<strong>${p.site_code} · ${p.name}</strong><p>SnapDistance: ${fmt(p.snap_distance_m)} m<br>Trạng thái: ${p.snap_status}</p><table><tr><th>Đợt</th><th class="num">EC (mS/m)</th></tr>${Object.entries(p.ec_ms_m_by_campaign).map(([k,v])=>`<tr><td>${k}</td><td class="num">${fmt(v)}</td></tr>`).join('')}</table>`;
+      })}).addTo(map);
+    map.fitBounds(layer.getBounds().pad(.25));
+  }).catch(e=>{document.getElementById('scenario-note').innerHTML='<span class="error">Không tải được dữ liệu: '+e.message+'</span>'});
+  </script>
+</body>
+</html>

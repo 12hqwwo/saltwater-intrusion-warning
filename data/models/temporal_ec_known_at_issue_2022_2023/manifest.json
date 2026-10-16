@@ -1,0 +1,21 @@
+{
+  "source_features": "D:\\Study\\TLCN\\data\\features\\10_monthly_feature_v2.csv",
+  "source_model_script": "D:\\Study\\TLCN\\pipelines\\models\\14_model_baseline.py",
+  "train_window": "1985-01..2018-12",
+  "validation_window": "2019-01..2021-12",
+  "final_initial_fit_through": "2021-12",
+  "test_window": "2022-01..2023-12",
+  "forecast_horizon": "one month ahead; previous month's observed EC assumed available at issue time",
+  "rf_allowed_features": [
+    "ec_lag_1",
+    "ec_lag_2",
+    "ec_lag_3",
+    "ec_lag_12",
+    "month"
+  ],
+  "rf_excluded": "target-month rainfall, temperature, wind, DAHITI, discharge, FES tide",
+  "tide_screening_joined": false,
+  "target_rule": "Only non-null verified EC in existing feature table; no imputed target evaluated",
+  "comparison_rule": "All models scored on exactly the same valid target months per station",
+  "mrc_source_grade": "Raw - Not Yet Reviewed / Unverified data in source metadata; internal VERIFIED denotes pipeline QA only"
+}
