@@ -8,6 +8,7 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
+# pyrefly: ignore [missing-import]
 import psycopg
 
 from backend.database import DatasetNotFound, Repository, SiteNotFound
