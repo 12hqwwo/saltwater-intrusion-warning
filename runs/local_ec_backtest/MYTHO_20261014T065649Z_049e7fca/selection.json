@@ -1,0 +1,120 @@
+{
+  "selection_stage": "validation",
+  "criterion": "MAE on common target months",
+  "selection_available_at": "2021-12-31T23:59:59+07:00",
+  "selected_model": "Random Forest",
+  "selected_candidate": "RF_basic_depth5_leaf3",
+  "selected_rf_candidate": "RF_basic_depth5_leaf3",
+  "rf_features": [
+    "ec_latest",
+    "ec_previous",
+    "age_latest_months",
+    "age_previous_months",
+    "month_sin",
+    "month_cos"
+  ],
+  "rf_parameters": {
+    "n_estimators": 100,
+    "random_state": 42,
+    "max_depth": 5,
+    "min_samples_leaf": 3
+  },
+  "validation_ranking": [
+    {
+      "stage": "validation",
+      "model": "RF_basic_depth5_leaf3",
+      "cohort": "common",
+      "mae_mS_m": 28.99525600767006,
+      "rmse_mS_m": 48.924488146185354,
+      "eval_samples": 12,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+    },
+    {
+      "stage": "validation",
+      "model": "Persistence",
+      "cohort": "common",
+      "mae_mS_m": 30.946666666666662,
+      "rmse_mS_m": 61.850165858036846,
+      "eval_samples": 12,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_seasonal_depthNone_leaf5",
+      "cohort": "common",
+      "mae_mS_m": 31.269901193016086,
+      "rmse_mS_m": 55.93548429144441,
+      "eval_samples": 12,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_seasonal_depth3_leaf5",
+      "cohort": "common",
+      "mae_mS_m": 31.968949213410383,
+      "rmse_mS_m": 54.963180644150874,
+      "eval_samples": 12,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_basic_depth3_leaf5",
+      "cohort": "common",
+      "mae_mS_m": 33.61815636437151,
+      "rmse_mS_m": 57.72879779748953,
+      "eval_samples": 12,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_seasonal_depth5_leaf3",
+      "cohort": "common",
+      "mae_mS_m": 34.67952675109617,
+      "rmse_mS_m": 60.868827509561214,
+      "eval_samples": 12,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_basic_depthNone_leaf5",
+      "cohort": "common",
+      "mae_mS_m": 38.512425595296016,
+      "rmse_mS_m": 62.44273307949988,
+      "eval_samples": 12,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+    },
+    {
+      "stage": "validation",
+      "model": "Seasonal Naive",
+      "cohort": "common",
+      "mae_mS_m": 152.19833333333335,
+      "rmse_mS_m": 259.2689993359535,
+      "eval_samples": 12,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+    }
+  ]
+}

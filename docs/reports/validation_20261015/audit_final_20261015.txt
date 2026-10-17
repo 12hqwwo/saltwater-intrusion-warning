@@ -1,0 +1,9 @@
+test_extra_calendar_month_with_no_ec_is_allowed (test_audit_local_data.AuditTests.test_extra_calendar_month_with_no_ec_is_allowed) ... ok
+test_missing_month_is_not_a_valid_match (test_audit_local_data.AuditTests.test_missing_month_is_not_a_valid_match) ... ok
+test_same_row_count_does_not_hide_changed_ec (test_audit_local_data.AuditTests.test_same_row_count_does_not_hide_changed_ec) ... ok
+test_wrong_station_or_nonfinite_coordinates_are_rejected (test_audit_local_data.AuditTests.test_wrong_station_or_nonfinite_coordinates_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.041s
+
+OK

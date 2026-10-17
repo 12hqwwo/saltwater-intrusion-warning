@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 import ssl
 from urllib.error import URLError
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 import numpy as np
@@ -64,6 +64,8 @@ def create_tls_context():
 def download(url, path, expected=None):
     # No credentials, executable content, or third-party serialized models.
     context = create_tls_context()
+    parts = urlsplit(url)
+    url = urlunsplit((parts.scheme, parts.netloc, quote(parts.path, safe='/%:@'), parts.query, parts.fragment))
     try:
         with urlopen(Request(url, headers={"User-Agent": "WebGIS-academic-data-review/1.0"}),
                      timeout=55, context=context) as response:

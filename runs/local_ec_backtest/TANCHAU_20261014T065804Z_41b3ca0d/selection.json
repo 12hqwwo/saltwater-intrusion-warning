@@ -1,0 +1,124 @@
+{
+  "selection_stage": "validation",
+  "criterion": "MAE on common target months",
+  "selection_available_at": "2021-12-31T23:59:59+07:00",
+  "selected_model": "Random Forest",
+  "selected_candidate": "RF_seasonal_depthNone_leaf5",
+  "selected_rf_candidate": "RF_seasonal_depthNone_leaf5",
+  "rf_features": [
+    "ec_latest",
+    "ec_previous",
+    "age_latest_months",
+    "age_previous_months",
+    "month_sin",
+    "month_cos",
+    "ec_lag12",
+    "ec_mean3",
+    "ec_mean12",
+    "ec_std12"
+  ],
+  "rf_parameters": {
+    "n_estimators": 100,
+    "random_state": 42,
+    "max_depth": null,
+    "min_samples_leaf": 5
+  },
+  "validation_ranking": [
+    {
+      "stage": "validation",
+      "model": "RF_seasonal_depthNone_leaf5",
+      "cohort": "common",
+      "mae_mS_m": 1.9237346301857305,
+      "rmse_mS_m": 2.2606861002431344,
+      "eval_samples": 11,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 0.9166666666666666,
+      "evaluation_months_sha256": "3ed3e7346ef5b6be8a02bc9f8ddb77d36cca419a49438d936ef0276416d63431"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_seasonal_depth5_leaf3",
+      "cohort": "common",
+      "mae_mS_m": 2.183623490341171,
+      "rmse_mS_m": 2.5424526972646775,
+      "eval_samples": 11,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 0.9166666666666666,
+      "evaluation_months_sha256": "3ed3e7346ef5b6be8a02bc9f8ddb77d36cca419a49438d936ef0276416d63431"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_seasonal_depth3_leaf5",
+      "cohort": "common",
+      "mae_mS_m": 2.450605979837285,
+      "rmse_mS_m": 2.799237658505673,
+      "eval_samples": 11,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 0.9166666666666666,
+      "evaluation_months_sha256": "3ed3e7346ef5b6be8a02bc9f8ddb77d36cca419a49438d936ef0276416d63431"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_basic_depthNone_leaf5",
+      "cohort": "common",
+      "mae_mS_m": 2.7830936700579234,
+      "rmse_mS_m": 3.396255122216804,
+      "eval_samples": 11,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 0.9166666666666666,
+      "evaluation_months_sha256": "3ed3e7346ef5b6be8a02bc9f8ddb77d36cca419a49438d936ef0276416d63431"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_basic_depth5_leaf3",
+      "cohort": "common",
+      "mae_mS_m": 2.8277437187508965,
+      "rmse_mS_m": 3.556599073968223,
+      "eval_samples": 11,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 0.9166666666666666,
+      "evaluation_months_sha256": "3ed3e7346ef5b6be8a02bc9f8ddb77d36cca419a49438d936ef0276416d63431"
+    },
+    {
+      "stage": "validation",
+      "model": "Seasonal Naive",
+      "cohort": "common",
+      "mae_mS_m": 3.223636363636363,
+      "rmse_mS_m": 3.7689545210599427,
+      "eval_samples": 11,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 0.9166666666666666,
+      "evaluation_months_sha256": "3ed3e7346ef5b6be8a02bc9f8ddb77d36cca419a49438d936ef0276416d63431"
+    },
+    {
+      "stage": "validation",
+      "model": "RF_basic_depth3_leaf5",
+      "cohort": "common",
+      "mae_mS_m": 3.2460391186825244,
+      "rmse_mS_m": 3.87985414711439,
+      "eval_samples": 11,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 0.9166666666666666,
+      "evaluation_months_sha256": "3ed3e7346ef5b6be8a02bc9f8ddb77d36cca419a49438d936ef0276416d63431"
+    },
+    {
+      "stage": "validation",
+      "model": "Persistence",
+      "cohort": "common",
+      "mae_mS_m": 4.809090909090909,
+      "rmse_mS_m": 6.037038708144612,
+      "eval_samples": 11,
+      "target_months_with_actual": 12,
+      "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+      "coverage_fraction": 0.9166666666666666,
+      "evaluation_months_sha256": "3ed3e7346ef5b6be8a02bc9f8ddb77d36cca419a49438d936ef0276416d63431"
+    }
+  ]
+}

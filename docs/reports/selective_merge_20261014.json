@@ -1,0 +1,122 @@
+[
+  {
+    "source": "WebGIS_DongThap_Step08/backend/research.py",
+    "destination": "backend/research.py",
+    "original_sha256": "f443533daffa5260112015d645fa0a9a09a08e89bae06e56867ebd1e9caf9cd8"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/backend/research_store.py",
+    "destination": "backend/research_store.py",
+    "original_sha256": "1836337cc2a6cf01352e352a97477fdd1d1491d05e45a1d002d53ae923cf407c"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/scripts/build_research_workspace.py",
+    "destination": "scripts/build_research_workspace.py",
+    "original_sha256": "2cf3cdc99be4bd38511551f499e89d007759e113030d8c8b6c9b35c4e432d8d5"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/scripts/import_research_workspace.py",
+    "destination": "scripts/import_research_workspace.py",
+    "original_sha256": "68421ccb62d93926b153a24f43edc6887c5e0386bb0a7775e649d438bd1e04a1"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/scripts/collect_webgis_evidence.py",
+    "destination": "scripts/collect_webgis_evidence.py",
+    "original_sha256": "94c243dba9b5e5f300eb276371487d2af9b90f59130ae6218a9f8a98495545b4"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/sql/04_research_workspace.sql",
+    "destination": "sql/04_research_workspace.sql",
+    "original_sha256": "9d43b5b7910b389a8e1c51acdf7b635aac116b211cbd47ac8ef136128e45b59d"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/data/metadata/gate_catalog_reviewed.json",
+    "destination": "data/metadata/gate_catalog_reviewed.json",
+    "original_sha256": "254adbf486b9a600e8109935a238e8a4f58381823756006ae38db7bc3fc89d10"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/data/raw/gates/dongthap_gate_catalog_2025.pdf",
+    "destination": "data/raw/gates/dongthap_gate_catalog_2025.pdf",
+    "original_sha256": "72b3e00ac184f00a0527478c898a1bc53eb7102b798f583f77d4e9d6ac90efe6"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/frontend/src/research.js",
+    "destination": "frontend/src/research.js",
+    "original_sha256": "c48d166f997deb587c8b8ddd184e50803b03240c6ba66bf61d2e0f568e5597c4"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/frontend/src/research.css",
+    "destination": "frontend/src/research.css",
+    "original_sha256": "271afe104fd443381feae6f4409b7cf2701aca7bac1d73283dcd85571b96db9e"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/frontend/src/research-utils.js",
+    "destination": "frontend/src/research-utils.js",
+    "original_sha256": "59dc39b86eb3d43f56728a90f8e124b30da0ba13a68c8d335c046068280cb055"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/frontend/src/research-map.js",
+    "destination": "frontend/src/research-map.js",
+    "original_sha256": "6a2f429e675fb1a900fcc8dea6be9aa19e80c2aa3a70900c3920d18e624e83c7"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/frontend/src/research-chart.js",
+    "destination": "frontend/src/research-chart.js",
+    "original_sha256": "282cf21727c8457f05e578b03f877cef2f88b0952bffdb17c289ef720d8bf367"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/run_forecast.py",
+    "destination": "run_monthly_ec.py",
+    "original_sha256": "798195f149ca2941eeac862800b9d13090dc6f6c347e240f6d09a5680ab9894f"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/frontend/index.html",
+    "destination": "frontend/research.html",
+    "original_sha256": "24b303db87de5436efc0a517d08990ccc5db03c3048d1a039c9d210ba68319cd"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/tests/test_run_forecast.py",
+    "destination": "tests/test_monthly_ec.py",
+    "original_sha256": "47cb9c549ab95683b2b84b6d39dcebd4da1bb60e9aacb225f1e606ad1030ede9"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/backend/tests/test_research_api.py",
+    "destination": "backend/test/test_research_api.py",
+    "original_sha256": "5c02416849a097cdc236398cf8f3baceb0d5d3bff46cf9544f6e996a5109d549"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/frontend/tests/research.test.js",
+    "destination": "frontend/src/tests/research.test.js",
+    "original_sha256": "2b787717be9b9bf6e3d93d89b8643429518f74bb9543e7ab46e68ba8f28e4aba"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/data/external/ec_recovery_20261011/ec_dongthap_ria2_2025.csv",
+    "destination": "data/external/ec_recovery_20261011/ec_dongthap_ria2_2025.csv",
+    "original_sha256": "eddb4e4809d5217c8a88d25e7f631629d3156deb98cbd4a3e3ab37d12e0996c1"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/data/external/ec_recovery_20261011/ec_mrc_rechecked_20261011.csv",
+    "destination": "data/external/ec_recovery_20261011/ec_mrc_rechecked_20261011.csv",
+    "original_sha256": "8d26060060f1a879a77ef659c7dd2525b5d9a8eeecd50684a849209443009698"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/data/external/ec_recovery_20261011/ec_recovery_manifest.json",
+    "destination": "data/external/ec_recovery_20261011/ec_recovery_manifest.json",
+    "original_sha256": "e9b3b298e294bd78599d6b6dd30d2985c80fed06684551d269a45ac2fab58100"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/data/external/ec_recovery_20261011/mrc_recheck_manifest.json",
+    "destination": "data/external/ec_recovery_20261011/mrc_recheck_manifest.json",
+    "original_sha256": "c4a4af24020095afb0858fa741216661b6a45961b6e29c2809609e3828515586"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/data/contracts/gate_input.json",
+    "destination": "data/contracts/gate_input.json",
+    "original_sha256": "cc3148cbd8bb5298b8fd8811e6523c9d646325033aa2090366cdf61d8703364a"
+  },
+  {
+    "source": "WebGIS_DongThap_Step08/data/contracts/gate_policy.json",
+    "destination": "data/contracts/gate_policy.json",
+    "original_sha256": "f5ae18a852d45982d1e084ad212597ba44f416d64f39483617a48a28abd3064d"
+  }
+]

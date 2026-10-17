@@ -1,0 +1,22 @@
+{
+  "source_id": "RIA2_CATRA_2025_12",
+  "file": "data/external/observation_archive_20261015T012357109839Z/f874720dfb9e552b071b.pdf",
+  "sha256": "57168c999d799f0b57de14593cd5ce3bb6371851b795abf40c2574518225525b",
+  "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/45-Ban-tin-ca-tra-dot-12.pdf",
+  "reference": "RIA2, 45/TTQT-ĐT, bản tin cá tra đợt 12, ngày văn bản 08/08/2025; mẫu 03–06/08/2025",
+  "extraction": "pypdf text extraction checked against rendered original PDF pages 1–4; unit on page 1; no sampling hour supplied",
+  "identity_evidence": "Same publisher, source station names and identical printed coordinate pairs as the existing RIA2 catalogue. Administrative text has unresolved inconsistencies; CRS and measurement method remain unverified.",
+  "columns": ["site_code", "observed_date", "ec_uS_cm", "latitude_source", "longitude_source", "page", "data_row_on_page"],
+  "rows": [
+    ["RIA2_DT_01", "2025-08-05", 207, 10.803889, 105.340278, 2, 7],
+    ["RIA2_DT_02", "2025-08-05", 147, 10.672500, 105.340000, 2, 8],
+    ["RIA2_DT_03", "2025-08-04", 128, 10.451667, 105.580833, 3, 1],
+    ["RIA2_DT_04", "2025-08-04", 138, 10.366667, 105.728611, 3, 2],
+    ["RIA2_DT_05", "2025-08-06", 173, 10.237869, 105.605944, 3, 3],
+    ["RIA2_DT_06", "2025-08-04", 138, 10.265275, 105.870819, 3, 4],
+    ["RIA2_DT_07", "2025-08-03", 133, 10.408056, 105.655833, 3, 5],
+    ["RIA2_DT_08", "2025-08-03", 168, 10.678892, 105.522353, 3, 6],
+    ["RIA2_DT_09", "2025-08-05", 138, 10.198522, 105.622250, 3, 7],
+    ["RIA2_DT_10", "2025-08-05", 138, 10.288150, 105.875875, 4, 1]
+  ]
+}

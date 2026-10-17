@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-11T00:04:47.660352+00:00",
+  "title": "EC observations recovered for the Dong Thap / Tien Giang WebGIS study",
+  "publisher": "RIA2, Southern Center for Environmental Monitoring and Aquatic Animal Health",
+  "selection": "Ten source-labelled Đồng Tháp points in the four latest retrieved catfish bulletins (15-18/2025). This is not the entire 2025 archive.",
+  "station_identity": "RIA2_DT_01..10 are project-local IDs, not publisher IDs; matches use identical source names and coordinates. No match to MRC stations is asserted.",
+  "license_status": "Publicly accessible official reports; no dataset-specific open-data licence confirmed.",
+  "sources": [
+    {
+      "source_id": "RIA2_CATRA_2025_15",
+      "issue": 15,
+      "document_date": "2025-10-03",
+      "article_url": "https://vienthuysan2.org.vn/ban-tin-thong-bao-ket-qua-quan-trac-chat-luong-nuoc-phuc-vu-vung-nuoi-ca-tra-o-dbscl-dot-15-2025/",
+      "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/61-ca-dot-15.pdf",
+      "file": "catra_2025_15.pdf",
+      "sha256": "0698d821f83c6ce8764a8f2a25d9c3cc6b8cf05bafb46a2d5dc5e37af1faa1fe",
+      "bytes": 9494121,
+      "retrieved_at": "2026-10-10T23:59:00.071092+00:00",
+      "selected_rows": 10,
+      "selected_province": "Đồng Tháp",
+      "extraction": "PDF visual transcription",
+      "converted_docx_sha256": null
+    },
+    {
+      "source_id": "RIA2_CATRA_2025_16",
+      "issue": 16,
+      "document_date": "2025-10-17",
+      "article_url": "https://vienthuysan2.org.vn/ban-tin-thong-bao-ket-qua-quan-trac-chat-luong-nuoc-phuc-vu-vung-nuoi-ca-tra-o-dbscl-dot-16-2025/",
+      "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/65-BAN-TIN-SO-16-CÁ-TRA.doc",
+      "file": "catra_2025_16.doc",
+      "sha256": "7766e604481b7e96ba8fab31668db21bbee5294fc43c0fc9269206fd34876f8a",
+      "bytes": 259584,
+      "retrieved_at": "2026-10-10T23:58:58.567901+00:00",
+      "selected_rows": 10,
+      "selected_province": "Đồng Tháp",
+      "extraction": "LibreOffice DOC->DOCX then python-docx table extraction",
+      "converted_docx_sha256": "f31ba076197249995476091265ba3cdf1c2475d7e237193828105f1884750fe6"
+    },
+    {
+      "source_id": "RIA2_CATRA_2025_17",
+      "issue": 17,
+      "document_date": "2025-10-31",
+      "article_url": "https://vienthuysan2.org.vn/ban-tin-thong-bao-ket-qua-quan-trac-chat-luong-nuoc-phuc-vu-vung-nuoi-ca-tra-o-dbscl-dot-17-2025/",
+      "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/11/67-BAN-TIN-SO-17-CÁ-TRA.doc",
+      "file": "catra_2025_17.doc",
+      "sha256": "85b64386fc13db635a1a902917ee77ba0fd0daca45121f83b858db9fdafe33a2",
+      "bytes": 264192,
+      "retrieved_at": "2026-10-10T23:58:58.216466+00:00",
+      "selected_rows": 10,
+      "selected_province": "Đồng Tháp",
+      "extraction": "LibreOffice DOC->DOCX then python-docx table extraction",
+      "converted_docx_sha256": "a67cf20fa22aecb8a8490c21c3c92a41335761f002044fa2c8c6fb7ab69a060a"
+    },
+    {
+      "source_id": "RIA2_CATRA_2025_18",
+      "issue": 18,
+      "document_date": "2025-11-14",
+      "article_url": "https://vienthuysan2.org.vn/ban-tin-thong-bao-ket-qua-quan-trac-chat-luong-nuoc-phuc-vu-vung-nuoi-ca-tra-o-dbscl-dot-18-2025/",
+      "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/11/71-BAN-TIN-SO-18-CÁ-TRA.doc",
+      "file": "catra_2025_18.doc",
+      "sha256": "ee3ade8418aa970c582d92df6679efcf1dd293a6e277a353ee9effbe602552b6",
+      "bytes": 241152,
+      "retrieved_at": "2026-10-10T23:59:04.966089+00:00",
+      "selected_rows": 10,
+      "selected_province": "Đồng Tháp",
+      "extraction": "LibreOffice DOC->DOCX then python-docx table extraction",
+      "converted_docx_sha256": "8e0a09d35590b15dee0609dd2fd0e601557382f24e15a4b7dc4a67371f6569aa"
+    }
+  ],
+  "datasets": [
+    {
+      "file": "ec_dongthap_ria2_2025.csv",
+      "sha256": "eddb4e4809d5217c8a88d25e7f631629d3156deb98cbd4a3e3ab37d12e0996c1",
+      "bytes": 29279
+    },
+    {
+      "file": "ec_mrc_rechecked_20261011.csv",
+      "sha256": "8d26060060f1a879a77ef659c7dd2525b5d9a8eeecd50684a849209443009698",
+      "bytes": 449126
+    },
+    {
+      "file": "mrc_recheck_manifest.json",
+      "sha256": "c4a4af24020095afb0858fa741216661b6a45961b6e29c2809609e3828515586",
+      "bytes": 14007
+    }
+  ],
+  "unit_conversion": {
+    "source": "µS/cm",
+    "target": "mS/m",
+    "factor": 0.1,
+    "temperature_compensation_applied": false
+  },
+  "observations_summary": {
+    "rows": 40,
+    "sites": 10,
+    "campaigns": 4,
+    "first_date": "2025-09-28",
+    "last_date": "2025-11-11"
+  },
+  "unresolved": [
+    "No verified downloadable 2026 EC observations recovered in the searched sources.",
+    "MRC Tan Chau and My Tho still end on 2023-12-15 after querying through retrieval time.",
+    "RIA2 records have date only, no sampling hour; four fortnightly observations per site cannot validate 2/6/12-hour forecasts.",
+    "EC temperature-compensation basis and instrument protocol are not stated; same-row water temperature alone does not justify salinity conversion.",
+    "Source coordinates have no explicit CRS. The Vam Cai Son - Vinh Thoi administrative label is inconsistent enough to require confirmation; it is preserved as printed.",
+    "The new sites are not the MRC My Tho/Tan Chau stations, nor verified gate sensors; no spatial substitution or gate rule is certified."
+  ],
+  "searched_but_unverified_2026_leads": [
+    {
+      "url": "https://snnmt.dongthap.gov.vn/web/snnmt/tin-tuc/chi-tiet?id=10742957",
+      "status": "Could not retrieve measurement attachment; publication/search date alone is not measurement evidence."
+    },
+    {
+      "url": "https://snnmt.dongthap.gov.vn/web/snnmt/tin-tuc/chi-tiet?id=10738333",
+      "status": "Could not retrieve measurement attachment; no values extracted."
+    }
+  ],
+  "gate_decision_eligible": false,
+  "hourly_forecast_validation_eligible": false
+}

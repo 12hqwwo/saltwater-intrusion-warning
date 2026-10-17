@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "is_demo": false,
+  "_instructions": "Hồ sơ lập kế hoạch; chỉ điền số đo có nguồn của đúng công trình. Không dùng mẫu EC tháng để quyết định giờ đóng/mở cống.",
+  "gate_code": null,
+  "issue_time": null,
+  "mode": null,
+  "current_state": "UNKNOWN",
+  "last_changed_at": null,
+  "operating_status": {
+    "gate_code": null,
+    "observed_at": null,
+    "available_at": null,
+    "quality_flag": "UNVERIFIED",
+    "source_reference": null,
+    "mechanical_ok": null,
+    "emergency": null,
+    "water_demand": null
+  },
+  "observations": {
+    "outside_quality": {
+      "gate_code": null,
+      "observed_at": null,
+      "available_at": null,
+      "quality_flag": "UNVERIFIED",
+      "source_reference": null,
+      "value": null,
+      "parameter": "EC",
+      "unit": "mS/m",
+      "ec_basis": "UNKNOWN",
+      "method_reference": null
+    },
+    "inside_quality": {
+      "gate_code": null,
+      "observed_at": null,
+      "available_at": null,
+      "quality_flag": "UNVERIFIED",
+      "source_reference": null,
+      "value": null,
+      "parameter": "EC",
+      "unit": "mS/m",
+      "ec_basis": "UNKNOWN",
+      "method_reference": null
+    },
+    "outside_level": {
+      "gate_code": null,
+      "observed_at": null,
+      "available_at": null,
+      "quality_flag": "UNVERIFIED",
+      "source_reference": null,
+      "value": null,
+      "unit": "m",
+      "vertical_datum": null
+    },
+    "inside_level": {
+      "gate_code": null,
+      "observed_at": null,
+      "available_at": null,
+      "quality_flag": "UNVERIFIED",
+      "source_reference": null,
+      "value": null,
+      "unit": "m",
+      "vertical_datum": null
+    }
+  }
+}

@@ -1,3 +1,5 @@
+> Tài liệu lịch sử, không phải hướng dẫn chạy hiện tại. Các đường dẫn thành phần đã loại bỏ chỉ còn trong bản sao lưu; xem [README hiện tại](../README.md). Giữ nội dung đánh giá để truy vết.
+
 # Tiến độ dự án — cập nhật 08/10/2026
 
 Đồ án được phát triển theo từng chặng. Đây là tiến độ có bằng chứng, chưa phải báo cáo kết thúc đồ án.

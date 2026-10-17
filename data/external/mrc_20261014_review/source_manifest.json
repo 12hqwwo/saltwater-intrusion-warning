@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "retrievals": [],
+  "series": [],
+  "errors": [
+    {
+      "type": "URLError",
+      "message": "<urlopen error [Errno 11001] getaddrinfo failed>"
+    }
+  ],
+  "gate_decision_eligible": false,
+  "license_status": "Publicly accessible; no dataset-specific reuse license confirmed.",
+  "quality_policy": "Keep Working, grade -1, notes and qualifiers. Never promote to VALIDATED.",
+  "api_stability": "Public portal JSON endpoints; no service-level or long-term compatibility guarantee."
+}

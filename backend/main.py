@@ -4,7 +4,8 @@ import logging
 import os
 from datetime import date
 from typing import Annotated
-from backend.replay import router as replay_router
+from backend.research import router as research_router
+from backend.intake import router as intake_router
 
 import psycopg
 from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request
@@ -30,14 +31,21 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         origin.strip() for origin in os.getenv(
-            "WEBGIS_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+            "WEBGIS_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173"
         ).split(",") if origin.strip()
     ],
     allow_credentials=False,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["Accept", "Content-Type"],
 )
-app.include_router(replay_router)
+app.include_router(research_router)
+app.include_router(intake_router)
+
+
+@app.get('/api/v1/app-health')
+def app_health():
+    return {'status': 'ok', 'research_mode': os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot'),
+            'database_checked': False}
 
 def get_repository() -> Repository:
     # No connection here: invalid requests can return 422 while PostgreSQL is offline.

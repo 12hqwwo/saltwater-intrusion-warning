@@ -1,0 +1,87 @@
+{
+  "files": [
+    {
+      "file": "WebGIS_DongThap_TienGiang_Master_Dataset_v3.xlsx",
+      "source_path": "D:\\UNIVERSITY\\DOANTOTNGHIEP\\TIEULUANCHUYENNGANH\\Gemini\\WebGIS_DongThap_TienGiang_Master_Dataset_v3.xlsx",
+      "sha256": "2b8896d980b3069cf99246c6749bf00d6bd07f87eb3ab6a94e0df456ee7a7a9d",
+      "received_at": "2026-10-15T06:25:19.518087+00:00",
+      "status": "USER_SUPPLIED_UNVERIFIED"
+    },
+    {
+      "file": "WebGIS_ML_Time_Series_Ready_v3.csv",
+      "source_path": "D:\\UNIVERSITY\\DOANTOTNGHIEP\\TIEULUANCHUYENNGANH\\Gemini\\WebGIS_ML_Time_Series_Ready_v3.csv",
+      "sha256": "917f9eb8dec720e0cf4d7caab2afd678321644386581a1916ccfa9ffa2890a7d",
+      "received_at": "2026-10-15T06:25:19.523085+00:00",
+      "status": "USER_SUPPLIED_UNVERIFIED"
+    },
+    {
+      "file": "webgis_dongthap_tiengiang_spatial_v3.json",
+      "source_path": "D:\\UNIVERSITY\\DOANTOTNGHIEP\\TIEULUANCHUYENNGANH\\Gemini\\webgis_dongthap_tiengiang_spatial_v3.json",
+      "sha256": "279eec89bddafca10683b8c8a638f5f1241271ce37cda0388f44273714a2a9e4",
+      "received_at": "2026-10-15T06:25:19.526086+00:00",
+      "status": "USER_SUPPLIED_UNVERIFIED"
+    }
+  ],
+  "sheet_rows": {
+    "00_Dashboard_TongQuan": 55,
+    "01_Data_Source_Catalog": 13,
+    "02_Stations_Sites_Catalog": 58,
+    "03_Salinity_River_Series": 533,
+    "04_Salinity_Canal_Interior": 189,
+    "05_RIA2_DongThap_EC_WQ": 21,
+    "06_Sluice_Gates_Catalog_190": 190,
+    "07_Canals_Dikes_Catalog": 50,
+    "08_Sluice_Operation_Rules": 8,
+    "09_Sluice_Operation_Logs": 57,
+    "10_WaterLevel_Separated": 302,
+    "11_Meteorology_Separated": 231,
+    "12_Coverage_Before_After": 28,
+    "13_ML_Time_Series_Ready": 640
+  },
+  "csv_rows": 640,
+  "workbook_ml_rows": 640,
+  "station_count": 47,
+  "duplicate_station_dates": 0,
+  "next1d_label_count": 387,
+  "next1d_zero_labels": 114,
+  "split_roles": {
+    "HIST_EXTREME_BASELINE (2016/2020)": 141,
+    "TEST_TIDAL_MULTIVAR_2026_10 (7-Day Contiguous Backtest)": 132,
+    "TRAIN_DRY_SEASON_2025": 122,
+    "VAL_DRY_SEASON_2026 (Contiguous May Window)": 113,
+    "TRAIN_TIDAL_MULTIVAR_2026_09 (5-Day Contiguous)": 83,
+    "TRAIN_DRY_SEASON_2024": 49
+  },
+  "issue_counts": {
+    "CALENDAR_MISMATCH_feat_salinity_lag1_g_l": 53,
+    "TARGET_REQUIRES_MEASUREMENT_LOCATION_DISAMBIGUATION": 5
+  },
+  "spatial_features": 85,
+  "spatial_classes": {
+    "MONITORING_STATION": 58,
+    "IRRIGATION_GATE": 27
+  },
+  "spatial_location_status": {
+    "EXACT_PLUS_CODE": 54,
+    "NEARBY_LANDMARK": 1,
+    "COMMUNE_REPORTED": 16,
+    "LANDMARK_REPORTED": 12,
+    "EXACT_MRC_PORTAL": 2
+  },
+  "spatial_null_geometries": 0,
+  "river_measurement_regimes": {
+    "HIST_MATCHED_DAY_2016": 77,
+    "HIST_MATCHED_DAY_2020": 64,
+    "SEASONAL_PEAK_OBS": 80,
+    "HIST_MATCHED_DAY_2024": 6,
+    "HIST_MATCHED_DAY_2025": 80,
+    "DAILY_MAX_S_GL": 118,
+    "PEAK_MORNING_TIDE": 40,
+    "PEAK_AFTERNOON_TIDE": 34,
+    "FIXED_07H00": 24,
+    "DAILY_MAX": 10
+  },
+  "acceptance": "STAGING_ONLY_NOT_APPROVED_FOR_TRAINING_OR_GATE_ADVICE",
+  "note": "Counts are internal consistency checks, not independent verification of measurement values.",
+  "full_hydromet_next1d": 138
+}

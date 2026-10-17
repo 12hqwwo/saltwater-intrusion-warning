@@ -1,3 +1,5 @@
+> Tài liệu lịch sử, không phải hướng dẫn chạy hiện tại. Các đường dẫn thành phần đã loại bỏ chỉ còn trong bản sao lưu; xem [README hiện tại](../../README.md). Giữ nội dung đánh giá để truy vết.
+
 # Tiếp tục sau khi kiểm thử ETL đạt — 25/09/2026
 
 Mốc hiện tại: đã đối chiếu log nạp lần đầu và nhập lặp; người thực hiện xác nhận rollback cũng đúng kịch bản. Tiếp theo: đưa mã đã kiểm chứng vào repo C, sao lưu database chính, bổ sung raw Mỹ Tho và tọa độ hai trạm, rồi hoàn thiện GIS và hồ sơ tuần. Các ca test đã đạt được giữ làm bằng chứng; không dựng lại database test.

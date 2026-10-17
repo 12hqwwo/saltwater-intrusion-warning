@@ -9,7 +9,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
-        replay: fileURLToPath(new URL('./replay.html', import.meta.url)),
+        research: fileURLToPath(new URL('./research.html', import.meta.url)),
       }
     }
   },
