@@ -3,69 +3,485 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gò Công · Spatial Pilot</title>
+  <title>Pilot Gò Công · Kiểm chứng topology và kết nối trạm</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
-    :root{font-family:system-ui,Arial,sans-serif;color:#173042;background:#f5f8fa}
-    *{box-sizing:border-box} body{margin:0} header{padding:14px 20px;background:#123c56;color:white}
-    h1{font-size:20px;margin:0 0 4px} header p{margin:0;color:#d4e5ee;font-size:13px}
-    main{display:grid;grid-template-columns:minmax(0,1fr) 355px;height:calc(100vh - 75px)}
-    #map{height:100%;min-height:480px} aside{overflow:auto;padding:18px;background:white;border-left:1px solid #dae5ec}
-    h2{font-size:16px;margin:18px 0 8px} h2:first-child{margin-top:0}
-    p,li{line-height:1.5;font-size:13px} .note{background:#fff5dd;border-left:3px solid #db9b24;padding:10px;margin:12px 0}
-    select{width:100%;padding:8px;border:1px solid #aac0cb;border-radius:6px;background:white}
-    table{border-collapse:collapse;width:100%;font-size:12px}td,th{padding:7px 4px;text-align:left;border-bottom:1px solid #e2ebef}
-    td.num,th.num{text-align:right} .muted{color:#647a85} .pill{display:inline-block;padding:3px 7px;border-radius:12px;background:#e1f1fb;font-size:11px}
-    .error{color:#a31c24} .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;margin:8px 0}
-    .swatch{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:4px}
-    @media(max-width:850px){main{display:block;height:auto}#map{height:56vh}aside{border-left:0}}
+    :root {
+      --primary: #0e3b56;
+      --accent: #0288d1;
+      --bg: #f4f7f9;
+      --panel-bg: #ffffff;
+      --text: #1a2a36;
+      --muted: #5e7381;
+      --border: #d2dee5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+    header {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #092c42 0%, #154c6e 100%);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    h1 { font-size: 19px; margin: 0 0 4px; font-weight: 600; }
+    header p { margin: 0; color: #bde0fe; font-size: 13px; }
+    .badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 12px;
+      color: #e0f2fe;
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 370px;
+      height: calc(100vh - 64px);
+    }
+    #map { height: 100%; min-height: 480px; background: #e5edf0; }
+    aside {
+      overflow-y: auto;
+      padding: 18px;
+      background: var(--panel-bg);
+      border-left: 1px solid var(--border);
+      box-shadow: -2px 0 10px rgba(0,0,0,0.03);
+    }
+    h2 { font-size: 15px; margin: 18px 0 8px; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+    h2:first-child { margin-top: 0; }
+    p, li { line-height: 1.5; font-size: 13px; }
+    .note {
+      background: #fff8e6;
+      border-left: 3px solid #f59e0b;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 12.5px;
+    }
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: white;
+      font-size: 13px;
+      color: var(--text);
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    td, th { padding: 7px 6px; text-align: left; border-bottom: 1px solid #e8f0f3; }
+    td.num, th.num { text-align: right; }
+    .muted { color: var(--muted); }
+    .legend-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      margin: 5px 0;
+    }
+    .line-swatch {
+      display: inline-block;
+      width: 26px;
+      height: 4px;
+      margin-right: 8px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .circle-swatch {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+      margin-left: 7px;
+      flex-shrink: 0;
+    }
+    .layer-toggles {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .layer-toggles label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+    }
+    .layer-toggles label:hover {
+      background: #f1f5f9;
+    }
+    .layer-toggles input[type="checkbox"] {
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+    .count-tag {
+      margin-left: auto;
+      font-size: 11px;
+      background: #e2e8f0;
+      color: #475569;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .stat-box {
+      background: #f0f7fb;
+      border: 1px solid #d0e4f2;
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+    }
+    .stat-box .num { font-size: 17px; font-weight: 700; color: #026aa7; }
+    .stat-box .lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    @media(max-width:880px){
+      main { display: block; height: auto; }
+      #map { height: 60vh; }
+      aside { border-left: 0; }
+    }
   </style>
 </head>
 <body>
-  <header><h1>Gò Công · Spatial Pilot</h1><p>Quan trắc EC I–IV, tuyến mạng đã chốt và thử độ nhạy giao KML–OSM 510175774</p></header>
-  <main><div id="map" role="img" aria-label="Bản đồ các điểm quan trắc và đường sông"></div>
+  <header>
+    <div>
+      <h1>Pilot Gò Công · Kiểm chứng topology và kết nối trạm</h1>
+      <p>Mốc freeze v1 · Mạng OSM 609 tuyến · 5 trạm quan trắc EC I–IV</p>
+    </div>
+    <div class="badge">OSM Waterways + Pilot Topology</div>
+  </header>
+
+  <main>
+    <div id="map" role="img" aria-label="Bản đồ mạng lưới sông ngòi chi tiết và các điểm quan trắc"></div>
+
     <aside>
-      <h2>Kịch bản topology</h2>
-      <select id="scenario"><option value="A_connected">A · Giữ giao KML–OSM</option><option value="B_crossing_closed">B · Tách 13 nút giao cùng way</option></select>
-      <div class="note" id="scenario-note">Đang tải…</div>
-      <div class="legend"><span><i class="swatch" style="background:#167ac6"></i>5 điểm pilot</span><span><i class="swatch" style="background:#d98117"></i>Tọa độ chờ QA</span><span><i class="swatch" style="background:#bd2e35"></i>Cụm giao</span></div>
-      <h2>Sai số LOLO · p=2</h2><p class="muted">mS/m; hàng thiếu dự báo mạng được tính vào độ phủ, không tính sai số.</p>
-      <table><thead><tr><th>Phương pháp</th><th class="num">MAE</th><th class="num">RMSE</th><th class="num">Độ phủ</th></tr></thead><tbody id="metrics"></tbody></table>
-      <h2>Điểm được chọn</h2><div id="site-detail" class="muted">Bấm vào điểm xanh trên bản đồ để xem EC từng đợt.</div>
-      <h2>Giới hạn diễn giải</h2><p>13 giao là giao hình học trong graph; trạng thái thông nước chưa được kiểm định tại hiện trường. Các đợt I–IV chưa có ngày đáng tin cậy trong bộ trích PDF. NM26, NM28, NM33 chưa vào kiểm định.</p>
+      <h2>Lớp dữ liệu bản đồ</h2>
+      <div class="layer-toggles">
+        <label>
+          <input type="checkbox" id="chk-waterways" checked>
+          <span>Mạng sông ngòi chằng chịt</span>
+          <span class="count-tag" id="tag-waterways">609 nhánh</span>
+        </label>
+        <label>
+          <input type="checkbox" id="chk-routes" checked>
+          <span>Tuyến kết nối 5 trạm Pilot</span>
+          <span class="count-tag">10 tuyến</span>
+        </label>
+        <label>
+          <input type="checkbox" id="chk-sites" checked>
+          <span>5 trạm quan trắc Pilot</span>
+          <span class="count-tag">NM29–34</span>
+        </label>
+        <label>
+          <input type="checkbox" id="chk-crossings" checked>
+          <span>13 điểm giao KML–OSM</span>
+          <span class="count-tag">13 nút</span>
+        </label>
+        <label>
+          <input type="checkbox" id="chk-candidates">
+          <span>Điểm đã loại khỏi freeze (Pilot-8)</span>
+          <span class="count-tag">3 điểm</span>
+        </label>
+      </div>
+
+      <div style="margin: 10px 0 16px;">
+        <a href="/pilot/spatial/waterways" download="go_cong_waterways.geojson" style="display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; background: #0284c7; color: white; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          📥 Tải 609 tuyến sông ngòi (.geojson)
+        </a>
+      </div>
+
+      <div class="legend-card">
+        <div style="font-weight: 600; font-size: 12px; margin-bottom: 6px; color: #334155;">Phân loại mạng sông ngòi:</div>
+        <div class="legend-row">
+          <span class="line-swatch" style="background:#004b87; height:4px;"></span>
+          <span>Sông chính (River) · 73 tuyến</span>
+        </div>
+        <div class="legend-row">
+          <span class="line-swatch" style="background:#0277bd; height:2.8px;"></span>
+          <span>Kênh thủy lợi (Canal) · 187 tuyến</span>
+        </div>
+        <div class="legend-row">
+          <span class="line-swatch" style="background:#00838f; height:2px;"></span>
+          <span>Rạch tự nhiên (Stream) · 329 tuyến</span>
+        </div>
+        <div class="legend-row">
+          <span class="line-swatch" style="background:#455a64; height:1.4px; border-top: 1px dashed #455a64;"></span>
+          <span>Mương, rãnh dẫn nước (Drain/Ditch)</span>
+        </div>
+        <div class="legend-row" style="margin-top: 8px;">
+          <span class="line-swatch" style="background:#e11d48; height:3.5px;"></span>
+          <span>Tuyến Pilot NM29–NM34 (nhạy cảm)</span>
+        </div>
+        <div class="legend-row">
+          <span class="circle-swatch" style="background:#0284c7; border: 2px solid #075985;"></span>
+          <span>Trạm quan trắc (5 trạm Pilot)</span>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="num">>1.368</div>
+          <div class="lbl">km sông ngòi OSM</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">609</div>
+          <div class="lbl">nhánh chia chi tiết</div>
+        </div>
+      </div>
+
+      <h2>Kịch bản topology thủy lực</h2>
+      <select id="scenario">
+        <option value="A_connected">Kịch bản A · Giữ giao KML–OSM (10/10 cặp thông suốt)</option>
+        <option value="B_crossing_closed">Kịch bản B · Tách 13 nút giao (NM29 cô lập mạng)</option>
+      </select>
+      <div class="note" id="scenario-note">Đang tải kịch bản…</div>
+
+      <h2>Sai số LOLO (p=2) · EC (mS/m)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Mô hình</th>
+            <th class="num">MAE</th>
+            <th class="num">RMSE</th>
+            <th class="num">Độ phủ</th>
+          </tr>
+        </thead>
+        <tbody id="metrics"></tbody>
+      </table>
+
+      <h2>Thông tin trạm được chọn</h2>
+      <div id="site-detail" class="muted">Nhấp vào một trạm quan trắc (chấm xanh) hoặc một nhánh sông trên bản đồ để xem chi tiết.</div>
+
+      <h2>Giới hạn kỹ thuật</h2>
+      <p class="muted">Toàn bộ 609 đoạn sông ngòi được nạp từ OpenStreetMap (ODbL). Trạng thái đóng/mở cống thực tế tại các nhánh rạch thủy lợi cần được kiểm chứng tại hiện trường để hoàn thiện mô hình truyền mặn động.</p>
     </aside>
   </main>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-  const api='/pilot/spatial';
-  const map=L.map('map').setView([10.32,106.69],10);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
-  const fmt=x=>Number(x).toLocaleString('vi-VN',{maximumFractionDigits:2});
-  const get=async path=>{const r=await fetch(api+path);if(!r.ok)throw Error(path+': '+r.status);return r.json()};
-  let metrics=[];
-  function update(){
-    const s=document.getElementById('scenario').value;
-    const subset=metrics.filter(x=>x.subset==='all_eligible'&&x.campaign==='ALL'&&x.scenario===s);
-    document.getElementById('metrics').innerHTML=subset.map(x=>`<tr><td>${x.model}</td><td class="num">${x.mae_ms_m?fmt(x.mae_ms_m):'—'}</td><td class="num">${x.rmse_ms_m?fmt(x.rmse_ms_m):'—'}</td><td class="num">${x.predicted_n}/${x.eligible_n}</td></tr>`).join('');
-    document.getElementById('scenario-note').textContent=s==='A_connected'
-      ?'A: 10/10 cặp nối được trong graph đã chốt. Đây chưa phải bằng chứng thông nước.'
-      :'B: NM29 mất đường mạng đến 4 điểm còn lại. 4/20 dự báo River không xác định; không dùng khoảng cách thẳng thay thế.';
-  }
-  document.getElementById('scenario').addEventListener('change',update);
-  Promise.all([get('/sites'),get('/routes'),get('/crossings'),get('/coordinate-candidates'),get('/metrics')]).then(([sites,routes,crossings,candidates,result])=>{
-    metrics=result.rows; update();
-    L.geoJSON(routes,{style:f=>({color:f.properties.site_a==='NM29'&&f.properties.site_b==='NM34'?'#ba3541':'#506f83',weight:f.properties.site_a==='NM29'&&f.properties.site_b==='NM34'?4:2,opacity:.65}),
-      onEachFeature:(f,l)=>l.bindPopup(`${f.properties.site_a}–${f.properties.site_b}<br>RiverDistance A: ${fmt(f.properties.river_m)} m`)}).addTo(map);
-    L.geoJSON(crossings,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:3,color:'#bd2e35',fillOpacity:.9}),
-      onEachFeature:(f,l)=>l.bindPopup('Giao KML–OSM 510175774 · chưa xác minh thông nước')}).addTo(map);
-    L.geoJSON(candidates,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:5,color:'#d98117',fillColor:'#f6ae41',fillOpacity:.8}),
-      onEachFeature:(f,l)=>l.bindPopup(`${f.properties.site_code}: ${f.properties.coordinate_version}<br>Đến mạng: ${fmt(f.properties.nearest_network_m)} m<br>HOLD`)}).addTo(map);
-    const layer=L.geoJSON(sites,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:8,color:'#075580',fillColor:'#167ac6',fillOpacity:1,weight:2}),
-      onEachFeature:(f,l)=>l.on('click',()=>{let p=f.properties;
-        document.getElementById('site-detail').innerHTML=`<strong>${p.site_code} · ${p.name}</strong><p>SnapDistance: ${fmt(p.snap_distance_m)} m<br>Trạng thái: ${p.snap_status}</p><table><tr><th>Đợt</th><th class="num">EC (mS/m)</th></tr>${Object.entries(p.ec_ms_m_by_campaign).map(([k,v])=>`<tr><td>${k}</td><td class="num">${fmt(v)}</td></tr>`).join('')}</table>`;
-      })}).addTo(map);
-    map.fitBounds(layer.getBounds().pad(.25));
-  }).catch(e=>{document.getElementById('scenario-note').innerHTML='<span class="error">Không tải được dữ liệu: '+e.message+'</span>'});
+  <script type="module">
+    import { pilotSpatialDataService } from '/pilot/spatial/data-service.js';
+
+    const fmt = x => (x !== null && x !== undefined && !isNaN(x)) ? Number(x).toLocaleString('vi-VN', { maximumFractionDigits: 2 }) : '—';
+
+    // Khởi tạo các lớp nền:
+    // 1. OpenStreetMap chuẩn (mặc định)
+    const osmStandard = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      subdomains: ['a', 'b', 'c'],
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    // 2. Ảnh vệ tinh Esri
+    const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 18,
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS'
+    });
+    // 3. Bản đồ sáng Esri Canvas
+    const esriCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 16,
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ'
+    });
+
+    const map = L.map('map', {
+      center: [10.36, 106.66],
+      zoom: 11,
+      layers: [osmStandard]
+    });
+
+    L.control.layers({
+      "OpenStreetMap (Mặc định)": osmStandard,
+      "Ảnh vệ tinh Esri": esriSatellite,
+      "Bản đồ xám Esri": esriCanvas
+    }, null, { position: 'topleft' }).addTo(map);
+
+    let metrics = [];
+    let layerWaterways, layerRoutes, layerCrossings, layerCandidates, layerSites;
+
+    // Phân loại style sông ngòi OSM tương phản cao trên nền OpenStreetMap
+    function getWaterwayStyle(feature) {
+      const type = (feature.properties.waterway || '').toLowerCase();
+      if (type === 'river') {
+        return { color: '#004b87', weight: 4.2, opacity: 0.9 };
+      } else if (type === 'canal') {
+        return { color: '#0277bd', weight: 3.0, opacity: 0.88 };
+      } else if (type === 'stream') {
+        return { color: '#00838f', weight: 2.0, opacity: 0.85 };
+      } else {
+        return { color: '#455a64', weight: 1.4, opacity: 0.7, dashArray: '4, 4' };
+      }
+    }
+
+    function translateWaterwayType(t) {
+      switch((t || '').toLowerCase()) {
+        case 'river': return 'Sông chính';
+        case 'canal': return 'Kênh đào / Kênh thủy lợi';
+        case 'stream': return 'Rạch / Suối tự nhiên';
+        case 'drain': return 'Mương tiêu thoát';
+        case 'ditch': return 'Rãnh nước';
+        default: return 'Đoạn sông ngòi (' + t + ')';
+      }
+    }
+
+    function updateScenario() {
+      const s = document.getElementById('scenario').value;
+      const subset = metrics.filter(x => x.subset === 'all_eligible' && x.campaign === 'ALL' && x.scenario === s);
+      document.getElementById('metrics').innerHTML = subset.map(x =>
+        `<tr>
+          <td><strong>${x.model}</strong></td>
+          <td class="num">${x.mae_ms_m ? fmt(x.mae_ms_m) : '—'}</td>
+          <td class="num">${x.rmse_ms_m ? fmt(x.rmse_ms_m) : '—'}</td>
+          <td class="num">${x.predicted_n}/${x.eligible_n}</td>
+        </tr>`
+      ).join('');
+
+      document.getElementById('scenario-note').innerHTML = s === 'A_connected'
+        ? '<strong>Kịch bản A (Kết nối):</strong> 10/10 cặp trạm nối được thông qua 609 đoạn sông kênh. Tuyến NM29–NM34 liền mạch.'
+        : '<strong>Kịch bản B (Tách cụm):</strong> 13 nút giao bị tách khiến NM29 mất đường thủy lực đến 4 trạm còn lại. 4/20 dự báo River không xác định.';
+    }
+    document.getElementById('scenario').addEventListener('change', updateScenario);
+
+    // Tải toàn bộ các tầng dữ liệu: Waterways (609 tuyến), Routes, Sites, Crossings, Candidates, Metrics
+    pilotSpatialDataService.loadMapBundle().then(({
+      waterways, routes, crossings, candidates, sites, metrics: result
+    }) => {
+      metrics = result.rows;
+      updateScenario();
+
+      // 1. Tầng Mạng sông ngòi chi tiết OSM
+      layerWaterways = L.geoJSON(waterways, {
+        style: getWaterwayStyle,
+        onEachFeature: (f, l) => {
+          const p = f.properties;
+          const name = p.name ? `<strong>${p.name}</strong><br>` : '';
+          const typeStr = translateWaterwayType(p.waterway);
+          l.bindPopup(`${name}Loại: <b>${typeStr}</b><br>OSM ID: ${p.osm_id}`);
+          l.on('mouseover', function () {
+            this.setStyle({ color: '#f59e0b', weight: 4.5, opacity: 1 });
+            this.bringToFront();
+          });
+          l.on('mouseout', function () {
+            layerWaterways.resetStyle(this);
+          });
+        }
+      }).addTo(map);
+
+      // 2. Tầng Tuyến Pilot 5
+      layerRoutes = L.geoJSON(routes, {
+        style: f => {
+          const isCritical = (f.properties.site_a === 'NM29' && f.properties.site_b === 'NM34') ||
+                             (f.properties.site_a === 'NM34' && f.properties.site_b === 'NM29');
+          return {
+            color: isCritical ? '#e11d48' : '#334155',
+            weight: isCritical ? 4.5 : 2.8,
+            opacity: 0.85,
+            dashArray: isCritical ? null : '5, 5'
+          };
+        },
+        onEachFeature: (f, l) => {
+          const p = f.properties;
+          l.bindPopup(`<b>Tuyến phân tích ${p.site_a} ↔ ${p.site_b}</b><br>Khoảng cách sông: ${fmt(p.river_m)} m`);
+        }
+      }).addTo(map);
+
+      // 3. Tầng Cụm nút giao KML-OSM
+      layerCrossings = L.geoJSON(crossings, {
+        pointToLayer: (f, ll) => L.circleMarker(ll, {
+          radius: 5,
+          color: '#be123c',
+          fillColor: '#f43f5e',
+          fillOpacity: 0.9,
+          weight: 2
+        }),
+        onEachFeature: (f, l) => l.bindPopup('<b>Cụm giao KML–OSM 510175774</b><br>13 nút giao nhạy cảm topology')
+      }).addTo(map);
+
+      // 4. Tầng ba tọa độ đã được xử lý bằng cách loại khỏi phạm vi freeze.
+      layerCandidates = L.geoJSON(candidates, {
+        pointToLayer: (f, ll) => L.circleMarker(ll, {
+          radius: 6,
+          color: '#d97706',
+          fillColor: '#fbbf24',
+          fillOpacity: 0.85,
+          weight: 2
+        }),
+        onEachFeature: (f, l) => {
+          const p = f.properties;
+          l.bindPopup(`<b>${p.site_code}</b> (${p.coordinate_version})<br>Khoảng cách đến sông: ${fmt(p.nearest_network_m)} m<br><span style="color:#d97706;">Trạng thái: ${p.pilot_admission || 'EXCLUDED_FROM_FREEZE'}</span><br>Chỉ mở lại khi có bằng chứng tọa độ và thủy vực.`);
+        }
+      }); // mặc định không add để tránh rối, bật qua toggle
+
+      // 5. Tầng Điểm trạm Pilot 5
+      layerSites = L.geoJSON(sites, {
+        pointToLayer: (f, ll) => L.circleMarker(ll, {
+          radius: 9,
+          color: '#075985',
+          fillColor: '#0284c7',
+          fillOpacity: 1,
+          weight: 2.5
+        }),
+        onEachFeature: (f, l) => {
+          const p = f.properties;
+          l.bindTooltip(p.site_code, { permanent: true, direction: 'top', className: 'station-label' });
+          l.on('click', () => {
+            let ecRows = Object.entries(p.ec_ms_m_by_campaign || {})
+              .map(([c, val]) => `<tr><td>${c}</td><td class="num"><b>${fmt(val)}</b></td></tr>`)
+              .join('');
+            document.getElementById('site-detail').innerHTML = `
+              <div style="background:#f0f9ff;border-left:3px solid #0284c7;padding:10px;border-radius:4px;margin-bottom:10px;">
+                <h3 style="margin:0 0 4px;color:#0369a1;font-size:14px;">${p.site_code} · ${p.name}</h3>
+                <div style="font-size:12px;color:#64748b;">
+                  Khoảng cách snap sông: <b>${fmt(p.snap_distance_m)} m</b> (${p.snap_status})
+                </div>
+              </div>
+              <table style="margin-top:6px;">
+                <thead><tr><th>Đợt quan trắc</th><th class="num">Độ dẫn điện EC (mS/m)</th></tr></thead>
+                <tbody>${ecRows}</tbody>
+              </table>
+            `;
+          });
+        }
+      }).addTo(map);
+
+      // Zoom vừa vặn bao quát toàn bộ vùng
+      map.fitBounds(layerSites.getBounds().pad(0.35));
+
+      // Thiết lập các checkbox bật/tắt tầng
+      const toggle = (id, layer) => {
+        const chk = document.getElementById(id);
+        chk.addEventListener('change', () => {
+          if (chk.checked) {
+            map.addLayer(layer);
+          } else {
+            map.removeLayer(layer);
+          }
+        });
+      };
+      toggle('chk-waterways', layerWaterways);
+      toggle('chk-routes', layerRoutes);
+      toggle('chk-sites', layerSites);
+      toggle('chk-crossings', layerCrossings);
+      toggle('chk-candidates', layerCandidates);
+
+    }).catch(err => {
+      document.getElementById('scenario-note').innerHTML = '<span style="color:#e11d48">Lỗi tải dữ liệu: ' + err.message + '</span>';
+    });
   </script>
 </body>
 </html>

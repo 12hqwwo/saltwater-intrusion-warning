@@ -1,5 +1,13 @@
 # WebGIS xâm nhập mặn Đồng Tháp - data pipeline
 
+## Mốc Pilot Gò Công đã đóng gói
+
+Mốc **“Pilot Gò Công – Kiểm chứng topology và kết nối trạm”** được đóng gói tại
+[`deliverables/pilot_go_cong_topology_freeze_v1`](deliverables/pilot_go_cong_topology_freeze_v1/README.md).
+Mốc này giữ GeoJSON/CSV để demo độc lập, gồm QA topology bốn nhóm, ma trận khoảng
+cách 5 trạm, chỉ số articulation/bridge, workbook tổng hợp, ảnh 300 dpi, metadata
+và checksum. Gò Công là khu vực thí điểm phương pháp, không đại diện toàn bộ vùng nghiên cứu.
+
 Pipeline chính đi theo luồng `RAW immutable -> STAGING -> QA/PROCESSED -> FEATURES -> MODELS`. Dữ liệu synthetic và pipeline cũ không được dùng để tuyên bố kết quả khoa học.
 
 ## Cấu trúc

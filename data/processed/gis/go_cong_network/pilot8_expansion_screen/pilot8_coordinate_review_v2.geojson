@@ -30,7 +30,11 @@
         "position_verified": false,
         "waterbody_verified": false,
         "sluice_side_verified": "NOT_APPLICABLE",
-        "pilot_admission": "HOLD"
+        "pilot_admission": "EXCLUDED_FROM_FREEZE",
+        "qa_resolution": "CLOSED_BY_SCOPE_EXCLUSION",
+        "resolution_date": "2026-10-17",
+        "resolution_reason": "Có giả thuyết hoán đổi dòng NM27/NM28 nhưng cả vị trí in và giả thuyết đều chưa xác minh được cầu/thủy vực.",
+        "reopen_condition": "Chỉ mở lại khi có tọa độ nguồn độc lập, xác minh đúng thủy vực và đối chiếu ảnh/hiện trường."
       }
     },
     {
@@ -62,7 +66,11 @@
         "position_verified": false,
         "waterbody_verified": false,
         "sluice_side_verified": "NOT_APPLICABLE",
-        "pilot_admission": "HOLD"
+        "pilot_admission": "EXCLUDED_FROM_FREEZE",
+        "qa_resolution": "CLOSED_BY_SCOPE_EXCLUSION",
+        "resolution_date": "2026-10-17",
+        "resolution_reason": "Có giả thuyết hoán đổi dòng NM27/NM28 nhưng cả vị trí in và giả thuyết đều chưa xác minh được cầu/thủy vực.",
+        "reopen_condition": "Chỉ mở lại khi có tọa độ nguồn độc lập, xác minh đúng thủy vực và đối chiếu ảnh/hiện trường."
       }
     },
     {
@@ -94,7 +102,11 @@
         "position_verified": false,
         "waterbody_verified": false,
         "sluice_side_verified": false,
-        "pilot_admission": "HOLD"
+        "pilot_admission": "EXCLUDED_FROM_FREEZE",
+        "qa_resolution": "CLOSED_BY_SCOPE_EXCLUSION",
+        "resolution_date": "2026-10-17",
+        "resolution_reason": "Vị trí PDF cách mạng 393,23 m; chưa xác minh đúng cống Vàm Tháp và phía lấy mẫu so với cống.",
+        "reopen_condition": "Chỉ mở lại khi có tọa độ nguồn độc lập, xác minh đúng thủy vực và đối chiếu ảnh/hiện trường."
       }
     },
     {
@@ -126,7 +138,11 @@
         "position_verified": false,
         "waterbody_verified": false,
         "sluice_side_verified": "NOT_APPLICABLE",
-        "pilot_admission": "HOLD"
+        "pilot_admission": "EXCLUDED_FROM_FREEZE",
+        "qa_resolution": "CLOSED_BY_SCOPE_EXCLUSION",
+        "resolution_date": "2026-10-17",
+        "resolution_reason": "Tọa độ PDF cách mạng làm việc 16,26 km; không được hiệu chỉnh kinh độ khi chưa có nguồn độc lập.",
+        "reopen_condition": "Chỉ mở lại khi có tọa độ nguồn độc lập, xác minh đúng thủy vực và đối chiếu ảnh/hiện trường."
       }
     }
   ]

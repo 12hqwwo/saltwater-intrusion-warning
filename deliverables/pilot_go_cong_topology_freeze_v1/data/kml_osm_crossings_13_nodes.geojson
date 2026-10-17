@@ -1,0 +1,200 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63938764868622,
+          10.27337142132786
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63977309976308,
+          10.272730917041823
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63867087018409,
+          10.275341527890243
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63972912235685,
+          10.272167937727986
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": true,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63977471628007,
+          10.27224135166878
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63981176133048,
+          10.272612488446155
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63965830149849,
+          10.272902014399133
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.6393455732431,
+          10.273726994047717
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63933477712361,
+          10.273838319621131
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63932150759344,
+          10.273947974549639
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.6390183969487,
+          10.27466013812006
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63899666319114,
+          10.27476550246291
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          106.63877701290166,
+          10.275158846744636
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "osm_id": 510175774,
+        "on_original_nm29_nm34_route": false,
+        "scenario_b_split": true
+      }
+    }
+  ]
+}

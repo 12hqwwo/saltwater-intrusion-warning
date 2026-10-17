@@ -1,0 +1,11 @@
+﻿metric,value,unit,interpretation
+source_osm_ways,609,ways,OSM waterway filter in extraction bbox
+graph_nodes,21447,nodes,"Augmented, geometrically noded graph"
+graph_edges,21736,edges,Augmented graph including pilot KML
+connected_components,47,components,Disconnected waterways remain separate
+largest_component_nodes,17918,nodes,Largest connected component
+degree_1_nodes,289,nodes,"Dangle candidates, not all are errors"
+articulation_points,9549,nodes,Removal increases component count
+bridges,9646,edges,Removal disconnects its component
+pilot_station_pairs_connected,10,pairs,All 5 choose 2 pairs in scenario A
+unique_kml_osm_crossing_nodes,13,nodes,Clustered from 15 raw intersections

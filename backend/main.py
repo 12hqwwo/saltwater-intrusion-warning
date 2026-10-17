@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse
 from typing import List, Optional
 from pydantic import BaseModel
 from datetime import datetime
@@ -19,9 +20,9 @@ MOCK_DATA = [
     {"station": "MyTho", "date": "2024-03-01", "conductivity_mS_per_m": 150.0},
 ]
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def read_root():
-    return {"message": "Welcome to Saltwater Intrusion API"}
+    return RedirectResponse(url="/pilot/spatial/map")
 
 @app.get("/salinity/history", response_model=List[SalinityRecord])
 def get_salinity_history(station: Optional[str] = None):

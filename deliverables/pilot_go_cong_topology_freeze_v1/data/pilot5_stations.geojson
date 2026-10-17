@@ -1,0 +1,85 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.63872222222221,
+          10.26788888888889
+        ]
+      },
+      "properties": {
+        "site_code": "NM29",
+        "name": "Cầu Kinh Nhiễm",
+        "coordinate_status": "USER_LOCATED_BRIDGE",
+        "route_evidence": "USER_CONTEXT_ONLY"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.67133333333334,
+          10.361222222222223
+        ]
+      },
+      "properties": {
+        "site_code": "NM30",
+        "name": "Cầu Long Chánh",
+        "coordinate_status": "USER_SATELLITE_BRIDGE",
+        "route_evidence": "USER_VISUAL_WATERWAY_MATCH"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.70988888888888,
+          10.320555555555556
+        ]
+      },
+      "properties": {
+        "site_code": "NM31",
+        "name": "Cầu Tân Hòa",
+        "coordinate_status": "USER_SATELLITE_BRIDGE",
+        "route_evidence": "USER_VISUAL_WATERWAY_MATCH"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.756315,
+          10.403545
+        ]
+      },
+      "properties": {
+        "site_code": "NM32",
+        "name": "Cống Cần Lộc",
+        "coordinate_status": "USER_SATELLITE_GATE",
+        "route_evidence": "USER_VISUAL_WATERWAY_MATCH"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.697629,
+          10.245803
+        ]
+      },
+      "properties": {
+        "site_code": "NM34",
+        "name": "Cầu Lý Quàn",
+        "coordinate_status": "USER_SATELLITE_BRIDGE",
+        "route_evidence": "USER_VISUAL_WATERWAY_MATCH"
+      }
+    }
+  ]
+}

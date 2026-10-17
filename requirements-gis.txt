@@ -1,0 +1,7 @@
+-r requirements.txt
+
+# Rebuild the portable Pilot Gò Công freeze package and 300 dpi map.
+geopandas>=1.0
+matplotlib>=3.9
+networkx>=3.0
+pyogrio>=0.10

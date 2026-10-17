@@ -1,0 +1,40 @@
+{
+  "title": "Pilot Gò Công – Kiểm chứng topology và kết nối trạm",
+  "version": "freeze-v1",
+  "freeze_date": "2026-10-17",
+  "scope_statement": "Gò Công là khu vực thí điểm để kiểm chứng phương pháp, không đại diện cho toàn bộ vùng nghiên cứu.",
+  "storage": "Portable GeoJSON/CSV; PostGIS not required for this freeze",
+  "crs_analysis": "EPSG:32648",
+  "osm": {
+    "base_timestamp": "2026-10-16T11:46:35Z",
+    "downloaded_at_utc": "2026-10-16T11:48:33.937955+00:00",
+    "query": "[out:json][timeout:180];\nway[\"waterway\"~\"^(river|canal|stream|drain|ditch|tidal_channel)$\"](10.18,106.42,10.5,106.82);\nout tags geom;",
+    "bbox_wgs84": {
+      "south": 10.18,
+      "west": 106.42,
+      "north": 10.5,
+      "east": 106.82
+    },
+    "license": "ODbL 1.0; © OpenStreetMap contributors",
+    "retained_way_count": 609
+  },
+  "user_kml": {
+    "file": "data/raw/gis/user_review_20261017/ban_do_nhanh_song_v2.kml",
+    "provided_date": "2026-10-17",
+    "trace_count": 4,
+    "use": "Pilot-only spatial mismatch mitigation for NM29/NM31"
+  },
+  "crossings": {
+    "raw_intersections": 15,
+    "unique_clustered_nodes": 13,
+    "hydraulic_status": "UNVERIFIED"
+  },
+  "qa_resolution": {
+    "closed_sites": [
+      "NM26",
+      "NM28",
+      "NM33"
+    ],
+    "decision": "EXCLUDED_FROM_FREEZE"
+  }
+}
