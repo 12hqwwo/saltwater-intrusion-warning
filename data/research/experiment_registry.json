@@ -1,0 +1,18 @@
+[
+  {
+    "experiment_id": "MYTHO_MONTHLY_LAG0",
+    "path": "runs/local_ec_backtest/MYTHO_20261014T065649Z_049e7fca"
+  },
+  {
+    "experiment_id": "MYTHO_MONTHLY_LAG30",
+    "path": "runs/local_ec_backtest/MYTHO_20261014T065714Z_5f8ea991"
+  },
+  {
+    "experiment_id": "TANCHAU_MONTHLY_LAG0",
+    "path": "runs/local_ec_backtest/TANCHAU_20261014T065736Z_d13dff7f"
+  },
+  {
+    "experiment_id": "TANCHAU_MONTHLY_LAG30",
+    "path": "runs/local_ec_backtest/TANCHAU_20261014T065804Z_41b3ca0d"
+  }
+]

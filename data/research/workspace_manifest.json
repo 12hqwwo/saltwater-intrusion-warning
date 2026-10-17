@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "sha256": "dedc8b5e3b3a5895e421befaa3181a04e236d00e4b66edbd94f8113ab99301cb",
+  "file": "workspace.json",
+  "builder_sha256": "8e1afea19d0ef8c152001b5309094592c6cf770c5bcb883ea96bbe817b076530",
+  "generated_at": "2026-10-15T11:27:30.466391+00:00",
+  "observations": 977,
+  "stations": 12,
+  "catalog_gates": 4,
+  "experiments": 4,
+  "monthly_input_sha256": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc"
+}

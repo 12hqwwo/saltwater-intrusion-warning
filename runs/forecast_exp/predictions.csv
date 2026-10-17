@@ -1,0 +1,73 @@
+station,snapshot,model,forecast_origin,target_month,horizon,actual,predicted,status
+Mỹ Tho,master_latest,Persistence,2021-12-01,2022-01-01,1,18.5,19.43,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2021-12-01,2022-01-01,1,18.5,19.74,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2021-12-01,2022-01-01,1,18.5,56.22945035204088,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-01-01,2022-02-01,1,50.0,18.5,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-01-01,2022-02-01,1,50.0,55.2,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-01-01,2022-02-01,1,50.0,46.48133108383112,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-02-01,2022-03-01,1,38.7,50.0,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-02-01,2022-03-01,1,38.7,191.5,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-02-01,2022-03-01,1,38.7,81.87036688101814,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-03-01,2022-04-01,1,25.7,38.7,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-03-01,2022-04-01,1,25.7,194.5,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-03-01,2022-04-01,1,25.7,109.4792146038175,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-04-01,2022-05-01,1,33.0,25.7,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-04-01,2022-05-01,1,33.0,34.0,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-04-01,2022-05-01,1,33.0,62.48711409385402,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-05-01,2022-06-01,1,23.7,33.0,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-05-01,2022-06-01,1,23.7,31.3,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-05-01,2022-06-01,1,23.7,23.665235822532416,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-06-01,2022-07-01,1,24.6,23.7,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-06-01,2022-07-01,1,24.6,35.0,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-06-01,2022-07-01,1,24.6,19.451031398331555,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-07-01,2022-08-01,1,16.68,24.6,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-07-01,2022-08-01,1,16.68,20.0,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-07-01,2022-08-01,1,16.68,18.431607303487155,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-08-01,2022-09-01,1,16.3,16.68,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-08-01,2022-09-01,1,16.3,14.44,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-08-01,2022-09-01,1,16.3,16.9209708308227,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-09-01,2022-10-01,1,13.53,16.3,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-09-01,2022-10-01,1,13.53,16.96,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-09-01,2022-10-01,1,13.53,15.730463893837372,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-10-01,2022-11-01,1,18.62,13.53,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-10-01,2022-11-01,1,18.62,20.3,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-10-01,2022-11-01,1,18.62,14.416295824595391,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-11-01,2022-12-01,1,17.15,18.62,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-11-01,2022-12-01,1,17.15,19.43,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-11-01,2022-12-01,1,17.15,19.296320895013242,SUCCESS
+Mỹ Tho,master_latest,Persistence,2022-12-01,2023-01-01,1,19.36,17.15,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2022-12-01,2023-01-01,1,19.36,18.5,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2022-12-01,2023-01-01,1,19.36,37.606853520481764,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-01-01,2023-02-01,1,25.9,19.36,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-01-01,2023-02-01,1,25.9,50.0,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-01-01,2023-02-01,1,25.9,55.88015339488892,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-02-01,2023-03-01,1,78.3,25.9,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-02-01,2023-03-01,1,78.3,38.7,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-02-01,2023-03-01,1,78.3,62.884956177234436,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-03-01,2023-04-01,1,45.1,78.3,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-03-01,2023-04-01,1,45.1,25.7,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-03-01,2023-04-01,1,45.1,126.20185709394023,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-04-01,2023-05-01,1,39.5,45.1,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-04-01,2023-05-01,1,39.5,33.0,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-04-01,2023-05-01,1,39.5,99.29787314396232,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-05-01,2023-06-01,1,37.9,39.5,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-05-01,2023-06-01,1,37.9,23.7,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-05-01,2023-06-01,1,37.9,23.48621031146768,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-06-01,2023-07-01,1,32.7,37.9,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-06-01,2023-07-01,1,32.7,24.6,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-06-01,2023-07-01,1,32.7,20.620297371708894,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-07-01,2023-08-01,1,14.8,32.7,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-07-01,2023-08-01,1,14.8,16.68,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-07-01,2023-08-01,1,14.8,20.1415110120747,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-08-01,2023-09-01,1,14.5,14.8,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-08-01,2023-09-01,1,14.5,16.3,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-08-01,2023-09-01,1,14.5,15.666401368262024,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-09-01,2023-10-01,1,16.4,14.5,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-09-01,2023-10-01,1,16.4,13.53,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-09-01,2023-10-01,1,16.4,14.414552005745941,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-10-01,2023-11-01,1,15.7,16.4,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-10-01,2023-11-01,1,15.7,18.62,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-10-01,2023-11-01,1,15.7,16.116222705413396,SUCCESS
+Mỹ Tho,master_latest,Persistence,2023-11-01,2023-12-01,1,15.4,15.7,SUCCESS
+Mỹ Tho,master_latest,Seasonal Naive,2023-11-01,2023-12-01,1,15.4,17.15,SUCCESS
+Mỹ Tho,master_latest,Random Forest,2023-11-01,2023-12-01,1,15.4,16.343407778568384,SUCCESS

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "_instructions": "Điền bằng hồ sơ thực tế. Trạm đại diện có thể dùng cho cống nếu đã kiểm chứng quan hệ thủy văn; không bắt buộc lắp cảm biến tại mọi cống. Không đổi DRAFT thành FIELD_REVIEWED chỉ để chương trình chạy. Mô-đun này chỉ đánh giá quan hệ trạm–cống, không phát lệnh vận hành.",
+  "link_id": null,
+  "site_code": null,
+  "gate_code": null,
+  "gate_side": null,
+  "method": "IDENTITY_PROXY",
+  "status": "DRAFT",
+  "parameter": "SALINITY_MASS",
+  "unit": "g/L",
+  "ec_basis": null,
+  "source_reference": null,
+  "station_location": null,
+  "station_location_reference": null,
+  "gate_location": null,
+  "gate_location_reference": null,
+  "hydrological_evidence": {
+    "connected": null,
+    "station_branch": null,
+    "gate_branch": null,
+    "reference": null
+  },
+  "valid_from": null,
+  "valid_to": null,
+  "max_age_minutes": null,
+  "validated_max_difference": null,
+  "policy_representation_tolerance": null,
+  "tolerance_policy_reference": null,
+  "review_reference": null
+}

@@ -1,0 +1,469 @@
+{
+  "generated_at_utc": "2026-10-03T05:03:11.983287+00:00",
+  "scope": "LOCAL_FILES_ONLY",
+  "database_checked": false,
+  "checks": [
+    {
+      "status": "PASS",
+      "check": "raw_019803",
+      "detail": "464 rows passed existing ETL validation"
+    },
+    {
+      "status": "PASS",
+      "check": "station_kml_019803",
+      "detail": "Named point parsed; duplicate KML copies match; REPORTED"
+    },
+    {
+      "status": "PASS",
+      "check": "raw_019805",
+      "detail": "463 rows passed existing ETL validation"
+    },
+    {
+      "status": "PASS",
+      "check": "station_kml_019805",
+      "detail": "Named point parsed; duplicate KML copies match; REPORTED"
+    },
+    {
+      "status": "PASS",
+      "check": "calendar_MYTHO",
+      "detail": "500/500 calendar months present"
+    },
+    {
+      "status": "PASS",
+      "check": "calendar_TANCHAU",
+      "detail": "500/500 calendar months present"
+    },
+    {
+      "status": "PASS",
+      "check": "master_validation",
+      "detail": "1000 rows passed existing ETL validation"
+    },
+    {
+      "status": "PASS",
+      "check": "raw_master_ec",
+      "detail": "0 month/value/missingness differences"
+    },
+    {
+      "status": "PASS",
+      "check": "source_manifest",
+      "detail": "All five original input hashes and sizes match"
+    },
+    {
+      "status": "PASS",
+      "check": "boundary_structure_Tiền Giang - 63.geojson",
+      "detail": "Polygon type and numeric coordinate bounds checked only"
+    },
+    {
+      "status": "PASS",
+      "check": "boundary_structure_Đồng Tháp (phường xã) - 34.geojson",
+      "detail": "Polygon type and numeric coordinate bounds checked only"
+    },
+    {
+      "status": "PASS",
+      "check": "boundary_structure_Đồng Tháp - 63.geojson",
+      "detail": "Polygon type and numeric coordinate bounds checked only"
+    },
+    {
+      "status": "WARN",
+      "check": "boundary_provenance",
+      "detail": "Source, effective dates, topology and database import need separate verification"
+    },
+    {
+      "status": "WARN",
+      "check": "gate_catalog",
+      "detail": "Template rows: 0; this is not the database gate count or evidence of real gates"
+    },
+    {
+      "status": "PASS",
+      "check": "exported_metrics",
+      "detail": "Recalculated from saved predictions; model fitting not rerun"
+    },
+    {
+      "status": "PASS",
+      "check": "forecast_cohort",
+      "detail": "24 target months shared by all models"
+    },
+    {
+      "status": "WARN",
+      "check": "forecast_method",
+      "detail": "Forecast issue time, data availability and validation protocol are not certified by this audit"
+    },
+    {
+      "status": "WARN",
+      "check": "database_state",
+      "detail": "No database connection made; existing database contents remain unknown to this run"
+    }
+  ],
+  "inputs": {
+    "data/raw/mrc_conductivity/Conductivity.Water Quality@VN_019803_[Tan Chau].csv": {
+      "sha256": "bd4cf100cb4782e37b355d94f15911c1bab2c4a9d4ad69d2fa2c3b4c5d590ba7",
+      "byte_count": 52168
+    },
+    "data/raw/spatial/Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml": {
+      "sha256": "0059e16ddb527081958707e10c5e62c8fb2fe3df1511dc9c0ab7f12776550867",
+      "byte_count": 301
+    },
+    "data/raw/mrc_conductivity/Conductivity.Water Quality@VN_019805_[My Tho].csv": {
+      "sha256": "2cee9c9c1cb8e29e67ea5379391fca507419385cd4fac990edf5119634b65997",
+      "byte_count": 52090
+    },
+    "data/raw/spatial/Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml": {
+      "sha256": "a1dc49953943d14d78cb0afff426289d7558c9dc37ea01b4e5c2fd09c33c0644",
+      "byte_count": 297
+    },
+    "data/processed/master_timeseries.csv": {
+      "sha256": "f9b2de085a265a13e21779aa7c95b8d0caaed9335ae61d820475f54e519eac71",
+      "byte_count": 116134
+    },
+    "data/biengioi/Tiền Giang - 63.geojson": {
+      "sha256": "a9ec088bf253cab7392463162271d681ffc0827a363347155e4e8e0928bd68b9",
+      "byte_count": 55564
+    },
+    "data/biengioi/Đồng Tháp (phường xã) - 34.geojson": {
+      "sha256": "eb5488f82e6f4136e660904067568d5836384392b3770aeccec5deb5d7f0b59e",
+      "byte_count": 6561739
+    },
+    "data/biengioi/Đồng Tháp - 63.geojson": {
+      "sha256": "60e9cdcb0753d4feb3d405916f43978dac7ab9d583a96cc34684836a6c6c01ef",
+      "byte_count": 55070
+    },
+    "runs/forecast_exp/predictions.csv": {
+      "sha256": "3d039da725fa3dd63f91b9e50164fa12e6d908dfac433130b4900828cb0275f9",
+      "byte_count": 6176
+    },
+    "runs/forecast_exp/metrics.csv": {
+      "sha256": "b3593d123cfc61e6b40ce746f053f90dec5a31d15eae2ebdab83e80f88f52ee2",
+      "byte_count": 205
+    },
+    "runs/forecast_exp/split_manifest.csv": {
+      "sha256": "88dfab90fd61011c7a1926a4ca1e7c49337bcb72bc0bdaf173bc3cb6998d9f0d",
+      "byte_count": 116
+    }
+  },
+  "raw_ec": [
+    {
+      "area_code": "TANCHAU",
+      "site_code": "MRC_VN_019803",
+      "rows": 464,
+      "first_observation": "1985-05-15T00:00:00+07:00",
+      "last_observation": "2023-12-15T00:00:00+07:00",
+      "unit": "mS/m",
+      "observed_or_estimated": {
+        "O": 464
+      },
+      "approval_level": {
+        "Raw - Not Yet Reviewed": 464
+      },
+      "grade": {
+        "Unverified data": 464
+      }
+    },
+    {
+      "area_code": "MYTHO",
+      "site_code": "MRC_VN_019805",
+      "rows": 463,
+      "first_observation": "1985-06-26T00:00:00+07:00",
+      "last_observation": "2023-12-15T00:00:00+07:00",
+      "unit": "mS/m",
+      "observed_or_estimated": {
+        "O": 463
+      },
+      "approval_level": {
+        "Raw - Not Yet Reviewed": 463
+      },
+      "grade": {
+        "Unverified data": 463
+      }
+    }
+  ],
+  "monthly": [
+    {
+      "area_code": "MYTHO",
+      "rows": 500,
+      "first_month": "1985-01-01",
+      "last_month": "2026-08-01",
+      "coverage": {
+        "conductivity_ms_per_m": {
+          "non_null_months": 463,
+          "first_month": "1985-06-01",
+          "last_month": "2023-12-01"
+        },
+        "precipitation_sum": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "temperature_mean": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "temperature_max": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "temperature_min": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "evapotranspiration_sum": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "windspeed_mean": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "humidity_mean": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "shortwave_rad_sum": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "water_level_m": {
+          "non_null_months": 217,
+          "first_month": "2008-07-01",
+          "last_month": "2026-07-01"
+        },
+        "glofas_discharge_m3s": {
+          "non_null_months": 0,
+          "first_month": null,
+          "last_month": null
+        }
+      }
+    },
+    {
+      "area_code": "TANCHAU",
+      "rows": 500,
+      "first_month": "1985-01-01",
+      "last_month": "2026-08-01",
+      "coverage": {
+        "conductivity_ms_per_m": {
+          "non_null_months": 464,
+          "first_month": "1985-05-01",
+          "last_month": "2023-12-01"
+        },
+        "precipitation_sum": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "temperature_mean": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "temperature_max": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "temperature_min": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "evapotranspiration_sum": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "windspeed_mean": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "humidity_mean": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "shortwave_rad_sum": {
+          "non_null_months": 500,
+          "first_month": "1985-01-01",
+          "last_month": "2026-08-01"
+        },
+        "water_level_m": {
+          "non_null_months": 108,
+          "first_month": "2002-06-01",
+          "last_month": "2016-05-01"
+        },
+        "glofas_discharge_m3s": {
+          "non_null_months": 469,
+          "first_month": "1985-01-01",
+          "last_month": "2024-01-01"
+        }
+      }
+    }
+  ],
+  "boundaries": [
+    {
+      "file": "Tiền Giang - 63.geojson",
+      "sha256": "a9ec088bf253cab7392463162271d681ffc0827a363347155e4e8e0928bd68b9",
+      "byte_count": 55564,
+      "feature_count": 1,
+      "geometry_types": [
+        "MultiPolygon"
+      ],
+      "bbox": [
+        105.81572725068884,
+        10.190960263275247,
+        106.82252780509747,
+        10.586992636402712
+      ],
+      "declared_crs": null,
+      "coordinate_range_check": "PASS",
+      "topology_check": "NOT_RUN",
+      "source_and_effective_dates": "NEEDS_DOCUMENTED_PROVENANCE"
+    },
+    {
+      "file": "Đồng Tháp (phường xã) - 34.geojson",
+      "sha256": "eb5488f82e6f4136e660904067568d5836384392b3770aeccec5deb5d7f0b59e",
+      "byte_count": 6561739,
+      "feature_count": 102,
+      "geometry_types": [
+        "MultiPolygon"
+      ],
+      "bbox": [
+        105.18723200000005,
+        10.13482300000004,
+        106.80781300000007,
+        10.973446000000024
+      ],
+      "declared_crs": null,
+      "coordinate_range_check": "PASS",
+      "topology_check": "NOT_RUN",
+      "source_and_effective_dates": "NEEDS_DOCUMENTED_PROVENANCE"
+    },
+    {
+      "file": "Đồng Tháp - 63.geojson",
+      "sha256": "60e9cdcb0753d4feb3d405916f43978dac7ab9d583a96cc34684836a6c6c01ef",
+      "byte_count": 55070,
+      "feature_count": 1,
+      "geometry_types": [
+        "MultiPolygon"
+      ],
+      "bbox": [
+        105.18517306930383,
+        10.134497078061518,
+        105.94191744708338,
+        10.973388148926235
+      ],
+      "declared_crs": null,
+      "coordinate_range_check": "PASS",
+      "topology_check": "NOT_RUN",
+      "source_and_effective_dates": "NEEDS_DOCUMENTED_PROVENANCE"
+    }
+  ],
+  "stations": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.2480164,
+          10.80062008
+        ]
+      },
+      "properties": {
+        "site_code": "MRC_VN_019803",
+        "external_site_code": "019803",
+        "site_name": "Tân Châu",
+        "area_code": "TANCHAU",
+        "source_code": "MRC_WATER_QUALITY",
+        "location_status": "REPORTED",
+        "location_reference": "KML Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml; sha256=0059e16ddb527081958707e10c5e62c8fb2fe3df1511dc9c0ab7f12776550867",
+        "source_file": "Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml",
+        "source_sha256": "0059e16ddb527081958707e10c5e62c8fb2fe3df1511dc9c0ab7f12776550867",
+        "unit": "mS/m",
+        "database_state_checked": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.3529997,
+          10.35912163
+        ]
+      },
+      "properties": {
+        "site_code": "MRC_VN_019805",
+        "external_site_code": "019805",
+        "site_name": "Mỹ Tho",
+        "area_code": "MYTHO",
+        "source_code": "MRC_WATER_QUALITY",
+        "location_status": "REPORTED",
+        "location_reference": "KML Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml; sha256=a1dc49953943d14d78cb0afff426289d7558c9dc37ea01b4e5c2fd09c33c0644",
+        "source_file": "Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml",
+        "source_sha256": "a1dc49953943d14d78cb0afff426289d7558c9dc37ea01b4e5c2fd09c33c0644",
+        "unit": "mS/m",
+        "database_state_checked": false
+      }
+    }
+  ],
+  "forecast_exports": {
+    "metrics_recalculated": [
+      {
+        "model": "Persistence",
+        "eval_samples": 24,
+        "mae_mS_m": 9.154583333333333,
+        "rmse_mS_m": 15.559446889269553
+      },
+      {
+        "model": "Random Forest",
+        "eval_samples": 24,
+        "mae_mS_m": 18.944994953168138,
+        "rmse_mS_m": 31.129004527608814
+      },
+      {
+        "model": "Seasonal Naive",
+        "eval_samples": 24,
+        "mae_mS_m": 20.149583333333336,
+        "rmse_mS_m": 47.842282162330015
+      }
+    ],
+    "saved_metrics_match": true,
+    "common_target_months": [
+      "2022-01-01",
+      "2022-02-01",
+      "2022-03-01",
+      "2022-04-01",
+      "2022-05-01",
+      "2022-06-01",
+      "2022-07-01",
+      "2022-08-01",
+      "2022-09-01",
+      "2022-10-01",
+      "2022-11-01",
+      "2022-12-01",
+      "2023-01-01",
+      "2023-02-01",
+      "2023-03-01",
+      "2023-04-01",
+      "2023-05-01",
+      "2023-06-01",
+      "2023-07-01",
+      "2023-08-01",
+      "2023-09-01",
+      "2023-10-01",
+      "2023-11-01",
+      "2023-12-01"
+    ],
+    "same_scoring_months": true,
+    "model_fit_rerun": false,
+    "availability_and_leakage_verified": false
+  },
+  "ec_mismatches": [],
+  "gate_template_rows": 0,
+  "status": "PASS_WITH_LIMITATIONS"
+}

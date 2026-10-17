@@ -1,3 +1,5 @@
+> Tài liệu lịch sử, không phải hướng dẫn chạy hiện tại. Các đường dẫn thành phần đã loại bỏ chỉ còn trong bản sao lưu; xem [README hiện tại](../README.md). Giữ nội dung đánh giá để truy vết.
+
 # Tiến độ dự án — cập nhật 08/10/2026
 
 Đồ án được phát triển theo từng chặng. Đây là tiến độ có bằng chứng, chưa phải báo cáo kết thúc đồ án.
@@ -41,16 +43,10 @@ Người thực hiện đã cung cấp phản hồi thành công của API healt
 6. Tạo contract và chương trình kiểm tra quan hệ trạm–cống. Khoảng cách gần không tự đủ để chấp nhận quan hệ đại diện; chưa có cống thực địa được xác minh qua mô-đun này.
 7. Bổ sung API chỉ đọc kết quả hồi cứu và trang `frontend/replay.html`, có chọn chân trời, thanh thời gian, biểu đồ, nguồn và chế độ đối chiếu với quan trắc.
 
-Bằng chứng: `runs/research_step07/`, `runs/sondoc_forecast/`, `runs/label_gap_era5/`, `runs/forecast_era5/`; nguồn chuẩn nằm trong `data/external/sources/` và manifest từng lần tải nằm trong `data/external/download_runs/`.
+Bằng chứng: `runs/research_step07/`, `runs/sondoc_forecast/`, `runs/label_gap_era5/`, `runs/forecast_era5/`, cùng manifest trong `data/external/`. Chi tiết phương pháp, kết quả và nguồn tại [research_step07.md](research_step07.md).
 
 ## Kiểm thử và phạm vi hoàn thành
 
 Đạt 69 kiểm thử Python và 16 kiểm thử JavaScript; build frontend thành công. Đã kiểm tra HTTP thực tế qua backend và Vite proxy, phản hồi 200 và đúng hành vi ẩn/hiện số đo đối chiếu. Log tại `runs/verification_step07/`.
 
 Chưa xác nhận hiển thị bằng trình duyệt trên máy người thực hiện; chưa kiểm thử kết nối mới với PostgreSQL của người thực hiện. API phát lại phục vụ dự báo lịch sử đã tính sẵn, chưa phải API suy luận hiện tại. Mô hình Sơn Đốc là trường hợp nghiên cứu phương pháp tại địa điểm khác, chưa đại diện cho các cống Đồng Tháp.
-
-Khoảng sai số danh nghĩa 90% của mô hình 6 giờ, kịch bản độ trễ 0, chỉ bao phủ khoảng 66,4% quan trắc test. Dữ liệu EC MRC tải được vẫn kết thúc 15/12/2023. Còn thiếu metadata bù nhiệt, nhãn mới tại địa điểm mục tiêu, hồ sơ cống, quan hệ thủy văn, mực nước hai phía cùng chuẩn và policy có nguồn. Các thiếu sót này chưa được coi là đã khép lại.
-
-## Việc kế tiếp
-
-Đưa từng file vào repo và chạy trang phát lại trên máy theo [step07_install_and_evidence.md](step07_install_and_evidence.md), chụp minh chứng thật. Sau khi mốc này chạy ổn, hoàn thiện hồ sơ và số đo cho một cống thí điểm để đánh giá tính đại diện và chất lượng khuyến nghị.

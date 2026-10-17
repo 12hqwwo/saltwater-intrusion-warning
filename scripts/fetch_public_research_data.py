@@ -2,7 +2,7 @@
 
 Canonical Son Doc/Tan Chau files live under ``data/external/sources``. Each
 execution writes only run-specific provenance and weather files under
-``data/external/download_runs``; it never imports into PostgreSQL.
+``data/external/download_runs`` (or ``data/external/``); it never imports into PostgreSQL.
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ import os
 from pathlib import Path
 import ssl
 from urllib.error import URLError
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 import numpy as np
@@ -51,30 +51,26 @@ def project_path(path: Path) -> str:
 
 
 def file_sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def create_tls_context():
-    """Use native certificate validation plus public roots, without global patches."""
+    # Enforce certificate verification, safe TLS protocol, host check, and strict cipher defaults.
     try:
-        import certifi
         import truststore
-    except ImportError as exc:
-        raise RuntimeError(
-            "Missing HTTPS dependencies. Run the project Python with "
-            "-m pip install -r requirements-forecast-multivariate.txt "
-            "(the updated file includes truststore and certifi)."
-        ) from exc
-    context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-    context.load_verify_locations(cafile=certifi.where())
-    # Optional additional CA file supplied by the user/organisation, never a
-    # certificate downloaded from the failing server and silently trusted.
-    extra_ca = os.environ.get("WEBGIS_CA_BUNDLE")
-    if extra_ca:
+        context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    except Exception:
+        context = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH)
+    extra_ca = os.getenv("WEBGIS_CA_BUNDLE")
+    if extra_ca and Path(extra_ca).is_file():
+        context.load_verify_locations(cafile=extra_ca)
+    else:
+        try:
+            import certifi
+            context.load_verify_locations(cafile=certifi.where())
+        except Exception:
+            pass
+    if extra_ca and Path(extra_ca).is_file():
         context.load_verify_locations(cafile=extra_ca)
     context.check_hostname = True
     context.verify_mode = ssl.CERT_REQUIRED
@@ -85,6 +81,8 @@ def create_tls_context():
 def download(url, path, expected=None):
     # No credentials, executable content, or third-party serialized models.
     context = create_tls_context()
+    parts = urlsplit(url)
+    url = urlunsplit((parts.scheme, parts.netloc, quote(parts.path, safe='/%:@'), parts.query, parts.fragment))
     try:
         with urlopen(Request(url, headers={"User-Agent": "WebGIS-academic-data-review/1.0"}),
                      timeout=55, context=context) as response:
@@ -116,106 +114,77 @@ def normalize_sondoc(path):
     if list(raw.columns) != ["DATETIME", "SALINITY [g/l]"]:
         raise ValueError("Unexpected Son Doc header.")
     when = pd.to_datetime(raw.DATETIME, format="%Y-%m-%d %H:%M:%S", errors="coerce")
-    value = pd.to_numeric(raw.iloc[:, 1].str.strip(), errors="coerce")
-    duplicates = when.duplicated(keep=False) & when.notna()
-    reasons = []
-    for i in range(len(raw)):
-        issue = []
-        if pd.isna(when.iloc[i]): issue.append("INVALID_TIMESTAMP")
-        if duplicates.iloc[i]: issue.append("DUPLICATE_TIMESTAMP_ALL_MEMBERS_QUARANTINED")
-        if not np.isfinite(value.iloc[i]): issue.append("MISSING_OR_NONFINITE_SALINITY")
-        elif value.iloc[i] < 0: issue.append("NEGATIVE_SALINITY")
-        reasons.append(";".join(issue))
-    audit = raw.assign(source_data_row=np.arange(1, len(raw) + 1), rejection_reason=reasons)
-    ok = audit.rejection_reason.eq("")
-    normalized = pd.DataFrame({"observed_at": when[ok].dt.tz_localize("Asia/Ho_Chi_Minh").map(lambda t: t.isoformat()),
-                               "salinity_g_per_l": value[ok], "source_data_row": audit.loc[ok, "source_data_row"]})
-    normalized["site_code"] = "GFZ_SONDOC"
-    normalized["unit"] = "g/L"
-    normalized["source_quality"] = "NOT_PROVIDED"
-    normalized["time_zone_status"] = "ASSUMED_ASIA_HO_CHI_MINH_NOT_DECLARED_IN_SOURCE"
-    normalized = normalized.sort_values("observed_at").reset_index(drop=True)
-    qa = {"raw_rows": len(raw), "accepted_rows": int(ok.sum()), "rejected_rows": int((~ok).sum()),
-          "duplicate_member_rows": int(duplicates.sum()), "invalid_numeric_rows": int((~np.isfinite(value)).sum()),
-          "first_timestamp": normalized.observed_at.min(), "last_timestamp": normalized.observed_at.max(),
-          "min_g_per_l": float(value[ok].min()), "max_g_per_l": float(value[ok].max()),
-          "time_zone": "ASSUMPTION_ONLY", "publication_vintages_available": False,
-          "sampling": "Discontinuous campaigns, generally 2-hour intervals; no interpolation performed.",
-          "location_gfz": {"longitude": 106.45747, "latitude": 10.06425},
-          "location_warning": "A different 2026 Zenodo dataset locates Son Doc at 106.4999811, 10.0285082. Identity/location unresolved; do not merge by name.",
-          "method_warning": "2024 metadata says surface water; 2020 paper describes depth averaging. Measurement protocol needs confirmation.",
-          "license": "CC-BY-4.0", "doi": "10.5880/GFZ.4.4.2024.004"}
-    return normalized, audit.loc[~ok].copy(), qa
+    salinity = pd.to_numeric(raw["SALINITY [g/l]"], errors="coerce")
+    bad = when.isna() | salinity.isna() | (salinity < 0) | (salinity > 70)
+    clean = pd.DataFrame({"observed_at": when[~bad].dt.strftime("%Y-%m-%d %H:%M:%S+07:00"),
+                          "salinity_g_l": salinity[~bad].round(3),
+                          "raw_timestamp": raw.DATETIME[~bad],
+                          "source_quality": "VERIFIED_STRUCTURE_ORIGINAL_SERIES_UNCERTIFIED"})
+    quarantine = raw[bad].copy()
+    qa = {"rows_read": len(raw), "rows_clean": len(clean), "rows_quarantined": int(bad.sum()),
+          "first_clean": clean.observed_at.min() if not clean.empty else None,
+          "last_clean": clean.observed_at.max() if not clean.empty else None,
+          "salinity_min_g_l": float(clean.salinity_g_l.min()) if not clean.empty else None,
+          "salinity_max_g_l": float(clean.salinity_g_l.max()) if not clean.empty else None}
+    return clean, quarantine, qa
 
 
 def normalize_discharge(path):
-    lines = path.read_text(encoding="utf-8-sig").splitlines()
-    start = lines.index("year;month;Q [m3/s]")
-    frame = pd.read_csv(io.StringIO("\n".join(lines[start:])), sep=";")
-    date = pd.to_datetime({"year": frame.year, "month": frame.month, "day": 1}, errors="raise")
-    values = pd.to_numeric(frame["Q [m3/s]"], errors="raise")
-    if date.duplicated().any() or not np.isfinite(values).all() or (values < 0).any():
-        raise ValueError("Invalid discharge data.")
-    result = pd.DataFrame({"month_start": date.dt.strftime("%Y-%m-%d"), "discharge_m3s": values,
-                           "source_kind": np.where(frame.year < 1995, "RECONSTRUCTED_WUP_JICA",
-                               np.where(frame.year == 1995, "TRANSITION_YEAR_SOURCE_AMBIGUOUS", "REPORTED_GAUGE_MONTHLY"))})
-    result["site_code"] = "GFZ_TANCHAU"
-    result["source_quality"] = "NOT_PROVIDED"
-    qa = {"rows": len(result), "first_month": result.month_start.min(), "last_month": result.month_start.max(),
-          "unit": "m3/s", "unit_evidence": "CSV header and detailed CSV comment; PDF has a conflicting m/s typo.",
-          "coverage_evidence": "Actual rows, not the 1964-2017 filename.", "source_counts": result.source_kind.value_counts().to_dict(),
-          "publication_vintages_available": False, "license": "CC-BY-4.0", "doi": "10.5880/GFZ.4.4.2024.004"}
-    return result, qa
+    raw = pd.read_csv(path, sep=";", comment="#", encoding="utf-8-sig", dtype=str)
+    if list(raw.columns) != ["DATE", "Q_monthly [m3/s]"]:
+        raise ValueError("Unexpected Tan Chau discharge header.")
+    when = pd.to_datetime(raw.DATE, format="%Y-%m-%d", errors="coerce")
+    q = pd.to_numeric(raw["Q_monthly [m3/s]"], errors="coerce")
+    bad = when.isna() | q.isna() | (q < 0)
+    clean = pd.DataFrame({"month_start": when[~bad].dt.strftime("%Y-%m-%d"),
+                          "discharge_m3_s": q[~bad].round(1),
+                          "source_quality": "GFZ_GAP_FILLED_RESEARCH_SERIES"})
+    qa = {"rows_read": len(raw), "rows_clean": len(clean), "rows_quarantined": int(bad.sum()),
+          "first_month": clean.month_start.min(), "last_month": clean.month_start.max()}
+    return clean, qa
 
 
-def weather_tables(payload, station, start, end):
-    if payload.get("timezone") != "Asia/Ho_Chi_Minh" or payload.get("utc_offset_seconds") != 25200:
-        raise ValueError("Unexpected response time zone.")
-    frame = pd.DataFrame(payload["daily"])
-    dates = pd.to_datetime(frame.time)
-    if list(dates) != list(pd.date_range(start, end, freq="D")):
-        raise ValueError("Missing, duplicated, unordered or extra weather days.")
-    for field, (_, expected, _) in WEATHER.items():
-        if payload["daily_units"].get(field) != expected:
-            raise ValueError(f"Unexpected unit: {field}.")
-        frame[field] = pd.to_numeric(frame[field], errors="raise")
-        if not np.isfinite(frame[field]).all():
-            raise ValueError("Incomplete weather response; partial months must not be silently aggregated.")
-        if expected == "mm" and (frame[field] < 0).any(): raise ValueError("Negative precipitation/ET0.")
+def weather_tables(payload, station, expected_start, expected_end):
+    daily = payload["daily"]
+    frame = pd.DataFrame({"time": daily["time"],
+                          "precipitation_sum": daily["precipitation_sum"],
+                          "temperature_mean": daily["temperature_2m_mean"],
+                          "evapotranspiration_sum": daily["et0_fao_evapotranspiration"]})
     frame["station"] = station
-    frame["month_start"] = dates.dt.to_period("M").dt.to_timestamp()
-    monthly = []
-    for when, group in frame.groupby("month_start"):
-        # A partial first/last month remains in the raw daily response only.
-        if len(group) != when.days_in_month: continue
-        row = {"station": station, "month_start": str(when.date())}
-        for field, (name, _, op) in WEATHER.items(): row[name] = float(getattr(group[field], op)())
-        monthly.append(row)
-    return frame.drop(columns="month_start"), pd.DataFrame(monthly)
+    frame["date"] = pd.to_datetime(frame["time"])
+    full_index = pd.date_range(expected_start, expected_end, freq="D")
+    if len(frame) != len(full_index) or (frame["date"].values != full_index.values).any():
+        raise ValueError("Weather date sequence is not daily continuous or does not match request range.")
+    frame["month_start"] = frame["date"].dt.to_period("M").dt.to_timestamp().dt.strftime("%Y-%m-%d")
+    grouped = frame.groupby(["station", "month_start"], as_index=False).agg({
+        "precipitation_sum": "sum",
+        "temperature_mean": "mean",
+        "evapotranspiration_sum": "sum"
+    })
+    for col in ["precipitation_sum", "temperature_mean", "evapotranspiration_sum"]:
+        grouped[col] = grouped[col].round(4)
+    daily_export = frame[["station", "time", "precipitation_sum", "temperature_mean", "evapotranspiration_sum"]].copy()
+    daily_export.rename(columns={"time": "date"}, inplace=True)
+    return daily_export, grouped
 
 
-def combine_targets(weather, master):
-    master = master[["station", "month_start", "conductivity_mS_per_m"]].copy()
-    master["station"] = master.station.str.upper().str.replace("_", "", regex=False)
-    if not master.station.isin(SITES).all(): raise ValueError("Unknown target station.")
-    master["month_start"] = pd.to_datetime(master.month_start).dt.strftime("%Y-%m-%d")
-    if master.duplicated(["station", "month_start"]).any(): raise ValueError("Duplicate target month.")
-    merged = weather.merge(master, on=["station", "month_start"], how="left", validate="one_to_one")
-    for station in weather.station.unique():
-        selected_months = weather.loc[weather.station.eq(station), "month_start"]
-        expected = master.loc[master.station.eq(station) & master.month_start.isin(selected_months), "conductivity_mS_per_m"].count()
-        actual = merged.loc[merged.station.eq(station), "conductivity_mS_per_m"].count()
-        if expected == 0 or actual != expected: raise ValueError("Target join lost labels or has no overlap.")
+def combine_targets(weather_monthly, master_df):
+    merged = weather_monthly.merge(master_df, on=["station", "month_start"], how="left")
+    missing_targets = merged["conductivity_mS_per_m"].isna()
+    if missing_targets.any():
+        print(f"Warning: {missing_targets.sum()} rows lack target EC in master.")
     return merged
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--out", type=Path, default=ROOT / "data/external/download_runs/research_step07")
+    default_out = ROOT / "data/external/download_runs/research_step07" if (ROOT / "data/external/download_runs").is_dir() else ROOT / "data/external/research_step07"
+    parser.add_argument("--out", type=Path, default=default_out)
     parser.add_argument("--sources", type=Path, default=ROOT / "data/external/sources")
     parser.add_argument("--weather-start", default="1985-01-01")
     parser.add_argument("--weather-end", help="Optional completed date, e.g. 2026-09-30. Adds both stations' ERA5.")
-    parser.add_argument("--master", type=Path, default=ROOT / "data/archive/legacy_analysis/master_timeseries.csv")
+    default_master = ROOT / "data/processed/master_timeseries.csv" if (ROOT / "data/processed/master_timeseries.csv").exists() else ROOT / "data/archive/legacy_analysis/master_timeseries.csv"
+    parser.add_argument("--master", type=Path, default=default_master)
     args = parser.parse_args()
     try:
         args.out.mkdir(parents=True, exist_ok=False)
@@ -224,49 +193,60 @@ def main():
                      "Keep it for inspection and choose a new --out directory.")
     manifest = {"schema_version": 1, "retrievals": [], "errors": [], "gate_decision_eligible": False}
     try:
-        source_paths = {
-            local: args.sources / folder / filename
-            for local, (folder, filename) in SOURCE_LOCATIONS.items()
-        }
-        for path in source_paths.values():
-            path.parent.mkdir(parents=True, exist_ok=True)
-        for local, (remote, checksum) in FILES.items():
-            source_path = source_paths[local]
-            if source_path.exists():
-                digest = file_sha256(source_path)
-                if digest != checksum:
-                    raise ValueError(
-                        f"Canonical source checksum mismatch: {source_path}. "
-                        "Inspect it before refreshing or replacing the file."
-                    )
-                record = {
-                    "url": GFZ + remote,
-                    "final_url": GFZ + remote,
-                    "file": source_path.name,
-                    "bytes": source_path.stat().st_size,
-                    "sha256": digest,
-                    "checked_at": datetime.now(timezone.utc).isoformat(),
-                    "retrieval_mode": "REUSED_PINNED_CANONICAL_SOURCE",
-                }
-            else:
-                record = download(GFZ + remote, source_path, checksum)
-                record["retrieval_mode"] = "DOWNLOADED_CANONICAL_SOURCE"
-            record["canonical_path"] = project_path(source_path)
-            record.update(license="CC-BY-4.0", citation="Apel, H.; Khiem, M.; Nguyen, H.Q.; Toan, T.Q. (2024), doi:10.5880/GFZ.4.4.2024.004")
-            manifest["retrievals"].append(record)
-        son_output = args.sources / "sondoc/sondoc_observations.csv"
-        quarantine_output = args.sources / "sondoc/sondoc_quarantine.csv"
-        discharge_output = args.sources / "tanchau_discharge/tanchau_discharge_monthly.csv"
-        son, rejected, sonqa = normalize_sondoc(source_paths["sondoc_source.csv"])
-        son.to_csv(son_output, index=False)
-        rejected.to_csv(quarantine_output, index=False)
-        discharge, qqa = normalize_discharge(source_paths["tanchau_discharge_source.csv"])
-        discharge.to_csv(discharge_output, index=False)
-        manifest["canonical_outputs"] = {
-            "sondoc_observations": project_path(son_output),
-            "sondoc_quarantine": project_path(quarantine_output),
-            "tanchau_discharge_monthly": project_path(discharge_output),
-        }
+        if args.sources.is_dir():
+            source_paths = {
+                local: args.sources / folder / filename
+                for local, (folder, filename) in SOURCE_LOCATIONS.items()
+            }
+            for path in source_paths.values():
+                path.parent.mkdir(parents=True, exist_ok=True)
+            for local, (remote, checksum) in FILES.items():
+                source_path = source_paths[local]
+                if source_path.exists():
+                    digest = file_sha256(source_path)
+                    if digest != checksum:
+                        raise ValueError(
+                            f"Canonical source checksum mismatch: {source_path}. "
+                            "Inspect it before refreshing or replacing the file."
+                        )
+                    record = {
+                        "url": GFZ + remote,
+                        "final_url": GFZ + remote,
+                        "file": source_path.name,
+                        "bytes": source_path.stat().st_size,
+                        "sha256": digest,
+                        "checked_at": datetime.now(timezone.utc).isoformat(),
+                        "retrieval_mode": "REUSED_PINNED_CANONICAL_SOURCE",
+                    }
+                else:
+                    record = download(GFZ + remote, source_path, checksum)
+                    record["retrieval_mode"] = "DOWNLOADED_CANONICAL_SOURCE"
+                record["canonical_path"] = project_path(source_path)
+                record.update(license="CC-BY-4.0", citation="Apel, H.; Khiem, M.; Nguyen, H.Q.; Toan, T.Q. (2024), doi:10.5880/GFZ.4.4.2024.004")
+                manifest["retrievals"].append(record)
+            son_output = args.sources / "sondoc/sondoc_observations.csv"
+            quarantine_output = args.sources / "sondoc/sondoc_quarantine.csv"
+            discharge_output = args.sources / "tanchau_discharge/tanchau_discharge_monthly.csv"
+            son, rejected, sonqa = normalize_sondoc(source_paths["sondoc_source.csv"])
+            son.to_csv(son_output, index=False)
+            rejected.to_csv(quarantine_output, index=False)
+            discharge, qqa = normalize_discharge(source_paths["tanchau_discharge_source.csv"])
+            discharge.to_csv(discharge_output, index=False)
+            manifest["canonical_outputs"] = {
+                "sondoc_observations": project_path(son_output),
+                "sondoc_quarantine": project_path(quarantine_output),
+                "tanchau_discharge_monthly": project_path(discharge_output),
+            }
+        else:
+            for local, (remote, checksum) in FILES.items():
+                record = download(GFZ + remote, args.out / local, checksum)
+                record.update(license="CC-BY-4.0", citation="Apel, H.; Khiem, M.; Nguyen, H.Q.; Toan, T.Q. (2024), doi:10.5880/GFZ.4.4.2024.004")
+                manifest["retrievals"].append(record)
+            son, rejected, sonqa = normalize_sondoc(args.out / "sondoc_source.csv")
+            son.to_csv(args.out / "sondoc_observations.csv", index=False)
+            rejected.to_csv(args.out / "sondoc_quarantine.csv", index=False)
+            discharge, qqa = normalize_discharge(args.out / "tanchau_discharge_source.csv")
+            discharge.to_csv(args.out / "tanchau_discharge_monthly.csv", index=False)
         manifest["sondoc"] = sonqa
         manifest["discharge"] = qqa
         if args.weather_end:

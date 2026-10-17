@@ -202,7 +202,7 @@ def audit_project(root):
     raw_by_area, manifest_files = {}, {}
     for code, meta in STATIONS.items():
         base = "Conductivity.Water Quality@VN_" + code + "_[" + meta["filename_label"] + "]"
-        path = root / "data/raw/mrc_conductivity" / (base + ".csv")
+        path = (root / "data/raw/ec/mrc" if (root / "data/raw/ec/mrc").is_dir() else root / "data/raw/mrc_conductivity") / (base + ".csv")
         try:
             capture(path)
             rows, rejects, total = etl_csv.validate(path.read_bytes(), "raw", code)
@@ -220,10 +220,10 @@ def audit_project(root):
         except (OSError, ValueError, csv.Error, UnicodeError) as exc:
             check("FAIL", "raw_" + code, str(exc))
         try:
-            kml = root / "data/raw/spatial" / (base + "__station-location.kml")
+            kml = (root / "data/raw/gis/spatial" if (root / "data/raw/gis/spatial").is_dir() else root / "data/raw/spatial") / (base + "__station-location.kml")
             capture(kml)
             feature = station_feature(kml, code)
-            original = root / "data/raw/mrc_conductivity" / kml.name
+            original = (root / "data/raw/ec/mrc" if (root / "data/raw/ec/mrc").is_dir() else root / "data/raw/mrc_conductivity") / kml.name
             if original.read_bytes() != kml.read_bytes():
                 raise ValueError("The two copies of the station KML differ")
             report["stations"].append(feature)
@@ -233,7 +233,10 @@ def audit_project(root):
             check("FAIL", "station_kml_" + code, str(exc))
     monthly_rows = []
     try:
-        path = root / "data/archive/legacy_analysis/master_timeseries.csv"
+        path = root / "data/processed/master_timeseries.csv"
+        if not path.exists():
+            path = root / "data/archive/legacy_analysis/master_timeseries.csv"
+            check("WARN", "archived_master", "Auditing archived master explicitly; not an active training input")
         capture(path)
         manifest_files["master_timeseries.csv"] = path
         headers, source_rows = read_csv(path)

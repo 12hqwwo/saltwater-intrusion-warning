@@ -1,0 +1,408 @@
+[
+  {
+    "sample_id": "ML_0334",
+    "station": "ST_HAMLUONG_VAMMON",
+    "date": "2024-05-13",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0337",
+    "station": "ST_HAMLUONG_VAMMON",
+    "date": "2025-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0338",
+    "station": "ST_HAMLUONG_VAMMON",
+    "date": "2025-03-16",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0339",
+    "station": "ST_HAMLUONG_VAMMON",
+    "date": "2025-03-22",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0355",
+    "station": "ST_SOAIRAP_RACHBANG",
+    "date": "2026-10-07",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0363",
+    "station": "ST_SONGTRA_SONGCUI",
+    "date": "2024-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0365",
+    "station": "ST_SONGTRA_SONGCUI",
+    "date": "2025-03-02",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0366",
+    "station": "ST_SONGTRA_SONGCUI",
+    "date": "2025-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0369",
+    "station": "ST_SONGTRA_SONGCUI",
+    "date": "2026-04-08",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0371",
+    "station": "ST_SONGTRA_TAMVU",
+    "date": "2024-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0373",
+    "station": "ST_SONGTRA_TAMVU",
+    "date": "2025-03-02",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0374",
+    "station": "ST_SONGTRA_TAMVU",
+    "date": "2025-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0377",
+    "station": "ST_SONGTRA_TAMVU",
+    "date": "2026-04-08",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0379",
+    "station": "ST_TIEN_BENDOTANPHU",
+    "date": "2024-03-11",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0381",
+    "station": "ST_TIEN_BENDOTANPHU",
+    "date": "2025-03-16",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0382",
+    "station": "ST_TIEN_BENDOTANPHU",
+    "date": "2025-04-04",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0385",
+    "station": "ST_TIEN_CAUKIMSON",
+    "date": "2024-05-13",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0389",
+    "station": "ST_TIEN_CAUKINHXANG",
+    "date": "2024-03-11",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0391",
+    "station": "ST_TIEN_CAUKINHXANG",
+    "date": "2024-05-13",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0393",
+    "station": "ST_TIEN_CAUPHUPHONG",
+    "date": "2024-03-03",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0395",
+    "station": "ST_TIEN_CAUPHUPHONG",
+    "date": "2024-05-13",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0399",
+    "station": "ST_TIEN_CAUXOAIHOT",
+    "date": "2024-05-13",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0400",
+    "station": "ST_TIEN_CAUXOAIHOT",
+    "date": "2024-05-27",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0402",
+    "station": "ST_TIEN_CAUXOAIHOT",
+    "date": "2025-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0403",
+    "station": "ST_TIEN_CAUXOAIHOT",
+    "date": "2025-03-16",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0404",
+    "station": "ST_TIEN_CAUXOAIHOT",
+    "date": "2025-04-04",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0420",
+    "station": "ST_TIEN_CVLACHONG",
+    "date": "2024-03-11",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0422",
+    "station": "ST_TIEN_CVLACHONG",
+    "date": "2024-05-13",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0423",
+    "station": "ST_TIEN_CVLACHONG",
+    "date": "2024-05-27",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0428",
+    "station": "ST_TIEN_CVLACHONG",
+    "date": "2025-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0429",
+    "station": "ST_TIEN_CVLACHONG",
+    "date": "2025-03-16",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0430",
+    "station": "ST_TIEN_CVLACHONG",
+    "date": "2025-03-22",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0431",
+    "station": "ST_TIEN_CVLACHONG",
+    "date": "2025-04-04",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0472",
+    "station": "ST_TIEN_LONGHAI",
+    "date": "2026-09-17",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0477",
+    "station": "ST_TIEN_LONGHAI",
+    "date": "2026-10-07",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0485",
+    "station": "ST_TIEN_NGUYENTANTHANH",
+    "date": "2025-04-04",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0526",
+    "station": "ST_TIEN_TRUONGCHINHTRI",
+    "date": "2024-03-11",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0528",
+    "station": "ST_TIEN_TRUONGCHINHTRI",
+    "date": "2024-05-13",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0529",
+    "station": "ST_TIEN_TRUONGCHINHTRI",
+    "date": "2024-05-27",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0531",
+    "station": "ST_TIEN_TRUONGCHINHTRI",
+    "date": "2025-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0532",
+    "station": "ST_TIEN_TRUONGCHINHTRI",
+    "date": "2025-03-16",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0533",
+    "station": "ST_TIEN_TRUONGCHINHTRI",
+    "date": "2025-04-04",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0573",
+    "station": "ST_TIEN_XUANHOA",
+    "date": "2024-03-11",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0575",
+    "station": "ST_TIEN_XUANHOA",
+    "date": "2024-05-13",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0576",
+    "station": "ST_TIEN_XUANHOA",
+    "date": "2024-05-27",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0581",
+    "station": "ST_TIEN_XUANHOA",
+    "date": "2025-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0582",
+    "station": "ST_TIEN_XUANHOA",
+    "date": "2025-03-16",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0583",
+    "station": "ST_TIEN_XUANHOA",
+    "date": "2025-03-22",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0584",
+    "station": "ST_TIEN_XUANHOA",
+    "date": "2025-04-04",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0634",
+    "station": "ST_VAMCO_RACHCHANH",
+    "date": "2024-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0636",
+    "station": "ST_VAMCO_RACHCHANH",
+    "date": "2025-03-02",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0637",
+    "station": "ST_VAMCO_RACHCHANH",
+    "date": "2025-03-05",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0640",
+    "station": "ST_VAMCO_RACHCHANH",
+    "date": "2026-04-08",
+    "reason": "CALENDAR_MISMATCH_feat_salinity_lag1_g_l",
+    "expected": null
+  },
+  {
+    "sample_id": "ML_0357",
+    "station": "ST_SOAIRAP_RACHBANG",
+    "date": "2026-10-09",
+    "reason": "TARGET_REQUIRES_MEASUREMENT_LOCATION_DISAMBIGUATION",
+    "expected": 0.05
+  },
+  {
+    "sample_id": "ML_0358",
+    "station": "ST_SOAIRAP_RACHBANG",
+    "date": "2026-10-10",
+    "reason": "TARGET_REQUIRES_MEASUREMENT_LOCATION_DISAMBIGUATION",
+    "expected": 0.05
+  },
+  {
+    "sample_id": "ML_0359",
+    "station": "ST_SOAIRAP_RACHBANG",
+    "date": "2026-10-11",
+    "reason": "TARGET_REQUIRES_MEASUREMENT_LOCATION_DISAMBIGUATION",
+    "expected": 0.05
+  },
+  {
+    "sample_id": "ML_0360",
+    "station": "ST_SOAIRAP_RACHBANG",
+    "date": "2026-10-12",
+    "reason": "TARGET_REQUIRES_MEASUREMENT_LOCATION_DISAMBIGUATION",
+    "expected": 0.05
+  },
+  {
+    "sample_id": "ML_0361",
+    "station": "ST_SOAIRAP_RACHBANG",
+    "date": "2026-10-13",
+    "reason": "TARGET_REQUIRES_MEASUREMENT_LOCATION_DISAMBIGUATION",
+    "expected": 0.05
+  }
+]

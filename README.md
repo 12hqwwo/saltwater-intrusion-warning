@@ -1,4 +1,6 @@
-# WebGIS xâm nhập mặn Đồng Tháp - data pipeline
+# WebGIS EC và hỗ trợ lập kế hoạch cống
+
+Sản phẩm nghiên cứu dự báo **giá trị mẫu EC tháng kế tiếp tại từng trạm**, đối chiếu thực tế–dự báo, tra cứu nguồn, rà soát hồ sơ công trình và thí điểm phương pháp không gian (Pilot Spatial Gò Công).
 
 ## Mốc Pilot Gò Công đã đóng gói
 
@@ -10,88 +12,57 @@ và checksum. Gò Công là khu vực thí điểm phương pháp, không đại
 
 Pipeline chính đi theo luồng `RAW immutable -> STAGING -> QA/PROCESSED -> FEATURES -> MODELS`. Dữ liệu synthetic và pipeline cũ không được dùng để tuyên bố kết quả khoa học.
 
-## Cấu trúc
+## Chạy trên Windows
 
-```text
-data/
-├── raw/
-│   ├── ec/mrc/
-│   ├── glofas/tanchau/
-│   ├── dahiti/
-│   ├── tide/
-│   │   ├── fes2022b/
-│   │   └── uhslc/
-│   ├── meteorology/openmeteo/
-│   └── gis/
-│       ├── gates/
-│       └── spatial/
-├── staging/
-├── processed/
-│   ├── ec/
-│   ├── glofas/
-│   ├── gis/
-│   └── tide/
-├── features/
-└── models/
-
-data/external/
-├── sources/
-│   ├── sondoc/
-│   └── tanchau_discharge/
-└── download_runs/
-
-pipelines/
-├── etl/12_etl_update.py
-├── features/13_feature_pipeline.py
-├── models/
-│   ├── 14_model_baseline.py
-│   ├── run_forecast_multivariate.py
-│   └── run_sondoc_forecast.py
-├── advisory/
-│   ├── run_gate_advisor.py
-│   └── run_station_gate_link.py
-└── legacy/
-    ├── run_forecast.py
-    └── data_processing/
-
-scripts/utilities/extract_fes2022b.py
-
-sql/migrations/11_schema_migration.sql
-docs/reports/01_data_audit.md
-docs/reports/16_IMPLEMENTATION_REPORT.md
-```
-
-## Chạy lại pipeline
+Từ gốc repository, dùng môi trường Python hiện có:
 
 ```powershell
-python pipelines/etl/12_etl_update.py
-python pipelines/features/13_feature_pipeline.py
-python pipelines/models/14_model_baseline.py
+.venv\Scripts\python.exe -m pip install -r requirements-prototype.txt
+npm.cmd --prefix frontend ci
+npm.cmd --prefix frontend run build
+.venv\Scripts\python.exe run_webgis.py --mode snapshot
 ```
 
-Các script phải được chạy theo thứ tự trên. `monthly_feature_v2` chỉ lấy EC `VERIFIED` làm target. Mỹ Tho GloFAS vẫn NULL; Tide FES vẫn NULL cho đến khi điểm offshore, datum và chuỗi dự báo được xác minh.
+- Mở http://127.0.0.1:8000/research.html (Nghiên cứu dự báo & WebGIS chung)
+- Mở http://127.0.0.1:8000/pilot/spatial/map (Bản đồ mạng lưới sông ngòi & Spatial Pilot Gò Công)
 
-Các file trong `data/external/sources/` là bản nguồn chuẩn dùng chung. Mỗi thư mục trong `data/external/download_runs/` chỉ lưu bằng chứng riêng của một lần tải; manifest trỏ về nguồn chuẩn để tránh nhân bản dữ liệu.
+`snapshot` đọc tệp nghiên cứu có nguồn và kiểm tra checksum; không phải dữ liệu demo. `--mode postgres` đọc PostgreSQL/PostGIS, lỗi kết nối được báo rõ và không chuyển sang tệp. Trang `/index.html` luôn đọc PostgreSQL.
 
-## Trạng thái 16 đầu ra
+## Dữ liệu và giới hạn
 
-| # | file | vị trí | trạng thái |
-|---:|---|---|---|
-| 01 | `01_data_audit.md` | `docs/reports/` | hoàn thành |
-| 02 | `02_ec_qa_report.csv` | `data/processed/ec/` | hoàn thành |
-| 03 | `03_ec_clean.csv` | `data/processed/ec/` | hoàn thành |
-| 04 | `04_tide_points.geojson` | `data/processed/tide/` | chưa tạo; thiếu điểm offshore đã xác minh |
-| 05 | `05_tide_hourly.csv` | `data/processed/tide/` | chưa tạo; thiếu FES2022b/PyFES input |
-| 06 | `06_tide_monthly.csv` | `data/processed/tide/` | chưa tạo; phụ thuộc 05 |
-| 07 | `07_glofas_mytho_daily.csv` | `data/processed/glofas/` | hoàn thành với NULL/MISSING có lý do |
-| 08 | `08_glofas_mytho_monthly.csv` | `data/processed/glofas/` | hoàn thành với NULL/MISSING có lý do |
-| 09 | `09_gate_coordinate_qa.csv` | `data/processed/gis/` | hoàn thành |
-| 10 | `10_monthly_feature_v2.csv` | `data/features/` | hoàn thành |
-| 11 | `11_schema_migration.sql` | `sql/migrations/` | đã soạn; chưa áp dụng DB |
-| 12 | `12_etl_update.py` | `pipelines/etl/` | hoàn thành |
-| 13 | `13_feature_pipeline.py` | `pipelines/features/` | hoàn thành |
-| 14 | `14_model_baseline.py` | `pipelines/models/` | hoàn thành |
-| 15 | `15_model_comparison.csv` | `data/models/` | hoàn thành |
-| 16 | `16_IMPLEMENTATION_REPORT.md` | `docs/reports/` | hoàn thành |
+- 977 mẫu EC: 927 MRC tại Mỹ Tho/Tân Châu, 50 RIA2 tại 10 điểm. MRC giữ cờ nguồn chưa xác minh; chuỗi kết thúc năm 2023.
+- Bốn thí nghiệm tháng: hai trạm × giả định độ trễ 0/30 ngày. Giữ train/validation/test theo thời gian, baseline, metrics, predictions và manifest. Kết quả hồi cứu không phải dự báo hiện tại.
+- EC dùng mS/m. **Chưa đủ căn cứ ước tính độ mặn**: chưa xác định cơ sở EC25/phương pháp hiệu chuẩn, phạm vi và sai số phù hợp. Không dùng hệ số chuyển đổi tùy ý.
+- Bản đồ hiển thị điểm có tọa độ; không tạo bề mặt mặn liên tục. Chưa đủ ngưỡng và số đo để phân loại nguy cơ hoặc định lượng độ tin cậy.
+- Danh mục bốn cống có nguồn nhưng thiếu tọa độ đã xác minh, quan hệ thủy lực, số đo hai phía và quy trình. Công cụ chỉ rà soát hồ sơ lập kế hoạch; không tính giờ đóng/mở.
 
-Chi tiết lỗi, QA, schema và các phần còn NULL nằm trong hai báo cáo ở `docs/reports/`.
+## Tái lập và kiểm toán
+
+```powershell
+.venv\Scripts\python.exe scripts/audit_research_data.py
+.venv\Scripts\python.exe scripts/build_research_workspace.py --fit
+.venv\Scripts\python.exe scripts/import_research_workspace.py
+.venv\Scripts\python.exe scripts/check_webgis_setup.py
+```
+
+## Cấu trúc repository
+
+```text
+backend/                 FastAPI: quan trắc DB, nghiên cứu, tiếp nhận, pilot spatial
+frontend/                WebGIS và biểu đồ hiện tại
+webgis/                  Bản đồ chuyên đề Pilot Spatial Gò Công
+run_webgis.py            Trình chạy Windows
+run_monthly_ec.py        Đánh giá dự báo mẫu EC tháng
+run_gate_advisor.py      Rà soát hồ sơ kế hoạch cống
+run_station_gate_link.py Kiểm tra bằng chứng liên kết trạm–cống
+scripts/                 Thu thập, chuẩn hóa, kiểm toán, xây/nạp dữ liệu
+etl/, pipelines/         ETL có QA và đánh giá baseline
+sql/                     Schema, migration và truy vấn kiểm toán
+config/                  Cấu hình nguồn dữ liệu
+data/raw/, external/     Nguồn gốc và hồ sơ tải/biến đổi
+data/research/           Snapshot, registry và khu vực tiếp nhận riêng
+data/archive/            Bằng chứng nghiên cứu lịch sử, không nạp tự động
+runs/local_ec_backtest/  Metrics, predictions, split và manifest
+docs/                    Hướng dẫn và báo cáo khoa học
+deliverables/            Các mốc đóng gói nghiệm thu độc lập
+```

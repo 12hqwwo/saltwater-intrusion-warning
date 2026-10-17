@@ -1,0 +1,4880 @@
+{
+  "generated_at": "2026-10-16T08:21:45.256490+00:00",
+  "database_checked": false,
+  "series": [
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_01",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-05",
+      "last": "2025-11-11",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 56.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "56.0": 1
+      },
+      "min": 11.8,
+      "max": 20.7,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_02",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-05",
+      "last": "2025-11-11",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 56.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "56.0": 1
+      },
+      "min": 11.9,
+      "max": 15.5,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_03",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-04",
+      "last": "2025-11-10",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 56.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "56.0": 1
+      },
+      "min": 11.9,
+      "max": 16.1,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_04",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-04",
+      "last": "2025-11-09",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 55.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "55.0": 1
+      },
+      "min": 11.7,
+      "max": 14.7,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 1,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_05",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-06",
+      "last": "2025-11-10",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 54.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "54.0": 1
+      },
+      "min": 14.6,
+      "max": 17.3,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 1,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_06",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-04",
+      "last": "2025-11-09",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 55.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "55.0": 1
+      },
+      "min": 11.8,
+      "max": 16.2,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_07",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-03",
+      "last": "2025-11-10",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 57.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "57.0": 1
+      },
+      "min": 11.7,
+      "max": 15.5,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_08",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-03",
+      "last": "2025-11-11",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 58.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "58.0": 1
+      },
+      "min": 14.9,
+      "max": 16.8,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_09",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-05",
+      "last": "2025-11-10",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 55.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "55.0": 1
+      },
+      "min": 13.8,
+      "max": 15.2,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "RIA2",
+      "station": "RIA2_DT_10",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 5,
+      "finite_values": 5,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2025-08-05",
+      "last": "2025-11-09",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 54.0,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "14.0": 3,
+        "54.0": 1
+      },
+      "min": 11.8,
+      "max": 15.3,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "SOURCE_REPORTED_METHOD_UNVERIFIED": 5
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "MRC",
+      "station": "MRC_VN_019805",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 463,
+      "finite_values": 463,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-06-26",
+      "last": "2023-12-15",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 31.0,
+      "max_gap_days": 45.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "16.0": 1,
+        "20.0": 1,
+        "25.0": 1,
+        "26.0": 1,
+        "27.0": 1,
+        "28.0": 26,
+        "29.0": 16,
+        "30.0": 152,
+        "31.0": 249,
+        "32.0": 11,
+        "34.0": 1,
+        "35.0": 1,
+        "45.0": 1
+      },
+      "min": 4.2,
+      "max": 841.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 47,
+      "quality_counts": {
+        "UNVERIFIED": 463
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "source": "MRC",
+      "station": "MRC_VN_019803",
+      "parameter": "EC",
+      "unit": "mS/m",
+      "rows": 464,
+      "finite_values": 464,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-05-15",
+      "last": "2023-12-15",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 31.0,
+      "max_gap_days": 42.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "20.0": 1,
+        "26.0": 2,
+        "27.0": 2,
+        "28.0": 28,
+        "29.0": 12,
+        "30.0": 149,
+        "31.0": 259,
+        "32.0": 6,
+        "33.0": 1,
+        "34.0": 1,
+        "35.0": 1,
+        "42.0": 1
+      },
+      "min": 1.4,
+      "max": 60.9,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 2,
+      "quality_counts": {
+        "UNVERIFIED": 464
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "file": "data/external/mrc_20261014_network/019803_Conductivity_Water_Quality_bc365241.csv",
+      "sha256": "d0716df1b8b9da4c47ec56e74a18ebea1258ad520c1b6b4e4c6f19bea72ecd32",
+      "source": "MRC_LATEST_RETRIEVAL",
+      "station": "MRC_VN_019803",
+      "parameter": "Conductivity",
+      "unit": "mS/m",
+      "rows": 464,
+      "finite_values": 464,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-05-14 17:00:00+00:00",
+      "last": "2023-12-14 17:00:00+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 31.0,
+      "max_gap_days": 42.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "20.0": 1,
+        "26.0": 2,
+        "27.0": 2,
+        "28.0": 28,
+        "29.0": 12,
+        "30.0": 149,
+        "31.0": 259,
+        "32.0": 6,
+        "33.0": 1,
+        "34.0": 1,
+        "35.0": 1,
+        "42.0": 1
+      },
+      "min": 1.4,
+      "max": 60.9,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 2,
+      "quality_counts": {
+        "UNVERIFIED": 464
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "file": "data/external/mrc_20261014_network/019803_Water_Level_Manual_3bd17f3a.csv",
+      "sha256": "7aa4d01db7f32e3f902bca6282e61874bbfd03d14ec81c9af08b39da1d4175a1",
+      "source": "MRC_LATEST_RETRIEVAL",
+      "station": "MRC_VN_019803",
+      "parameter": "Water Level",
+      "unit": "m",
+      "rows": 305,
+      "finite_values": 305,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2026-08-31 18:00:00+00:00",
+      "last": "2026-10-14 00:00:00+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 0.14583333333333334,
+      "max_gap_days": 0.3333333333333333,
+      "gaps_over_twice_median": 1,
+      "gap_days_histogram": {
+        "0.020833333333333332": 29,
+        "0.041666666666666664": 21,
+        "0.0625": 24,
+        "0.08333333333333333": 21,
+        "0.10208333333333333": 1,
+        "0.10416666666666667": 27,
+        "0.125": 19,
+        "0.14583333333333334": 30,
+        "0.14791666666666667": 1,
+        "0.16666666666666666": 21,
+        "0.1875": 22,
+        "0.20833333333333334": 14,
+        "0.22916666666666666": 20,
+        "0.25": 53,
+        "0.3333333333333333": 1
+      },
+      "min": 2.24,
+      "max": 3.58,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNVERIFIED": 305
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "file": "data/external/mrc_20261014_network/019803_Water_Level_Telemetry_c27f981e.csv",
+      "sha256": "1d719df3f7058e5fa3d6f8fe1efcadd69775a80dbaf0fe3d98987287863b6816",
+      "source": "MRC_LATEST_RETRIEVAL",
+      "station": "MRC_VN_019803",
+      "parameter": "Water Level",
+      "unit": "m",
+      "rows": 4250,
+      "finite_values": 4250,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2026-08-31 17:00:00+00:00",
+      "last": "2026-10-14 06:45:00+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 0.010416666666666666,
+      "max_gap_days": 0.010416666666666666,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "0.003472222222222222": 66,
+        "0.006944444444444444": 66,
+        "0.010416666666666666": 4117
+      },
+      "min": 2.21,
+      "max": 3.59,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNVERIFIED": 4250
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "file": "data/external/mrc_20261014_network/019803_Water_Temperature_Water_Quality_bb1fab49.csv",
+      "sha256": "89f22975f3c92b5c3d680f222408de0360cecdbf809699bc1e0eba0a02ee052a",
+      "source": "MRC_LATEST_RETRIEVAL",
+      "station": "MRC_VN_019803",
+      "parameter": "Water Temperature",
+      "unit": "degC",
+      "rows": 250,
+      "finite_values": 250,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2003-01-14 17:00:00+00:00",
+      "last": "2023-12-14 17:00:00+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 31.0,
+      "max_gap_days": 62.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "27.0": 1,
+        "28.0": 16,
+        "29.0": 8,
+        "30.0": 79,
+        "31.0": 139,
+        "32.0": 3,
+        "34.0": 1,
+        "61.0": 1,
+        "62.0": 1
+      },
+      "min": 23.3,
+      "max": 33.2,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNVERIFIED": 250
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "file": "data/external/mrc_20261014_network/019805_Conductivity_Water_Quality_acce65db.csv",
+      "sha256": "204a8a48a235becfe792b0a01973e5eac3b948250d62f91f7f6430ee7fa53893",
+      "source": "MRC_LATEST_RETRIEVAL",
+      "station": "MRC_VN_019805",
+      "parameter": "Conductivity",
+      "unit": "mS/m",
+      "rows": 463,
+      "finite_values": 463,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-06-25 17:00:00+00:00",
+      "last": "2023-12-14 17:00:00+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 31.0,
+      "max_gap_days": 45.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "16.0": 1,
+        "20.0": 1,
+        "25.0": 1,
+        "26.0": 1,
+        "27.0": 1,
+        "28.0": 26,
+        "29.0": 16,
+        "30.0": 152,
+        "31.0": 249,
+        "32.0": 11,
+        "34.0": 1,
+        "35.0": 1,
+        "45.0": 1
+      },
+      "min": 4.2,
+      "max": 841.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 47,
+      "quality_counts": {
+        "UNVERIFIED": 463
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "file": "data/external/mrc_20261014_network/019805_Water_Temperature_Water_Quality_46c3d7c0.csv",
+      "sha256": "362e95c54288b98395b6e21bdd02054038f7c8b940e2a579e1d855a9f3751713",
+      "source": "MRC_LATEST_RETRIEVAL",
+      "station": "MRC_VN_019805",
+      "parameter": "Water Temperature",
+      "unit": "degC",
+      "rows": 250,
+      "finite_values": 250,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2003-01-14 17:00:00+00:00",
+      "last": "2023-12-14 17:00:00+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 31.0,
+      "max_gap_days": 62.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "28.0": 16,
+        "29.0": 8,
+        "30.0": 80,
+        "31.0": 140,
+        "32.0": 3,
+        "61.0": 1,
+        "62.0": 1
+      },
+      "min": 23.1,
+      "max": 32.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNVERIFIED": 250
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule"
+    },
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_MyTho_id3316.csv",
+      "sha256": "3bbe14e944a97316abbb14501247c9471c02d9a836312ed3339b8d2913e1b10b",
+      "station": "MyTho",
+      "parameter": "water_level_m",
+      "unit": "m",
+      "rows": 621,
+      "finite_values": 621,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2008-07-17 11:58:24+00:00",
+      "last": "2026-08-06 09:40:10+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 9.915648148148149,
+      "max_gap_days": 29.746921296296296,
+      "gaps_over_twice_median": 3,
+      "gap_days_histogram": {
+        "9.915162037037037": 1,
+        "9.91525462962963": 1,
+        "9.915567129629629": 1,
+        "9.915578703703703": 1,
+        "9.915590277777778": 1,
+        "9.915625": 16,
+        "9.915636574074075": 227,
+        "9.915648148148149": 300,
+        "9.915659722222221": 22,
+        "9.91576388888889": 1,
+        "9.915960648148149": 1,
+        "9.91611111111111": 4,
+        "19.831261574074073": 2,
+        "19.83127314814815": 9,
+        "19.83128472222222": 16,
+        "19.831296296296298": 14,
+        "19.83130787037037": 2,
+        "29.746921296296296": 1
+      },
+      "min": 1.55,
+      "max": 4.155,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 12,
+      "quality_counts": {
+        "UNSPECIFIED": 621
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "target_lat": [],
+        "target_lon": []
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_MyTho_id3316.csv",
+      "sha256": "3bbe14e944a97316abbb14501247c9471c02d9a836312ed3339b8d2913e1b10b",
+      "station": "MyTho",
+      "parameter": "water_level_err_m",
+      "unit": "m",
+      "rows": 621,
+      "finite_values": 621,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2008-07-17 11:58:24+00:00",
+      "last": "2026-08-06 09:40:10+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 9.915648148148149,
+      "max_gap_days": 29.746921296296296,
+      "gaps_over_twice_median": 3,
+      "gap_days_histogram": {
+        "9.915162037037037": 1,
+        "9.91525462962963": 1,
+        "9.915567129629629": 1,
+        "9.915578703703703": 1,
+        "9.915590277777778": 1,
+        "9.915625": 16,
+        "9.915636574074075": 227,
+        "9.915648148148149": 300,
+        "9.915659722222221": 22,
+        "9.91576388888889": 1,
+        "9.915960648148149": 1,
+        "9.91611111111111": 4,
+        "19.831261574074073": 2,
+        "19.83127314814815": 9,
+        "19.83128472222222": 16,
+        "19.831296296296298": 14,
+        "19.83130787037037": 2,
+        "29.746921296296296": 1
+      },
+      "min": 0.0,
+      "max": 0.259,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 27,
+      "quality_counts": {
+        "UNSPECIFIED": 621
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "target_lat": [],
+        "target_lon": []
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_TanChau_id627.csv",
+      "sha256": "30ff90a9340540c41f2a3fc9fee9ed2e409d798229234c4ada053481f43943ac",
+      "station": "TanChau",
+      "parameter": "water_level_m",
+      "unit": "m",
+      "rows": 108,
+      "finite_values": 108,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2002-06-13 03:05:27+00:00",
+      "last": "2016-05-07 11:07:57+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 35.0,
+      "max_gap_days": 912.3368981481482,
+      "gaps_over_twice_median": 6,
+      "gap_days_histogram": {
+        "34.99974537037037": 1,
+        "34.99976851851852": 1,
+        "34.99979166666667": 1,
+        "34.999849537037036": 1,
+        "34.99986111111111": 1,
+        "34.99991898148148": 2,
+        "34.99993055555556": 1,
+        "34.99994212962963": 3,
+        "34.9999537037037": 7,
+        "34.999965277777775": 10,
+        "34.999976851851855": 13,
+        "34.99998842592593": 10,
+        "35.0": 10,
+        "35.00001157407407": 13,
+        "35.000023148148145": 6,
+        "35.000034722222225": 6,
+        "35.0000462962963": 3,
+        "35.00005787037037": 2,
+        "35.00008101851852": 1,
+        "35.000092592592594": 1,
+        "35.00010416666667": 1,
+        "35.00013888888889": 1,
+        "69.99991898148149": 1,
+        "69.99994212962963": 2,
+        "69.99995370370371": 1,
+        "69.99996527777778": 1,
+        "69.99998842592592": 1,
+        "70.00001157407408": 1,
+        "70.00002314814814": 1,
+        "70.00008101851851": 1,
+        "104.99971064814815": 1,
+        "104.99994212962963": 1,
+        "912.3368981481482": 1
+      },
+      "min": 2.707,
+      "max": 6.376,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 2,
+      "quality_counts": {
+        "UNSPECIFIED": 108
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "target_lat": [],
+        "target_lon": []
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_TanChau_id627.csv",
+      "sha256": "30ff90a9340540c41f2a3fc9fee9ed2e409d798229234c4ada053481f43943ac",
+      "station": "TanChau",
+      "parameter": "water_level_err_m",
+      "unit": "m",
+      "rows": 108,
+      "finite_values": 108,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "2002-06-13 03:05:27+00:00",
+      "last": "2016-05-07 11:07:57+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 35.0,
+      "max_gap_days": 912.3368981481482,
+      "gaps_over_twice_median": 6,
+      "gap_days_histogram": {
+        "34.99974537037037": 1,
+        "34.99976851851852": 1,
+        "34.99979166666667": 1,
+        "34.999849537037036": 1,
+        "34.99986111111111": 1,
+        "34.99991898148148": 2,
+        "34.99993055555556": 1,
+        "34.99994212962963": 3,
+        "34.9999537037037": 7,
+        "34.999965277777775": 10,
+        "34.999976851851855": 13,
+        "34.99998842592593": 10,
+        "35.0": 10,
+        "35.00001157407407": 13,
+        "35.000023148148145": 6,
+        "35.000034722222225": 6,
+        "35.0000462962963": 3,
+        "35.00005787037037": 2,
+        "35.00008101851852": 1,
+        "35.000092592592594": 1,
+        "35.00010416666667": 1,
+        "35.00013888888889": 1,
+        "69.99991898148149": 1,
+        "69.99994212962963": 2,
+        "69.99995370370371": 1,
+        "69.99996527777778": 1,
+        "69.99998842592592": 1,
+        "70.00001157407408": 1,
+        "70.00002314814814": 1,
+        "70.00008101851851": 1,
+        "104.99971064814815": 1,
+        "104.99994212962963": 1,
+        "912.3368981481482": 1
+      },
+      "min": 0.0,
+      "max": 0.204,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 9,
+      "quality_counts": {
+        "UNSPECIFIED": 108
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "target_lat": [],
+        "target_lon": []
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "MyTho",
+      "parameter": "precipitation_sum",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.0,
+      "max": 122.9,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 65,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "MyTho",
+      "parameter": "temperature_2m_max",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 20.9,
+      "max": 37.5,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 6,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "MyTho",
+      "parameter": "temperature_2m_min",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 16.4,
+      "max": 28.2,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 26,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "MyTho",
+      "parameter": "temperature_2m_mean",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 20.3,
+      "max": 31.2,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 8,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "MyTho",
+      "parameter": "et0_fao_evapotranspiration",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.48,
+      "max": 7.26,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "MyTho",
+      "parameter": "windspeed_10m_max",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 1.2,
+      "max": 7.62,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "MyTho",
+      "parameter": "relative_humidity_2m_mean",
+      "unit": "%",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 57.0,
+      "max": 100.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "MyTho",
+      "parameter": "shortwave_radiation_sum",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 2.21,
+      "max": 27.21,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "TanChau",
+      "parameter": "precipitation_sum",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.0,
+      "max": 191.9,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 112,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "TanChau",
+      "parameter": "temperature_2m_max",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 20.2,
+      "max": 39.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 7,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "TanChau",
+      "parameter": "temperature_2m_min",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 15.9,
+      "max": 28.8,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 86,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "TanChau",
+      "parameter": "temperature_2m_mean",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 19.1,
+      "max": 33.4,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 14,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "TanChau",
+      "parameter": "et0_fao_evapotranspiration",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.62,
+      "max": 7.61,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "TanChau",
+      "parameter": "windspeed_10m_max",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 1.17,
+      "max": 9.04,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "TanChau",
+      "parameter": "relative_humidity_2m_mean",
+      "unit": "%",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 45.0,
+      "max": 96.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "station": "TanChau",
+      "parameter": "shortwave_radiation_sum",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 1.85,
+      "max": 27.15,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "precipitation_sum",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.0,
+      "max": 122.9,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 65,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "temperature_2m_max",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 20.9,
+      "max": 37.5,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 6,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "temperature_2m_min",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 16.4,
+      "max": 28.2,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 26,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "temperature_2m_mean",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 20.3,
+      "max": 31.2,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 8,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "et0_fao_evapotranspiration",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.48,
+      "max": 7.26,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "windspeed_10m_max",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 1.2,
+      "max": 7.62,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "relative_humidity_2m_mean",
+      "unit": "%",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 57.0,
+      "max": 100.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "shortwave_radiation_sum",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 2.21,
+      "max": 27.21,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "precipitation_sum",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.0,
+      "max": 122.9,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 65,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "temperature_2m_max",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 20.9,
+      "max": 37.5,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 6,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "temperature_2m_min",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 16.4,
+      "max": 28.2,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 26,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "temperature_2m_mean",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 20.3,
+      "max": 31.2,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 8,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "et0_fao_evapotranspiration",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.48,
+      "max": 7.26,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "windspeed_10m_max",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 1.2,
+      "max": 7.62,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "relative_humidity_2m_mean",
+      "unit": "%",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 57.0,
+      "max": 100.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "station": "MyTho",
+      "parameter": "shortwave_radiation_sum",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 2.21,
+      "max": 27.21,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.36
+        ],
+        "lon": [
+          106.36
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "precipitation_sum",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.0,
+      "max": 191.9,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 112,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "temperature_2m_max",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 20.2,
+      "max": 39.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 7,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "temperature_2m_min",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 15.9,
+      "max": 28.8,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 86,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "temperature_2m_mean",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 19.1,
+      "max": 33.4,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 14,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "et0_fao_evapotranspiration",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.62,
+      "max": 7.61,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "windspeed_10m_max",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 1.17,
+      "max": 9.04,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "relative_humidity_2m_mean",
+      "unit": "%",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 45.0,
+      "max": 96.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "shortwave_radiation_sum",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 1.85,
+      "max": 27.15,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "precipitation_sum",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.0,
+      "max": 191.9,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 112,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "temperature_2m_max",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 20.2,
+      "max": 39.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 7,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "temperature_2m_min",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 15.9,
+      "max": 28.8,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 86,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "temperature_2m_mean",
+      "unit": "degC",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 19.1,
+      "max": 33.4,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 14,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "et0_fao_evapotranspiration",
+      "unit": "mm",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 0.62,
+      "max": 7.61,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "windspeed_10m_max",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 1.17,
+      "max": 9.04,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "relative_humidity_2m_mean",
+      "unit": "%",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 45.0,
+      "max": 96.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "station": "TanChau",
+      "parameter": "shortwave_radiation_sum",
+      "unit": "UNCONFIRMED",
+      "rows": 15218,
+      "finite_values": 15218,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-01-01",
+      "last": "2026-08-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 15217
+      },
+      "min": 1.85,
+      "max": 27.15,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 15218
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {
+        "lat": [
+          10.804
+        ],
+        "lon": [
+          105.234
+        ]
+      },
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/raw/tide/uhslc/uhslc_tides_VungTau_id142_daily.csv",
+      "sha256": "f4e5d483f0a9c485a90c31bcfa6d9ba27f7672481b51ed4cefef0f93fe88407b",
+      "station": "VungTau",
+      "parameter": "tide_max_m",
+      "unit": "m",
+      "rows": 14855,
+      "finite_values": 14855,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1985-11-29",
+      "last": "2026-07-31",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 1.0,
+      "max_gap_days": 1.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "1.0": 14854
+      },
+      "min": 2.09,
+      "max": 4.508,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "UNSPECIFIED": 14855
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {},
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/external/research_tls_20261010_215230/sondoc_observations.csv",
+      "sha256": "302bfe2b388f815eac6b994dd7b85b1d73edbcba211ead7a98aa9401a0de5552",
+      "station": "GFZ_SONDOC",
+      "parameter": "salinity_g_per_l",
+      "unit": "g/L",
+      "rows": 18300,
+      "finite_values": 18300,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1996-01-31 18:00:00+00:00",
+      "last": "2016-06-29 16:00:00+00:00",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 0.08333333333333333,
+      "max_gap_days": 306.0833333333333,
+      "gaps_over_twice_median": 460,
+      "gap_days_histogram": {
+        "0.08333333333333333": 17838,
+        "0.16666666666666666": 1,
+        "1.0833333333333333": 31,
+        "2.0833333333333335": 49,
+        "3.0833333333333335": 79,
+        "4.0": 1,
+        "4.083333333333333": 100,
+        "5.083333333333333": 81,
+        "6.083333333333333": 55,
+        "7.083333333333333": 24,
+        "8.083333333333334": 13,
+        "9.083333333333334": 5,
+        "29.083333333333332": 1,
+        "58.083333333333336": 1,
+        "95.08333333333333": 1,
+        "155.08333333333334": 1,
+        "184.08333333333334": 1,
+        "187.08333333333334": 1,
+        "188.08333333333334": 4,
+        "189.08333333333334": 1,
+        "190.08333333333334": 2,
+        "199.08333333333334": 1,
+        "216.08333333333334": 1,
+        "218.08333333333334": 1,
+        "220.08333333333334": 2,
+        "222.08333333333334": 1,
+        "225.08333333333334": 1,
+        "253.08333333333334": 1,
+        "306.0833333333333": 1
+      },
+      "min": 0.0,
+      "max": 27.4,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 26,
+      "quality_counts": {
+        "NOT_PROVIDED": 18300
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {},
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    },
+    {
+      "file": "data/external/research_tls_20261010_215230/tanchau_discharge_monthly.csv",
+      "sha256": "67e348f2bbbe5cfc0fc32c5b4cc2312f67dce9c97344d93a53b9855a991dc1c2",
+      "station": "GFZ_TANCHAU",
+      "parameter": "discharge_m3s",
+      "unit": "m3/s",
+      "rows": 444,
+      "finite_values": 444,
+      "missing_or_nonfinite": 0,
+      "invalid_dates": 0,
+      "first": "1980-01-01",
+      "last": "2016-12-01",
+      "time_precision": "DATE_ONLY",
+      "duplicate_times": 0,
+      "duplicate_rows": 0,
+      "median_gap_days": 31.0,
+      "max_gap_days": 31.0,
+      "gaps_over_twice_median": 0,
+      "gap_days_histogram": {
+        "28.0": 27,
+        "29.0": 10,
+        "30.0": 148,
+        "31.0": 258
+      },
+      "min": 1460.0,
+      "max": 23238.0,
+      "negative_values": 0,
+      "extreme_3IQR_review_only": 0,
+      "quality_counts": {
+        "NOT_PROVIDED": 444
+      },
+      "exclusions": "NONE by audit; negative water level may be legitimate; IQR is not a validity rule",
+      "source_coordinates": {},
+      "crs": "NOT_CONFIRMED_BY_THIS_AUDIT"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "RIA2_CATRA_2025_15",
+      "issue": 15,
+      "document_date": "2025-10-03",
+      "article_url": "https://vienthuysan2.org.vn/ban-tin-thong-bao-ket-qua-quan-trac-chat-luong-nuoc-phuc-vu-vung-nuoi-ca-tra-o-dbscl-dot-15-2025/",
+      "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/61-ca-dot-15.pdf",
+      "file": "catra_2025_15.pdf",
+      "sha256": "0698d821f83c6ce8764a8f2a25d9c3cc6b8cf05bafb46a2d5dc5e37af1faa1fe",
+      "bytes": 9494121,
+      "retrieved_at": "2026-10-10T23:59:00.071092+00:00",
+      "selected_rows": 10,
+      "selected_province": "Đồng Tháp",
+      "extraction": "PDF visual transcription",
+      "converted_docx_sha256": null,
+      "provider": "RIA2",
+      "reference": "Bản tin quan trắc vùng nuôi cá tra",
+      "local_original_status": "HASH_VERIFIED"
+    },
+    {
+      "source_id": "RIA2_CATRA_2025_16",
+      "issue": 16,
+      "document_date": "2025-10-17",
+      "article_url": "https://vienthuysan2.org.vn/ban-tin-thong-bao-ket-qua-quan-trac-chat-luong-nuoc-phuc-vu-vung-nuoi-ca-tra-o-dbscl-dot-16-2025/",
+      "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/65-BAN-TIN-SO-16-CÁ-TRA.doc",
+      "file": "catra_2025_16.doc",
+      "sha256": "7766e604481b7e96ba8fab31668db21bbee5294fc43c0fc9269206fd34876f8a",
+      "bytes": 259584,
+      "retrieved_at": "2026-10-10T23:58:58.567901+00:00",
+      "selected_rows": 10,
+      "selected_province": "Đồng Tháp",
+      "extraction": "LibreOffice DOC->DOCX then python-docx table extraction",
+      "converted_docx_sha256": "f31ba076197249995476091265ba3cdf1c2475d7e237193828105f1884750fe6",
+      "provider": "RIA2",
+      "reference": "Bản tin quan trắc vùng nuôi cá tra",
+      "local_original_status": "HASH_VERIFIED"
+    },
+    {
+      "source_id": "RIA2_CATRA_2025_17",
+      "issue": 17,
+      "document_date": "2025-10-31",
+      "article_url": "https://vienthuysan2.org.vn/ban-tin-thong-bao-ket-qua-quan-trac-chat-luong-nuoc-phuc-vu-vung-nuoi-ca-tra-o-dbscl-dot-17-2025/",
+      "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/11/67-BAN-TIN-SO-17-CÁ-TRA.doc",
+      "file": "catra_2025_17.doc",
+      "sha256": "85b64386fc13db635a1a902917ee77ba0fd0daca45121f83b858db9fdafe33a2",
+      "bytes": 264192,
+      "retrieved_at": "2026-10-10T23:58:58.216466+00:00",
+      "selected_rows": 10,
+      "selected_province": "Đồng Tháp",
+      "extraction": "LibreOffice DOC->DOCX then python-docx table extraction",
+      "converted_docx_sha256": "a67cf20fa22aecb8a8490c21c3c92a41335761f002044fa2c8c6fb7ab69a060a",
+      "provider": "RIA2",
+      "reference": "Bản tin quan trắc vùng nuôi cá tra",
+      "local_original_status": "HASH_VERIFIED"
+    },
+    {
+      "source_id": "RIA2_CATRA_2025_18",
+      "issue": 18,
+      "document_date": "2025-11-14",
+      "article_url": "https://vienthuysan2.org.vn/ban-tin-thong-bao-ket-qua-quan-trac-chat-luong-nuoc-phuc-vu-vung-nuoi-ca-tra-o-dbscl-dot-18-2025/",
+      "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/11/71-BAN-TIN-SO-18-CÁ-TRA.doc",
+      "file": "catra_2025_18.doc",
+      "sha256": "ee3ade8418aa970c582d92df6679efcf1dd293a6e277a353ee9effbe602552b6",
+      "bytes": 241152,
+      "retrieved_at": "2026-10-10T23:59:04.966089+00:00",
+      "selected_rows": 10,
+      "selected_province": "Đồng Tháp",
+      "extraction": "LibreOffice DOC->DOCX then python-docx table extraction",
+      "converted_docx_sha256": "8e0a09d35590b15dee0609dd2fd0e601557382f24e15a4b7dc4a67371f6569aa",
+      "provider": "RIA2",
+      "reference": "Bản tin quan trắc vùng nuôi cá tra",
+      "local_original_status": "HASH_VERIFIED"
+    },
+    {
+      "source_id": "MRC_EC_019805",
+      "provider": "MRC",
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/acce65db89d54d2e806fad1213c0a654?sd=1985-06-25T17%3A00%3A00%2B00%3A00&ed=2026-10-11T00%3A01%3A26.025734%2B00%3A00",
+      "sha256": "c9ea04a739effaa9587b8f972af07b414d6624eb18c442937bb71b823ec0f90d",
+      "retrieved_at": "2026-10-11T00:02:00.412653+00:00",
+      "reference": "Conductivity / Water Quality / Mỹ Tho"
+    },
+    {
+      "source_id": "MRC_EC_019803",
+      "provider": "MRC",
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/bc3652412734485aa3715e2726b00a38?sd=1985-05-14T17%3A00%3A00%2B00%3A00&ed=2026-10-11T00%3A01%3A26.025734%2B00%3A00",
+      "sha256": "724ded5fe5a622e76b976d3c2722bb789e3a8f1602ca1020698d1e65dca80d25",
+      "retrieved_at": "2026-10-11T00:01:45.913378+00:00",
+      "reference": "Conductivity / Water Quality / Tân Châu"
+    },
+    {
+      "source_id": "RIA2_CATRA_2025_12",
+      "provider": "RIA2",
+      "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/45-Ban-tin-ca-tra-dot-12.pdf",
+      "sha256": "57168c999d799f0b57de14593cd5ce3bb6371851b795abf40c2574518225525b",
+      "retrieved_at": "2026-10-15T01:25:01.871061+00:00",
+      "reference": "RIA2, 45/TTQT-ĐT, bản tin cá tra đợt 12, ngày văn bản 08/08/2025; mẫu 03–06/08/2025",
+      "extraction": "pypdf text extraction checked against rendered original PDF pages 1–4; unit on page 1; no sampling hour supplied",
+      "local_original_status": "HASH_VERIFIED"
+    },
+    {
+      "source_id": "DT_GATE_CATALOG_2025",
+      "provider": "Tài liệu UBND tỉnh Đồng Tháp do người dùng cung cấp",
+      "reference": "Phụ lục III của Quyết định 20/2025/QĐ-UBND, 20/03/2025",
+      "file": "data/raw/gates/dongthap_gate_catalog_2025.pdf",
+      "sha256": "72b3e00ac184f00a0527478c898a1bc53eb7102b798f583f77d4e9d6ac90efe6",
+      "scope": "Chỉ 4 công trình tỉnh quản lý tại trang PDF 2; không phải toàn bộ danh mục 163 trang.",
+      "current_legal_effect_verified": false
+    }
+  ],
+  "station_metadata": [
+    {
+      "site_code": "RIA2_DT_01",
+      "site_name": "Sông Sở Thượng",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Phường Hồng Ngự (huyện TP Hồng Ngự cũ )",
+      "geometry": null,
+      "source_coordinates": [
+        105.340278,
+        10.803889
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "NOT_INDEPENDENTLY_VERIFIED",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-05",
+      "last_observed_date": "2025-11-11",
+      "latest_ec_mS_m": 15.0,
+      "median_gap_days": 14.0,
+      "max_gap_days": 56,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "RIA2_DT_02",
+      "site_name": "Sông Tiền - Tân Hòa",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Xã Tân Long (huyện Huyện Thanh Bình cũ)",
+      "geometry": null,
+      "source_coordinates": [
+        105.34,
+        10.6725
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "NOT_INDEPENDENTLY_VERIFIED",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-05",
+      "last_observed_date": "2025-11-11",
+      "latest_ec_mS_m": 15.5,
+      "median_gap_days": 14.0,
+      "max_gap_days": 56,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "RIA2_DT_03",
+      "site_name": "Sông Tiền - Tân Thuận Tây",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Phường Cao Lãnh (huyện TP Cao Lãnh cũ)",
+      "geometry": null,
+      "source_coordinates": [
+        105.580833,
+        10.451667
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "NOT_INDEPENDENTLY_VERIFIED",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-04",
+      "last_observed_date": "2025-11-10",
+      "latest_ec_mS_m": 13.9,
+      "median_gap_days": 14.0,
+      "max_gap_days": 56,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "RIA2_DT_04",
+      "site_name": "Sông Tiền - Tân Khánh Đông",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Phường Sa Đéc (huyện TP Sa Déc cũ )",
+      "geometry": null,
+      "source_coordinates": [
+        105.728611,
+        10.366667
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "NOT_INDEPENDENTLY_VERIFIED",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-04",
+      "last_observed_date": "2025-11-09",
+      "latest_ec_mS_m": 14.2,
+      "median_gap_days": 14.0,
+      "max_gap_days": 55,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "RIA2_DT_05",
+      "site_name": "Sông Vàm Cái Sơn - Vĩnh Thới",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Xã Tân Hồng (huyện Huyện Tân Hồng cũ )",
+      "geometry": null,
+      "source_coordinates": [
+        105.605944,
+        10.237869
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "SOURCE_ADMIN_LABEL_REQUIRES_REVIEW",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-06",
+      "last_observed_date": "2025-11-10",
+      "latest_ec_mS_m": 15.1,
+      "median_gap_days": 14.0,
+      "max_gap_days": 54,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "RIA2_DT_06",
+      "site_name": "Sông Sa Đéc - An Nhơn",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Xã Phú Hựu (huyện Huyện Châu Thành cũ )",
+      "geometry": null,
+      "source_coordinates": [
+        105.870819,
+        10.265275
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "NOT_INDEPENDENTLY_VERIFIED",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-04",
+      "last_observed_date": "2025-11-09",
+      "latest_ec_mS_m": 14.2,
+      "median_gap_days": 14.0,
+      "max_gap_days": 55,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "RIA2_DT_07",
+      "site_name": "Sông Tiền - Tân Mỹ - Lấp Vò",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Xã Mỹ An Hưng (huyện Huyện Lấp Vò cũ )",
+      "geometry": null,
+      "source_coordinates": [
+        105.655833,
+        10.408056
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "NOT_INDEPENDENTLY_VERIFIED",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-03",
+      "last_observed_date": "2025-11-10",
+      "latest_ec_mS_m": 15.5,
+      "median_gap_days": 14.0,
+      "max_gap_days": 57,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "RIA2_DT_08",
+      "site_name": "Tân Công Sính 1",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Xã Tràm Chim (huyện Huyện Tam Nông cũ)",
+      "geometry": null,
+      "source_coordinates": [
+        105.522353,
+        10.678892
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "NOT_INDEPENDENTLY_VERIFIED",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-03",
+      "last_observed_date": "2025-11-11",
+      "latest_ec_mS_m": 15.3,
+      "median_gap_days": 14.0,
+      "max_gap_days": 58,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "RIA2_DT_09",
+      "site_name": "Sông Hậu -Tân Hòa",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Xã Phong Hòa (huyện Huyện Lai Vung cũ)",
+      "geometry": null,
+      "source_coordinates": [
+        105.62225,
+        10.198522
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "NOT_INDEPENDENTLY_VERIFIED",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-05",
+      "last_observed_date": "2025-11-10",
+      "latest_ec_mS_m": 14.7,
+      "median_gap_days": 14.0,
+      "max_gap_days": 55,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "RIA2_DT_10",
+      "site_name": "Sông Tiền - An Nhơn",
+      "provider": "RIA2",
+      "study_role": "Điểm quan trắc trong bản tin Đồng Tháp",
+      "admin_label_source": "Xã Phú Hựu (huyện Huyện Châu Thành cũ )",
+      "geometry": null,
+      "source_coordinates": [
+        105.875875,
+        10.28815
+      ],
+      "coordinate_crs": "NOT_STATED_IN_BULLETIN",
+      "location_status": "NOT_INDEPENDENTLY_VERIFIED",
+      "location_reference": "Tọa độ in trong bản tin; chưa xác nhận CRS.",
+      "time_precision": "DATE_ONLY",
+      "sampling_label": "5 đợt lấy mẫu; có khoảng trống giữa các đợt",
+      "hourly_validation_eligible": false,
+      "model_status": "TOO_FEW_SAMPLES",
+      "observation_count": 5,
+      "first_observed_date": "2025-08-05",
+      "last_observed_date": "2025-11-09",
+      "latest_ec_mS_m": 14.3,
+      "median_gap_days": 14.0,
+      "max_gap_days": 54,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "MRC_VN_019805",
+      "model_station": "MYTHO",
+      "site_name": "Mỹ Tho",
+      "provider": "MRC",
+      "study_role": "Trạm lịch sử khu vực Tiền Giang",
+      "admin_label_source": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.3529997,
+          10.35912163
+        ]
+      },
+      "source_coordinates": [
+        106.3529997,
+        10.35912163
+      ],
+      "coordinate_crs": "EPSG:4326 (KML)",
+      "location_status": "REPORTED",
+      "location_reference": "Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml; sha256=a1dc49953943d14d78cb0afff426289d7558c9dc37ea01b4e5c2fd09c33c0644",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "sampling_label": "Chuỗi mẫu theo tháng; có tháng thiếu",
+      "hourly_validation_eligible": false,
+      "model_status": "HISTORICAL_MONTHLY_BACKTEST",
+      "observation_count": 463,
+      "first_observed_date": "1985-06-26",
+      "last_observed_date": "2023-12-15",
+      "latest_ec_mS_m": 15.4,
+      "median_gap_days": 31.0,
+      "max_gap_days": 45,
+      "unit": "mS/m"
+    },
+    {
+      "site_code": "MRC_VN_019803",
+      "model_station": "TANCHAU",
+      "site_name": "Tân Châu",
+      "provider": "MRC",
+      "study_role": "Trạm thượng lưu tham chiếu; không đồng nhất với điểm Đồng Tháp",
+      "admin_label_source": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.2480164,
+          10.80062008
+        ]
+      },
+      "source_coordinates": [
+        105.2480164,
+        10.80062008
+      ],
+      "coordinate_crs": "EPSG:4326 (KML)",
+      "location_status": "REPORTED",
+      "location_reference": "Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml; sha256=0059e16ddb527081958707e10c5e62c8fb2fe3df1511dc9c0ab7f12776550867",
+      "time_precision": "SOURCE_TIMESTAMP",
+      "sampling_label": "Chuỗi mẫu theo tháng; có tháng thiếu",
+      "hourly_validation_eligible": false,
+      "model_status": "HISTORICAL_MONTHLY_BACKTEST",
+      "observation_count": 464,
+      "first_observed_date": "1985-05-15",
+      "last_observed_date": "2023-12-15",
+      "latest_ec_mS_m": 13.5,
+      "median_gap_days": 31,
+      "max_gap_days": 42,
+      "unit": "mS/m"
+    }
+  ],
+  "gate_catalog": {
+    "schema_version": 1,
+    "source": {
+      "source_id": "DT_GATE_CATALOG_2025",
+      "provider": "Tài liệu UBND tỉnh Đồng Tháp do người dùng cung cấp",
+      "reference": "Phụ lục III của Quyết định 20/2025/QĐ-UBND, 20/03/2025",
+      "file": "data/raw/gates/dongthap_gate_catalog_2025.pdf",
+      "sha256": "72b3e00ac184f00a0527478c898a1bc53eb7102b798f583f77d4e9d6ac90efe6",
+      "scope": "Chỉ 4 công trình tỉnh quản lý tại trang PDF 2; không phải toàn bộ danh mục 163 trang.",
+      "current_legal_effect_verified": false
+    },
+    "items": [
+      {
+        "gate_code": "DT_PLIII_001",
+        "gate_name": "Cống Đường nước Uỷ ban",
+        "admin_label_source": "H.Thanh Bình",
+        "service_area_ha": 400,
+        "opening_width_m": 3.0,
+        "length_m": 18,
+        "bottom_elevation_source_m": -2.5,
+        "vertical_datum": "NOT_STATED",
+        "year_built": 2023,
+        "source_id": "DT_GATE_CATALOG_2025",
+        "source_locator": "PDF page 2, Phụ lục III, row 1",
+        "geometry": null,
+        "location_status": "MISSING",
+        "waterway_name": null,
+        "operating_policy_status": "NOT_PROVIDED",
+        "salinity_control_role": "NOT_VERIFIED",
+        "is_demo": false
+      },
+      {
+        "gate_code": "DT_PLIII_002",
+        "gate_name": "Cống Bảy Ngỏi",
+        "admin_label_source": "H.HN",
+        "service_area_ha": 500,
+        "opening_width_m": 3.0,
+        "length_m": 18,
+        "bottom_elevation_source_m": -2.5,
+        "vertical_datum": "NOT_STATED",
+        "year_built": 2023,
+        "source_id": "DT_GATE_CATALOG_2025",
+        "source_locator": "PDF page 2, Phụ lục III, row 2",
+        "geometry": null,
+        "location_status": "MISSING",
+        "waterway_name": null,
+        "operating_policy_status": "NOT_PROVIDED",
+        "salinity_control_role": "NOT_VERIFIED",
+        "is_demo": false
+      },
+      {
+        "gate_code": "DT_PLIII_003",
+        "gate_name": "Cống Kho Bể",
+        "admin_label_source": "TP. HN",
+        "service_area_ha": 467,
+        "opening_width_m": 3.0,
+        "length_m": 17.5,
+        "bottom_elevation_source_m": -2.5,
+        "vertical_datum": "NOT_STATED",
+        "year_built": 2023,
+        "source_id": "DT_GATE_CATALOG_2025",
+        "source_locator": "PDF page 2, Phụ lục III, row 3",
+        "geometry": null,
+        "location_status": "MISSING",
+        "waterway_name": null,
+        "operating_policy_status": "NOT_PROVIDED",
+        "salinity_control_role": "NOT_VERIFIED",
+        "is_demo": false
+      },
+      {
+        "gate_code": "DT_PLIII_004",
+        "gate_name": "Cống Đồng Tiến",
+        "admin_label_source": "H. Tam Nông",
+        "service_area_ha": 300,
+        "opening_width_m": 3.0,
+        "length_m": 17.5,
+        "bottom_elevation_source_m": -2.5,
+        "vertical_datum": "NOT_STATED",
+        "year_built": 2023,
+        "source_id": "DT_GATE_CATALOG_2025",
+        "source_locator": "PDF page 2, Phụ lục III, row 4",
+        "geometry": null,
+        "location_status": "MISSING",
+        "waterway_name": null,
+        "operating_policy_status": "NOT_PROVIDED",
+        "salinity_control_role": "NOT_VERIFIED",
+        "is_demo": false
+      }
+    ]
+  },
+  "classifications": {
+    "MRC": "OBSERVATION; original quality retained",
+    "RIA2": "OBSERVATION; inherited transcription",
+    "DAHITI": "SATELLITE_DERIVED_WATER_LEVEL; not a gate level",
+    "GloFAS": "MODEL_REANALYSIS_DISCHARGE",
+    "OpenMeteo": "ARCHIVE_MODEL_PRODUCT; explicit ERA5 only where requested",
+    "GFZ_SONDOC": "HISTORICAL_SALINITY_OBSERVATION",
+    "GFZ_TANCHAU": "RECONSTRUCTED_GAP_FILLED_DISCHARGE",
+    "SIWRR": "AGENCY_FORECAST; excluded from observed labels",
+    "synthetic": "SIMULATION; excluded"
+  },
+  "raw_file_inventory": [
+    {
+      "file": "data/raw/dahiti/dahiti_download_summary.json",
+      "bytes": 243,
+      "sha256": "f60d2ca2337c0b374c3dd1d19e6112ce065be32837453daf4ac06887b5acb1ef",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_MyTho_id3316.csv",
+      "bytes": 29034,
+      "sha256": "3bbe14e944a97316abbb14501247c9471c02d9a836312ed3339b8d2913e1b10b",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_TanChau_id627.csv",
+      "bytes": 5255,
+      "sha256": "30ff90a9340540c41f2a3fc9fee9ed2e409d798229234c4ada053481f43943ac",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gates/dongthap_gate_catalog_2025.pdf",
+      "bytes": 1496267,
+      "sha256": "72b3e00ac184f00a0527478c898a1bc53eb7102b798f583f77d4e9d6ac90efe6",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/Conductivity.Water Quality@VN_019803_[Tan Chau].csv",
+      "bytes": 52168,
+      "sha256": "bd4cf100cb4782e37b355d94f15911c1bab2c4a9d4ad69d2fa2c3b4c5d590ba7",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/Conductivity.Water Quality@VN_019803_[Tan Chau].xlsx",
+      "bytes": 30644,
+      "sha256": "7df7dca520725bcede662f248464764dd91c8714fea1d55fd6dd1c1b53cfac4c",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/Conductivity.Water Quality@VN_019803_[Tan Chau]__README.txt",
+      "bytes": 1074,
+      "sha256": "20411f2339dbdc0a5dd55f7e00e71aa7568d54f8cc94124818ccce5637dd3be3",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml",
+      "bytes": 301,
+      "sha256": "0059e16ddb527081958707e10c5e62c8fb2fe3df1511dc9c0ab7f12776550867",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/Conductivity.Water Quality@VN_019805_[My Tho].csv",
+      "bytes": 52090,
+      "sha256": "2cee9c9c1cb8e29e67ea5379391fca507419385cd4fac990edf5119634b65997",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/Conductivity.Water Quality@VN_019805_[My Tho].xlsx",
+      "bytes": 30649,
+      "sha256": "ea6d06439e231900e7575fe2bc5c80eae3878f83760105816a40599b2e7f9897",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/Conductivity.Water Quality@VN_019805_[My Tho]__README.txt",
+      "bytes": 1066,
+      "sha256": "275a4205b7e4f5a84b786cce74c207feaf443374875c8a526a88ea30c2115ae3",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml",
+      "bytes": 297,
+      "sha256": "a1dc49953943d14d78cb0afff426289d7558c9dc37ea01b4e5c2fd09c33c0644",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/data-request-e-receipt.pdf",
+      "bytes": 212981,
+      "sha256": "300692a043833259d63e998f2b55e9881e6db9dec063069647eb4f5b1d46f723",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/ec/mrc/data-use-license.pdf",
+      "bytes": 270645,
+      "sha256": "eed98ab5e3c1810fd54590b663c9f3fc32d76153a2e8080099b96559b1639cf1",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/gates/Dong_Thap_Sluice_Gates_WEBGIS_Master.xlsx",
+      "bytes": 582558,
+      "sha256": "820ba898f6ae2fb8d4e7f61430d48a757e28d1f12f4896b1e85ed683834a99ce",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/gates/sluice_gates_dong_thap_new.csv",
+      "bytes": 8447,
+      "sha256": "b823e5f3ef665f4d4de92e7c7d78dc14594c9624a2e889d269f12e8cae806f43",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/gates/sluice_gates_dong_thap_new.geojson",
+      "bytes": 13499,
+      "sha256": "ef4d952671c9fb7b77b530808e63fae60533c3a49d783fc8db01c58a864deb47",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/spatial/Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml",
+      "bytes": 301,
+      "sha256": "0059e16ddb527081958707e10c5e62c8fb2fe3df1511dc9c0ab7f12776550867",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/spatial/Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml",
+      "bytes": 297,
+      "sha256": "a1dc49953943d14d78cb0afff426289d7558c9dc37ea01b4e5c2fd09c33c0644",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/spatial/dong_thap_boundary.geojson",
+      "bytes": 9825,
+      "sha256": "13c1138aba9f9406d4d65d5e436b0bf473b9d7dca9924cdfe82f4cfcbe519f06",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/spatial/sluice_gates_dong_thap_new.csv",
+      "bytes": 8447,
+      "sha256": "b823e5f3ef665f4d4de92e7c7d78dc14594c9624a2e889d269f12e8cae806f43",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/spatial/sluice_gates_dong_thap_new.geojson",
+      "bytes": 13499,
+      "sha256": "ef4d952671c9fb7b77b530808e63fae60533c3a49d783fc8db01c58a864deb47",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/spatial/stations_observed.geojson",
+      "bytes": 2412,
+      "sha256": "de626e9550ec01545c0b7899dda9b6b8cfa16015d454bc83c3cc71fc2de94a7b",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/gis/spatial/stations_synthetic_demo.geojson",
+      "bytes": 3530,
+      "sha256": "a87cd61801dd2136d2fc9a4bca47bea93f986307c9fa24127727034221955000",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1985_29days.nc",
+      "bytes": 25089,
+      "sha256": "80fdbdf5cac17f466a8b76700149824a064c1889bd8827cdfab402bfdc244e72",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1985_30days.nc",
+      "bytes": 28824,
+      "sha256": "76a99e98e9d6992cb9a03d0b9205bc21a1a420c8f3c98e9fd45f869bdaf88acc",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1985_31days.nc",
+      "bytes": 31628,
+      "sha256": "f628cd6c7eb8d055accb46c12d5528952b01fdb3c4858e236f8a181a5789efaa",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1986_29days.nc",
+      "bytes": 25089,
+      "sha256": "616f1c366614cd59d0bf3295d484a93e0113dcf0acc9e9b61ef753fd77c51777",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1986_30days.nc",
+      "bytes": 28815,
+      "sha256": "19d31640bdf42bb6158d9f989f69bfa4b1ccf90b8877366db864d71913ed9852",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1986_31days.nc",
+      "bytes": 31452,
+      "sha256": "5f8bfb288aa708e9f15fec34a17ddc8f8ccf6bd231db0309a0c99fda1a1ba317",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1987_29days.nc",
+      "bytes": 25089,
+      "sha256": "525923513d999ca292444f4da6ea0be78e41783ec3a58026e4dd12d3766923fa",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1987_30days.nc",
+      "bytes": 28864,
+      "sha256": "52db8be41b893d379ed833eb360d9b1d1cf918ed7af50a18a103876d032e380c",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1987_31days.nc",
+      "bytes": 31087,
+      "sha256": "81203b1675b0c0a9e7b1f8252ce38790a673572ac341fd4fde8cd7ee7e674cfd",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1988_29days.nc",
+      "bytes": 25089,
+      "sha256": "b0698e929a8333359e1866641ed78582bdcd848de0507f0923d84afd36a22f4d",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1988_30days.nc",
+      "bytes": 28814,
+      "sha256": "c7fa82629919538fc5e71269a0d256f5cce47671b190b6458e5b9cb98ae16e87",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1988_31days.nc",
+      "bytes": 31235,
+      "sha256": "b633cf1d1366ab8a3526252a14f291298cd7a90d67a0cb80ecada08c9da63639",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1989_29days.nc",
+      "bytes": 25089,
+      "sha256": "57b48b0cf7da08f93a4aa5432cdc1c04e27e391a2d6443313d9e10a4f8bdf213",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1989_30days.nc",
+      "bytes": 28806,
+      "sha256": "65f22159196e2962939e0c1c3b737d368751520016c7a3afd7c05731e69a2e9b",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1989_31days.nc",
+      "bytes": 31272,
+      "sha256": "c4478322f78d6c27ab8f71a46fac1eb0356789099648919d5dc18545752e72fa",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1990_29days.nc",
+      "bytes": 25089,
+      "sha256": "b16d07f57b5ec7aed3a56e8138840c5b31adeb88f00cb331d2556ae44ee1a8c4",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1990_30days.nc",
+      "bytes": 28764,
+      "sha256": "7f9aec29ad6393cf75062288089691ebaa4c785494e2b9c5f5b471da5105ac9a",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1990_31days.nc",
+      "bytes": 30918,
+      "sha256": "eb62e20e934a0dc7c917728f29b7b15950183b90d01457f7c0ff4058c566849d",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1991_29days.nc",
+      "bytes": 25089,
+      "sha256": "f328d2ab8d289b200385dd36760c2b3d1db51c63e26f8525f6036698bb428c06",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1991_30days.nc",
+      "bytes": 28785,
+      "sha256": "29c76b01b3d8d9a37e681893d47d66aa07f0e2ea17febac985d4f9ce818df344",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1991_31days.nc",
+      "bytes": 30989,
+      "sha256": "e788d8584e7753d744d82704e48ace9fde2e0b34d83a9f39fcf1d66c5e94eb26",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1992_29days.nc",
+      "bytes": 25089,
+      "sha256": "e483123de569ad62376d27c1608c1f132d9c6b7a732850cbb731072077ae59cc",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1992_30days.nc",
+      "bytes": 28702,
+      "sha256": "46dd438935e2a400d6b173173527bd73a6b10037f35cc28736736c07045d490a",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1992_31days.nc",
+      "bytes": 31156,
+      "sha256": "9f47f74dc5e8e10eb35bc7d7e0000352ac1acab9c09800900df87c56b2961682",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1993_29days.nc",
+      "bytes": 25089,
+      "sha256": "e7693fd439b199cdb1f4c78773233540ace2d142df7990a0f56e45bb9897ae23",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1993_30days.nc",
+      "bytes": 28718,
+      "sha256": "163a92a16b38ea3db3c46614643e2437adc52c4765e365c14bff6b6ae258ec55",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1993_31days.nc",
+      "bytes": 31390,
+      "sha256": "7189f8ce82f13c247b3a014f66000af0847e9666e05a49b6f09a13dd626f2980",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1994_29days.nc",
+      "bytes": 25089,
+      "sha256": "43911c3dc94e72792062bd95f1828e8f239a19ffab0fe184462fa9d516f1b8d9",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1994_30days.nc",
+      "bytes": 28741,
+      "sha256": "1caae81ec89f63f95952c320d75d14d12b1ab1fbe56756e2f0ff1009db2f65f7",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1994_31days.nc",
+      "bytes": 31136,
+      "sha256": "a53a7aa567e0ad934a17f238d2be1b37e7e7b9d99a021819bf61bbf324c75e32",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1995_29days.nc",
+      "bytes": 25089,
+      "sha256": "905040b34e94a47efc14a267de2200a861b9487e4cab6996d0eb10b85cfac064",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1995_30days.nc",
+      "bytes": 28737,
+      "sha256": "445037f3edfeb9574a8cc0052ddb5c46b69ad983da5db1157b6d605beddf97e2",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1995_31days.nc",
+      "bytes": 31396,
+      "sha256": "ff15eaff3d5979a705055257e475fd0db11acf6c10cfa83adce279281ddc26a6",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1996_29days.nc",
+      "bytes": 25089,
+      "sha256": "d3c1085a271939805741e4ac070b44a80f759a400fe3b260d51b07f863003f59",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1996_30days.nc",
+      "bytes": 28883,
+      "sha256": "bdf5f6a2d1a5a118b5ba3dd73a892e33bfe056085b66fd0eea44805ff2cb613e",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1996_31days.nc",
+      "bytes": 31400,
+      "sha256": "bedf4cb147eb527d71f693a70dfff9aaa7cb052381e7806cbf9edde781b5b549",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1997_29days.nc",
+      "bytes": 25089,
+      "sha256": "b08fcc475bfad8c6c9822e84bef107e8246d2d7dd263b58d7769ac38c0357c76",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1997_30days.nc",
+      "bytes": 28846,
+      "sha256": "d7ef44ab64c5b15e51a73f62b17e545da74982e2589e273a72b73d447f7aff29",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1997_31days.nc",
+      "bytes": 31189,
+      "sha256": "9b7f86690ae474710f7b55de43aa61060a50372098c9ccd8b0727caaa6224ae2",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1998_29days.nc",
+      "bytes": 25089,
+      "sha256": "8258de83fcd68c5817bd35365c31467333242ca87618f91f15a091dd28d2799f",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1998_30days.nc",
+      "bytes": 28871,
+      "sha256": "537cfb3292ad7cfa017bc66d9c2e67bece387889e0b05318f6423036463ee1aa",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1998_31days.nc",
+      "bytes": 31184,
+      "sha256": "81d72c818e63cea20d0f7c6805edd77451f4d54465075912a3581d20e265a6e0",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1999_29days.nc",
+      "bytes": 25089,
+      "sha256": "81bba19b39e54e15d0911213fd9cf4606a1a272dac0586ca11c232de5a051616",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1999_30days.nc",
+      "bytes": 29083,
+      "sha256": "bddac2c658374b01294797f19fd4ec90e457f028c282438fd86b8bf47b858581",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_1999_31days.nc",
+      "bytes": 31749,
+      "sha256": "68ce22dfe2cd88866d5171ebdf1e857156b564ed7d23ee104f5abed2290d38ee",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2000_29days.nc",
+      "bytes": 25089,
+      "sha256": "25c01a09a4edff44a0513dd984f8682c8eaf8cf875eeb958ea3bd2becb24f92e",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2000_30days.nc",
+      "bytes": 28797,
+      "sha256": "b0b65c657e9ab9b5546dfa707ac8f2bc1aefc90bd6a07f5521d98b6f357a0a19",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2000_31days.nc",
+      "bytes": 31613,
+      "sha256": "ad4056766d470ae7a5b816afb383373eab90d7d218a2203943113ebe557cf15c",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2001_29days.nc",
+      "bytes": 25089,
+      "sha256": "6a5f3ff9895deb3239410896eadf9eefb228653ba8391b541190b68f69fcdd8a",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2001_30days.nc",
+      "bytes": 28913,
+      "sha256": "a64e32545249d94de11f1e767f03b24391378db9b93620bda7db158b12485742",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2001_31days.nc",
+      "bytes": 31595,
+      "sha256": "3a17f3a1f0a084cfb00149bcc7f7375cd7ccc7a6ad7f3f7f1d06b522cf703a41",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2002_29days.nc",
+      "bytes": 25089,
+      "sha256": "5a7465e9467d1ddf9ca67748c068161825b3ea7682d2cf2caa59a63e316cbc3c",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2002_30days.nc",
+      "bytes": 28690,
+      "sha256": "8876d91cceafb7b22a673b2818e495cd0380bea6cf63c048fac679e2857c87de",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2002_31days.nc",
+      "bytes": 31039,
+      "sha256": "3cb33a70ac5c288dd2db56b34bbadfe87aacd02fd70220afa6f21b85f27ca0d5",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2003_29days.nc",
+      "bytes": 25089,
+      "sha256": "5427935ae2a4073f6864776af46791cddcbc2306d62cfe8eec4861d7fd1622b7",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2003_30days.nc",
+      "bytes": 28732,
+      "sha256": "a64561ab3a7f4d1e09094dd4e1c5f4b513f07df1289414b86f7e5aaff9bc9678",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2003_31days.nc",
+      "bytes": 31341,
+      "sha256": "ab750d52db31a48a5b2c150c132fee8d94ff18c15782b7957870df9d91763299",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2004_29days.nc",
+      "bytes": 25089,
+      "sha256": "8a35203c42dbd5c75406535cfaa5029cb4dfb51840ca323aafbba99f99f34368",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2004_30days.nc",
+      "bytes": 28727,
+      "sha256": "1e4def1934b364f701adf9975c5286a1eed18bf6ecd0ac64326368eb81370e60",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2004_31days.nc",
+      "bytes": 30995,
+      "sha256": "b216ba395ea706ae11a60193f4290ad2a83f973e0e448d636b7676f68d5fd17a",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2005_29days.nc",
+      "bytes": 25089,
+      "sha256": "762ef16393e3d6e740aad9b61098f977e727532faa4edf18296f5863db17f9f7",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2005_30days.nc",
+      "bytes": 28779,
+      "sha256": "899d30e2c31557566d94d95b0642f515a7ce5fdb951d72938d6c49492cd52a01",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2005_31days.nc",
+      "bytes": 31061,
+      "sha256": "b1db71cfec1176c0e499bd1d7f45578ac62a447101f7993fd1df5dc592b726bb",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2006_29days.nc",
+      "bytes": 25089,
+      "sha256": "ea9cb0811047e0dc3d2b18a390f6f5cbd13c33232810218eee3ee192d132226e",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2006_30days.nc",
+      "bytes": 28956,
+      "sha256": "90f0a1bb62bfdffd9f8591a98a3c4d0fc546deb7d3e8282a230cefa5e0c86bfd",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2006_31days.nc",
+      "bytes": 31333,
+      "sha256": "ef7ae338a3ef0ae7b8d36f0c6bc7684e65f57bdf8bd224e57aeebc39ecebdc44",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2007_29days.nc",
+      "bytes": 25089,
+      "sha256": "4b55d2738c24fb52247102fe57235e58709cf2f5d86474cb3af3f5846af156cd",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2007_30days.nc",
+      "bytes": 28914,
+      "sha256": "981ecd7692d88b31acddb355ea38873bb9d4354828984d5ac9060efa6e417a74",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2007_31days.nc",
+      "bytes": 31694,
+      "sha256": "7cbc7085d5b4967d456758974dce8d66fd53eeebfcec88c7d09d9b3e8123d547",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2008_29days.nc",
+      "bytes": 25089,
+      "sha256": "3a7b918de5011fb1144946d4a852338786d910db6c7daab5a266a26efd9fdfc5",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2008_30days.nc",
+      "bytes": 28978,
+      "sha256": "6edef017b0c473c83d938b0223639d129bb7426210cf664c2a515be2b28dbe3d",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2008_31days.nc",
+      "bytes": 31453,
+      "sha256": "8bf93f9dbbaa9be0fbf39a4a774ef0a108d113efbba49c3aba162bf443d1693d",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2009_29days.nc",
+      "bytes": 25089,
+      "sha256": "d817d6dec97bbf97c639cd6bd718aa79caa58c1efd59f14b88c6f3dda843a179",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2009_30days.nc",
+      "bytes": 28940,
+      "sha256": "3795df60bdd874cf94262baf7cdd16a0d986c51a232500d4314c0900c84b3afb",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2009_31days.nc",
+      "bytes": 31490,
+      "sha256": "67ea2425809fdd26053b5b339e4d5328e0b63ff79c30f13c1af0287758561d7d",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2010_29days.nc",
+      "bytes": 25089,
+      "sha256": "b2b8e298a51c2e9a16f7a60aa18a281fbe9c75d2c905ec4884596338c26b9f83",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2010_30days.nc",
+      "bytes": 28782,
+      "sha256": "c28396bba22c1fee80b19835e0b56496a12acd11e6e8d5fb5429ca0212d27e7a",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2010_31days.nc",
+      "bytes": 31516,
+      "sha256": "e1df443626fc623b62b9f4aa8597d571f82c038f83a3bb30f43ba311889431f3",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2011_29days.nc",
+      "bytes": 25089,
+      "sha256": "0ed5bdf0130dbf5b57c87cae991f9e2c619d63ee736c1a8fa7f863bd04600446",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2011_30days.nc",
+      "bytes": 28880,
+      "sha256": "cfc568fa630be3f78e99d128ba697c29176f01a7f4d38059007c300c1feb0146",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2011_31days.nc",
+      "bytes": 31623,
+      "sha256": "a41ab510b8ac3435c22f1cfa52ec9a69f467b232c19adb1a562997c08f76cbc4",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2012_29days.nc",
+      "bytes": 25089,
+      "sha256": "f0b27d9ebb2aa62162cae359ac31c85f20f86b98c0de4a50eb6cc19300f79f8c",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2012_30days.nc",
+      "bytes": 28945,
+      "sha256": "bc78d705641db2256bb2e618eb837754738c26eefe2c8e431e8992a32bd7c438",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2012_31days.nc",
+      "bytes": 31637,
+      "sha256": "6b90f06fab60c61d28ac23c74bd691e223ff4b783c3326cf7a6fc141f3ce85bd",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2013_29days.nc",
+      "bytes": 25089,
+      "sha256": "37209c211329bd0b385dbd2d967b1fa1a779e737053ff21a9baadfa2b6ce97dc",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2013_30days.nc",
+      "bytes": 28888,
+      "sha256": "5f903311aceadd09d444066f86cbb8336b7684a54b544ef782824d5f541f63eb",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2013_31days.nc",
+      "bytes": 31629,
+      "sha256": "c4e75ca9131fd35338e674b1ca2c17e605f30cd5d164ebdda0cd0b97c834ae6f",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2014_29days.nc",
+      "bytes": 25089,
+      "sha256": "3d244da400d71abdde2dc67d8d3c95982543111eb42091a437aea37ec3770bea",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2014_30days.nc",
+      "bytes": 28819,
+      "sha256": "8e8bf6233589b295f9b5de9813472d93379253a3624f148f165a0eb5156452c7",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2014_31days.nc",
+      "bytes": 31205,
+      "sha256": "603a5bfe74aa9a31914717c8707f852b54736580b018403c2c63ac9ba92d1bf1",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2015_29days.nc",
+      "bytes": 25089,
+      "sha256": "ebe442eeaa71c17a7020a0f87eaa81ab05ffa70b5cdab6dfc071a7a336ada306",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2015_30days.nc",
+      "bytes": 28751,
+      "sha256": "e5e31861029f19b2d73a2ab1bc7fe6c55822d0a04484bd42a84927c0ec7c79f4",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2015_31days.nc",
+      "bytes": 31187,
+      "sha256": "aafed426bb5a48b8fec079b1a1e8d43d076e1b49b06a5ced2acd34a7697ba062",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2016_29days.nc",
+      "bytes": 25089,
+      "sha256": "0942eae5c0f494ae8dba914e96335781604a3ee55786d2d3c1663c0d89836ef9",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2016_30days.nc",
+      "bytes": 28801,
+      "sha256": "bc58f9c3dcb9a288fc60e62abe733927e824ddd0adcb0446f4892bd185f6c663",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2016_31days.nc",
+      "bytes": 31257,
+      "sha256": "09a3d614b35fef63a75a11a38f7c99538e320e480bf879ad818ed3e60c72db44",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2017_29days.nc",
+      "bytes": 25089,
+      "sha256": "07938c0f0c0c5539b602ccf0c781f401aa39b20560eb2ee74312820380765dcd",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2017_30days.nc",
+      "bytes": 29086,
+      "sha256": "db6c15fbaf80e9f0fe655c9979265a1d05468ff04e83072214c3255a62a5f921",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2017_31days.nc",
+      "bytes": 31911,
+      "sha256": "a3ebbe05d6b33785c702b473f15e8f2260a6cb45ec6a722350356cca8c2fa5b5",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2018_29days.nc",
+      "bytes": 25089,
+      "sha256": "8ae1526054edf4eb60a93faa0d25a27780ee369dd858f07f7fec2c22c4f99850",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2018_30days.nc",
+      "bytes": 28742,
+      "sha256": "9056ba9e4d5345e47ea067586612e416b47828e0190e4d720d011596342c1057",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2018_31days.nc",
+      "bytes": 31724,
+      "sha256": "66edd1776b18872282fae08e68ef9f0250ea4874b831ce74cef34d5af3a3b224",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2019_29days.nc",
+      "bytes": 25089,
+      "sha256": "efdde06fbe629173e90853e5ab220f153d4c07fd96f17e4a995550e728a49e74",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2019_30days.nc",
+      "bytes": 28733,
+      "sha256": "b42913b8b26573fc13f472122308a1b9b20951385284226f9aaf44cc9555a40a",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2019_31days.nc",
+      "bytes": 31133,
+      "sha256": "0e0f320eab954ee194c6a1c71639b4df5ccd70e94a85ccf64b0ccde588129be6",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2020_29days.nc",
+      "bytes": 25089,
+      "sha256": "2ab4ed408e1332a77c9d25063dcb01bc0a92d7c148f56f2720465236b144593f",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2020_30days.nc",
+      "bytes": 28827,
+      "sha256": "3745a63cd40674becec8f17faf058c6839c6d03695629c7ddbc14a47372b4757",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2020_31days.nc",
+      "bytes": 31151,
+      "sha256": "0ad484806f1a15c1151bcc41e9397ad4414176d5317be6a1f7d0e181ca236697",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2021_29days.nc",
+      "bytes": 25089,
+      "sha256": "3ede5f212da86972adfbca2d0473c4597f030681885ad075d6e9e2ae9acaef71",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2021_30days.nc",
+      "bytes": 28906,
+      "sha256": "e863f3e072c7972a6bcfae99b29dfd8bf6b310b5c875942d1b0f9644192265cb",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2021_31days.nc",
+      "bytes": 31379,
+      "sha256": "0c4dcdd17072ef8887864d17ec459530d911b6e380545169104cf3f8ba541bda",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2022_29days.nc",
+      "bytes": 25089,
+      "sha256": "6ff8e847094979f1effc271fe6fe36c629b2d93e9468e65b06f0b200bc959c78",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2022_30days.nc",
+      "bytes": 29001,
+      "sha256": "7d74c13472a28ebdba66215db49f6f517a5c6fdf174238c0a49ddbe96d468962",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2022_31days.nc",
+      "bytes": 31752,
+      "sha256": "3f4e0dc9e1f76c7a9c7384ccb93d91f31989774862d25af5c68677aa33b5f87e",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2023_29days.nc",
+      "bytes": 25089,
+      "sha256": "e2493cedfda762e9eff410fbdea1c4a84e799aa0e49cfa9d5dc2a644509ff2ed",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2023_30days.nc",
+      "bytes": 28959,
+      "sha256": "aa1dcbba3f7732797efb14566acb658062687bf3f9a0b4be05db7fe66d90fbdd",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/glofas/tanchau/glofas_2023_31days.nc",
+      "bytes": 31768,
+      "sha256": "1d436959e203477334e2e53e6fa1c5c57d23902631bc1e5c1d84e58c6853edaf",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "bytes": 2155562,
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "bytes": 1047673,
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "bytes": 1047673,
+      "sha256": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "bytes": 1108085,
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "bytes": 1108085,
+      "sha256": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/tide/fes2022/README.md",
+      "bytes": 497,
+      "sha256": "854bd6eaeb3470ade2ca4580f930886f2269f414c4803bf451771defe6655aff",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    },
+    {
+      "file": "data/raw/tide/uhslc/uhslc_tides_VungTau_id142_daily.csv",
+      "bytes": 392473,
+      "sha256": "f4e5d483f0a9c485a90c31bcfa6d9ba27f7672481b51ed4cefef0f93fe88407b",
+      "detailed_numeric_audit": "CSV series above, otherwise NOT_RUN (including NetCDF and GIS)"
+    }
+  ],
+  "overlap": [
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_MyTho_id3316.csv",
+      "station": "MyTho",
+      "parameter": "water_level_m",
+      "months_with_input": 218,
+      "months_with_observed_ec": 463,
+      "intersection_months": 186,
+      "input_months_without_ec": 32,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_MyTho_id3316.csv",
+      "station": "MyTho",
+      "parameter": "water_level_err_m",
+      "months_with_input": 218,
+      "months_with_observed_ec": 463,
+      "intersection_months": 186,
+      "input_months_without_ec": 32,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_TanChau_id627.csv",
+      "station": "TanChau",
+      "parameter": "water_level_m",
+      "months_with_input": 108,
+      "months_with_observed_ec": 464,
+      "intersection_months": 108,
+      "input_months_without_ec": 0,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/dahiti/dahiti_waterlevel_TanChau_id627.csv",
+      "station": "TanChau",
+      "parameter": "water_level_err_m",
+      "months_with_input": 108,
+      "months_with_observed_ec": 464,
+      "intersection_months": 108,
+      "input_months_without_ec": 0,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "MyTho",
+      "parameter": "precipitation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "MyTho",
+      "parameter": "temperature_2m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "MyTho",
+      "parameter": "temperature_2m_min",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "MyTho",
+      "parameter": "temperature_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "MyTho",
+      "parameter": "et0_fao_evapotranspiration",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "MyTho",
+      "parameter": "windspeed_10m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "MyTho",
+      "parameter": "relative_humidity_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "MyTho",
+      "parameter": "shortwave_radiation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "TanChau",
+      "parameter": "precipitation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "TanChau",
+      "parameter": "temperature_2m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "TanChau",
+      "parameter": "temperature_2m_min",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "TanChau",
+      "parameter": "temperature_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "TanChau",
+      "parameter": "et0_fao_evapotranspiration",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "TanChau",
+      "parameter": "windspeed_10m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "TanChau",
+      "parameter": "relative_humidity_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
+      "station": "TanChau",
+      "parameter": "shortwave_radiation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "station": "MyTho",
+      "parameter": "precipitation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "station": "MyTho",
+      "parameter": "temperature_2m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "station": "MyTho",
+      "parameter": "temperature_2m_min",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "station": "MyTho",
+      "parameter": "temperature_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "station": "MyTho",
+      "parameter": "et0_fao_evapotranspiration",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "station": "MyTho",
+      "parameter": "windspeed_10m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "station": "MyTho",
+      "parameter": "relative_humidity_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily.csv",
+      "station": "MyTho",
+      "parameter": "shortwave_radiation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "station": "MyTho",
+      "parameter": "precipitation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "station": "MyTho",
+      "parameter": "temperature_2m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "station": "MyTho",
+      "parameter": "temperature_2m_min",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "station": "MyTho",
+      "parameter": "temperature_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "station": "MyTho",
+      "parameter": "et0_fao_evapotranspiration",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "station": "MyTho",
+      "parameter": "windspeed_10m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "station": "MyTho",
+      "parameter": "relative_humidity_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_MyTho_daily_1985_2026.csv",
+      "station": "MyTho",
+      "parameter": "shortwave_radiation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 463,
+      "intersection_months": 463,
+      "input_months_without_ec": 37,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "station": "TanChau",
+      "parameter": "precipitation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "station": "TanChau",
+      "parameter": "temperature_2m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "station": "TanChau",
+      "parameter": "temperature_2m_min",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "station": "TanChau",
+      "parameter": "temperature_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "station": "TanChau",
+      "parameter": "et0_fao_evapotranspiration",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "station": "TanChau",
+      "parameter": "windspeed_10m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "station": "TanChau",
+      "parameter": "relative_humidity_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily.csv",
+      "station": "TanChau",
+      "parameter": "shortwave_radiation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "station": "TanChau",
+      "parameter": "precipitation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "station": "TanChau",
+      "parameter": "temperature_2m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "station": "TanChau",
+      "parameter": "temperature_2m_min",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "station": "TanChau",
+      "parameter": "temperature_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "station": "TanChau",
+      "parameter": "et0_fao_evapotranspiration",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "station": "TanChau",
+      "parameter": "windspeed_10m_max",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "station": "TanChau",
+      "parameter": "relative_humidity_2m_mean",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    },
+    {
+      "file": "data/raw/meteorology/openmeteo/openmeteo_TanChau_daily_1985_2026.csv",
+      "station": "TanChau",
+      "parameter": "shortwave_radiation_sum",
+      "months_with_input": 500,
+      "months_with_observed_ec": 464,
+      "intersection_months": 464,
+      "input_months_without_ec": 36,
+      "training_labels_created": 0,
+      "available_at_forecast_origin": "NOT_CONFIRMED; not used by monthly EC-only backtest"
+    }
+  ],
+  "mrc_recheck": [
+    {
+      "station": "MRC_VN_019803",
+      "rows": 464,
+      "unmatched": 0,
+      "changed_values": 0
+    },
+    {
+      "station": "MRC_VN_019805",
+      "rows": 463,
+      "unmatched": 0,
+      "changed_values": 0
+    }
+  ],
+  "source_integrity_note": "Original RIA2 hashes checked separately from transcription correctness; neither implies VALIDATED."
+}

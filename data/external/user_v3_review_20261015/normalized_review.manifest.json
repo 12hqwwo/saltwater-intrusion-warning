@@ -1,0 +1,18 @@
+{
+  "file": "normalized_review.json",
+  "sha256": "779235f7639f986a04ae51f5d43caf513faf7e351ffd2a02dbe198742eb887cd",
+  "source_sha256": "2b8896d980b3069cf99246c6749bf00d6bd07f87eb3ab6a94e0df456ee7a7a9d",
+  "method": "normalize_v3_observations.py; source rows unchanged; contexts partitioned; no aggregation",
+  "counts": {
+    "records": 890,
+    "rejected": 21,
+    "measurement_points": 75,
+    "positions": {
+      "RIVER_REPORTED": 533,
+      "INTERIOR_0M": 189,
+      "INTERIOR_200M": 168
+    },
+    "training_eligible": 0,
+    "gate_decision_eligible": 0
+  }
+}

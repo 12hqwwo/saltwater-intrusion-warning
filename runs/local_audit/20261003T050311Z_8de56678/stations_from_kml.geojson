@@ -1,0 +1,51 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.2480164,
+          10.80062008
+        ]
+      },
+      "properties": {
+        "site_code": "MRC_VN_019803",
+        "external_site_code": "019803",
+        "site_name": "Tân Châu",
+        "area_code": "TANCHAU",
+        "source_code": "MRC_WATER_QUALITY",
+        "location_status": "REPORTED",
+        "location_reference": "KML Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml; sha256=0059e16ddb527081958707e10c5e62c8fb2fe3df1511dc9c0ab7f12776550867",
+        "source_file": "Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml",
+        "source_sha256": "0059e16ddb527081958707e10c5e62c8fb2fe3df1511dc9c0ab7f12776550867",
+        "unit": "mS/m",
+        "database_state_checked": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.3529997,
+          10.35912163
+        ]
+      },
+      "properties": {
+        "site_code": "MRC_VN_019805",
+        "external_site_code": "019805",
+        "site_name": "Mỹ Tho",
+        "area_code": "MYTHO",
+        "source_code": "MRC_WATER_QUALITY",
+        "location_status": "REPORTED",
+        "location_reference": "KML Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml; sha256=a1dc49953943d14d78cb0afff426289d7558c9dc37ea01b4e5c2fd09c33c0644",
+        "source_file": "Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml",
+        "source_sha256": "a1dc49953943d14d78cb0afff426289d7558c9dc37ea01b4e5c2fd09c33c0644",
+        "unit": "mS/m",
+        "database_state_checked": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+[
+  {
+    "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/61-ca-dot-15.pdf",
+    "final_url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/61-ca-dot-15.pdf",
+    "file": "catra_2025_15.pdf",
+    "bytes": 9494121,
+    "sha256": "0698d821f83c6ce8764a8f2a25d9c3cc6b8cf05bafb46a2d5dc5e37af1faa1fe",
+    "fetched_at": "2026-10-14T06:57:42.252396+00:00",
+    "classification": "SOURCE_DOCUMENT_NOT_AUTOMATICALLY_OBSERVATIONS"
+  },
+  {
+    "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/65-BAN-TIN-SO-16-CA%CC%81-TRA.doc",
+    "final_url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/10/65-BAN-TIN-SO-16-CA%CC%81-TRA.doc",
+    "file": "catra_2025_16.doc",
+    "bytes": 259584,
+    "sha256": "7766e604481b7e96ba8fab31668db21bbee5294fc43c0fc9269206fd34876f8a",
+    "fetched_at": "2026-10-14T06:57:39.998435+00:00",
+    "classification": "SOURCE_DOCUMENT_NOT_AUTOMATICALLY_OBSERVATIONS"
+  },
+  {
+    "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/11/67-BAN-TIN-SO-17-CA%CC%81-TRA.doc",
+    "final_url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/11/67-BAN-TIN-SO-17-CA%CC%81-TRA.doc",
+    "file": "catra_2025_17.doc",
+    "bytes": 264192,
+    "sha256": "85b64386fc13db635a1a902917ee77ba0fd0daca45121f83b858db9fdafe33a2",
+    "fetched_at": "2026-10-14T06:57:40.177657+00:00",
+    "classification": "SOURCE_DOCUMENT_NOT_AUTOMATICALLY_OBSERVATIONS"
+  },
+  {
+    "url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/11/71-BAN-TIN-SO-18-CA%CC%81-TRA.doc",
+    "final_url": "https://vienthuysan2.org.vn/wp-content/uploads/2025/11/71-BAN-TIN-SO-18-CA%CC%81-TRA.doc",
+    "file": "catra_2025_18.doc",
+    "bytes": 241152,
+    "sha256": "ee3ade8418aa970c582d92df6679efcf1dd293a6e277a353ee9effbe602552b6",
+    "fetched_at": "2026-10-14T06:57:40.111423+00:00",
+    "classification": "SOURCE_DOCUMENT_NOT_AUTOMATICALLY_OBSERVATIONS"
+  },
+  {
+    "url": "https://thuyloitiengiang.vn/en/web/thuyloitiengiang/chi-tiet-tin-tuc?id=522066",
+    "attempted_at": "2026-10-14T06:57:41.921084+00:00",
+    "status": "BLOCKED",
+    "error_type": "RuntimeError",
+    "error": "HTTPS certificate verification failed for https://thuyloitiengiang.vn/en/web/thuyloitiengiang/chi-tiet-tin-tuc?id=522066. Native truststore and certifi are enabled; certificate checking remains on. Check the Windows trust store, the server certificate chain, or an organisation-managed HTTPS proxy. If your administrator provides an approved PEM CA bundle, set WEBGIS_CA_BUNDLE to that file. Retry with --out pointing to a new directory."
+  },
+  {
+    "url": "https://vienthuysan2.org.vn/",
+    "final_url": "https://vienthuysan2.org.vn/",
+    "file": "ria2_index.html",
+    "bytes": 215638,
+    "sha256": "d7901641321b75e613b92b419eae48961473b4aa91d988fdb2578c78205bbcff",
+    "fetched_at": "2026-10-14T06:57:44.505989+00:00",
+    "classification": "SOURCE_DOCUMENT_NOT_AUTOMATICALLY_OBSERVATIONS"
+  },
+  {
+    "url": "https://www.siwrr.org.vn/docs/2023/files/20251124-Ban-tin-mua-kho-2025-2026-DB-HTVH-CL-CB-24-11-2025.pdf",
+    "final_url": "https://www.siwrr.org.vn/docs/2023/files/20251124-Ban-tin-mua-kho-2025-2026-DB-HTVH-CL-CB-24-11-2025.pdf",
+    "file": "siwrr_forecast.pdf",
+    "bytes": 6110139,
+    "sha256": "50c79fc2824e02e92706982220fc778bd119fd50580d55434c71b28adecd0ad6",
+    "fetched_at": "2026-10-14T06:57:43.070232+00:00",
+    "classification": "SOURCE_DOCUMENT_NOT_AUTOMATICALLY_OBSERVATIONS"
+  }
+]

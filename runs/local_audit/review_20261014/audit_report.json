@@ -1,0 +1,151 @@
+{
+  "generated_at_utc": "2026-10-14T06:53:26.116989+00:00",
+  "scope": "LOCAL_FILES_ONLY",
+  "database_checked": false,
+  "checks": [
+    {
+      "status": "FAIL",
+      "check": "raw_019803",
+      "detail": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\TOAN TIEN COMPUTER\\\\Documents\\\\CodeWebBaoMatCoSoDuLieu\\\\saltwater-intrusion-warning\\\\data\\\\raw\\\\mrc_conductivity\\\\Conductivity.Water Quality@VN_019803_[Tan Chau].csv'"
+    },
+    {
+      "status": "FAIL",
+      "check": "station_kml_019803",
+      "detail": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\TOAN TIEN COMPUTER\\\\Documents\\\\CodeWebBaoMatCoSoDuLieu\\\\saltwater-intrusion-warning\\\\data\\\\raw\\\\spatial\\\\Conductivity.Water Quality@VN_019803_[Tan Chau]__station-location.kml'"
+    },
+    {
+      "status": "FAIL",
+      "check": "raw_019805",
+      "detail": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\TOAN TIEN COMPUTER\\\\Documents\\\\CodeWebBaoMatCoSoDuLieu\\\\saltwater-intrusion-warning\\\\data\\\\raw\\\\mrc_conductivity\\\\Conductivity.Water Quality@VN_019805_[My Tho].csv'"
+    },
+    {
+      "status": "FAIL",
+      "check": "station_kml_019805",
+      "detail": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\TOAN TIEN COMPUTER\\\\Documents\\\\CodeWebBaoMatCoSoDuLieu\\\\saltwater-intrusion-warning\\\\data\\\\raw\\\\spatial\\\\Conductivity.Water Quality@VN_019805_[My Tho]__station-location.kml'"
+    },
+    {
+      "status": "FAIL",
+      "check": "master_validation",
+      "detail": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\TOAN TIEN COMPUTER\\\\Documents\\\\CodeWebBaoMatCoSoDuLieu\\\\saltwater-intrusion-warning\\\\data\\\\processed\\\\master_timeseries.csv'"
+    },
+    {
+      "status": "FAIL",
+      "check": "source_manifest",
+      "detail": "Source manifest entries differ from the five expected inputs"
+    },
+    {
+      "status": "PASS",
+      "check": "boundary_structure_Tiền Giang - 63.geojson",
+      "detail": "Polygon type and numeric coordinate bounds checked only"
+    },
+    {
+      "status": "PASS",
+      "check": "boundary_structure_Đồng Tháp (phường xã) - 34.geojson",
+      "detail": "Polygon type and numeric coordinate bounds checked only"
+    },
+    {
+      "status": "PASS",
+      "check": "boundary_structure_Đồng Tháp - 63.geojson",
+      "detail": "Polygon type and numeric coordinate bounds checked only"
+    },
+    {
+      "status": "WARN",
+      "check": "boundary_provenance",
+      "detail": "Source, effective dates, topology and database import need separate verification"
+    },
+    {
+      "status": "WARN",
+      "check": "gate_catalog",
+      "detail": "Template rows: 0; this is not the database gate count or evidence of real gates"
+    },
+    {
+      "status": "WARN",
+      "check": "forecast_method",
+      "detail": "Forecast issue time, data availability and validation protocol are not certified by this audit"
+    },
+    {
+      "status": "WARN",
+      "check": "database_state",
+      "detail": "No database connection made; existing database contents remain unknown to this run"
+    }
+  ],
+  "inputs": {
+    "data/biengioi/Tiền Giang - 63.geojson": {
+      "sha256": "a9ec088bf253cab7392463162271d681ffc0827a363347155e4e8e0928bd68b9",
+      "byte_count": 55564
+    },
+    "data/biengioi/Đồng Tháp (phường xã) - 34.geojson": {
+      "sha256": "eb5488f82e6f4136e660904067568d5836384392b3770aeccec5deb5d7f0b59e",
+      "byte_count": 6561739
+    },
+    "data/biengioi/Đồng Tháp - 63.geojson": {
+      "sha256": "60e9cdcb0753d4feb3d405916f43978dac7ab9d583a96cc34684836a6c6c01ef",
+      "byte_count": 55070
+    }
+  },
+  "raw_ec": [],
+  "monthly": [],
+  "boundaries": [
+    {
+      "file": "Tiền Giang - 63.geojson",
+      "sha256": "a9ec088bf253cab7392463162271d681ffc0827a363347155e4e8e0928bd68b9",
+      "byte_count": 55564,
+      "feature_count": 1,
+      "geometry_types": [
+        "MultiPolygon"
+      ],
+      "bbox": [
+        105.81572725068884,
+        10.190960263275247,
+        106.82252780509747,
+        10.586992636402712
+      ],
+      "declared_crs": null,
+      "coordinate_range_check": "PASS",
+      "topology_check": "NOT_RUN",
+      "source_and_effective_dates": "NEEDS_DOCUMENTED_PROVENANCE"
+    },
+    {
+      "file": "Đồng Tháp (phường xã) - 34.geojson",
+      "sha256": "eb5488f82e6f4136e660904067568d5836384392b3770aeccec5deb5d7f0b59e",
+      "byte_count": 6561739,
+      "feature_count": 102,
+      "geometry_types": [
+        "MultiPolygon"
+      ],
+      "bbox": [
+        105.18723200000005,
+        10.13482300000004,
+        106.80781300000007,
+        10.973446000000024
+      ],
+      "declared_crs": null,
+      "coordinate_range_check": "PASS",
+      "topology_check": "NOT_RUN",
+      "source_and_effective_dates": "NEEDS_DOCUMENTED_PROVENANCE"
+    },
+    {
+      "file": "Đồng Tháp - 63.geojson",
+      "sha256": "60e9cdcb0753d4feb3d405916f43978dac7ab9d583a96cc34684836a6c6c01ef",
+      "byte_count": 55070,
+      "feature_count": 1,
+      "geometry_types": [
+        "MultiPolygon"
+      ],
+      "bbox": [
+        105.18517306930383,
+        10.134497078061518,
+        105.94191744708338,
+        10.973388148926235
+      ],
+      "declared_crs": null,
+      "coordinate_range_check": "PASS",
+      "topology_check": "NOT_RUN",
+      "source_and_effective_dates": "NEEDS_DOCUMENTED_PROVENANCE"
+    }
+  ],
+  "stations": [],
+  "forecast_exports": null,
+  "gate_template_rows": 0,
+  "status": "FAILED"
+}

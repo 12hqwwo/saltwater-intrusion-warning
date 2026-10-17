@@ -1,3 +1,5 @@
+> Tài liệu lịch sử, không phải hướng dẫn chạy hiện tại. Các đường dẫn thành phần đã loại bỏ chỉ còn trong bản sao lưu; xem [README hiện tại](../../README.md). Giữ nội dung đánh giá để truy vết.
+
 # TỔNG HỢP SỬA ĐỔI CẦN THỰC HIỆN – TUẦN 3
 
 **Project:** WebGIS dự báo xâm nhập mặn và hỗ trợ điều phối vận hành cống thủy lợi tại tỉnh Đồng Tháp mới  

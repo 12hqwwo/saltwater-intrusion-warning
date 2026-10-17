@@ -1,0 +1,4 @@
+split,start,end,calendar_months,actual_months
+train,1985-06-01,2020-12-01,427,427
+validation,2021-01-01,2021-12-01,12,12
+test,2022-01-01,2023-12-01,24,24

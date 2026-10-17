@@ -1,0 +1,261 @@
+{
+  "status": "COMPLETED",
+  "run_id": "20261014T065649Z_049e7fca",
+  "script_version": "2.0.0",
+  "script_sha256": "0e824295d9b97b90dccc4f79a5eb193cd27279a21d37ba9d632bdecd3c11a7dc",
+  "created_at_utc": "2026-10-14T06:56:49.723584+00:00",
+  "config": {
+    "station": "MYTHO",
+    "validation_months": 12,
+    "test_months": 24,
+    "min_train_samples": 36,
+    "min_eval_months": 6,
+    "trees": 100,
+    "seed": 42,
+    "availability_lag_days": 0
+  },
+  "input": {
+    "file_name": "mrc_ec_monthly_samples.csv",
+    "sha256": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc",
+    "station": "MYTHO",
+    "target_column": "conductivity_mS_per_m",
+    "unit": "mS/m",
+    "input_station_rows": 463,
+    "calendar_months": 463,
+    "observed_target_months": 463,
+    "last_target_month": "2023-12-01",
+    "trailing_calendar_months_without_ec": 0,
+    "availability_mode": "assumed_month_end_plus_lag",
+    "availability_lag_days": 0,
+    "source_quality_validation": "not_performed; retain upstream quality flags"
+  },
+  "software": {
+    "python": "3.12.10",
+    "pandas": "2.3.3",
+    "numpy": "2.5.3",
+    "scikit_learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "protocol": {
+    "target": "EC sample in the next calendar month, mS/m; no target imputation; not continuous monthly mean",
+    "forecast_origin": "23:59:59 Asia/Ho_Chi_Minh on the last day of the preceding month",
+    "horizon": "One calendar month after forecast_origin's month",
+    "evaluation": "Expanding-window walk-forward; refit RF at every origin",
+    "validation": "Select RF configuration and overall model by common-cohort validation MAE",
+    "test": "Frozen choices; earlier test observations may enter later fits only when available",
+    "historical_test_caveat": "2022-2023 results were inspected in earlier project experiments; not a blind test"
+  },
+  "limitations": [
+    "Historical backtest, not an operational warning or gate-control recommendation.",
+    "No scientific validation of source EC quality; UNVERIFIED is not promoted to VALIDATED.",
+    "Availability is only a scenario unless ec_available_at has documented provenance.",
+    "A month label identifies an aggregate; it is not the original measurement timestamp.",
+    "Input has no historical revision vintages; real-time reproducibility is not certified."
+  ],
+  "high_ec_metrics": [
+    {
+      "model": "Persistence",
+      "train_p90_mS_m": 71.10000000000005,
+      "eval_samples": 1,
+      "mae_mS_m": 52.4,
+      "rmse_mS_m": 52.4
+    },
+    {
+      "model": "Seasonal Naive",
+      "train_p90_mS_m": 71.10000000000005,
+      "eval_samples": 1,
+      "mae_mS_m": 39.599999999999994,
+      "rmse_mS_m": 39.599999999999994
+    },
+    {
+      "model": "Random Forest",
+      "train_p90_mS_m": 71.10000000000005,
+      "eval_samples": 1,
+      "mae_mS_m": 9.5701848667144,
+      "rmse_mS_m": 9.5701848667144
+    }
+  ],
+  "selection": {
+    "selection_stage": "validation",
+    "criterion": "MAE on common target months",
+    "selection_available_at": "2021-12-31T23:59:59+07:00",
+    "selected_model": "Random Forest",
+    "selected_candidate": "RF_basic_depth5_leaf3",
+    "selected_rf_candidate": "RF_basic_depth5_leaf3",
+    "rf_features": [
+      "ec_latest",
+      "ec_previous",
+      "age_latest_months",
+      "age_previous_months",
+      "month_sin",
+      "month_cos"
+    ],
+    "rf_parameters": {
+      "n_estimators": 100,
+      "random_state": 42,
+      "max_depth": 5,
+      "min_samples_leaf": 3
+    },
+    "validation_ranking": [
+      {
+        "stage": "validation",
+        "model": "RF_basic_depth5_leaf3",
+        "cohort": "common",
+        "mae_mS_m": 28.99525600767006,
+        "rmse_mS_m": 48.924488146185354,
+        "eval_samples": 12,
+        "target_months_with_actual": 12,
+        "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+        "coverage_fraction": 1.0,
+        "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+      },
+      {
+        "stage": "validation",
+        "model": "Persistence",
+        "cohort": "common",
+        "mae_mS_m": 30.946666666666662,
+        "rmse_mS_m": 61.850165858036846,
+        "eval_samples": 12,
+        "target_months_with_actual": 12,
+        "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+        "coverage_fraction": 1.0,
+        "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+      },
+      {
+        "stage": "validation",
+        "model": "RF_seasonal_depthNone_leaf5",
+        "cohort": "common",
+        "mae_mS_m": 31.269901193016086,
+        "rmse_mS_m": 55.93548429144441,
+        "eval_samples": 12,
+        "target_months_with_actual": 12,
+        "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+        "coverage_fraction": 1.0,
+        "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+      },
+      {
+        "stage": "validation",
+        "model": "RF_seasonal_depth3_leaf5",
+        "cohort": "common",
+        "mae_mS_m": 31.968949213410383,
+        "rmse_mS_m": 54.963180644150874,
+        "eval_samples": 12,
+        "target_months_with_actual": 12,
+        "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+        "coverage_fraction": 1.0,
+        "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+      },
+      {
+        "stage": "validation",
+        "model": "RF_basic_depth3_leaf5",
+        "cohort": "common",
+        "mae_mS_m": 33.61815636437151,
+        "rmse_mS_m": 57.72879779748953,
+        "eval_samples": 12,
+        "target_months_with_actual": 12,
+        "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+        "coverage_fraction": 1.0,
+        "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+      },
+      {
+        "stage": "validation",
+        "model": "RF_seasonal_depth5_leaf3",
+        "cohort": "common",
+        "mae_mS_m": 34.67952675109617,
+        "rmse_mS_m": 60.868827509561214,
+        "eval_samples": 12,
+        "target_months_with_actual": 12,
+        "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+        "coverage_fraction": 1.0,
+        "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+      },
+      {
+        "stage": "validation",
+        "model": "RF_basic_depthNone_leaf5",
+        "cohort": "common",
+        "mae_mS_m": 38.512425595296016,
+        "rmse_mS_m": 62.44273307949988,
+        "eval_samples": 12,
+        "target_months_with_actual": 12,
+        "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+        "coverage_fraction": 1.0,
+        "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+      },
+      {
+        "stage": "validation",
+        "model": "Seasonal Naive",
+        "cohort": "common",
+        "mae_mS_m": 152.19833333333335,
+        "rmse_mS_m": 259.2689993359535,
+        "eval_samples": 12,
+        "target_months_with_actual": 12,
+        "evaluation_label_cutoff": "2021-12-31T23:59:59+07:00",
+        "coverage_fraction": 1.0,
+        "evaluation_months_sha256": "d6443571aa249fbbd8c3c42fb53782981c4ee252b2baa72bd5ccae80274455b9"
+      }
+    ]
+  },
+  "test_assessment": {
+    "selected_on_validation": "Random Forest",
+    "selected_test_mae_mS_m": 22.253031058241675,
+    "persistence_test_mae_mS_m": 9.154583333333333,
+    "selected_beats_persistence_on_test": false,
+    "mae_skill_vs_persistence": -1.4308076345992453,
+    "deployment_ready": false,
+    "note": "Test diagnoses generalization; it does not change the selection already frozen on validation."
+  },
+  "test_common_metrics": [
+    {
+      "stage": "test",
+      "model": "Persistence",
+      "cohort": "common",
+      "mae_mS_m": 9.154583333333333,
+      "rmse_mS_m": 15.559446889269553,
+      "eval_samples": 24,
+      "target_months_with_actual": 24,
+      "evaluation_label_cutoff": null,
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "3e34fb006af564ecb3ad795a811a75d4ac9b913a2633f76bce742a75412e6ac5"
+    },
+    {
+      "stage": "test",
+      "model": "Seasonal Naive",
+      "cohort": "common",
+      "mae_mS_m": 20.149583333333336,
+      "rmse_mS_m": 47.842282162330015,
+      "eval_samples": 24,
+      "target_months_with_actual": 24,
+      "evaluation_label_cutoff": null,
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "3e34fb006af564ecb3ad795a811a75d4ac9b913a2633f76bce742a75412e6ac5"
+    },
+    {
+      "stage": "test",
+      "model": "Random Forest",
+      "cohort": "common",
+      "mae_mS_m": 22.253031058241675,
+      "rmse_mS_m": 41.356256666084995,
+      "eval_samples": 24,
+      "target_months_with_actual": 24,
+      "evaluation_label_cutoff": null,
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "3e34fb006af564ecb3ad795a811a75d4ac9b913a2633f76bce742a75412e6ac5"
+    }
+  ],
+  "selected_next_status": "SUCCESS",
+  "finished_at_utc": "2026-10-14T06:57:13.332777+00:00",
+  "output_sha256": {
+    "evaluation_cohort.csv": "98153503ab0da564bfa622d7617ccdd969c17e332fa1eafbb3d55abcc20eb43e",
+    "feature_audit.csv": "8b64d2da39befe4432df30fbe1dc3b73319586397973fc85ad92c5e41690a742",
+    "forecast_chart.png": "285f298c5ba1f22bd553a71af0b1e612fa460bc961e6d536f0b9354988630db9",
+    "high_ec_metrics.csv": "dfefd538c68ea7d6eb7be1ebb6c2db6a62d766e99119f422f1049246f772fa94",
+    "metrics.csv": "9591fe244311cbb9a408fdd1cf3c13f54cafdd225cbad6bdef4930a8507318d7",
+    "model_bundle.joblib": "2d9317dd43a47c3f1e7f8021e644e9ef808f6a226f38a125c1dd2f9207bc9e3d",
+    "next_forecast.json": "529aa39b5e16254191d45044b10cb6467079976d6b5984e96cf1d2654fcd2a09",
+    "predictions.csv": "8e3613f2fd405ef82039e9d8e8f142877145f192e3fc2c85cca139adc8bb00ec",
+    "selection.json": "8934f4ac2aa9c5c15f66d00c71566b8b8428b4b261cdbcfb51520685d74dff11",
+    "split_manifest.csv": "85a5487cd49b2057bad0f83b7ce2977a50a951767c29ffcca33ae14532560e22",
+    "validation_metrics.csv": "db1fe2e7e2f6f7c5f5881dd5ce62dc13c0b08fbd7a12d68ad6ee7a9281024d3e",
+    "validation_predictions.csv": "2f42e47538a7ce329cfa50d8d6dccadaf190867f533a5571297d723b68411642"
+  }
+}

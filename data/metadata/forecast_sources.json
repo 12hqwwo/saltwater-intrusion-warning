@@ -104,7 +104,6 @@
       "finding": "Official regional research/forecast source; no local gate policy inferred from a general bulletin."
     }
   ],
-  "snapshot_hashes": {
     "data/archive/legacy_analysis/master_timeseries.csv": "b416ec761e56347047f29f095b14108c3211740fb96cd6246bcb4e654af6602e",
     "data/raw/openmeteo_rainfall/openmeteo_MyTho_daily.csv": "a15eb3e2671900c3aaa394d8acf83b3913b04619738fae8e98c683de5fa3b9c8",
     "data/raw/openmeteo_rainfall/openmeteo_TanChau_daily.csv": "56ff32a0f5c5d6f2cfd825771b544759ecda58b830101c6901757d9b1e51b730"

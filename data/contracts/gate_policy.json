@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "is_demo": false,
+  "_instructions": "Hồ sơ quy trình của đúng cống; giá trị chưa xác minh để null. Không tự điền ngưỡng EC hoặc độ mặn.",
+  "policy_id": null,
+  "gate_code": null,
+  "approval": {
+    "status": "DRAFT",
+    "reference": null,
+    "valid_from": null,
+    "valid_to": null
+  },
+  "parameter": {
+    "name": "EC",
+    "unit": "mS/m",
+    "ec_basis": "UNKNOWN"
+  },
+  "vertical_datum": null,
+  "allowed_modes": [],
+  "allow_drainage_with_saline_outside": null,
+  "quality_thresholds": {
+    "open_below": null,
+    "close_at_or_above": null
+  },
+  "levels": {
+    "inside_min_m": null,
+    "inside_max_m": null,
+    "inside_critical_m": null,
+    "min_head_m": null,
+    "max_abs_head_m": null
+  }
+}

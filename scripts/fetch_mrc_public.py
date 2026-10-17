@@ -84,7 +84,8 @@ def paired_ec_temperature(ec, water):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--out",type=Path,default=ROOT/"data/external/download_runs/mrc_step07")
+    default_out = ROOT/"data/external/download_runs/mrc_step07" if (ROOT/"data/external/download_runs").is_dir() else ROOT/"data/external/mrc_step07"
+    parser.add_argument("--out",type=Path,default=default_out)
     parser.add_argument("--hydrology-from",default="2026-09-01")
     parser.add_argument("--hydrology-until",help="ISO timestamp with offset; default is retrieval start time in UTC.")
     args=parser.parse_args()

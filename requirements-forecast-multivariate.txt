@@ -1,0 +1,10 @@
+# Add to the existing data/model .venv; no third environment is needed.
+# Versions used for the supplied experiment: numpy 2.3.5, pandas 2.2.3, scikit-learn 1.8.0.
+numpy>=2.0,<3
+pandas>=2.2,<3
+scikit-learn>=1.4,<2
+
+# HTTPS downloads: native OS certificate verification plus public CA roots.
+# truststore requires Python 3.10+; Windows Python 3.12 is supported.
+truststore>=0.10,<1
+certifi>=2024.2.2

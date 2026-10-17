@@ -51,7 +51,7 @@ Không giả định điểm khí tượng, ô lưới GloFAS hoặc điểm DAH
 | water_level_m | Trung bình tháng DAHITI | m theo tên trường; mốc cao độ chưa xác minh |
 | glofas_discharge_m3s | GloFAS qua pipeline hiện có | m³/s theo tên trường; cách chọn ô lưới, thời gian và gộp file cần rà soát |
 
-Các phép tổng hợp legacy đọc từ `pipelines/legacy/data_processing/process_data.py`. Đợt này chỉ đối chiếu lại EC với raw; chưa chứng nhận toàn bộ biến ngoại sinh.
+Các phép tổng hợp đọc từ `pipelines/legacy/data_processing/process_data.py`. Đợt này chỉ đối chiếu lại EC với raw; chưa chứng nhận toàn bộ biến ngoại sinh.
 
 ## Độ phủ
 

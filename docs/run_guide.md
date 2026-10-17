@@ -1,64 +1,63 @@
-# Hướng dẫn chạy từng bước
+# Chạy và tái lập trên Windows
 
-Mở terminal tại thư mục gốc dự án trong Antigravity. Các lệnh py dùng Python Launcher trên Windows; nếu không có py, dùng python hoặc .\.venv\Scripts\python.exe đang hoạt động.
-
-## 1. Kiểm tra bộ dữ liệu hiện có
+Thực hiện trong PowerShell tại gốc repository. Giữ `.venv` và `.venv-api` hiện có. Nếu máy nhận bàn giao chưa có Python environment, cài Python 3.12 và chạy `py -3.12 -m venv .venv` trước khi cài dependency.
 
 ```powershell
-py scripts/audit_local_data.py
+.venv\Scripts\python.exe -m pip install -r requirements-prototype.txt
+npm.cmd --prefix frontend ci
+npm.cmd --prefix frontend run build
+.venv\Scripts\python.exe run_webgis.py --mode snapshot
 ```
 
-Dùng thư viện chuẩn Python và hàm validation ETL đã có. Không cần cài requirements.txt, không cần mật khẩu, không kết nối hoặc ghi database.
+- Mở http://127.0.0.1:8000/research.html. Có thể đổi cổng bằng `--port 8016`. Phát triển frontend bằng `npm.cmd --prefix frontend run dev`; Vite chuyển `/api` tới backend cổng 8000.
+- Mở http://127.0.0.1:8000/pilot/spatial/map để xem bản đồ mạng lưới sông ngòi chi tiết và phân tích Pilot Spatial Gò Công.
 
-Chương trình in một thư mục mới trong runs/local_audit/, gồm:
+## Chọn nguồn rõ ràng
 
-- audit_report.md: báo cáo dễ đọc.
-- audit_report.json: số đếm, hash, độ phủ và chi tiết kiểm tra.
-- stations_from_kml.geojson: hai trạm nếu cả hai KML đạt kiểm tra mã trạm/tọa độ.
+- `snapshot`: đọc `data/research/workspace.json`, kiểm tra SHA-256 với `workspace_manifest.json`. Đây là quan trắc có nguồn và kết quả hồi cứu, không phải dữ liệu trực tiếp.
+- `postgres`: đọc schema `webgis_research` qua tài khoản PG*. Không fallback nếu kết nối hoặc schema lỗi.
+- `/index.html` và `/api/v1/health`, `/api/v1/stations` luôn truy cập DB thật. `/api/v1/app-health` chỉ xác nhận tiến trình, không chứng nhận DB.
+- Tiếp nhận v3 luôn đọc tệp riêng; chưa nhập vào quan trắc hay huấn luyện, dù chọn chế độ PostgreSQL.
 
-PASS_WITH_LIMITATIONS cùng failures = 0 nghĩa là các kiểm tra file đạt, còn các phần ngoài phạm vi như PostgreSQL, nguồn ranh giới và phương pháp backtest. Không có nghĩa toàn bộ WebGIS đã hoàn thành. Nếu FAILED, đọc các dòng FAIL trước khi dùng dữ liệu cho bước tiếp theo.
+## PostgreSQL/PostGIS
 
-Bộ kết quả bàn giao nằm tại runs/local_audit/review_20261002/. Mỗi lần chạy mặc định tạo thư mục riêng.
-
-## 2. Kiểm tra mã liên quan khi có thay đổi
+Sao chép `.env.example` thành `.env` nếu chưa có; điền PGHOST, PGPORT, PGDATABASE, PGUSER và cấu hình mật khẩu cục bộ bằng PGPASSWORD hoặc PGPASSFILE. Không ghi mật khẩu vào báo cáo/Git. `run_webgis.py` nạp `.env`; lệnh uvicorn trực tiếp không tự nạp.
 
 ```powershell
-py -m unittest discover -s etl/tests -v
-py -m unittest discover -s scripts/tests -v
+.venv\Scripts\python.exe scripts/check_webgis_setup.py
+.venv\Scripts\python.exe scripts/import_research_workspace.py
 ```
 
-Đợt này đã chạy đạt lần lượt 7 và 4 test. Không cần làm lại kịch bản nhập lặp/rollback database đã đạt để dùng bản cập nhật.
+Lệnh import trên là dry-run, không xác nhận DB hoạt động. Trước khi ghi DB, người quản trị rà soát schema hiện hữu, quyền và bản sao lưu PostgreSQL. `sql/04_research_workspace.sql` định nghĩa schema nghiên cứu; các schema `public` nằm trong `sql/`. Không chạy bootstrap lên DB đã có dữ liệu.
 
-## 3. Xem hai trạm trong QGIS
-
-Kéo stations_from_kml.geojson từ thư mục kết quả vào QGIS; dùng site_name để đặt nhãn. Bảng thuộc tính có site_code, location_status, location_reference và source_sha256.
-
-Tọa độ giữ nguyên KML, trạng thái REPORTED. Xem GeoJSON không tự nhập tọa độ vào PostgreSQL.
-
-## 4. Đối chiếu DB trước API đầu tiên
-
-Trong pgAdmin/DBeaver, kết nối database chính dongthap_gis, mở sql/checks/03_webgis_readiness.sql. File chỉ đọc dữ liệu và đặt giới hạn thời gian khi chạy toàn bộ; không nạp/xóa/sửa dữ liệu. Nếu Query Tool chỉ hiện kết quả SELECT cuối, bôi đen và chạy riêng từng khối SELECT W01–W05 để lưu từng bảng. Khối W02 bắt đầu từ WITH observation_summary.
-
-Kết quả gồm tên database; trạm và tọa độ/nguồn/độ phủ EC; snapshot; ranh giới; số cống. Nếu đã có kết quả tương đương từ 00_kiem_tra_hien_trang.sql thì dùng lại, không cần chạy lại chỉ để tạo bằng chứng trùng.
-
-File sql/01_toa_do_tram_MyTho_TanChau.sql kết thúc bằng ROLLBACK: chạy mà chưa đổi bước kết thúc sẽ không lưu tọa độ. Trước khi định nhập lại, xem dữ liệu hiện tại ở bước trên.
-
-## 5. Các lệnh thuộc chặng sau
-
-Thí nghiệm cũ:
+Sau khi schema và tài khoản đã sẵn sàng:
 
 ```powershell
-.\.venv\Scripts\python.exe pipelines/legacy/run_forecast.py
+.venv\Scripts\python.exe scripts/import_research_workspace.py --apply
+.venv\Scripts\python.exe run_webgis.py --mode postgres
 ```
 
-Lệnh ghi vào runs/forecast_exp/; giữ bản kết quả trước nếu muốn so sánh. Phương pháp đánh giá còn các điểm cần sửa trong current_state.md.
-
-Tổng hợp dữ liệu:
+## Tái lập khoa học và thu thập
 
 ```powershell
-.\.venv\Scripts\python.exe pipelines/legacy/data_processing/process_data.py
+.venv\Scripts\python.exe scripts/audit_research_data.py
+.venv\Scripts\python.exe scripts/build_research_workspace.py --fit
 ```
 
-Chạy tại thư mục gốc. Lệnh ghi đè master CSV/parquet; không cần chạy lại trong đợt này. Cần rà soát GloFAS và metadata trước khi mở rộng mô hình.
+`--fit` chạy lại bốn thí nghiệm, tạo thư mục run mới rồi cập nhật registry/snapshot. Giữ bản run cũ để truy vết. Target là mẫu EC của tháng kế tiếp, hiện mỗi tháng có một mẫu; không nội suy thành nhãn ngày/giờ. Mô hình được chọn trên validation; test là hồi cứu, không độc lập với toàn bộ lịch sử phát triển.
 
-frontend/ chưa có mã giao diện nên các script npm chưa tạo thành WebGIS chạy được. API và trang bản đồ thuộc chặng tiếp theo.
+Các script `fetch_mrc_public.py`, `fetch_public_research_data.py`, `collect_observation_archive.py` giữ nguồn, checksum và hồ sơ tải. Kiểm tra `--help` trước khi tải thêm. `normalize_v3_observations.py`, `audit_supplied_v3.py` và `inspect_observation_archive.py` phục vụ chuẩn hóa/kiểm toán; dữ liệu tiếp nhận chưa được coi là quan trắc đã xác minh.
+
+`etl/etl_csv.py --help` mô tả chuẩn hóa CSV và tạo SQL. Dùng nguồn EC trong `data/raw/ec/mrc/`. Không dùng `master_timeseries.csv` lịch sử nếu chưa đối chiếu đúng header; phiên bản có thêm cột thủy triều không khớp hợp đồng ETL master cũ.
+
+## Chức năng cống và độ mặn
+
+```powershell
+.venv\Scripts\python.exe run_gate_advisor.py --policy data/contracts/gate_policy.json --input data/contracts/gate_input.json
+```
+
+Các mẫu thiếu dữ liệu phải trả `INSUFFICIENT_DATA`, `recommendation=null`. Chức năng này lập danh sách thông tin cần bổ sung, không phát lệnh hoặc lịch vận hành. Chưa có căn cứ chuyển EC sang độ mặn, nên API trả trạng thái thiếu căn cứ, giá trị/unit/phương pháp/sai số là null; không có cột độ mặn suy diễn được ghi vào DB EC.
+
+## Kiểm tra bàn giao
+
+Xem [handover.md](handover.md) để biết lệnh đã thực chạy, kết quả, giới hạn DB và đường dẫn khôi phục.

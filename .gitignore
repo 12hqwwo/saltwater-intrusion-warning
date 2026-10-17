@@ -1,22 +1,24 @@
-# Secrets – KHÔNG BAO GIỜ commit file .env thật
+# Local secrets and environments
 .env
+.env.*
+!.env.example
 .env-api
 .claude
+.venv/
+.venv-api/
 
-# Python
+# Generated dependencies, build and caches
+frontend/node_modules/
+frontend/dist/
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-.Python
 *.egg-info/
-dist/
-build/
-*.egg
-
-# Jupyter
 .ipynb_checkpoints/
 *.ipynb_checkpoints
+.pytest_cache/
+.coverage
+htmlcov/
+tmp/
 
 # Data – file nhị phân / dữ liệu lớn (giữ CSV nhỏ, bỏ binary)
 *.parquet
@@ -27,28 +29,25 @@ build/
 *.zip
 gadm*.json
 data/processed/*.parquet
+data/biengioi/
 # FES2022b binaries stay local; README and SHA-256 manifest remain versioned.
 data/raw/tide/fes2022b/ocean_tide_extrapolated/*.nc
 data/raw/tide/fes2022b/ocean_tide_extrapolated/*.nc.xz
+data/raw/glofas/aux/v4/ldd_glofas_v4_0.nc
+data/raw/glofas/aux/v4/uparea_glofas_v4_0.nc
+data/archive/
 
 # Model artifacts
 *.pkl
 *.joblib
 *.model
-tmp/
 
-# OS
+# Local logs and OS/editor files
+*.log
+logs/
+Thumbs.db
 .DS_Store
 *.tmp
-.DS_Store
-.venv/
-.venv-api/
-
-frontend/node_modules/
-data/biengioi/
-__pycache__/
-
-Thumbs.db
 
 # IDE
 .vscode/settings.json
@@ -56,11 +55,6 @@ Thumbs.db
 *.suo
 *.user
 
-# Log
-*.log
-logs/
-
-runs/
-
-data/raw/glofas/aux/v4/ldd_glofas_v4_0.nc
-data/raw/glofas/aux/v4/uparea_glofas_v4_0.nc
+# Ephemeral execution diagnostics; scientific runs remain deliverable
+runs/setup_checks/
+runs/webgis_evidence/

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "advisor_version": "1.0.0",
+  "gate_code": null,
+  "issue_time": null,
+  "status": "INSUFFICIENT_DATA",
+  "recommendation": null,
+  "reasons": [
+    "GATE_ID_MISSING_OR_POLICY_MISMATCH"
+  ],
+  "evidence": {},
+  "requires_operator_review": true,
+  "actuator_command": null,
+  "deployment_ready": false,
+  "data_kind": "GATE_ADVISORY",
+  "input_hashes": {
+    "policy": "f5ae18a852d45982d1e084ad212597ba44f416d64f39483617a48a28abd3064d",
+    "input": "cc3148cbd8bb5298b8fd8811e6523c9d646325033aa2090366cdf61d8703364a"
+  },
+  "script_sha256": "721e442301f5f75a92d7e29654c714d88c8f7876fce762e4f9a7f5d7b32bbfbb"
+}

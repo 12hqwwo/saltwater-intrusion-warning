@@ -1,0 +1,2245 @@
+{
+  "type": "FeatureCollection",
+  "name": "dongthap_tiengiang_webgis_spatial_v3",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.736828,
+          10.275938
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_VAMKENH",
+        "name": "Trạm Vàm Kênh (Cửa Tiểu - Sông Tiền)",
+        "station_type": "RIVER_ESTUARY",
+        "river_or_canal": "Sông Tiền (Cửa Tiểu)",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Tân Thành, H. Gò Công Đông",
+        "plus_code": "7P287PGP+9PG",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Salinity (g/l), Water Level (m), Rainfall (mm)",
+        "observed_days_count_v3": 12,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Cách cửa Tiểu ~2,2 km; đo đỉnh mặn 2 con nước/ngày + 7h00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.654422,
+          10.280388
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_LONGHAI",
+        "name": "Trạm Long Hải (Sông Tiền)",
+        "station_type": "RIVER_MAIN",
+        "river_or_canal": "Sông Tiền (Cửa Tiểu)",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Long Bình, H. Gò Công Tây",
+        "plus_code": "7P287MJ3+5Q3",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Salinity (g/l), Water Level (m), Rainfall (mm)",
+        "observed_days_count_v3": 12,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mặn trên sông Tiền & nội đồng cống Long Hải"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.663078,
+          10.254012
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_CUATRUNG_RACHMUONG",
+        "name": "Trạm Rạch Mương (Sông Cửa Trung)",
+        "station_type": "RIVER_ESTUARY",
+        "river_or_canal": "Sông Cửa Trung (Sông Tiền)",
+        "project_zone": "Phú Thạnh - Phú Đông",
+        "admin_unit": "Xã Phú Thạnh, H. Tân Phú Đông",
+        "plus_code": "7P287M37+J64",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Salinity (g/l), Water Level (m), Rainfall (mm)",
+        "observed_days_count_v3": 12,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mặn sông Cửa Trung (2 đỉnh triều/ngày + 7h00) và nội đồng"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.773453,
+          10.413788
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_SOAIRAP_MYDIEN",
+        "name": "Trạm Mỹ Điền (Sông Soài Rạp - Vàm Cỏ - Kênh Chợ Gạo)",
+        "station_type": "RIVER_ESTUARY",
+        "river_or_canal": "Sông Soài Rạp / Vàm Cỏ",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "H. Gò Công Đông / Chợ Gạo",
+        "plus_code": "7P28CQ7F+G98",
+        "location_status": "NEARBY_LANDMARK",
+        "measured_parameters": "Salinity (g/l)",
+        "observed_days_count_v3": 12,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo đỉnh mặn 2 con nước/ngày + 7h00 trên nhánh Soài Rạp - Vàm Cỏ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.7125,
+          10.4152
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_SOAIRAP_RACHBANG",
+        "name": "Trạm Rạch Băng (Sông Soài Rạp / Vàm Cỏ)",
+        "station_type": "RIVER_ESTUARY",
+        "river_or_canal": "Sông Soài Rạp",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Bình Đông, TX. Gò Công",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Salinity (g/l), Water Level (m), Rainfall (mm)",
+        "observed_days_count_v3": 10,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mặn trên sông Soài Rạp và nội đồng cống Rạch Băng"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.444016,
+          10.332862
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_XUANHOA",
+        "name": "Trạm Cống Xuân Hòa (Sông Tiền & Nội đồng)",
+        "station_type": "RIVER_AND_GATE",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Xuân Đông / Bình Ninh, H. Chợ Gạo",
+        "plus_code": "7P288CMV+4JR",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Tide Peak/Trough (m), Salinity (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 48,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Trạm chuẩn thủy triều Sông Tiền (4 trị số đỉnh/chân mỗi ngày); cách biển ~42 km"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.366984,
+          10.352412
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_CVLACHONG",
+        "name": "Trạm Công viên Lạc Hồng / Thủ Khoa Huân (Mỹ Tho)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Tiền (Vàm Bảo Định)",
+        "project_zone": "Vùng Bảo Định / Mỹ Tho",
+        "admin_unit": "Phường 1, TP. Mỹ Tho",
+        "plus_code": "7P289928+XQ9",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Salinity (g/l), Water Level (m)",
+        "observed_days_count_v3": 40,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Cách cửa sông ~50 km; điểm kiểm soát mặn sát cửa rạch Bảo Định"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.3245,
+          10.3468
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_TRUONGCHINHTRI",
+        "name": "Trạm Cầu Trường Chính Trị (Bình Đức - Mỹ Tho)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Vùng Bảo Định / Châu Thành",
+        "admin_unit": "Xã Bình Đức, H. Châu Thành",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity (g/l)",
+        "observed_days_count_v3": 33,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Trạm quan trắc mặn cố định mùa khô của Đài KTTV trên sông Tiền"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.311047,
+          10.341162
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_CAUXOAIHOT",
+        "name": "Trạm Cầu Xoài Hột (Sông Tiền - Bình Đức)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Tiền / Rạch Xoài Hột",
+        "project_zone": "Vùng Bảo Định / ĐT.864",
+        "admin_unit": "Xã Bình Đức / Kim Sơn, H. Châu Thành",
+        "plus_code": "7P2888R6+FC7",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Salinity (g/l)",
+        "observed_days_count_v3": 10,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Tách biệt hoàn toàn với Cống Xoài Hột và Trạm Mỹ Tho"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.284438,
+          10.340563
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_NGUYENTANTHANH",
+        "name": "Trạm Cống Âu Nguyễn Tấn Thành (Vàm Kênh Nguyễn Tấn Thành)",
+        "station_type": "RIVER_AND_GATE",
+        "river_or_canal": "Sông Tiền / Kênh Nguyễn Tấn Thành",
+        "project_zone": "Tỉnh lộ 864",
+        "admin_unit": "Xã Song Thuận / Kim Sơn, H. Châu Thành",
+        "plus_code": "7P2887RM+6Q",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Salinity (g/l), Water Level (m), Rainfall (mm)",
+        "observed_days_count_v3": 2,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Ngưỡng kiểm soát mặn 0,5 g/l bảo vệ 128.000 ha và nhà máy nước Đồng Tâm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.2835,
+          10.3392
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_CAUKINHXANG",
+        "name": "Trạm Cầu Kinh Xáng (Song Thuận - Châu Thành)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Tiền / Kênh Nguyễn Tấn Thành",
+        "project_zone": "Tỉnh lộ 864",
+        "admin_unit": "Xã Song Thuận, H. Châu Thành",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity (g/l)",
+        "observed_days_count_v3": 5,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Điểm đo mặn mùa khô của Đài KTTV tại đầu kênh Nguyễn Tấn Thành"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.244484,
+          10.326713
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_CAUKIMSON",
+        "name": "Trạm Cầu Kim Sơn (Rạch Gầm - Châu Thành)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Tiền / Vàm Rạch Gầm",
+        "project_zone": "Tỉnh lộ 864",
+        "admin_unit": "Xã Kim Sơn, H. Châu Thành",
+        "plus_code": "7P2886GV+MQQ",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Salinity (g/l)",
+        "observed_days_count_v3": 4,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Điểm đo mặn mùa khô tại cửa Rạch Gầm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.207266,
+          10.322812
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_CAUPHUPHONG",
+        "name": "Trạm Cầu / Cống Phú Phong (Châu Thành)",
+        "station_type": "RIVER_AND_GATE",
+        "river_or_canal": "Sông Tiền / Rạch Phú Phong",
+        "project_zone": "Tỉnh lộ 864",
+        "admin_unit": "Xã Phú Phong, H. Châu Thành",
+        "plus_code": "7P2886F4+4WC",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Salinity (g/l), Water Level (m), Rainfall (mm)",
+        "observed_days_count_v3": 4,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Điểm đo mực nước, mưa hàng ngày và ranh mặn cực đại mùa khô 2024"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.150422,
+          10.309662
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_MUU",
+        "name": "Trạm Cống Mù U (ĐT.864 - Cai Lậy)",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Sông Năm Thôn / Rạch Mù U",
+        "project_zone": "Tỉnh lộ 864",
+        "admin_unit": "Xã Tam Bình / Ngũ Hiệp, H. Cai Lậy",
+        "plus_code": "7P288552+V57",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Rainfall (mm)",
+        "observed_days_count_v3": 0,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước đồng phía Tây & lượng mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.124,
+          10.3365
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_BARAI_MUOINEN",
+        "name": "Trạm Cống Mười Nén (Đông Ba Rài - Cai Lậy)",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Sông Ba Rài",
+        "project_zone": "Dự án Đông Ba Rài",
+        "admin_unit": "Xã Long Tiên, H. Cai Lậy",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Water Level (m), Rainfall (mm)",
+        "observed_days_count_v3": 0,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước đồng phía Tây (Đông Ba Rài) & mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.058328,
+          10.330488
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_BARAI_CAILA",
+        "name": "Trạm Cống Cái Lá (Tây Ba Rài - Cai Lậy)",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Sông Tiền / Rạch Cái Lá",
+        "project_zone": "Dự án Tây Ba Rài",
+        "admin_unit": "Xã Hiệp Đức, H. Cai Lậy",
+        "plus_code": "7P2883J5+58W",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Rainfall (mm)",
+        "observed_days_count_v3": 0,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước đồng phía Tây (Tây Ba Rài) & mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.155,
+          10.258
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_HAMLUONG_VAMMON",
+        "name": "Trạm Vàm Mơn (Sông Hàm Luông - Chợ Lách / Cai Lậy)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Hàm Luông",
+        "project_zone": "Liên tỉnh Bến Tre - Tiền Giang",
+        "admin_unit": "H. Chợ Lách (đối diện Ngũ Hiệp, Cai Lậy)",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity (g/l)",
+        "observed_days_count_v3": 7,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Trạm chỉ báo mặn từ sông Hàm Luông truyền qua nhánh Năm Thôn (ngưỡng 1,5–2,0 g/l)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.195,
+          10.312
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_BENDOTANPHU",
+        "name": "Trạm Bến đò Tân Phú (Sông Tiền - Châu Thành)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Liên tỉnh phía Nam sông Tiền",
+        "admin_unit": "Xã Tân Phú (đối diện Châu Thành)",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity (g/l)",
+        "observed_days_count_v3": 5,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Điểm đo mặn thực đo mùa khô 2024–2025 phía thượng lưu Phú Phong"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.9103,
+          10.2764
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_MYTHUAN",
+        "name": "Trạm Thủy văn Mỹ Thuận (Sông Tiền)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Thượng nguồn cầu Mỹ Thuận",
+        "admin_unit": "Tân Ngãi / Hòa Hưng (Cầu Mỹ Thuận)",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Water Level (m), Discharge (m3/s), Salinity (g/l)",
+        "observed_days_count_v3": 0,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Trạm thủy văn quốc gia kiểm soát biên thượng nguồn khu vực Tiền Giang – Đồng Tháp"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.248016,
+          10.80062
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "MRC_VN_019803",
+        "name": "Trạm MRC Tân Châu (Sông Tiền)",
+        "station_type": "MRC_WQ_STATION",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Biên thượng nguồn ĐBSCL",
+        "admin_unit": "TX. Tân Châu, An Giang (giáp Hồng Ngự, Đồng Tháp)",
+        "plus_code": "MRC_VN_019803",
+        "location_status": "EXACT_MRC_PORTAL",
+        "measured_parameters": "Electrical Conductivity EC (mS/m), Water Level (m)",
+        "observed_days_count_v3": 0,
+        "source_code": "MRC_PORTAL",
+        "notes": "Chuỗi EC lịch sử 1985–12/2023 (464 bản ghi trong CSDL hiện tại của nhóm)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.353,
+          10.359122
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "MRC_VN_019805",
+        "name": "Trạm MRC Mỹ Tho (Sông Tiền)",
+        "station_type": "MRC_WQ_STATION",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Vùng cửa sông Tiền",
+        "admin_unit": "TP. Mỹ Tho, Tiền Giang",
+        "plus_code": "MRC_VN_019805",
+        "location_status": "EXACT_MRC_PORTAL",
+        "measured_parameters": "Electrical Conductivity EC (mS/m), Water Level (m)",
+        "observed_days_count_v3": 0,
+        "source_code": "MRC_PORTAL",
+        "notes": "Chuỗi EC lịch sử 1985–12/2023 (463 bản ghi trong CSDL hiện tại của nhóm)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.548484,
+          10.300887
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_VAMGIONG",
+        "name": "Trạm Nội đồng Cống Vàm Giồng",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Vàm Giồng / Kênh 14",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Vĩnh Hựu, H. Gò Công Tây",
+        "plus_code": "7P288G2X+995",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 34,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước 7h00, biên độ dao động, độ mặn tại cống & cách cống 200m, mưa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.657922,
+          10.385387
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_GOCONG",
+        "name": "Trạm Nội đồng Cống Gò Công",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Gò Công",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Long Chánh / Bình Xuân, TX. Gò Công",
+        "plus_code": "7P289MP5+553",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn nội đồng và mưa tại cống đầu mối Gò Công"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.710484,
+          10.311063
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_LONGUONG",
+        "name": "Trạm Nội đồng Cống Long Uông",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Kênh Salisette / Rạch Long Uông",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Phước Trung, H. Gò Công Đông",
+        "plus_code": "7P288P66+C5H",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.775703,
+          10.359437
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_RACHBUN",
+        "name": "Trạm Nội đồng Cống Rạch Bùn",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Kênh Trần Văn Dõng",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Tân Điền, H. Gò Công Đông",
+        "plus_code": "7P289Q5G+Q7G",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.645641,
+          10.407787
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_RAMVE",
+        "name": "Trạm Nội đồng Cống Rầm Vé",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Rầm Vé",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Bình Xuân, TX. Gò Công",
+        "plus_code": "7P28CJ5W+476",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.565,
+          10.412
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_SO3ST",
+        "name": "Trạm Nội đồng Cống Số 3 (Sông Tra)",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Kiến / Sông Tra",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Đồng Sơn, H. Gò Công Tây",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 34,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa tại Cống lớn Số 3 Sông Tra"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.578,
+          10.418
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_SO4ST",
+        "name": "Trạm Nội đồng Cống Số 4 (Sông Tra)",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Hươu / Sông Tra",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Đồng Sơn, H. Gò Công Tây",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa tại Cống Số 4 Sông Tra"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.691891,
+          10.432513
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_VAMTHAP",
+        "name": "Trạm Nội đồng Cống Vàm Tháp",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Sơn Qui - Láng Nứa",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Tân Phước, H. Gò Công Đông",
+        "plus_code": "7P28CMMR+2Q2",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.737688,
+          10.437938
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_GIATHUAN",
+        "name": "Trạm Nội đồng Cống Gia Thuận",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Kênh Tổng Châu - Gia Thuận",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Gia Thuận, H. Gò Công Đông",
+        "plus_code": "7P28CPQQ+53",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Điểm thường xuyên có độ mặn nội đồng 0,06–0,38 g/l do sát sông Soài Rạp"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.661703,
+          10.311738
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_RACHGIA",
+        "name": "Trạm Nội đồng Cống Rạch Giá / Rạch Già",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Giá / Rạch Già",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Tân Trung / Phước Trung, Gò Công",
+        "plus_code": "7P288M66+MMW",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.779016,
+          10.291163
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_CONG862",
+        "name": "Trạm Nội đồng Cống 862 (Nam)",
+        "station_type": "CANAL_INTERIOR",
+        "river_or_canal": "Kênh ĐT.862",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Thạnh Trị / Tân Thành, Gò Công",
+        "plus_code": "7P287QRH+FJ6",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 7,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước 7h00, độ mặn và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.715,
+          10.335
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_CAUHL2",
+        "name": "Trạm Nội đồng Cầu Hương Lộ 2",
+        "station_type": "CANAL_INTERIOR",
+        "river_or_canal": "Kênh Hương Lộ 2",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "H. Gò Công Đông",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Water Level (m), Salinity (g/l)",
+        "observed_days_count_v3": 7,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước 7h00 và độ mặn nội đồng hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.779016,
+          10.291163
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_CAUTANTHANH",
+        "name": "Trạm Nội đồng Cầu Tân Thành",
+        "station_type": "CANAL_INTERIOR",
+        "river_or_canal": "Kênh Champeaux - Tân Thành",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Tân Thành, H. Gò Công Đông",
+        "plus_code": "7P287QRH+FJ6",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity (g/l)",
+        "observed_days_count_v3": 7,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước 7h00 và độ mặn nội đồng (thường ở mức 0,30 g/l)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.378,
+          10.3685
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_BD_GOCAT",
+        "name": "Trạm Nội đồng Cống Gò Cát",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Gò Cát",
+        "project_zone": "Dự án Bảo Định",
+        "admin_unit": "Phường 3 / Xã Mỹ Phong, TP. Mỹ Tho",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, trạng thái lấy/xả, độ mặn và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.344297,
+          10.376638
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_BD_BAODINH",
+        "name": "Trạm Nội đồng Cống Bảo Định",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Bảo Định",
+        "project_zone": "Dự án Bảo Định",
+        "admin_unit": "Phường 10 / Xã Đạo Thạnh, TP. Mỹ Tho",
+        "plus_code": "7P2898GV+MP3",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Cống đầu mối Bảo Định; đo biên độ mực nước, độ mặn và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.431812,
+          10.363937
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_BD_DANGHUNGPHUOC",
+        "name": "Trạm Nội đồng Đăng Hưng Phước",
+        "station_type": "CANAL_INTERIOR",
+        "river_or_canal": "Rạch Gò Cát - Hóc Lựu - Ông Văn",
+        "project_zone": "Dự án Bảo Định",
+        "admin_unit": "Xã Đăng Hưng Phước, H. Chợ Gạo",
+        "plus_code": "7P289C7J+HP",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.455078,
+          10.390587
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_BD_TANTHUANBINH",
+        "name": "Trạm Nội đồng Cống Tân Thuận Bình",
+        "station_type": "GATE_INTERIOR",
+        "river_or_canal": "Rạch Ông Văn - Tân Thuận Bình",
+        "project_zone": "Dự án Bảo Định",
+        "admin_unit": "Xã Tân Thuận Bình, H. Chợ Gạo",
+        "plus_code": "7P289FR4+62P",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, trạng thái xả, độ mặn 0m/200m và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.382641,
+          10.460787
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_BD_HOATINH",
+        "name": "Trạm Nội đồng Hòa Tịnh",
+        "station_type": "CANAL_INTERIOR",
+        "river_or_canal": "Rạch Bảo Định / Ông Đạo - Cổ Chi",
+        "project_zone": "Dự án Bảo Định",
+        "admin_unit": "Xã Hòa Tịnh, H. Chợ Gạo",
+        "plus_code": "7P28F96M+836",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.387047,
+          10.355662
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_BD_COCHI",
+        "name": "Trạm Nội đồng Cổ Chi",
+        "station_type": "CANAL_INTERIOR",
+        "river_or_canal": "Rạch Ông Đạo - Cổ Chi",
+        "project_zone": "Dự án Bảo Định",
+        "admin_unit": "Xã Tân Mỹ Chánh / Tân Hương",
+        "plus_code": "7P28994P+7R7",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Water Level (m), Salinity 0m & 200m (g/l), Rainfall (mm)",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Đo mực nước, độ mặn 0m/200m và mưa hàng ngày"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.855,
+          10.265
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "DT_WQ_TIEN_CHAUTHANH",
+        "name": "Điểm Quan trắc Sông Tiền - H. Châu Thành (Đồng Tháp)",
+        "station_type": "WQ_EC_SALINITY_SITE",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Vùng nuôi thủy sản Đồng Tháp",
+        "admin_unit": "Xã An Nhơn / An Hiệp, H. Châu Thành, Đồng Tháp",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Salinity (‰), EC (µS/cm), DO, pH, kH, NH4+, PO43-, COD, H2S",
+        "observed_days_count_v3": 0,
+        "source_code": "SNNMT_DONGTHAP_XANH",
+        "notes": "Điểm quan trắc cố định của Sở NN&MT Đồng Tháp & RIA2 trên sông Tiền"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.612,
+          10.198
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "DT_WQ_HAU_LAIVUNG",
+        "name": "Điểm Quan trắc Sông Hậu - H. Lai Vung (Đồng Tháp)",
+        "station_type": "WQ_EC_SALINITY_SITE",
+        "river_or_canal": "Sông Hậu",
+        "project_zone": "Vùng nuôi thủy sản Đồng Tháp",
+        "admin_unit": "Xã Phong Hòa / Định Hòa, H. Lai Vung, Đồng Tháp",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Salinity (‰), EC (µS/cm), DO, pH, kH, NH4+, PO43-, COD, H2S",
+        "observed_days_count_v3": 0,
+        "source_code": "SNNMT_DONGTHAP_XANH",
+        "notes": "Điểm quan trắc cố định của Sở NN&MT Đồng Tháp & RIA2 trên sông Hậu"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.528,
+          10.745
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "DT_WQ_TAMNONG_TCS1",
+        "name": "Điểm Quan trắc Kênh Tân Công Sính 1 & Kênh Phèn (Tam Nông)",
+        "station_type": "WQ_EC_SALINITY_SITE",
+        "river_or_canal": "Kênh Tân Công Sính 1 / Kênh Phèn",
+        "project_zone": "Vùng nuôi thủy sản Đồng Tháp",
+        "admin_unit": "H. Tam Nông, Đồng Tháp",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Salinity (‰), EC (µS/cm), DO, pH, kH, H2S, PO43-, COD",
+        "observed_days_count_v3": 0,
+        "source_code": "SNNMT_DONGTHAP_XANH",
+        "notes": "Ghi nhận độ mặn nội đồng 0,05–0,21 ‰ trong mùa khô 2024–2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.595,
+          10.432
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "DT_WQ_TIEN_CAOLANH",
+        "name": "Điểm Quan trắc Sông Tiền - Xã Tân Thuận Tây (TP. Cao Lãnh)",
+        "station_type": "WQ_EC_SALINITY_SITE",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Vùng nuôi cá tra Đồng Tháp (RIA2)",
+        "admin_unit": "Xã Tân Thuận Tây, TP. Cao Lãnh, Đồng Tháp",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "EC (µS/cm), Temp, pH, DO, Alkalinity, TAN, NO2-, PO43-, COD, TSS",
+        "observed_days_count_v3": 0,
+        "source_code": "RIA2_VIENTHUYSAN2",
+        "notes": "1 trong 10 trạm quan trắc môi trường vùng nuôi cá tra của Viện NCNT Thủy sản II (RIA2)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.335,
+          10.785
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "DT_WQ_TIEN_HONGNGU",
+        "name": "Điểm Quan trắc Sông Tiền - Xã Long Thuận & Phú Thuận B (Hồng Ngự)",
+        "station_type": "WQ_EC_SALINITY_SITE",
+        "river_or_canal": "Sông Tiền / Sông Sở Thượng",
+        "project_zone": "Vùng nuôi cá tra Đồng Tháp (RIA2)",
+        "admin_unit": "H. Hồng Ngự & TP. Hồng Ngự, Đồng Tháp",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "EC (µS/cm), Temp, pH, DO, Alkalinity, H2S, COD",
+        "observed_days_count_v3": 0,
+        "source_code": "RIA2_VIENTHUYSAN2",
+        "notes": "Trạm kiểm soát chất lượng nước đầu nguồn sông Tiền tại Đồng Tháp (RIA2 & Sở NN&MT)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.4852,
+          10.3245
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_HOADINH",
+        "name": "Trạm Bến đò Hòa Định (Sông Tiền - Chợ Gạo)",
+        "station_type": "RIVER_MAIN",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Dự án Gò Công / Bảo Định",
+        "admin_unit": "Xã Hòa Định, H. Chợ Gạo",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 26,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Trạm đo mặn mùa khô cố định của KTCTTL Tiền Giang (35 km)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.3912,
+          10.3458
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_TANMYCHANH",
+        "name": "Trạm Vàm Tân Mỹ Chánh (Sông Tiền - Mỹ Tho)",
+        "station_type": "RIVER_MAIN",
+        "river_or_canal": "Sông Tiền",
+        "project_zone": "Dự án Bảo Định",
+        "admin_unit": "Xã Tân Mỹ Chánh, TP. Mỹ Tho",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 27,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Trạm đo mặn mùa khô cố định của KTCTTL Tiền Giang (44 km)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.132,
+          10.3045
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_TIEN_THOILOC",
+        "name": "Trạm Phà Thới Lộc (Sông Tiền / Năm Thôn - Cai Lậy)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Tiền (Nhánh Năm Thôn)",
+        "project_zone": "Tỉnh lộ 864 / Cai Lậy",
+        "admin_unit": "Xã Ngũ Hiệp / Tam Bình, H. Cai Lậy",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 1,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Điểm kiểm soát mặn mùa khô 2024 tại Cai Lậy (đỉnh 11/03/2024: 0,25 g/l)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.548,
+          10.4055
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_GC_SO1ST",
+        "name": "Trạm Cống Số 1 (Sông Tra / Soài Rạp)",
+        "station_type": "RIVER_AND_GATE",
+        "river_or_canal": "Sông Soài Rạp / Sông Tra",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Đồng Sơn, H. Gò Công Tây",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 20,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Trạm đo mặn mùa khô cố định của KTCTTL Tiền Giang (55 km)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.461188,
+          10.352688
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_CHOGAO_CAUCHOGAO",
+        "name": "Trạm Cầu Chợ Gạo (Kênh Chợ Gạo)",
+        "station_type": "RIVER_MAIN",
+        "river_or_canal": "Kênh Chợ Gạo",
+        "project_zone": "Dự án Gò Công / Bảo Định",
+        "admin_unit": "TT. Chợ Gạo, H. Chợ Gạo",
+        "plus_code": "7P289F36+3FC",
+        "location_status": "EXACT_PLUS_CODE",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 20,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Trạm đo mặn mùa khô cố định của KTCTTL Tiền Giang (60 km)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.4325,
+          10.3362
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_CHOGAO_XUANDONG",
+        "name": "Trạm Bến đò Xuân Đông (Kênh Chợ Gạo / Sông Tiền)",
+        "station_type": "RIVER_MAIN",
+        "river_or_canal": "Kênh Chợ Gạo / Sông Tiền",
+        "project_zone": "Dự án Gò Công",
+        "admin_unit": "Xã Xuân Đông, H. Chợ Gạo",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 25,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Trạm đo mặn mùa khô cố định của KTCTTL Tiền Giang (66 km)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.368,
+          10.2285
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_HAMLUONG_MYHOA",
+        "name": "Trạm Mỹ Hóa (Sông Hàm Luông - Bến Tre)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Hàm Luông",
+        "project_zone": "Biên đối chứng Sông Hàm Luông",
+        "admin_unit": "TP. Bến Tre (45 km)",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 26,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Trạm biên đối chứng trong bảng Thông báo mặn KTCTTL Tiền Giang"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.285,
+          10.264
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_HAMLUONG_ANHIEP",
+        "name": "Trạm An Hiệp (Sông Hàm Luông - Châu Thành BT)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Hàm Luông",
+        "project_zone": "Biên đối chứng Sông Hàm Luông",
+        "admin_unit": "H. Châu Thành, Bến Tre (55 km)",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 26,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Trạm biên đối chứng trong bảng Thông báo mặn KTCTTL Tiền Giang"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.131,
+          10.2625
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_HAMLUONG_CHOLACH",
+        "name": "Trạm Chợ Lách (Sông Hàm Luông / Cổ Chiên)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Hàm Luông",
+        "project_zone": "Biên thượng lưu Cai Lậy - Chợ Lách",
+        "admin_unit": "TT. Chợ Lách",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 2,
+        "source_code": "KTTV_DONGTHAP_TIENGIANG",
+        "notes": "Kiểm soát mặn nhánh Hàm Luông - Năm Thôn sang vùng sầu riêng Cai Lậy"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.4082,
+          10.5385
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_VAMCO_CAUTANAN",
+        "name": "Trạm Cầu Tân An (Sông Vàm Cỏ Tây)",
+        "station_type": "RIVER_HYDRO_MET",
+        "river_or_canal": "Sông Vàm Cỏ Tây",
+        "project_zone": "Biên đối chứng Vàm Cỏ Tây - Bảo Định",
+        "admin_unit": "TP. Tân An (75 km)",
+        "plus_code": "LANDMARK_REF",
+        "location_status": "LANDMARK_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l)",
+        "observed_days_count_v3": 26,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Trạm biên đối chứng phía Bắc kênh Bảo Định"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.632,
+          10.432
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_SONGTRA_SONGCUI",
+        "name": "Trạm Cống Sông Cui (Sông Tra - Giáp Gò Công)",
+        "station_type": "RIVER_AND_GATE",
+        "river_or_canal": "Sông Tra (Vàm Cỏ)",
+        "project_zone": "Biên vận hành Bắc Gò Công (Mục V)",
+        "admin_unit": "Giáp Gò Công Tây (36 km)",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l), Gate Status",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Công trình biên theo dõi tại Mục V báo cáo vận hành KTCTTL Tiền Giang"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.591,
+          10.425
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_SONGTRA_TAMVU",
+        "name": "Trạm Cống Tầm Vu (Sông Tra - Giáp Gò Công)",
+        "station_type": "RIVER_AND_GATE",
+        "river_or_canal": "Sông Tra (Vàm Cỏ)",
+        "project_zone": "Biên vận hành Bắc Gò Công (Mục V)",
+        "admin_unit": "Giáp Gò Công Tây (43 km)",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l), Gate Status",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Công trình biên theo dõi tại Mục V báo cáo vận hành KTCTTL Tiền Giang"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.382,
+          10.491
+        ]
+      },
+      "properties": {
+        "feature_class": "MONITORING_STATION",
+        "code": "ST_VAMCO_RACHCHANH",
+        "name": "Trạm Cống Âu Rạch Chanh (Vàm Cỏ Tây - Chợ Gạo)",
+        "station_type": "RIVER_AND_GATE",
+        "river_or_canal": "Sông Vàm Cỏ Tây / Kênh Rạch Chanh",
+        "project_zone": "Biên vận hành Bảo Định - Chợ Gạo (Mục V)",
+        "admin_unit": "Giáp Chợ Gạo (54 km)",
+        "plus_code": "COMMUNE_REF",
+        "location_status": "COMMUNE_REPORTED",
+        "measured_parameters": "Salinity Daily Max (g/l), Gate Status",
+        "observed_days_count_v3": 8,
+        "source_code": "KTCTTL_TIENGIANG",
+        "notes": "Công trình biên theo dõi tại Mục V báo cáo vận hành KTCTTL Tiền Giang"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.284438,
+          10.340563
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_000",
+        "name": "Cống âu Nguyễn Tấn Thành",
+        "category": "CỐNG LỚN (CỐNG ÂU THUYỀN)",
+        "project_zone": "Hệ thống cống ĐT.864 & Nguyễn Tấn Thành",
+        "commune_district": "Xã Song Thuận & Kim Sơn - huyện Châu Thành",
+        "gate_type": "Hở + Âu thuyền",
+        "bay_count": 2,
+        "aperture_width_m": "40,0 + 12,0 (Âu)",
+        "sill_elevation_m": -5.5,
+        "service_area_ha": 128000.0,
+        "year_built": "2022-2024",
+        "plus_code": "7P2887RM+6Q",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, trữ ngọt, kiểm soát triều cường bảo vệ 128.000 ha và cấp nước sinh hoạt cho 800.000 dân (nhà máy nước Đồng Tâm); kết hợp giao thông thủy",
+        "source_code": "BQL_DT864_NGUYENTANTHANH",
+        "source_url": "https://nhandan.vn/ban-giao-dua-vao-su-dung-cong-au-nguyen-tan-thanh-post843368.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.444016,
+          10.332862
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_001",
+        "name": "Xuân Hòa",
+        "category": "CỐNG LỚN",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Xuân Đông-huyện Chợ Gạo",
+        "gate_type": "Hở",
+        "bay_count": 4,
+        "aperture_width_m": "8,0",
+        "sill_elevation_m": -3.5,
+        "service_area_ha": 34000.0,
+        "year_built": "1978",
+        "plus_code": "7P288CMV+4JR",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.344297,
+          10.376638
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_002",
+        "name": "Bảo Định",
+        "category": "CỐNG LỚN",
+        "project_zone": "Dự án Bảo Định",
+        "commune_district": "Phường 10-xã Đạo Thạnh-Tp Mỹ Tho",
+        "gate_type": "Hở",
+        "bay_count": 3,
+        "aperture_width_m": "10,5",
+        "sill_elevation_m": -4.2,
+        "service_area_ha": 10300.0,
+        "year_built": "2004",
+        "plus_code": "7P2898GV+MP3",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.244484,
+          10.326713
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_003",
+        "name": "Rạch Gầm",
+        "category": "CỐNG LỚN",
+        "project_zone": "Hệ thống cống ĐT.864",
+        "commune_district": "Kim Sơn-huyện Châu Thành",
+        "gate_type": "Hở",
+        "bay_count": 2,
+        "aperture_width_m": "25,0",
+        "sill_elevation_m": -5.5,
+        "service_area_ha": 10000.0,
+        "year_built": "2021",
+        "plus_code": "7P2886GV+MQQ",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.207266,
+          10.322812
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_004",
+        "name": "Phú Phong",
+        "category": "CỐNG LỚN",
+        "project_zone": "Hệ thống cống ĐT.864",
+        "commune_district": "Phú Phong-huyện Châu Thành",
+        "gate_type": "Hở",
+        "bay_count": 2,
+        "aperture_width_m": "25,0",
+        "sill_elevation_m": -5.5,
+        "service_area_ha": 10000.0,
+        "year_built": "2021",
+        "plus_code": "7P2886F4+4WC",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.548484,
+          10.300887
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_005",
+        "name": "Vàm Giồng",
+        "category": "CỐNG VỪA",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Vĩnh Hựu-huyện Gò Công Tây",
+        "gate_type": "Hở",
+        "bay_count": 2,
+        "aperture_width_m": "8,0",
+        "sill_elevation_m": -3.5,
+        "service_area_ha": 17000.0,
+        "year_built": "1989",
+        "plus_code": "7P288G2X+995",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.657922,
+          10.385387
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_006",
+        "name": "Gò Công",
+        "category": "CỐNG VỪA",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Long Chánh-TX Gò Công",
+        "gate_type": "Hở",
+        "bay_count": 2,
+        "aperture_width_m": "8,0",
+        "sill_elevation_m": -3.5,
+        "service_area_ha": 6000.0,
+        "year_built": "1988",
+        "plus_code": "7P289MP5+553",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.444016,
+          10.332862
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_008",
+        "name": "Cống Thủ Ngữ",
+        "category": "CỐNG VỪA",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Xuân Đông-huyện Chợ Gạo",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "10,0",
+        "sill_elevation_m": -3.2,
+        "service_area_ha": 368.0,
+        "year_built": "2018",
+        "plus_code": "7P288CMV+4JR",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.058328,
+          10.330488
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_016",
+        "name": "Cái Lá",
+        "category": "CỐNG VỪA",
+        "project_zone": "Dự án Đông - Tây Ba Rài (Cai Lậy)",
+        "commune_district": "Xã Hiệp Đức-huyện Cai Lậy",
+        "gate_type": "Hở",
+        "bay_count": 2,
+        "aperture_width_m": "7,5",
+        "sill_elevation_m": -3.3,
+        "service_area_ha": 223.0,
+        "year_built": "2017-2018",
+        "plus_code": "7P2883J5+58W",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.308578,
+          10.344488
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_020",
+        "name": "Xoài Hột",
+        "category": "CỐNG VỪA",
+        "project_zone": "Dự án Bảo Định",
+        "commune_district": "Xã Bình Đức - huyện Châu Thành",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "10,0",
+        "sill_elevation_m": -3.5,
+        "service_area_ha": 7300.0,
+        "year_built": "2018",
+        "plus_code": "7P2888V5+QCW",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.135828,
+          10.306712
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_021",
+        "name": "Cái Sơn",
+        "category": "CỐNG VỪA",
+        "project_zone": "Hệ thống cống ĐT.864",
+        "commune_district": "Xã Tam Bình,-huyện Cai Lậy",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "10,0",
+        "sill_elevation_m": -2.5,
+        "service_area_ha": 450.0,
+        "year_built": "2022",
+        "plus_code": "7P28844P+M8P",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.188953,
+          10.316487
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_022",
+        "name": "Cây Còng",
+        "category": "CỐNG VỪA",
+        "project_zone": "Hệ thống cống ĐT.864",
+        "commune_district": "Xã Tam Bình,-huyện Cai Lậy",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "10,0",
+        "sill_elevation_m": -3.0,
+        "service_area_ha": 580.0,
+        "year_built": "2022",
+        "plus_code": "7P28858Q+HHW",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.150422,
+          10.309662
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_023",
+        "name": "Mù U",
+        "category": "CỐNG VỪA",
+        "project_zone": "Hệ thống cống ĐT.864",
+        "commune_district": "Xã Tam Bình,-huyện Cai Lậy",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "20,0",
+        "sill_elevation_m": -4.5,
+        "service_area_ha": 2280.0,
+        "year_built": "2022",
+        "plus_code": "7P288552+V57",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.173141,
+          10.316137
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_024",
+        "name": "Hai Tân",
+        "category": "CỐNG VỪA",
+        "project_zone": "Hệ thống cống ĐT.864",
+        "commune_district": "Xã Tam Bình,-huyện Cai Lậy",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "10,0",
+        "sill_elevation_m": -3.0,
+        "service_area_ha": 1950.0,
+        "year_built": "2022",
+        "plus_code": "7P28858F+F72",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.455078,
+          10.390587
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_071",
+        "name": "Tân Thuận Bình",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Bảo Định",
+        "commune_district": "Xã Tân Thuận Bình - huyện Chợ Gạo",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "5,5",
+        "sill_elevation_m": -3.2,
+        "service_area_ha": 1700.0,
+        "year_built": "2008",
+        "plus_code": "7P289FR4+62P",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.710484,
+          10.311063
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_092",
+        "name": "Long Uông",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Phước Trung - huyện Gò Công Đông",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "8,0",
+        "sill_elevation_m": -3.5,
+        "service_area_ha": 6000.0,
+        "year_built": "1989",
+        "plus_code": "7P288P66+C5H",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.691891,
+          10.432513
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_093",
+        "name": "Vàm Tháp",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Tân Phước-huyện Gò Công Đông",
+        "gate_type": "Hở",
+        "bay_count": 2,
+        "aperture_width_m": "4,5",
+        "sill_elevation_m": -2.7,
+        "service_area_ha": 2000.0,
+        "year_built": "1998",
+        "plus_code": "7P28CMMR+2Q2",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.736828,
+          10.275938
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_094",
+        "name": "Vàm Kênh",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Tân Thành-huyện Gò Công Đông",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "7,5",
+        "sill_elevation_m": -2.5,
+        "service_area_ha": 2000.0,
+        "year_built": "2018",
+        "plus_code": "7P287PGP+9PG",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.775703,
+          10.359437
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_095",
+        "name": "Rạch Bùn mới",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Tân Điền-huyện Gò Công Đông",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "7,5",
+        "sill_elevation_m": -2.5,
+        "service_area_ha": 2500.0,
+        "year_built": "2011",
+        "plus_code": "7P289Q5G+Q7G",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.737688,
+          10.437938
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_097",
+        "name": "Gia Thuận",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Gia Thuận-huyện Gò Công Đông",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "5,5",
+        "sill_elevation_m": -2.6,
+        "service_area_ha": 1200.0,
+        "year_built": "1997",
+        "plus_code": "7P28CPQQ+53",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.645641,
+          10.407787
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_098",
+        "name": "Rầm Vé",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Bình Xuân-TX Gò Công",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "5,5",
+        "sill_elevation_m": -2.2,
+        "service_area_ha": 850.0,
+        "year_built": "1996",
+        "plus_code": "7P28CJ5W+476",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.654422,
+          10.280388
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_099",
+        "name": "Long Hải",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Long Bình-huyện Gò Công Tây",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "5,0",
+        "sill_elevation_m": -2.1,
+        "service_area_ha": 820.0,
+        "year_built": "1995",
+        "plus_code": "7P287MJ3+5Q3",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.661703,
+          10.311738
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_101",
+        "name": "Rạch Già",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Phước Trung-huyện Gò Công Đông",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "4,5",
+        "sill_elevation_m": -2.0,
+        "service_area_ha": 750.0,
+        "year_built": "1993",
+        "plus_code": "7P288M66+MMW",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.779016,
+          10.291163
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_114",
+        "name": "Tân Thành",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Tân Thành-huyện Gò Công Đông",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "2,0",
+        "sill_elevation_m": -1.5,
+        "service_area_ha": 400.0,
+        "year_built": "1999",
+        "plus_code": "7P287QRH+FJ6",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.746266,
+          10.272612
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_140",
+        "name": "Rạch Gốc",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Tân Thành-huyện Gò Công Đông",
+        "gate_type": "Hộp",
+        "bay_count": 1,
+        "aperture_width_m": "3,0",
+        "sill_elevation_m": -2.5,
+        "service_area_ha": 1000.0,
+        "year_built": "2018",
+        "plus_code": "7P287PFW+2GR",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.779016,
+          10.291163
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_157",
+        "name": "Cống 862",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Ngọt hóa Gò Công",
+        "commune_district": "Xã Thạnh Trị-huyện Gò Công Tây",
+        "gate_type": "Hở",
+        "bay_count": 2,
+        "aperture_width_m": "1,8x2,5",
+        "sill_elevation_m": -2.5,
+        "service_area_ha": 850.0,
+        "year_built": "1993",
+        "plus_code": "7P287QRH+FJ6",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.663078,
+          10.254012
+        ]
+      },
+      "properties": {
+        "feature_class": "IRRIGATION_GATE",
+        "code": "GATE_TG_174",
+        "name": "Rạch Mương",
+        "category": "CỐNG NHỎ",
+        "project_zone": "Dự án Phú Thạnh - Phú Đông",
+        "commune_district": "Phú Thạnh-huyện Tân Phú Đông",
+        "gate_type": "Hở",
+        "bay_count": 1,
+        "aperture_width_m": "4,5",
+        "sill_elevation_m": -2.75,
+        "service_area_ha": 1500.0,
+        "year_built": "2000",
+        "plus_code": "7P287M37+J64",
+        "location_status": "EXACT_PLUS_CODE",
+        "function_desc": "Ngăn mặn, lấy ngọt, tiêu úng, điều tiết mực nước nội đồng theo QĐ 12/2023/QĐ-UBND & QĐ 110/2026/QĐ-UBND",
+        "source_code": "UBND_TIENGIANG_QD12_2023",
+        "source_url": "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Quyet-dinh-12-2023-QD-UBND-sua-doi-phan-cap-quan-ly-khai-thac-bao-ve-cong-trinh-thuy-loi-Tien-Giang-572905.aspx"
+      }
+    }
+  ]
+}
