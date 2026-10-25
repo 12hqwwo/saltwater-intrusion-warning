@@ -51,7 +51,7 @@ test('river direction, color and bounded speed preserve illustrative seasonal fl
   assert.equal(saline.direction, -1); assert.equal(saline.color, '#f43f5e');
   assert.equal(saline.speed, fresh.speed / 2);
   assert.equal(riverMotion({ flow_velocity_factor: 999 }).speed, 33);
-  assert.equal(RIVER_PARTICLE_COUNT, 220);
+  assert.ok(RIVER_PARTICLE_COUNT >= 45 && RIVER_PARTICLE_COUNT <= 60);
   assert.equal(boundedDelta(null, 1000), 0);
   assert.equal(boundedDelta(1000, 1016), 0.016);
   assert.equal(boundedDelta(1000, 999), 0);
@@ -62,7 +62,7 @@ function harness() {
   const callbacks = new Map(), listeners = new Map(); let next = 1;
   const context = () => ({ strokes: 0, clears: 0, transform: null, radii: [],
     setTransform(...args) { this.transform = args; }, clearRect() { this.clears++; },
-    beginPath() {}, moveTo() {}, lineTo() {}, stroke() { this.strokes++; }, arc(x, y, radius) { this.radii.push(radius); }, fill() {},
+    beginPath() { this.path = []; }, moveTo(...p) { this.path.push(p); }, lineTo(...p) { this.path.push(p); }, stroke() { this.strokes++; this.lastPath = this.path; }, arc(x, y, radius) { this.radii.push(radius); }, fill() {},
   });
   const riverContext = context(), windContext = context();
   const canvas = ctx => ({ getContext: () => ctx, getBoundingClientRect: () => ({ width: 800, height: 600 }) });
@@ -85,7 +85,7 @@ test('separate DPR canvases render both trails, honor toggles and cancel RAF on 
   const original = structuredClone(h.frame);
   h.engine.setFrame(h.frame); h.engine.start(); h.tick(0); h.tick(16);
   assert.ok(h.riverContext.strokes > 0); assert.ok(h.windContext.strokes > 0);
-  assert.equal(h.riverContext.radii.at(-1), 0.7);
+  assert.equal(h.riverContext.radii.length, 0, 'river streaks have no circular heads');
   assert.equal(h.windContext.radii.at(-1), 0.45);
   h.engine.setVisible({ wind: false }); const windStrokes = h.windContext.strokes;
   h.tick(32); assert.equal(h.windContext.strokes, windStrokes);
@@ -93,6 +93,18 @@ test('separate DPR canvases render both trails, honor toggles and cancel RAF on 
   h.engine.setVisible({ river: true }); assert.equal(h.callbacks.size, 1);
   h.engine.destroy(); assert.equal(h.callbacks.size, 0); assert.equal(h.listeners.size, 0);
   assert.deepEqual(h.frame, original);
+});
+
+test('water current uses sparse white 10–16 pixel streaks without round heads', () => {
+  const h = harness(); h.engine.setFrame(h.frame); h.engine.start(); h.tick(0);
+  assert.equal(h.riverContext.strokes, RIVER_PARTICLE_COUNT);
+  const points = h.riverContext.lastPath;
+  const length = Math.hypot(points.at(-1)[0] - points[0][0], points.at(-1)[1] - points[0][1]);
+  assert.ok(length >= 10 && length <= 16);
+  assert.equal(h.riverContext.lineWidth, 2);
+  assert.equal(h.riverContext.strokeStyle, 'rgba(255,255,255,0.75)');
+  assert.equal(h.riverContext.radii.length, 0);
+  h.engine.destroy();
 });
 
 test('hidden/reduced-motion/moving maps stop trails and resume without a large time step', () => {
@@ -129,8 +141,8 @@ test('canal particles require explicit selection and reset on a new frame', () =
   // Intake preview also needs a visible river path in the current map frame.
   h.frame.river_segments = [{ geometry: { type: 'LineString', coordinates: [[0, 0], [800, 0]] }, properties: {} }];
   h.engine.setFrame(h.frame); h.engine.setIntakeGate('G1'); h.tick(32); h.tick(48);
-  assert.equal(h.riverContext.strokes, 228, '220 river and 8 explicitly selected canal trails');
+  assert.equal(h.riverContext.strokes, 2 * RIVER_PARTICLE_COUNT + 8, 'river streaks and 8 explicitly selected canal trails');
   h.engine.setFrame(h.frame); h.tick(64); h.tick(80);
-  assert.equal(h.riverContext.strokes, 448, 'new frame clears preview: only 220 river trails');
+  assert.equal(h.riverContext.strokes, 4 * RIVER_PARTICLE_COUNT + 8, 'new frame clears the selected canal preview');
   h.engine.setFrame(null); assert.equal(h.callbacks.size, 0); h.engine.destroy();
 });

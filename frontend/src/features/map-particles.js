@@ -1,4 +1,4 @@
-export const RIVER_PARTICLE_COUNT = 220;
+export const RIVER_PARTICLE_COUNT = 54;
 export const MAX_PARTICLE_DT = 0.05;
 export const WIND_TRAIL_POINTS = 34;
 export const RIVER_TRAIL_POINTS = 16;
@@ -86,7 +86,10 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
     }
     riverPath = pathMetrics(points);
     spans.forEach(span => { span.end = riverPath.distances[span.endIndex]; });
-    riverParticles = Array.from({ length: RIVER_PARTICLE_COUNT }, () => ({ distance: random() * riverPath.length, life: random() * 5, trail: [] }));
+    riverParticles = Array.from({ length: RIVER_PARTICLE_COUNT }, (_, index) => ({
+      distance: (index + random()) / RIVER_PARTICLE_COUNT * riverPath.length,
+      length: 10 + random() * 6,
+    }));
     const gate = frame?.gates?.find(item => item.gate_code === intakeGate);
     canalPaths = gate ? canals.filter(feature => feature.properties?.gate_code === intakeGate || gate.canal_ids?.includes(feature.properties?.id ?? feature.id))
       .map(feature => pathMetrics(projectPoints(feature.geometry.coordinates))).filter(path => path.length > 0) : [];
@@ -126,12 +129,18 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
     for (const particle of riverParticles) {
       const span = spans.find(item => particle.distance <= item.end) || spans.at(-1);
       const motion = riverMotion(span?.properties);
-      particle.distance += motion.direction * motion.speed * dt; particle.life += dt;
-      if (particle.distance < 0 || particle.distance > riverPath.length || particle.life > 6) {
-        particle.distance = random() * riverPath.length; particle.life = 0; particle.trail = [];
-      }
-      const trail = appendTrailPoint(particle.trail, atDistance(riverPath, particle.distance), RIVER_TRAIL_POINTS);
-      comet(riverContext, trail, motion.color, 0.85);
+      particle.distance = (particle.distance + motion.direction * motion.speed * dt + riverPath.length) % riverPath.length;
+      // Sample a 10–16 CSS-pixel streak along the path, without a glowing dot head.
+      const tail = Math.max(0, Math.min(riverPath.length, particle.distance - motion.direction * particle.length));
+      const samples = Math.max(1, Math.ceil(Math.abs(particle.distance - tail) / 2));
+      riverContext.strokeStyle = 'rgba(255,255,255,0.75)';
+      riverContext.globalAlpha = 1;
+      riverContext.lineWidth = 2;
+      riverContext.lineCap = riverContext.lineJoin = 'round';
+      riverContext.beginPath();
+      riverContext.moveTo(...atDistance(riverPath, tail));
+      for (let i = 1; i <= samples; i++) riverContext.lineTo(...atDistance(riverPath, tail + (particle.distance - tail) * i / samples));
+      riverContext.stroke();
     }
     for (const particle of intakeParticles) {
       particle.distance += 20 * dt;

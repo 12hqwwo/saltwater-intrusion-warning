@@ -1,4 +1,4 @@
-/* Phase 3 map viewport: compact controls, atmospheric canvas, and a shared timeline dock. */
+/* Map viewport: compact controls, atmospheric canvas, and a shared timeline dock. */
 .visually-hidden { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important; }
 #observations .map-layout { display:grid; grid-template-columns:minmax(0,1fr); align-items:start; gap:14px; }
 #observations .map-layout.stations-open { grid-template-columns:210px minmax(0,1fr); }
@@ -253,4 +253,63 @@
   .simulation-timeline .timeline-jumps button { font-size:7px; }
   .simulation-timeline .timeline-status { font-size:7px; }
   .map-legend-control { right:12px; }
+}
+
+/* Unified cartographic control deck: reserve layout space instead of floating rows. */
+.windy-map-panel .map-toolbar { position:relative; inset:auto; min-height:54px; box-sizing:border-box; flex-wrap:wrap; gap:10px 16px; padding:10px 14px; background:#102430; border-bottom:1px solid #ffffff20; pointer-events:auto; }
+.map-toolbar .simulation-hud { position:relative; inset:auto; flex:1 1 auto; max-width:100%; padding:0; margin:0; gap:6px; border:0; border-radius:0; background:none; box-shadow:none; backdrop-filter:none; }
+.map-toolbar .map-header-actions { flex:0 1 auto; display:flex; align-items:center; flex-wrap:wrap; width:auto; max-width:100%; gap:6px; }
+.map-toolbar .map-station-count { display:inline-flex; align-items:center; min-height:30px; padding:0 9px; border:1px solid #ffffff26; border-radius:7px; font-size:12px; font-weight:600; color:#f8fafc; background:#ffffff08; white-space:nowrap; }
+.map-toolbar :is(button,select) { min-height:34px; height:34px; box-sizing:border-box; font-size:12px; border-radius:7px; }
+.map-toolbar .simulation-units label { font-size:12px; min-height:34px; box-sizing:border-box; padding:7px 10px; }
+.map-toolbar .simulation-units small { font-size:10px; }
+.map-toolbar .crop-preset select { width:190px; }
+.map-toolbar .threshold-popover { top:calc(100% + 12px); left:0; z-index:20; max-width:calc(100vw - 64px); }
+.map-water-legend { top:calc(var(--map-header-height, 100px) + 14px); left:16px; font-size:11px; color:#f1f5f9; background:#0f172ae0; border:1px solid #ffffff38; padding:7px 10px; border-radius:8px; }
+.map-water-legend small { font-size:10px; color:#d2e2eb; }
+.simulation-gate-card, .simulation-river-tooltip, .forecast-map-banner { top:calc(var(--map-header-height, 100px) + 56px); }
+.simulation-gate-card { max-height:calc(100% - var(--map-header-height, 100px) - var(--timeline-height) - 74px); }
+.map-scene:has(.forecast-map-banner:not([hidden])) .simulation-gate-card { top:calc(var(--map-header-height, 100px) + 140px); max-height:calc(100% - var(--map-header-height, 100px) - var(--timeline-height) - 158px); }
+/* Two rows: month/play/speed/slider, followed by profile tools and quick jumps. */
+.simulation-timeline { display:grid; grid-template-columns:104px minmax(0,1fr); grid-template-rows:34px 34px; gap:8px 12px; padding:12px 14px; background:#0c202eee; }
+.simulation-timeline .timeline-banner, .simulation-timeline[data-profile-expanded=true] .timeline-banner { grid-row:1; grid-column:1; }
+.simulation-timeline .timeline-month > strong { display:flex; align-items:center; justify-content:center; height:34px; font-size:19px; font-variant-numeric:tabular-nums; letter-spacing:0; line-height:1; border:1px solid #ffffff26; border-radius:7px; background:#ffffff08; }
+.simulation-timeline .timeline-controls, .simulation-timeline[data-profile-expanded=true] .timeline-controls { grid-row:1; grid-column:2; gap:10px; }
+.simulation-timeline .timeline-controls > button, .simulation-timeline .timeline-controls #simulationPlay { height:34px; min-width:108px; width:auto; font-size:12px; padding:5px 10px; }
+.simulation-timeline #simulationPlay::before { content:none; }
+.simulation-timeline .timeline-speed { gap:6px; font-size:12px; color:#dbe9ef; }
+.simulation-timeline .timeline-speed select { height:34px; font-size:12px; padding:5px 8px; }
+.simulation-timeline .timeline-controls input[type=range] { min-width:40px; }
+.timeline-secondary { grid-column:1 / -1; grid-row:2; display:flex; align-items:center; flex-wrap:nowrap; gap:12px; min-width:0; }
+.timeline-secondary .profile-dock-heading { display:flex; flex:0 1 auto; min-width:0; gap:8px; }
+.timeline-secondary .profile-dock-title { display:none; }
+.windy-map-panel #simulationProfileToggle { height:34px; padding:5px 10px; font-size:12px; border-radius:7px; white-space:nowrap; }
+.timeline-secondary .profile-gate-picker { display:block; flex:0 1 190px; min-width:100px; }
+.timeline-secondary .profile-gate-picker select { height:34px; font-size:12px; }
+.simulation-timeline .timeline-jumps, .simulation-timeline[data-profile-expanded=true] .timeline-jumps { display:flex; flex:1; grid-area:auto; margin:0; gap:6px; min-width:0; }
+.simulation-timeline .timeline-jumps button { min-height:34px; height:34px; font-size:11px; padding:5px 9px; border-radius:7px; }
+.simulation-timeline .timeline-status { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.simulation-timeline .timeline-status.is-error { width:auto; height:auto; clip-path:none; }
+.simulation-timeline #simulationProfilePanel { grid-column:1 / -1; grid-row:3; }
+.simulation-timeline[data-profile-expanded=true] { grid-template-rows:34px 34px auto; }
+@media (max-width:700px) {
+  .windy-map-panel .map-toolbar { padding:10px; gap:8px; }
+  .map-toolbar .simulation-hud { gap:5px; }
+  .map-toolbar .map-header-actions { width:100%; }
+  .map-toolbar .map-basemap-picker { flex:1; }
+  .map-toolbar .map-basemap-picker select { width:100%; font-size:11px; }
+  .map-toolbar .crop-preset select { width:165px; font-size:11px; }
+  .simulation-timeline { grid-template-columns:86px minmax(0,1fr); padding:10px; gap:8px; }
+  .simulation-timeline .timeline-month > strong { font-size:16px; }
+  .simulation-timeline .timeline-controls { gap:6px; }
+  .simulation-timeline .timeline-controls #simulationPlay { min-width:34px; width:34px; padding:0; font-size:0; }
+  .simulation-timeline #simulationPlay::before { content:'▶'; font-size:13px; }
+  .simulation-timeline #simulationPlay[aria-pressed=true]::before { content:'⏸'; }
+  .simulation-timeline .timeline-speed { font-size:0; gap:0; }
+  .simulation-timeline .timeline-speed select { font-size:12px; }
+  .timeline-secondary { overflow-x:auto; gap:8px; }
+  .timeline-secondary .profile-dock-heading { flex:none; }
+  .timeline-secondary .profile-gate-picker { flex:none; width:145px; }
+  .timeline-secondary .timeline-jumps { flex:none; overflow:visible; }
+  .windy-map-panel #simulationProfileToggle, .simulation-timeline .timeline-jumps button { font-size:11px; }
 }

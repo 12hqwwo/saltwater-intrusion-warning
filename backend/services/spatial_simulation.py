@@ -17,7 +17,11 @@ ROOT = Path(__file__).resolve().parents[2]
 CORRIDOR_PATH = ROOT / 'data/biengioi/tien_river_corridor.geojson'
 GATE_CATALOG = ROOT / 'data/8file/03_sluice_gates_190_and_27_verified_gis.csv'
 METHODOLOGY = '1D River-Axis IDW & Empirical EC-Salinity Conversion (0.0064 g/L per mS/m)'
-MY_THO = [106.360, 10.350]
+# Axis anchors are orthogonal feet on the cached OSM centerline, not bank pins.
+# Keep the station features themselves at their original catalog coordinates.
+TAN_CHAU = [105.23607136, 10.80589425]
+MY_THO = [106.35984003, 10.34514228]
+ESTUARY = [106.7503834, 10.2635303]
 GATE_ADVISORIES = {
     'OPEN_INTAKE': ('ADVISORY_SAFE_INTAKE', '#10b981',
                     'Nguồn nước thuận lợi · Có thể xem xét lấy nước'),
@@ -67,7 +71,7 @@ def _read_corridor():
         coordinates = main['geometry']['coordinates']
         if (data['type'] != 'FeatureCollection' or main['geometry']['type'] != 'LineString'
                 or len(coordinates) < 3 or MY_THO not in coordinates[1:-1]
-                or coordinates[0] != [105.233, 10.800] or coordinates[-1] != [106.750, 10.220]
+                or coordinates[0] != TAN_CHAU or coordinates[-1] != ESTUARY
                 or not all(_point(dict(type='Point', coordinates=p)) for p in coordinates)
                 or any(a == b for a, b in zip(coordinates, coordinates[1:]))):
             raise ValueError('Invalid simulation corridor.')

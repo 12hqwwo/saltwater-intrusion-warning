@@ -9,7 +9,7 @@ import Feature from 'ol/Feature.js';
 import Point from 'ol/geom/Point.js';
 import { getVectorContext } from 'ol/render.js';
 import VectorSource from 'ol/source/Vector.js';
-import { Circle, Fill, Stroke, Style, Text, RegularShape } from 'ol/style.js';
+import { Circle, Fill, Stroke, Style, Text, RegularShape, Icon } from 'ol/style.js';
 import { fromLonLat } from 'ol/proj.js';
 import { defaults as controls, ScaleLine } from 'ol/control.js';
 import { mapFeatures } from '../research-utils.js';
@@ -30,34 +30,53 @@ function riverColor(ec, alpha = 1) {
   return `rgba(${low.map((channel,i)=>Math.round(channel+(upper[i]-channel)*t)).join(',')},${alpha})`;
 }
 
+// A single cached SVG label supplies rounded glass, a white keyline and a soft shadow.
+function glassLabel(text, zIndex = 25) {
+  const escaped = String(text).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[char]));
+  const context = document.createElement('canvas').getContext('2d');
+  context.font = '600 12px Segoe UI, sans-serif';
+  const width = Math.ceil(context.measureText(String(text)).width) + 24;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width + 24}" height="52"><defs><filter id="shadow" x="-30%" y="-60%" width="160%" height="220%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity=".25"/></filter></defs><rect x="12" y="7" width="${width}" height="28" rx="14" fill="#0f172a" fill-opacity=".88" stroke="#fff" stroke-opacity=".22" filter="url(#shadow)"/><text x="${12 + width / 2}" y="25" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#f8fafc">${escaped}</text></svg>`;
+  return new Style({ image: new Icon({ src: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`, anchor: [.5, 35 / 52], displacement: [0, 18] }), zIndex });
+}
+
 export function createResearchMap(target, { onSelect, onTileError }) {
   const source = new VectorSource(), boundarySource = new VectorSource(), gateSource = new VectorSource(), candidateSource = new VectorSource(), forecastSource = new VectorSource();
   const tileSource = theme => theme === 'satellite' ? new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', crossOrigin: 'anonymous', attributions: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community' }) : new OSM();
   const base = new TileLayer({ source: tileSource(), className: 'simulation-base-tiles' });
   let frame = null, corridor = null, displayUnit = 'ec', selectedGate = null, intakeGate = null, disposed = false;
   let initialSimulationFit = false, hoveredSegment = null, hoveredGate = null;
-  const riverSource = new VectorSource(), canalSource = new VectorSource(), simulationGateSource = new VectorSource(), isoSource = new VectorSource();
+  const riverSource = new VectorSource({ attributions: 'River geometry &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> · ODbL' }), canalSource = new VectorSource(), simulationGateSource = new VectorSource(), isoSource = new VectorSource();
   const ribbonStyles = new globalThis.Map();
-  const riverLayer = new VectorLayer({ source: riverSource, updateWhileAnimating: true, updateWhileInteracting: true, style: (f, resolution) => {
-    const ec = f.get('ec_mS_m'), key = Number(ec).toFixed(3);
-    // EPSG:3857 resolution gives continuous fractional zoom without caching each zoom.
+  function ribbonStyle(feature, resolution, band) {
+    const ec = feature.get('ec_mS_m'), key = Number(ec).toFixed(3);
     const zoom = Math.log2(156543.03392804097 / resolution);
-    const scale = Math.min(1.8, Math.max(.65, 2 ** ((zoom - 9) * .15)));
-    if (!ribbonStyles.has(key)) ribbonStyles.set(key, [new Style({ stroke: new Stroke({ color: riverColor(ec, .16), width: 13 }) }),new Style({ stroke: new Stroke({ color: 'rgba(6,18,26,.85)', width: 7.5 }) }),new Style({ stroke: new Stroke({ color: riverColor(ec), width: 4.5 }) })]);
-    const styles = ribbonStyles.get(key);
-    [13, 7.5, 4.5].forEach((width, index) => styles[index].getStroke().setWidth(width * scale));
-    return styles;
-  } });
+    const scale = Math.min(1.4, Math.max(.85, 2 ** ((zoom - 10) * .08)));
+    const widths = [(10 + 2 * Math.max(0, Math.min(1, zoom - 9))) * scale, 4.5 * scale];
+    if (!ribbonStyles.has(key)) ribbonStyles.set(key, widths.map(width => new Style({ stroke: new Stroke({ color: riverColor(ec), width, lineCap: 'round', lineJoin: 'round' }) })));
+    const style = ribbonStyles.get(key)[band];
+    style.getStroke().setWidth(widths[band]);
+    return style;
+  }
+  // Opacity is applied once per complete canvas, avoiding darker round segment joints.
+  // No black casing, and the main river never goes into the dashed canal layer.
+  const riverDiffusion = new VectorLayer({ source: riverSource, className: 'river-water-diffusion', opacity: .25, updateWhileAnimating: true, updateWhileInteracting: true, style: (f, resolution) => ribbonStyle(f, resolution, 0) });
+  const riverLayer = new VectorLayer({ source: riverSource, className: 'river-water-core', opacity: .78, updateWhileAnimating: true, updateWhileInteracting: true, style: (f, resolution) => ribbonStyle(f, resolution, 1) });
   const canalLayer = new VectorLayer({ source: canalSource, style: new Style({ stroke: new Stroke({ color: 'rgba(148,163,184,.55)', width: 2, lineDash: [5, 7] }) }) });
   const simulationGates = new VectorLayer({ source: simulationGateSource, style: f => {
     const color = advisoryColor(f.get('gate'));
     const active = [selectedGate, hoveredGate].includes(f.get('gate').gate_code);
-    const radius = map.getView().getZoom() < 10 ? 4.5 : 6;
-    return active
-      ? [new Style({ image: new Circle({ radius: 14, fill: new Fill({ color: `${color}20` }) }) }), new Style({ image: new RegularShape({ points: 4, radius: 10, fill: new Fill({ color }), stroke: new Stroke({ color: '#09141c', width: 1.5 }) }), zIndex: 24 })]
-      : [new Style({ image: new Circle({ radius: radius + 2, fill: new Fill({ color: `${color}12` }) }) }), new Style({ image: new Circle({ radius, fill: new Fill({ color }), stroke: new Stroke({ color: '#09141c', width: 1.5 }) }), zIndex: 20 })];
+    const radius = active ? 9 : 5.5;
+    return [new Style({ image: new Circle({ radius: radius + 4, fill: new Fill({ color: 'rgba(15,23,42,.08)' }) }), zIndex: active ? 22 : 18 }),
+      new Style({ image: new Circle({ radius: radius + 2, fill: new Fill({ color: 'rgba(15,23,42,.17)' }) }), zIndex: active ? 23 : 19 }),
+      new Style({ image: new Circle({ radius, fill: new Fill({ color }), stroke: new Stroke({ color: '#ffffff', width: 2 }) }), zIndex: active ? 24 : 20 })];
   } });
-  const isoLayer = new VectorLayer({ source: isoSource, declutter: true, style: f => new Style({ image: new RegularShape({ points: 3, radius: 7, rotation: Math.PI / 2, fill: new Fill({ color: '#facc15' }), stroke: new Stroke({ color: '#0b2435', width: 1.5 }) }), text: new Text({ text: `Ranh ${f.get('salinity_g_l')} g/L · km ${Number(f.get('chainage_km')).toFixed(1)}`, offsetY: -17, font: '600 10px Segoe UI', fill: new Fill({ color: '#fef3c7' }), backgroundFill: new Fill({ color: 'rgba(9,20,28,.85)' }), padding: [3, 5, 3, 5] }), zIndex: 22 }) });
+  const isoStyles = new globalThis.Map();
+  const isoLayer = new VectorLayer({ source: isoSource, declutter: true, style: feature => {
+    const text = `Ranh ${feature.get('salinity_g_l')} g/L · km ${Number(feature.get('chainage_km')).toFixed(1)}`;
+    if (!isoStyles.has(text)) isoStyles.set(text, [new Style({ image: new RegularShape({ points: 3, radius: 7, rotation: Math.PI / 2, fill: new Fill({ color: '#facc15' }), stroke: new Stroke({ color: '#fff', width: 2 }) }), zIndex: 22 }), glassLabel(text)]);
+    return isoStyles.get(text);
+  } });
   let selected = null, collection = { type: 'FeatureCollection', features: [] }, showUnconfirmed = false, forecastResult = null;
   const formatter = new GeoJSON(), cache = new globalThis.Map();
   const options = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' };
@@ -75,19 +94,18 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     if (!cache.has(key)) {
       const active = f.get('site_code') === selected;
       const color = exceeds === true ? '#c44d39' : exceeds === false ? '#087f78' : f.get('assumed_crs') ? '#b77a23' : '#097c78';
-      cache.set(key, new Style({
-        image: new Circle({ radius: active ? 9 : 6, fill: new Fill({ color: active ? color : '#fff' }), stroke: new Stroke({ color, width: 2.5, lineDash: f.get('assumed_crs') ? [3, 2] : undefined }) }),
-        text: new Text({ text: `${stationLabel} · ${compactWater}${monthlyEC == null ? '' : ' ◇'}`, offsetY: -17, font: '600 11px Segoe UI', fill: new Fill({ color: '#e2e8f0' }), backgroundFill: new Fill({ color: 'rgba(9,20,28,.85)' }), padding: [4, 7, 4, 7] }), zIndex: active ? 9 : 1,
-      }));
+      cache.set(key, [new Style({
+        image: new Circle({ radius: active ? 9 : 6, fill: new Fill({ color }), stroke: new Stroke({ color: '#fff', width: 2, lineDash: f.get('assumed_crs') ? [3, 2] : undefined }) }), zIndex: active ? 24 : 21,
+      }), glassLabel(`${stationLabel} · ${compactWater}${monthlyEC == null ? '' : ' ◇'}`, active ? 28 : 26)]);
     }
     return cache.get(key);
   } });
-  const gates = new VectorLayer({ source: gateSource, style: new Style({ image: new Circle({ radius: 4.5, fill: new Fill({ color: '#7560a7' }), stroke: new Stroke({ color: '#09141c', width: 1.5 }) }) }) });
+  const gates = new VectorLayer({ source: gateSource, style: new Style({ image: new Circle({ radius: 5.5, fill: new Fill({ color: '#7560a7' }), stroke: new Stroke({ color: '#fff', width: 2 }) }) }) });
   const candidates = new VectorLayer({ source: candidateSource, style: new Style({ stroke: new Stroke({ color: '#7560a7', width: 2, lineDash: [6, 5] }) }) });
   const forecastLayer = new VectorLayer({ source: forecastSource, style(f) {
     return new Style({ image: new Circle({ radius: 13, fill: new Fill({ color: 'rgba(54,105,191,.16)' }), stroke: new Stroke({ color: '#3669bf', width: 3 }) }), text: new Text({ text: `Dự báo ${f.get('target_month')}: ${formatWater(f.get('predicted_ec_mS_m'), displayUnit)}`, offsetY: 27, font: '600 13px Segoe UI', fill: new Fill({ color: '#234d90' }), backgroundFill: new Fill({ color: '#fff' }), padding: [4, 6, 4, 6], stroke: new Stroke({ color: '#fff', width: 3 }) }), zIndex: 15 });
   } });
-  const map = new Map({ target, layers: [base, boundaries, canalLayer, riverLayer, candidates, gates, simulationGates, stations, forecastLayer, isoLayer], controls: controls({ rotate: false, attributionOptions: { collapsible: false } }).extend([new ScaleLine()]),
+  const map = new Map({ target, layers: [base, boundaries, canalLayer, riverDiffusion, riverLayer, candidates, gates, simulationGates, stations, forecastLayer, isoLayer], controls: controls({ rotate: false, attributionOptions: { collapsible: false } }).extend([new ScaleLine()]),
     view: new View({ center: fromLonLat([105.8, 10.45]), zoom: 8.7, minZoom: 5, maxZoom: 18, enableRotation: false }) });
   if (onTileError) base.getSource().on('tileloaderror', onTileError);
   const canvases = ['river', 'wind'].map(kind => {
@@ -104,7 +122,13 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     if (found) selectSimulationGate(found.get('gate').gate_code, false);
   });
   map.on('singleclick', event => { const f = map.forEachFeatureAtPixel(event.pixel, f => f, { layerFilter: l => l === stations, hitTolerance: 7 }); if (f) onSelect(f.get('site_code')); });
-  const observer = new ResizeObserver(() => { map.updateSize(); particles.resize(); }); observer.observe(target);
+  const toolbar = target.parentElement.querySelector('.map-toolbar');
+  const observer = new ResizeObserver(() => {
+    if (toolbar) target.parentElement.style.setProperty('--map-header-height', `${toolbar.getBoundingClientRect().height}px`);
+    map.updateSize(); particles.resize();
+  });
+  observer.observe(target);
+  if (toolbar) observer.observe(toolbar);
   const riverTooltip = document.createElement('div'); riverTooltip.id = 'simulationRiverTooltip'; riverTooltip.className = 'simulation-river-tooltip'; riverTooltip.hidden = true; riverTooltip.setAttribute('role', 'status'); target.parentElement.append(riverTooltip);
   function updateRiverTooltip() {
     riverTooltip.hidden = !hoveredSegment;
@@ -187,12 +211,12 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   }
   function setSimulationCorridor(value) {
     corridor = value; canalSource.clear();
-    const features = (value?.corridor?.features || value?.features || []).map(feature => feature.geometry?.type === 'LineString' ? {...feature,geometry:{...feature.geometry,coordinates:smoothCoordinates(feature.geometry.coordinates, riverInterpolation)}} : feature);
+    const features = (value?.corridor?.features || value?.features || []).filter(feature => feature.properties?.type !== 'MAIN_RIVER').map(feature => feature.geometry?.type === 'LineString' ? {...feature,geometry:{...feature.geometry,coordinates:smoothCoordinates(feature.geometry.coordinates, riverInterpolation)}} : feature);
     canalSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features }, options));
     particles.setCanals(features.filter(feature => feature.properties?.type !== 'MAIN_RIVER'));
   }
   function setSimulationFrame(value) {
-    frame = value; intakeGate = null; hoveredSegment = null; hoveredGate = null; updateRiverTooltip(); riverSource.clear(); simulationGateSource.clear(); isoSource.clear();
+    frame = value; intakeGate = null; hoveredSegment = null; hoveredGate = null; updateRiverTooltip(); riverSource.clear(); simulationGateSource.clear(); isoSource.clear(); isoStyles.clear();
     const smoothed = smoothRiverSegments(frame?.river_segments || [], riverInterpolation);
     // Subdivide only display geometry: particles retain the original 35 continuous paths.
     const ribbon = smoothed.segments.flatMap(feature => {

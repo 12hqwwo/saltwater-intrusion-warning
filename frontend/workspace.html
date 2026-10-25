@@ -95,12 +95,8 @@
           <div class="panel map-panel windy-map-panel" data-base-theme="dark">
             <div class="map-scene">
             <div class="map-toolbar">
-              <div class="map-brand"><strong>SÔNG TIỀN <span class="hud-live-dot" aria-hidden="true"></span></strong><span class="map-simulation-tag">MÔ PHỎNG</span><span id="mapCount">Đang tải tọa độ…</span></div>
-              <div class="map-header-actions"><button id="toggleStationList" type="button" aria-controls="stationPanel" aria-expanded="false">Hiện danh sách trạm</button><button id="fitMap" class="small-button" title="Về toàn trục Sông Tiền">↗ Toàn cảnh</button><label class="map-basemap-picker"><span class="visually-hidden">Nền bản đồ</span><select id="mapBaseTheme"><option value="dark" selected>Nền tối Thủy văn (Deep Navy)</option><option value="satellite">Ảnh vệ tinh (Esri Satellite Dark)</option><option value="light">Bản đồ sáng (OSM Standard)</option></select></label></div>
-            </div>
-            <div id="researchMap" aria-label="Bản đồ dòng sông, quan trắc và khuyến nghị vận hành" tabindex="0">
-            </div>
             <aside class="simulation-hud" aria-label="Điều khiển bản đồ mô phỏng">
+              <span id="mapCount" class="map-station-count" role="status">Đang tải tọa độ…</span>
               <fieldset class="simulation-units"><legend class="visually-hidden">Đơn vị hiển thị</legend>
                 <label><input type="radio" name="simulationUnit" value="ec" aria-label="EC (mS/m)" checked><span>EC <small>mS/m</small></span></label>
                 <label><input type="radio" name="simulationUnit" value="salinity" aria-label="Độ mặn quy đổi (g/L)"><span>Độ mặn <small>g/L</small></span></label>
@@ -126,6 +122,9 @@
                 <p>Ngưỡng kịch bản theo mục đích. Kỹ sư kiểm tra hiện trường và quyết định.</p>
               </div>
             </aside>
+              <div class="map-header-actions"><button id="toggleStationList" type="button" aria-controls="stationPanel" aria-expanded="false">Hiện danh sách trạm</button><button id="fitMap" class="small-button" title="Về toàn trục Sông Tiền">↗ Toàn cảnh</button><label class="map-basemap-picker"><span class="visually-hidden">Nền bản đồ</span><select id="mapBaseTheme"><option value="dark" selected>Nền tối Thủy văn (Deep Navy)</option><option value="satellite">Ảnh vệ tinh (Esri Satellite Dark)</option><option value="light">Bản đồ sáng (OSM Standard)</option></select></label></div>
+            </div>
+            <div id="researchMap" aria-label="Bản đồ dòng sông, quan trắc và khuyến nghị vận hành" tabindex="0"></div>
             <div class="map-water-legend"><span>Ngọt</span><i></i><span>Mặn cao</span><small id="simulationConversionNote" hidden>Quy đổi thực nghiệm 0.0064 g/L trên 1 mS/m</small></div>
             <aside id="mapForecastBanner" class="forecast-map-banner" role="status" hidden><div><strong id="mapForecastValue"></strong><small id="mapForecastContext"></small></div><button id="mapForecastDismiss" type="button" aria-label="Ẩn dự báo trên bản đồ">✕</button></aside>
             <aside id="simulationGateCard" class="simulation-gate-card" aria-label="Khuyến nghị vận hành tại cống" tabindex="-1" hidden></aside>

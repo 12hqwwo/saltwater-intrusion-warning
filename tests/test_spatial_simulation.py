@@ -1,5 +1,6 @@
 """Spatial simulation contracts, numerical boundaries, and core isolation."""
 import copy
+import hashlib
 import json
 import math
 import os
@@ -106,6 +107,67 @@ class SpatialSimulationTests(unittest.TestCase):
                 self.assertTrue(9 < lat < 12)
         self.assertEqual(len(result['gates']), 27)
 
+    def test_osm_centerline_projects_bank_stations_and_ends_at_true_mouth(self):
+        result = self.read('corridor')
+        main = next(f for f in result['corridor']['features'] if f['properties']['id'] == 'TIEN_MAIN')
+        points = main['geometry']['coordinates']
+        provenance = main['properties']['geometry_provenance']
+        raw = (spatial_simulation.ROOT / provenance['source_file']).read_bytes()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), provenance['source_sha256'])
+        source = json.loads(raw)
+        ways = source['elements']
+        self.assertEqual([w['id'] for w in ways], provenance['osm_way_ids'])
+        for a, b in zip(ways, ways[1:]):
+            self.assertEqual(a['nodes'][-1], b['nodes'][0])
+        real_nodes = {(p['lon'], p['lat']) for w in ways for p in w['geometry']}
+        station_anchors = provenance['station_axis_anchors']
+        projections = {tuple(a['projected_coordinate']) for a in station_anchors.values()}
+        self.assertEqual(points[0], [105.23607136, 10.80589425])
+        self.assertIn([106.35984003, 10.34514228], points)
+        self.assertEqual(points[-1], [106.7503834, 10.2635303])
+        self.assertEqual(points[-1], [ways[-1]['geometry'][-1]['lon'], ways[-1]['geometry'][-1]['lat']])
+        self.assertNotIn([106.75, 10.22], points)
+        self.assertEqual(station_anchors['MRC_VN_019803']['bank_coordinate'], [105.233, 10.8])
+        self.assertEqual(station_anchors['MRC_VN_019805']['bank_coordinate'], [106.36, 10.35])
+        for anchor in station_anchors.values():
+            bank, projected = anchor['bank_coordinate'], anchor['projected_coordinate']
+            a, b = anchor['source_segment']
+            self.assertIn(tuple(a), real_nodes)
+            self.assertIn(tuple(b), real_nodes)
+            sx, sy = 111195 * math.cos(math.radians(bank[1])), 111195
+            dx, dy = (b[0] - a[0]) * sx, (b[1] - a[1]) * sy
+            # The foot lies on the actual OSM segment and the bank-to-foot vector
+            # is perpendicular in local metric coordinates (millimetre tolerance).
+            px, py = (projected[0] - a[0]) * sx, (projected[1] - a[1]) * sy
+            length = math.hypot(dx, dy)
+            self.assertLess(abs(px * dy - py * dx) / length, .002)
+            t = (px * dx + py * dy) / length ** 2
+            self.assertTrue(0 <= t <= 1)
+            nx, ny = (projected[0] - bank[0]) * sx, (projected[1] - bank[1]) * sy
+            self.assertLess(abs(nx * dx + ny * dy) / length, .002)
+            self.assertAlmostEqual(math.hypot(nx, ny), anchor['distance_to_axis_m'], delta=.002)
+            self.assertNotIn(bank, points)
+
+        self.assertTrue(120 <= len(points) <= 180)
+        self.assertEqual(len(points), provenance['vertex_count'])
+        self.assertTrue(all(tuple(p) in real_nodes or tuple(p) in projections for p in points))
+        self.assertLess(provenance['simplification_tolerance_m'], 25)
+
+    def test_osm_canal_connections_preserve_catalog_headworks(self):
+        result = self.read('corridor')
+        features = result['corridor']['features']
+        points = next(f for f in features if f['properties']['id'] == 'TIEN_MAIN')['geometry']['coordinates']
+        gates = {gate['gate_code']: gate['geometry']['coordinates'] for gate in result['gates']}
+        branches = [f for f in features if 'gate_code' in f['properties']]
+        self.assertEqual(len(branches), 10)
+        for branch in branches:
+            props, path = branch['properties'], branch['geometry']['coordinates']
+            self.assertEqual(path[0], props['connection_coordinate'])
+            self.assertEqual(path[0], points[props['connection_main_index']])
+            self.assertEqual(props['gate_path_index'], 2)
+            self.assertEqual(path[2], props['gate_coordinate'])
+            self.assertEqual(path[2], gates[props['gate_code']])
+
     def test_timeline_contains_drought_and_wet_season_frames(self):
         result = self.read('timeline')
         self.assertEqual(result['total'], 495)
@@ -201,7 +263,9 @@ class SpatialSimulationTests(unittest.TestCase):
                 self.assertAlmostEqual(projection['chainage_km'], chainage, places=5)
                 self.assertEqual(projection['distance_to_axis_km'], 0)
                 self.assertFalse(projection['hydrological_link_validated'])
-        self.assertEqual(axis.coordinate(125), [106.36, 10.35])
+        self.assertEqual(axis.coordinate(125), [106.35984003, 10.34514228])
+        self.assertEqual(axis.coordinate(0), [105.23607136, 10.80589425])
+        self.assertEqual(axis.coordinate(175), [106.7503834, 10.2635303])
         for (a, ea), (b, eb) in zip(anchors, anchors[1:]):
             self.assertAlmostEqual(spatial_simulation._idw((a + b) / 2, anchors), (ea + eb) / 2)
         segments = spatial_simulation.interpolate_river_profile('2024-04')
@@ -263,7 +327,7 @@ class SpatialSimulationTests(unittest.TestCase):
             elif mutation == 'wrong_endpoint':
                 points[-1] = [106.8, 10.2]
             else:
-                points.remove([106.36, 10.35])
+                points.remove([106.35984003, 10.34514228])
             with self.subTest(mutation=mutation), patch.object(spatial_simulation, 'CORRIDOR_PATH') as source:
                 source.read_text.return_value = json.dumps(damaged)
                 response = self.client.get('/api/v1/workspace/simulation/corridor')
