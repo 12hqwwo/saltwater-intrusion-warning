@@ -5,18 +5,30 @@ Thực hiện trong PowerShell tại gốc repository. Giữ `.venv` và `.venv-
 ```powershell
 .venv\Scripts\python.exe -m pip install -r requirements-prototype.txt
 npm.cmd --prefix frontend ci
-npm.cmd --prefix frontend run build
-.venv\Scripts\python.exe run_webgis.py --mode snapshot
+.venv\Scripts\python.exe scripts/apply_dss_storage.py --apply
+.venv\Scripts\python.exe scripts/setup_security.py --apply
+.\start.ps1
 ```
 
-Mở http://127.0.0.1:8000/research.html. Có thể đổi cổng bằng `--port 8016`. Phát triển frontend bằng `npm.cmd --prefix frontend run dev`; Vite chuyển `/api` tới backend cổng 8000.
+Mở http://127.0.0.1:8000/workspace.html. Script mặc định chọn PostgreSQL, kiểm tra build thành công rồi chạy máy chủ ngay trong terminal hiện tại; Ctrl+C để dừng. Có thể dùng `.\start.ps1 -Mode postgres -Port 8016`. Chỉ dùng `-SkipBuild` khi bản build đã cập nhật; script không báo khởi động thành công trước khi Uvicorn sẵn sàng.
+
+Có thể chạy từng bước:
+
+```powershell
+npm.cmd --prefix frontend run build
+.venv\Scripts\python.exe run_webgis.py --mode postgres --port 8000
+```
+
+Phát triển frontend bằng `npm.cmd --prefix frontend run dev`; Vite chuyển `/api` tới backend cổng 8000. Chạy backend bằng `.venv\Scripts\python.exe run_webgis.py --mode postgres --api-only` nếu chưa cần build giao diện. Trong Vite mở `/workspace.html`; `/index.html` là trang lịch sử PostgreSQL. Trang cũ `/research.html` chuyển tới workspace.
 
 ## Chọn nguồn rõ ràng
 
 - `snapshot`: đọc `data/research/workspace.json`, kiểm tra SHA-256 với `workspace_manifest.json`. Đây là quan trắc có nguồn và kết quả hồi cứu, không phải dữ liệu trực tiếp.
-- `postgres`: đọc schema `webgis_research` qua tài khoản PG*. Không fallback nếu kết nối hoặc schema lỗi.
+- `postgres`: quan trắc đọc `public.measurement_site`, `public.source_dataset`, `public.conductivity_observation` qua tài khoản WEBGIS_DB_USER chỉ đọc. Mỗi trạm chọn RAW_EC được nhập gần nhất (hoặc phiên bản được ghim); không trộn phiên bản. Kết quả mô hình và danh mục cống vẫn đọc bộ tệp có manifest. Không fallback khi DB lỗi.
 - `/index.html` và `/api/v1/health`, `/api/v1/stations` luôn truy cập DB thật. `/api/v1/app-health` chỉ xác nhận tiến trình, không chứng nhận DB.
 - Tiếp nhận v3 luôn đọc tệp riêng; chưa nhập vào quan trắc hay huấn luyện, dù chọn chế độ PostgreSQL.
+- Ước tính EC từ khí tượng 2024–2026 luôn đọc artifact tệp. Đây là ước tính hồi cứu dùng khí tượng cùng tháng, không phải dự báo hiện tại hoặc căn cứ vận hành cống.
+- API chính của workspace là `/api/v1/workspace`; `/api/v1/research` vẫn hoạt động để giữ tương thích.
 
 ## PostgreSQL/PostGIS
 
@@ -29,14 +41,15 @@ Sao chép `.env.example` thành `.env` nếu chưa có; điền PGHOST, PGPORT, 
 
 Lệnh import trên là dry-run, không xác nhận DB hoạt động. Trước khi ghi DB, người quản trị rà soát schema hiện hữu, quyền và bản sao lưu PostgreSQL. `sql/04_research_workspace.sql` định nghĩa schema nghiên cứu; các schema `public` nằm trong `sql/`. Không chạy bootstrap lên DB đã có dữ liệu.
 
-Sau khi schema và tài khoản đã sẵn sàng:
+Nếu các bảng `public` đã có dữ liệu, chạy trực tiếp:
 
 ```powershell
-.venv\Scripts\python.exe scripts/import_research_workspace.py --apply
 .venv\Scripts\python.exe run_webgis.py --mode postgres
 ```
 
 ## Tái lập khoa học và thu thập
+
+Workspace PostgreSQL không cần nhập lại schema nghiên cứu. Mục Quan trắc có sẵn phần tra cứu nguồn / trạm / phiên bản. Muốn ghim bộ dữ liệu, đặt biến `WEBGIS_WORKSPACE_DATASETS` thành JSON ánh xạ mã trạm sang mã dataset; cấu hình sai hoặc thiếu phiên bản sẽ báo lỗi. Bỏ biến này để dùng phiên bản nhập gần nhất.
 
 ```powershell
 .venv\Scripts\python.exe scripts/audit_research_data.py
@@ -57,6 +70,19 @@ Các script `fetch_mrc_public.py`, `fetch_public_research_data.py`, `collect_obs
 
 Các mẫu thiếu dữ liệu phải trả `INSUFFICIENT_DATA`, `recommendation=null`. Chức năng này lập danh sách thông tin cần bổ sung, không phát lệnh hoặc lịch vận hành. Chưa có căn cứ chuyển EC sang độ mặn, nên API trả trạng thái thiếu căn cứ, giá trị/unit/phương pháp/sai số là null; không có cột độ mặn suy diễn được ghi vào DB EC.
 
+Trong giao diện, mục Hồ sơ cống có chế độ mô phỏng riêng. Nhập bốn số đo, thời điểm, hệ cao độ, cơ sở EC và giới hạn kịch bản; chọn lấy hoặc thoát nước rồi chạy. Nút Lưu nháp lưu cục bộ theo mã cống; Khôi phục nháp mở lại trên cùng trình duyệt. JSON xuất ra gồm đầu vào và quy trình kịch bản, chưa phải hồ sơ được phê duyệt. Xem [luồng trình bày](user-flow.md).
+
 ## Kiểm tra bàn giao
 
-Xem [handover.md](handover.md) để biết lệnh đã thực chạy, kết quả, giới hạn DB và đường dẫn khôi phục. File test tự động không còn trong bản bàn giao theo yêu cầu; QA dữ liệu, baseline và bằng chứng khoa học vẫn tồn tại.
+Kiểm thử hồi quy hiện tại:
+
+```powershell
+.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+.venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py" -v
+node --test tests/frontend_api.test.mjs
+npm.cmd --prefix frontend run build
+```
+
+Bộ kiểm thử dùng snapshot và client trong tiến trình; không truy cập DB để thay đổi dữ liệu. Xem [kiến trúc](architecture.md) và [kế hoạch triển khai](implementation-plan.md) để nắm cấu trúc mới và phạm vi nghiệm thu. [handover.md](handover.md) là bằng chứng lịch sử ngày 16/10, không phải kết quả kiểm tra phiên bản hiện tại.
+
+Xem [bảo mật PostgreSQL và lưu lịch sử](database-security.md) về hai role, audit, API key tùy chọn và cách kiểm tra quyền.

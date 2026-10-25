@@ -5,12 +5,16 @@ import os
 from datetime import date
 from typing import Annotated
 from backend.research import router as research_router
+from backend.api.workspace import router as workspace_router
+from backend.services.workspace import WorkspaceError
 from backend.intake import router as intake_router
 
 import psycopg
 from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.middleware.trustedhost import TrustedHostMiddleware
+from backend.security import SecurityMiddleware
 
 from backend.database import DatasetNotFound, Repository, SiteNotFound
 from backend.schemas import (
@@ -36,10 +40,20 @@ app.add_middleware(
     ],
     allow_credentials=False,
     allow_methods=["GET", "POST"],
-    allow_headers=["Accept", "Content-Type"],
+    allow_headers=["Accept", "Content-Type", "X-API-Key"],
 )
 app.include_router(research_router)
-app.include_router(intake_router)
+app.include_router(workspace_router, prefix='/api/v1/workspace', tags=['Workspace'])
+app.include_router(intake_router, prefix='/api/v1/workspace')
+app.include_router(intake_router, prefix='/api/v1/research')
+app.add_middleware(SecurityMiddleware)
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=[value.strip() for value in os.getenv(
+    'WEBGIS_ALLOWED_HOSTS', 'localhost,127.0.0.1,[::1],testserver').split(',') if value.strip()])
+
+
+@app.exception_handler(WorkspaceError)
+async def workspace_error(request: Request, exc: WorkspaceError):
+    return JSONResponse(status_code=exc.status_code, content={'detail': exc.detail})
 
 
 @app.get('/api/v1/app-health')

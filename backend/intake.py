@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Query
 
 ROOT = Path(__file__).resolve().parents[1]
 INTAKE = ROOT / 'data/external/user_v3_review_20261015'
-router = APIRouter(prefix='/api/v1/research/intake', tags=['Data intake'])
+router = APIRouter(prefix='/intake', tags=['Data intake'])
 
 
 def read_intake():

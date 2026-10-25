@@ -1,5 +1,6 @@
 # Local secrets and environments
 .env
+.security/
 .env.*
 !.env.example
 .venv/
@@ -29,3 +30,7 @@ runs/setup_checks/
 runs/webgis_evidence/
 data/archive/
 # Raw sources, GIS, model artifacts, split manifests and metrics are retained.
+# Ephemeral docs/verification outputs and packages
+docs/*.zip
+docs/screenshots/
+docs/*-verification.json

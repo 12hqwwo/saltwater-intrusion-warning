@@ -8,6 +8,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
+        workspace: fileURLToPath(new URL('./workspace.html', import.meta.url)),
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
         research: fileURLToPath(new URL('./research.html', import.meta.url)),
       }

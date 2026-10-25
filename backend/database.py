@@ -8,6 +8,7 @@ import psycopg
 from psycopg.rows import dict_row
 
 from backend.schemas import LOCAL_TZ
+from backend.db_security import assert_application_role
 
 
 class SiteNotFound(Exception):
@@ -26,7 +27,8 @@ def read_connection():
         host=os.getenv("PGHOST", "127.0.0.1"),
         port=os.getenv("PGPORT", "5432"),
         dbname=os.getenv("PGDATABASE", "dongthap_gis"),
-        user=os.getenv("PGUSER", "postgres"),
+        user=os.getenv("WEBGIS_DB_USER", "webgis_reader"),
+        **({'password': os.environ['WEBGIS_DB_PASSWORD']} if 'WEBGIS_DB_PASSWORD' in os.environ else {}),
         connect_timeout=5,
         application_name="webgis_read_api",
         options="-c statement_timeout=10000 -c lock_timeout=3000 -c timezone=Asia/Ho_Chi_Minh",
@@ -35,6 +37,7 @@ def read_connection():
         conn.read_only = True
         # Count and page must see the same snapshot within one request.
         conn.isolation_level = psycopg.IsolationLevel.REPEATABLE_READ
+        assert_application_role(conn)
         yield conn
 
 

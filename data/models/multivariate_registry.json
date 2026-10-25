@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "models": {
+    "MYTHO": {
+      "model_path": "runs/multivariate_ec/mytho/20261023T041813Z/model.joblib",
+      "manifest_path": "runs/multivariate_ec/mytho/20261023T041813Z/manifest.json",
+      "model_sha256": "a51227644805d1a231a50a7b6b82203e3ffe6983898a55b8a4deebee6bd0bd25",
+      "manifest_sha256": "0f8cd87d1f9c90d173241cd68789943dcbee3f4a52d6fd884aa0a1332e0b7f05"
+    },
+    "TANCHAU": {
+      "model_path": "runs/multivariate_ec/tanchau/20261023T041813Z/model.joblib",
+      "manifest_path": "runs/multivariate_ec/tanchau/20261023T041813Z/manifest.json",
+      "model_sha256": "9b01d1232a19b70621594f1fee4baee49bde3b0af6c4899d0aa811e876a00122",
+      "manifest_sha256": "6943f6f49afd5b9e104de31add96f0c9aa5b910143d6f99913cd5955ec7c3ad4"
+    }
+  }
+}

@@ -27,12 +27,14 @@ export function describeSeries(items) {
   };
 }
 
-export function renderChart(container, items) {
+export function renderChart(container, items, { showQuality = true } = {}) {
   container.replaceChildren();
   if (!items.length) {
     const note = document.createElement('p');
     note.className = 'empty-chart';
-    note.textContent = 'Không có quan trắc trong bộ lọc này. Hãy thử khoảng thời gian hoặc cờ chất lượng khác.';
+    note.textContent = showQuality
+      ? 'Không có quan trắc trong bộ lọc này. Hãy thử khoảng thời gian hoặc cờ chất lượng khác.'
+      : 'Không có quan trắc trong bộ lọc này. Hãy thử khoảng thời gian hoặc loại số đo khác.';
     container.append(note);
     return;
   }
@@ -48,7 +50,7 @@ export function renderChart(container, items) {
   const y = value => margin.top + plotHeight * (1 - value / maxValue);
   const svg = svgNode('svg', { viewBox: `0 0 ${width} ${height}`, role: 'img', 'aria-labelledby': 'ec-chart-title ec-chart-description' });
   svg.append(svgNode('title', { id: 'ec-chart-title' }, 'Độ dẫn điện EC theo thời gian, đơn vị mS/m'));
-  svg.append(svgNode('desc', { id: 'ec-chart-description' }, `${items.length} số đo, từ ${dateLabel(items[0].observed_at)} đến ${dateLabel(items.at(-1).observed_at)}. Giá trị và chất lượng từng số đo có trong bảng phía dưới. Đường nối dừng tại tháng thiếu hoặc giá trị INVALID.`));
+  svg.append(svgNode('desc', { id: 'ec-chart-description' }, `${items.length} số đo, từ ${dateLabel(items[0].observed_at)} đến ${dateLabel(items.at(-1).observed_at)}. ${showQuality ? 'Giá trị và chất lượng' : 'Giá trị'} từng số đo có trong bảng phía dưới. Đường nối dừng tại tháng thiếu hoặc số đo không hợp lệ.`));
   for (let i = 0; i <= 4; i++) {
     const value = maxValue * i / 4;
     svg.append(svgNode('line', { x1: margin.left, x2: width - margin.right, y1: y(value), y2: y(value), stroke: '#e7ecec', 'stroke-dasharray': i ? '3 5' : '0' }));
@@ -73,12 +75,12 @@ export function renderChart(container, items) {
   svg.append(svgNode('path', { d: path, fill: 'none', stroke: '#238e86', 'stroke-width': 2, 'stroke-linejoin': 'round' }));
   for (const row of items) {
     const px = x(Date.parse(row.observed_at)), py = y(row.conductivity_ms_per_m);
-    const color = COLORS[row.quality_flag];
+    const color = showQuality ? COLORS[row.quality_flag] : '#087f78';
     const invalid = row.quality_flag === 'INVALID';
     const point = invalid
       ? svgNode('path', { d: `M${px-4},${py-4}l8,8m-8,0l8,-8`, stroke: color, 'stroke-width': 2, 'data-quality': row.quality_flag })
       : svgNode('circle', { cx: px, cy: py, r: items.length > 120 ? 2.4 : 4, fill: row.observed_or_estimated === 'E' ? '#ffffff' : color, stroke: color, 'stroke-width': 1.3, 'data-quality': row.quality_flag });
-    point.append(svgNode('title', {}, `${dateLabel(row.observed_at)} · ${number(row.conductivity_ms_per_m)} mS/m · ${QUALITY_LABELS[row.quality_flag]} · ${row.observed_or_estimated === 'O' ? 'Quan trắc (O)' : 'Ước tính (E)'}`));
+    point.append(svgNode('title', {}, `${dateLabel(row.observed_at)} · ${number(row.conductivity_ms_per_m)} mS/m${showQuality ? ` · ${QUALITY_LABELS[row.quality_flag]}` : ''} · ${row.observed_or_estimated === 'O' ? 'Quan trắc (O)' : 'Ước tính (E)'}`));
     svg.append(point);
   }
   container.append(svg);

@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#123f43">
+    <title>WebGIS Đồng Tháp · Không gian làm việc</title>
+    <link rel="icon" href="data:,">
+  </head>
+  <body>
+    <a class="skip" href="#main">Đến nội dung</a>
+    <header class="header">
+      <a class="brand" href="#overview">
+        <span class="brand-mark" aria-hidden="true">≈</span>
+        <span>
+          <strong>ĐỒNG THÁP</strong>
+          <small>WebGIS · Nghiên cứu nguồn nước</small>
+        </span>
+      </a>
+      <nav aria-label="Điều hướng chính">
+        <a href="#overview">Tổng quan</a>
+        <a href="#observations">Quan trắc</a>
+        <a href="#forecasts">Dự báo EC đa biến</a>
+        <a href="#data-quality">Chất lượng dữ liệu</a>
+        <a href="#gates">Hồ sơ cống</a>
+      </nav>
+      <span id="modeBadge" class="badge">Đang tải…</span>
+    </header>
+    <main id="main" class="shell">
+      <section id="overview" data-view="overview" class="intro">
+        <div>
+          <p class="eyebrow">ĐỒNG THÁP · TIỀN GIANG / DỮ LIỆU NGHIÊN CỨU</p>
+          <h1>Từ quan trắc đến<br>
+            <em>hiểu nguồn nước.</em>
+          </h1>
+          <p>Tra cứu quan trắc trên bản đồ và dự báo EC tháng bằng mô hình đa biến từ lượng mưa, nhiệt độ, gió và chu kỳ mùa vụ.</p>
+        </div>
+        <aside class="scope">
+          <span class="dot">
+          </span>
+          <strong>Phạm vi hệ thống</strong>
+          <p>Chọn trạm và tháng để chạy mô hình đa biến. Mỗi kết quả ghi rõ các biến khí tượng đầu vào, phiên bản mô hình và kỳ huấn luyện.</p>
+          <button id="checkDatabase" class="text-button">Kiểm tra PostgreSQL ↗</button>
+          <p id="dbStatus" role="status">Chế độ dữ liệu được ghi rõ trên thanh đầu trang.</p>
+          <a href="#observations">Tra cứu dữ liệu và lịch sử PostgreSQL →</a>
+        </aside>
+      </section>
+      <div id="loadError" class="notice error" role="alert" hidden>
+      </div>
+      <button id="retryWorkspace" class="secondary" hidden>Tải lại dữ liệu nền</button>
+      <section data-view="overview" class="stats" aria-label="Độ phủ dữ liệu">
+        <article>
+          <span>Mẫu EC RIA2 tại Đồng Tháp</span>
+          <strong id="statRia">—</strong>
+          <small>Trong nguồn dữ liệu đang chọn</small>
+        </article>
+        <article>
+          <span>Điểm quan trắc đang phục vụ</span>
+          <strong id="statSites">—</strong>
+          <small id="observationCoverage">Đang đọc độ phủ dữ liệu</small>
+        </article>
+        <article>
+          <span>Quan trắc gần nhất</span>
+          <strong id="statLatest">—</strong>
+          <small>Ngày đo mẫu cuối</small>
+        </article>
+        <article>
+          <span>Trạm dự báo đa biến</span>
+          <strong id="statExperiments">—</strong>
+          <small>Mô hình khí tượng và mùa vụ</small>
+        </article>
+      </section>
+      <section data-view="overview" class="workflow-cards" aria-label="Luồng sử dụng">
+        <a class="panel workflow-card" href="#observations"><span class="tag">01 · TRA CỨU</span><h3>Chọn trạm trên bản đồ</h3><p>Xem EC, nguồn số đo, khoảng thời gian và tải dữ liệu đang xem.</p></a>
+        <a class="panel workflow-card" href="#forecasts"><span class="tag">02 · DỰ BÁO ĐA BIẾN</span><h3>Chạy mô hình dự báo EC</h3><p>Chọn trạm, tháng và đầu vào mưa / nhiệt độ / gió để nhận kết quả.</p></a>
+        <a class="panel workflow-card" href="#data-quality"><span class="tag">03 · NGUỒN &amp; KẾT QUẢ</span><h3>Truy nguồn dữ liệu</h3><p>Xem dữ liệu đầu vào, chất lượng nguồn và xuất kết quả dự báo.</p></a>
+      </section>
+      <section data-view="overview" class="panel source-summary"><h3>Nguồn đang phục vụ</h3><p id="workspaceSourceStatus" role="status">Đang tải thông tin nguồn…</p><div id="datasetSummary"></div></section>
+      <section data-view="observations" id="observations" class="section">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">01 / QUAN TRẮC &amp; KHÔNG GIAN</p>
+            <h2>Nhìn dòng nước. Chủ động quyết định.</h2>
+          </div>
+          <span class="subtle">Sông Tiền · Quan trắc &amp; kịch bản không gian</span>
+        </div>
+        <div id="mapLayout" class="map-layout stations-collapsed">
+          <aside id="stationPanel" class="panel station-panel" hidden>
+            <label for="stationSearch">Tìm điểm quan trắc</label>
+            <input id="stationSearch" type="search" placeholder="Tên trạm hoặc mã điểm…">
+            <div id="stationList" class="station-list" aria-label="Danh sách điểm đo">
+              <p>Đang tải dữ liệu…</p>
+            </div>
+          </aside>
+          <div class="panel map-panel windy-map-panel" data-base-theme="dark">
+            <div class="map-scene">
+            <div class="map-toolbar">
+              <div class="map-brand"><strong>SÔNG TIỀN <span class="hud-live-dot" aria-hidden="true"></span></strong><span class="map-simulation-tag">MÔ PHỎNG</span><span id="mapCount">Đang tải tọa độ…</span></div>
+              <div class="map-header-actions"><button id="toggleStationList" type="button" aria-controls="stationPanel" aria-expanded="false">Hiện danh sách trạm</button><button id="fitMap" class="small-button" title="Về toàn trục Sông Tiền">↗ Toàn cảnh</button><label class="map-basemap-picker"><span class="visually-hidden">Nền bản đồ</span><select id="mapBaseTheme"><option value="dark" selected>Nền tối Thủy văn (Deep Navy)</option><option value="satellite">Ảnh vệ tinh (Esri Satellite Dark)</option><option value="light">Bản đồ sáng (OSM Standard)</option></select></label></div>
+            </div>
+            <div id="researchMap" aria-label="Bản đồ dòng sông, quan trắc và khuyến nghị vận hành" tabindex="0">
+            </div>
+            <aside class="simulation-hud" aria-label="Điều khiển bản đồ mô phỏng">
+              <fieldset class="simulation-units"><legend class="visually-hidden">Đơn vị hiển thị</legend>
+                <label><input type="radio" name="simulationUnit" value="ec" aria-label="EC (mS/m)" checked><span>EC <small>mS/m</small></span></label>
+                <label><input type="radio" name="simulationUnit" value="salinity" aria-label="Độ mặn quy đổi (g/L)"><span>Độ mặn <small>g/L</small></span></label>
+              </fieldset>
+              <label class="crop-preset"><span class="visually-hidden">Ngưỡng khuyến nghị theo mục đích</span><select id="simulationThresholdPreset" title="Ngưỡng kịch bản theo mục đích · mS/m">
+                <option value="durian">🌱 Sầu riêng (50/80)</option>
+                <option value="citrus" selected>🍊 Cây có múi (100/150)</option>
+                <option value="rice">🌾 Lúa &amp; nước ngọt (120/200)</option>
+                <option value="custom">Tự nhập ngưỡng</option>
+              </select></label>
+              <button id="simulationThresholdToggle" type="button" aria-expanded="false" aria-controls="simulationThresholdPopover">⚙ Ngưỡng</button>
+              <span class="hud-divider" aria-hidden="true"></span>
+              <button id="simulationRiverToggle" type="button" class="layer-pill" aria-pressed="true">🌊 Hạt dòng chảy</button>
+              <button id="simulationWindToggle" type="button" class="layer-pill" aria-pressed="true">💨 Gió ERA5</button>
+              <button id="simulationGatesToggle" type="button" class="layer-pill" aria-pressed="true">🚧 27 Cống</button>
+              <div id="simulationThresholdPopover" class="threshold-popover" hidden>
+                <strong>Ngưỡng khuyến nghị · mS/m</strong>
+                <form id="simulationThresholdForm" class="simulation-thresholds">
+                  <label>Xem xét lấy dưới<input id="simulationOpenBelow" name="open_below_ec" type="number" min="0" step="any" value="100" required aria-label="Ngưỡng xem xét lấy nước dưới (mS/m)"></label>
+                  <label>Ngăn mặn từ<input id="simulationCloseAbove" name="close_above_ec" type="number" min="0" step="any" value="150" required aria-label="Ngưỡng ngăn mặn từ (mS/m)"></label>
+                  <button type="submit">Áp dụng</button>
+                </form>
+                <p>Ngưỡng kịch bản theo mục đích. Kỹ sư kiểm tra hiện trường và quyết định.</p>
+              </div>
+            </aside>
+            <div class="map-water-legend"><span>Ngọt</span><i></i><span>Mặn cao</span><small id="simulationConversionNote" hidden>Quy đổi thực nghiệm 0.0064 g/L trên 1 mS/m</small></div>
+            <aside id="mapForecastBanner" class="forecast-map-banner" role="status" hidden><div><strong id="mapForecastValue"></strong><small id="mapForecastContext"></small></div><button id="mapForecastDismiss" type="button" aria-label="Ẩn dự báo trên bản đồ">✕</button></aside>
+            <aside id="simulationGateCard" class="simulation-gate-card" aria-label="Khuyến nghị vận hành tại cống" tabindex="-1" hidden></aside>
+            <div id="simulationTimeline" class="simulation-timeline" aria-label="Dòng thời gian mô phỏng"></div>
+            <div class="map-legend-control">
+            <button id="mapLegendToggle" type="button" aria-expanded="false" aria-controls="mapLegendPopover">ⓘ Chú giải &amp; Nguồn</button>
+            <div id="mapLegendPopover" class="map-legend-popover" role="region" aria-label="Chú giải, lớp bản đồ và nguồn" hidden>
+            <strong>Chú giải &amp; Nguồn</strong>
+            <div class="map-options">
+              <label>
+                <input id="showUnconfirmed" type="checkbox" checked> Điểm RIA2 tham khảo</label>
+              <label>
+                <input id="showBase" type="checkbox" checked> Bản đồ nền</label>
+              <label><input id="showBoundaries" type="checkbox" checked> Ranh giới</label>
+              <label class="visually-hidden"><input id="showGates" type="checkbox" checked> Cống có tọa độ</label>
+            </div>
+            <p id="simulationSourceNotice" class="map-note">Trục sông / kênh minh họa · EC nội suy, độ mặn quy đổi thực nghiệm · Đèn khuyến nghị cần người kiểm tra; không thể hiện trạng thái đóng / mở thực tế.</p>
+            <p id="coordinateNotice" class="map-note">Điểm RIA2 có viền đứt: tọa độ tham khảo với CRS giả định WGS84. Ranh giới từ tệp dự án.</p>
+            <p id="mapComparisonLegend" class="map-note">Màu điểm thể hiện nguồn tọa độ. Mở đối chiếu nâng cao để so sánh EC.</p>
+            <p id="mapForecastStatus" class="map-note" hidden></p>
+            </div>
+            </div>
+            <p id="tileError" class="map-tile-error" role="status" hidden>Nền bản đồ chưa tải được. Lớp ranh giới và điểm đo vẫn hoạt động.</p>
+            </div>
+          </div>
+        </div>
+        <details id="stationDetails" class="panel compact-details"><summary>Đối chiếu ngưỡng EC nâng cao &amp; Biểu đồ chi tiết trạm</summary>
+        <article class="panel comparison-panel">
+          <h3>Đối chiếu ngưỡng EC</h3>
+          <p class="subtle">Ngưỡng tự nhập dùng chung cho màu điểm và đường ngang trên biểu đồ quan trắc / dự báo. Giá trị mẫu mới nhất tại mỗi trạm có thể khác ngày.</p>
+          <form id="ecComparisonForm" class="filters">
+            <label>Ngưỡng minh họa có ghi chú<select id="ecComparisonPreset">
+              <option value="">— Tự nhập ngưỡng —</option>
+            </select></label>
+            <label>Ngưỡng (mS/m)<input id="ecComparisonValue" type="number" min="0.001" step="any" required></label>
+            <label>Mục đích sử dụng<input id="ecComparisonPurpose" maxlength="120" placeholder="Ví dụ: kịch bản tưới"></label>
+            <label>Nguồn / ghi chú<input id="ecComparisonReference" maxlength="240" placeholder="Tài liệu ngưỡng hoặc giả định"></label>
+            <button type="submit">Áp dụng ngưỡng</button>
+            <button id="clearECComparison" type="button" class="secondary">Bỏ ngưỡng</button>
+          </form>
+          <p id="ecPresetStatus" role="status" class="subtle"></p>
+          <p id="ecComparisonStatus" role="status" class="subtle"></p>
+        </article>
+        <article class="panel observation-panel">
+          <div class="panel-heading">
+            <div>
+              <span id="siteProvider" class="tag">QUAN TRẮC</span>
+              <h3 id="siteTitle">Chọn một điểm đo</h3>
+              <p id="siteRole" class="subtle">
+              </p>
+            </div>
+            <div class="latest-value">
+              <strong id="siteEC">—</strong>
+              <span id="siteECUnit">mS/m · mẫu mới nhất của điểm</span>
+            </div>
+          </div>
+          <p id="siteWarning" class="notice">
+          </p>
+          <p id="stationComparisonStatus" class="subtle" role="status"></p>
+          <button id="openStationForecast" type="button" class="secondary" hidden>Dự báo EC đa biến tại trạm này →</button>
+          <p id="stationForecastNote" class="subtle"></p>
+          <form id="dateFilter" class="filters">
+            <label>Từ ngày<input id="dateFrom" type="date" required>
+            </label>
+            <label>Đến ngày<input id="dateTo" type="date" required>
+            </label>
+            <button type="submit">Áp dụng</button>
+            <button type="button" class="secondary" id="allDates">Toàn bộ</button>
+            <button type="button" class="text-button" id="downloadRows">Tải CSV đang xem ↓</button>
+          </form>
+          <button id="retryObservations" class="secondary">Tải lại quan trắc</button>
+          <p id="observationStatus" role="status" class="subtle">
+          </p>
+          <div id="observationChart" class="chart">
+          </div>
+          <details>
+            <summary>Bảng số đo và nguồn từng dòng</summary>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ngày quan trắc</th>
+                    <th>EC (mS/m)</th>
+                    <th>Chất lượng nguồn</th>
+                    <th>Minh chứng</th>
+                  </tr>
+                </thead>
+                <tbody id="observationRows">
+                </tbody>
+              </table>
+            </div>
+            <p class="subtle">Các mẫu rời rạc không được nội suy thành số đo theo giờ; EC chưa được quy đổi thành độ mặn.</p>
+          </details>
+        </article>
+        </details>
+        <details class="panel compact-details"><summary>Tra cứu lịch sử quan trắc PostgreSQL</summary><div id="databaseHistoryHost" class="panel database-history"></div></details>
+      </section>
+      <section data-view="forecasts" id="multivariate-forecast" class="section">
+        <div class="section-title"><div><p class="eyebrow">02 / DỰ BÁO EC ĐA BIẾN</p><h2>Dự báo EC từ khí tượng và mùa vụ.</h2></div><span class="badge">Random Forest · mS/m</span></div>
+        <article class="panel"><p class="subtle">Mô hình sử dụng lượng mưa, nhiệt độ, gió của tháng t−2 và chu kỳ tháng cần dự báo. Khí tượng đủ tháng đã có trước kỳ mục tiêu; mỗi trạm có mô hình riêng.</p><div id="multivariateForecastHost"></div></article>
+      </section>
+      <section data-view="forecasts" id="forecast" class="section">
+        <details class="historical-forecast"><summary>Đánh giá lịch sử: mô hình EC trễ và Persistence</summary>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">02 / KIỂM CHỨNG MÔ HÌNH TẠI TRẠM (1985–2023)</p>
+            <h2>Mô hình máy học đối chiếu với thực đo lịch sử.</h2>
+          </div>
+        </div>
+        <article class="panel">
+          <div class="forecast-controls">
+            <label for="experimentSelect">Trạm và giả định dữ liệu khả dụng<select id="experimentSelect">
+              </select>
+            </label>
+            <span class="badge">Horizon: 1 tháng lịch</span>
+          </div>
+          <p class="notice">MRC có mẫu EC theo tháng. Mô hình được chọn trên validation và đánh giá trên test 2022–2023. Nguồn MRC, chuỗi lịch sử 1985–2023; xem manifest để kiểm tra mốc train/validation/test. Đây là kiểm chứng hồi cứu cho dự báo mẫu EC tháng kế tiếp, chưa phải dự báo hiện tại.</p>
+          <button id="retryForecast" class="secondary">Tải lại thí nghiệm</button>
+          <div id="forecastStatus" role="status" class="subtle">
+          </div>
+          <div class="next-forecast-card">
+            <div class="panel-heading"><div><span class="tag">DỰ BÁO SAU MẪU CUỐI CỦA BỘ THÍ NGHIỆM</span><h3>EC tháng <span id="nextForecastTarget">—</span></h3></div><div class="latest-value"><strong id="nextForecastValue">—</strong><span>mS/m · kết quả mô hình</span></div></div>
+            <p id="nextForecastStatus" class="subtle" role="status"></p>
+            <div class="table-wrap"><table><thead><tr><th>Mô hình</th><th>EC dự báo (mS/m)</th><th>Tháng EC đầu vào mới nhất</th><th>Tuổi dữ liệu</th></tr></thead><tbody id="nextForecastRows"></tbody></table></div>
+            <button id="nextForecastDownload" type="button" class="text-button" disabled>Tải kết quả và mốc đầu vào ↓</button>
+          </div>
+          <div id="modelAssessment" class="model-assessment">
+          </div>
+          <div class="legend">
+            <span>
+              <i style="background:#173b45">
+              </i>Quan trắc</span>
+            <span>
+              <i style="background:#087f78">
+              </i>Mô hình chọn trên validation</span>
+            <span>
+              <i style="background:#c18b33">
+              </i>Persistence</span>
+          </div>
+          <div id="forecastChart" class="chart">
+          </div>
+          <details open class="prediction-details">
+            <summary>Kết quả theo từng tháng</summary>
+            <div class="filters">
+              <label>Năm đối chiếu<select id="predictionYear"><option value="">Toàn bộ</option></select></label>
+              <button id="downloadPredictions" type="button" class="secondary" disabled>Tải bảng đang xem ↓</button>
+            </div>
+            <p id="predictionStatus" role="status" class="subtle"></p>
+            <div class="table-wrap"><table><thead><tr><th>Tháng mục tiêu</th><th>EC thực đo</th><th id="predictionModelHeading">Mô hình</th><th>Persistence</th><th>Sai số tuyệt đối mô hình</th></tr></thead><tbody id="predictionRows"></tbody></table></div>
+          </details>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mô hình</th>
+                  <th>MAE (mS/m) ↓</th>
+                  <th>RMSE (mS/m) ↓</th>
+                  <th>Tháng đánh giá chung</th>
+                  <th>Chọn trên validation</th>
+                </tr>
+              </thead>
+              <tbody id="metricsRows">
+              </tbody>
+            </table>
+          </div>
+          <div id="artifactLinks" class="download-links">
+          </div>
+        </article>
+        </details>
+      </section>
+      <section data-view="data-quality" id="future-forecast" class="section">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">03 / ƯỚC TÍNH HỒI CỨU THEO KHÍ TƯỢNG (2024–2026)</p>
+            <h2>Mô hình máy học đa biến kết hợp khí tượng Open-Meteo.</h2>
+          </div>
+          <button id="downloadFutureCsv" class="small-button">Tải kết quả CSV (2024–2026) ↓</button>
+        </div>
+        <article class="panel">
+          <div class="forecast-controls">
+            <label for="futureStationSelect">Chọn trạm ước tính hồi cứu<select id="futureStationSelect">
+                <option value="TanChau">Trạm Tân Châu (Sông Tiền - Đầu nguồn Đồng Tháp)</option>
+                <option value="MyTho">Trạm Mỹ Tho (Hạ lưu Sông Tiền)</option>
+              </select>
+            </label>
+            <span class="badge" style="background:#eaf8f4;color:#087f78;border-color:#a8ddcc">Khoảng ước tính: 01/2024–08/2026</span>
+          </div>
+          <div class="stats" style="margin:18px 0;background:#fafcfb">
+            <article>
+              <span>EC ước tính cao nhất (mS/m)</span>
+              <strong id="kpiFutureMax" style="color:#087f78">—</strong>
+              <small id="kpiFutureMaxMonth">—</small>
+            </article>
+            <article>
+              <span>Trung bình chu kỳ</span>
+              <strong id="kpiFutureAvg">—</strong>
+              <small>32 tháng (01/2024–08/2026)</small>
+            </article>
+            <article>
+              <span>Kiểm chứng cùng kỳ</span>
+              <strong class="compact-value">Chưa có</strong>
+              <small>Chưa kết luận độ mặn / an toàn</small>
+            </article>
+            <article>
+              <span>Biến khí tượng đầu vào</span>
+              <strong style="font-size:18px">Mưa, Nhiệt, Gió</strong>
+              <small>Chuỗi khí hậu Open-Meteo</small>
+            </article>
+          </div>
+          <p id="futureStatus" role="status" class="notice">
+          </p>
+          <button id="retryFuture" class="secondary">Tải lại ước tính</button>
+          <div id="futureEcChart" class="chart">
+          </div>
+          <p class="subtle">Khí tượng lịch sử không phải thông tin dự báo thời tiết sẵn có tại thời điểm phát hành. Không dùng chuỗi này để chứng minh chất lượng dự báo ngoài mẫu.</p>
+          <details style="margin-top:14px">
+            <summary>Xem số liệu ước tính hồi cứu</summary>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tháng</th>
+                    <th>EC ước tính (mS/m)</th>
+                    <th>Lượng mưa (mm)</th>
+                    <th>Nhiệt độ TB (°C)</th>
+                    <th>Gió TB (m/s)</th>
+                  </tr>
+                </thead>
+                <tbody id="futureTableRows">
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </article>
+      </section>
+      <section data-view="gates" id="gates" class="section">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">04 / RÀ SOÁT HỒ SƠ CÔNG TRÌNH</p>
+            <h2>Mô phỏng điều kiện và quản lý hồ sơ cống.</h2>
+          </div>
+          <a class="text-button" href="/api/v1/workspace/gate-source#page=2" target="_blank" rel="noopener">Danh mục gốc · trang 2 ↗</a>
+        </div>
+        <div class="gate-layout">
+          <article class="panel">
+            <label for="gateSelect">Cống trong danh mục tài liệu<select id="gateSelect">
+              </select>
+            </label>
+            <p id="gateInfo">
+            </p>
+            <p class="notice">Danh mục có nguồn. Thông tin nhập là khai báo; công cụ không xác minh pháp lý hoặc quan hệ thủy lực và không phát lệnh đóng / mở cống.</p>
+            <button class="secondary" id="loadDatabaseGates">Đọc cống đã có trong PostgreSQL</button>
+            <p id="databaseGateStatus" role="status" class="subtle">
+            </p>
+            <div id="databaseGateList">
+            </div>
+            <hr>
+            <h3>Mô phỏng điều kiện tại cống</h3>
+            <p class="subtle">Nhập số đo và ngưỡng kịch bản, lưu bản nháp trên trình duyệt hoặc PostgreSQL và xuất JSON. Kết quả giúp giải thích quy tắc của đồ án.</p>
+            <div id="gateForecastContext" class="forecast-reference" hidden></div>
+            <form id="fieldForm" class="field-grid">
+              <label>Thời điểm đo (GMT+7)<input name="observed" type="datetime-local">
+              </label>
+              <label>Mục tiêu<select name="mode">
+                  <option value="INTAKE">Lấy nước (INTAKE)</option>
+                  <option value="DRAIN">Thoát nước (DRAIN)</option>
+                </select>
+              </label>
+              <label>Mực nước ngoài (m)<input name="outside_level" type="number" step="any">
+              </label>
+              <label>Mực nước trong (m)<input name="inside_level" type="number" step="any">
+              </label>
+              <label>EC ngoài (mS/m)<input name="outside_quality" type="number" step="any" min="0">
+              </label>
+              <label>EC trong (mS/m)<input name="inside_quality" type="number" step="any" min="0">
+              </label>
+              <label class="wide">Hệ cao độ của hai số đo mực nước<input name="datum" placeholder="Ghi đúng hệ cao độ từ hồ sơ">
+              </label>
+              <label class="wide">Nguồn / mã phiếu quan trắc<input name="reference" placeholder="Không dùng số liệu ước lượng thay số đo">
+              </label>
+              <label class="wide">Phương pháp / thiết bị đo EC<input name="method" placeholder="Theo phiếu đo thực tế">
+              </label>
+              <label class="wide">Mẫu ngưỡng kịch bản (tùy chọn)<select id="gateScenarioPreset">
+                <option value="">— Tự nhập ngưỡng bên dưới —</option>
+              </select></label>
+              <p id="thresholdPresetStatus" role="status" class="subtle wide"></p>
+              <label>Cơ sở EC<select name="ec_basis"><option value="UNKNOWN">Chưa xác định</option><option value="EC25">EC quy về 25°C</option><option value="RAW">EC tại nhiệt độ đo</option></select></label>
+              <label>EC cho phép lấy dưới (mS/m)<input name="open_below" type="number" min="0" step="any"></label>
+              <label>EC ngừng lấy từ (mS/m)<input name="close_at_or_above" type="number" min="0" step="any"></label>
+              <label>Chênh mực nước tối thiểu (m)<input name="min_head_m" type="number" min="0" step="any"></label>
+              <label>Chênh mực nước tối đa (m)<input name="max_abs_head_m" type="number" min="0" step="any"></label>
+              <label>Mực nước trong tối thiểu (m)<input name="inside_min_m" type="number" step="any"></label>
+              <label>Mực nước trong tối đa (m)<input name="inside_max_m" type="number" step="any"></label>
+              <label class="wide"><input name="allow_saline_drain" type="checkbox"> Kịch bản cho phép thoát nước khi EC vượt ngưỡng</label>
+              <div class="wide draft-actions">
+                <button type="submit">Chạy mô phỏng và xuất hồ sơ ↓</button>
+                <button id="saveGateDraft" type="button" class="secondary">Lưu nháp trình duyệt</button>
+                <button id="restoreGateDraft" type="button" class="secondary">Khôi phục nháp trình duyệt</button>
+                <button id="saveGateDatabaseDraft" type="submit" class="secondary">Lưu nháp PostgreSQL</button>
+                <button id="restoreGateDatabaseDraft" type="button" class="secondary">Mở nháp PostgreSQL gần nhất</button>
+              </div>
+            </form>
+            <p id="fieldStatus" role="status" class="subtle">
+            </p>
+            <p id="gateDraftDatabaseStatus" role="status" class="subtle"></p>
+          </article>
+          <article class="panel">
+            <span class="tag">KẾT QUẢ RÀ SOÁT KHAI BÁO</span>
+            <h3 id="gateResultTitle">Chưa đủ dữ liệu đánh giá</h3>
+            <p class="subtle">Các trường thông tin trong hồ sơ:</p>
+            <ul id="gateChecklist" class="checklist">
+            </ul>
+            <div class="download-links">
+              <button id="downloadGateInput" class="text-button">Mẫu quan trắc cống ↓</button>
+              <button id="downloadGatePolicy" class="text-button">Mẫu quy trình cống ↓</button>
+              <button id="downloadGateLink" class="text-button">Mẫu liên kết trạm–cống ↓</button>
+            </div>
+            <details>
+              <summary>Nạp hồ sơ JSON tùy chỉnh và chạy kiểm tra</summary>
+              <p>Quy trình chứa ngưỡng mặn, hệ cao độ và căn cứ phê duyệt; đầu vào chứa số đo và nhu cầu nước.</p>
+              <label>Hồ sơ đầu vào (input.json)<input id="gateInputFile" type="file" accept=".json,application/json">
+              </label>
+              <label>Quy trình (policy.json)<input id="gatePolicyFile" type="file" accept=".json,application/json">
+              </label>
+              <button id="evaluateGate">Mô phỏng kịch bản</button>
+              <button id="downloadEvaluation" class="secondary" disabled>Tải kết quả ↓</button>
+              <p id="gateEvaluationStatus" role="status" class="subtle">
+              </p>
+              <pre id="gateResult" class="json-result">
+              </pre>
+            </details>
+          </article>
+        </div>
+      </section>
+      <section data-view="overview" class="section">
+        <details class="panel">
+          <summary>Nguồn dữ liệu, phạm vi và minh chứng</summary>
+          <div id="sourceList" class="source-list">
+          </div>
+          <p class="subtle">Ngày cập nhật giao diện khác ngày lấy mẫu. Các điểm RIA2 và trạm MRC giữ mã riêng, không ghép thành một chuỗi liên tục.</p>
+        </details>
+      </section>
+      <section id="data-quality" data-view="data-quality" class="section">
+        <h2>Chất lượng và tiếp nhận dữ liệu</h2>
+        <p class="notice">Giữ riêng dữ liệu chưa xác minh, quan trắc EC và số đo độ mặn. Các hồ sơ tiếp nhận chưa tự động trở thành dữ liệu huấn luyện.</p>
+        <button id="retryIntake" class="secondary">Tải lại hồ sơ tiếp nhận</button>
+        <div id="intakeHost">
+        </div>
+      </section>
+    </main>
+    <footer>WebGIS Đồng Tháp · Quan trắc có nguồn · Kiểm chứng EC tháng · Rà soát hồ sơ</footer>
+    <script type="module" src="/src/app/workspace.js">
+    </script>
+  </body>
+</html>

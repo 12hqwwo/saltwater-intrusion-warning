@@ -1,0 +1,732 @@
+{
+  "type": "FeatureCollection",
+  "name": "tien_river_corridor",
+  "metadata": {
+    "coordinate_order": "longitude,latitude",
+    "crs": "EPSG:4326",
+    "purpose": "Illustrative inland salinity and gate-barrier simulation",
+    "gate_coordinates": "Copied exactly from the local verified-headworks catalog; verification is the catalog designation, not an independent survey",
+    "main_axis_landmarks": [
+      "Border",
+      "Hong Ngu",
+      "Cao Lanh",
+      "Sa Dec",
+      "Vinh Long",
+      "My Tho",
+      "Estuary"
+    ],
+    "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+    "hydraulic_link_status": "SIMULATION_ONLY",
+    "coordinate_reference_system": "EPSG:4326",
+    "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "TIEN_MAIN",
+      "properties": {
+        "id": "TIEN_MAIN",
+        "name": "Tr\u1ee5c ch\u00ednh S\u00f4ng Ti\u1ec1n",
+        "type": "MAIN_RIVER",
+        "length_km": 175,
+        "length_basis": "Nominal simulation corridor length; not measured from schematic geometry",
+        "flow_direction": "UPSTREAM_TO_SEA",
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.233,
+            10.8
+          ],
+          [
+            105.285,
+            10.807
+          ],
+          [
+            105.34,
+            10.8
+          ],
+          [
+            105.383,
+            10.727
+          ],
+          [
+            105.432,
+            10.65
+          ],
+          [
+            105.49,
+            10.571
+          ],
+          [
+            105.553,
+            10.505
+          ],
+          [
+            105.625,
+            10.451
+          ],
+          [
+            105.668,
+            10.395
+          ],
+          [
+            105.728,
+            10.344
+          ],
+          [
+            105.765,
+            10.305
+          ],
+          [
+            105.831,
+            10.292
+          ],
+          [
+            105.904,
+            10.286
+          ],
+          [
+            105.97,
+            10.278
+          ],
+          [
+            106.015,
+            10.286
+          ],
+          [
+            106.055,
+            10.305
+          ],
+          [
+            106.095,
+            10.299
+          ],
+          [
+            106.135,
+            10.291
+          ],
+          [
+            106.171,
+            10.299
+          ],
+          [
+            106.205,
+            10.307
+          ],
+          [
+            106.243,
+            10.312
+          ],
+          [
+            106.282,
+            10.325
+          ],
+          [
+            106.307,
+            10.329
+          ],
+          [
+            106.335,
+            10.34
+          ],
+          [
+            106.36,
+            10.35
+          ],
+          [
+            106.397,
+            10.335
+          ],
+          [
+            106.441,
+            10.317
+          ],
+          [
+            106.489,
+            10.298
+          ],
+          [
+            106.546,
+            10.284
+          ],
+          [
+            106.595,
+            10.272
+          ],
+          [
+            106.65,
+            10.25
+          ],
+          [
+            106.7,
+            10.232
+          ],
+          [
+            106.735,
+            10.224
+          ],
+          [
+            106.75,
+            10.22
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_016",
+      "properties": {
+        "id": "CANAL_GATE_TG_016",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - C\u00e1i L\u00e1",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_016",
+        "gate_name": "C\u00e1i L\u00e1",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.055,
+          10.305
+        ],
+        "connection_main_index": 15,
+        "gate_coordinate": [
+          106.058328,
+          10.330488
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.055,
+            10.305
+          ],
+          [
+            106.056664,
+            10.317744
+          ],
+          [
+            106.058328,
+            10.330488
+          ],
+          [
+            106.052928,
+            10.364238
+          ],
+          [
+            106.046328,
+            10.405488
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_021",
+      "properties": {
+        "id": "CANAL_GATE_TG_021",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - C\u00e1i S\u01a1n",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_021",
+        "gate_name": "C\u00e1i S\u01a1n",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.135,
+          10.291
+        ],
+        "connection_main_index": 17,
+        "gate_coordinate": [
+          106.135828,
+          10.306712
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.135,
+            10.291
+          ],
+          [
+            106.135414,
+            10.298856
+          ],
+          [
+            106.135828,
+            10.306712
+          ],
+          [
+            106.129078,
+            10.337312
+          ],
+          [
+            106.120828,
+            10.374712
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_004",
+      "properties": {
+        "id": "CANAL_GATE_TG_004",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - Ph\u00fa Phong",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_004",
+        "gate_name": "Ph\u00fa Phong",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.205,
+          10.307
+        ],
+        "connection_main_index": 19,
+        "gate_coordinate": [
+          106.207266,
+          10.322812
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.205,
+            10.307
+          ],
+          [
+            106.206133,
+            10.314906
+          ],
+          [
+            106.207266,
+            10.322812
+          ],
+          [
+            106.201866,
+            10.353412
+          ],
+          [
+            106.195266,
+            10.390812
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_003",
+      "properties": {
+        "id": "CANAL_GATE_TG_003",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - R\u1ea1ch G\u1ea7m",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_003",
+        "gate_name": "R\u1ea1ch G\u1ea7m",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.243,
+          10.312
+        ],
+        "connection_main_index": 20,
+        "gate_coordinate": [
+          106.244484,
+          10.326713
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.243,
+            10.312
+          ],
+          [
+            106.243742,
+            10.319356
+          ],
+          [
+            106.244484,
+            10.326713
+          ],
+          [
+            106.246284,
+            10.361813
+          ],
+          [
+            106.248484,
+            10.404713
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_000",
+      "properties": {
+        "id": "CANAL_GATE_TG_000",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - C\u1ed1ng \u00e2u Nguy\u1ec5n T\u1ea5n Th\u00e0nh",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_000",
+        "gate_name": "C\u1ed1ng \u00e2u Nguy\u1ec5n T\u1ea5n Th\u00e0nh",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.282,
+          10.325
+        ],
+        "connection_main_index": 21,
+        "gate_coordinate": [
+          106.284438,
+          10.340563
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.282,
+            10.325
+          ],
+          [
+            106.283219,
+            10.332781
+          ],
+          [
+            106.284438,
+            10.340563
+          ],
+          [
+            106.279038,
+            10.394563
+          ],
+          [
+            106.272438,
+            10.460563
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_020",
+      "properties": {
+        "id": "CANAL_GATE_TG_020",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - Xo\u00e0i H\u1ed9t",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_020",
+        "gate_name": "Xo\u00e0i H\u1ed9t",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.307,
+          10.329
+        ],
+        "connection_main_index": 22,
+        "gate_coordinate": [
+          106.308578,
+          10.344488
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.307,
+            10.329
+          ],
+          [
+            106.307789,
+            10.336744
+          ],
+          [
+            106.308578,
+            10.344488
+          ],
+          [
+            106.312178,
+            10.374638
+          ],
+          [
+            106.316578,
+            10.411488
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_002",
+      "properties": {
+        "id": "CANAL_GATE_TG_002",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - B\u1ea3o \u0110\u1ecbnh",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_002",
+        "gate_name": "B\u1ea3o \u0110\u1ecbnh",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.335,
+          10.34
+        ],
+        "connection_main_index": 23,
+        "gate_coordinate": [
+          106.344297,
+          10.376638
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.335,
+            10.34
+          ],
+          [
+            106.339648,
+            10.358319
+          ],
+          [
+            106.344297,
+            10.376638
+          ],
+          [
+            106.346997,
+            10.419388
+          ],
+          [
+            106.350297,
+            10.471638
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_001",
+      "properties": {
+        "id": "CANAL_GATE_TG_001",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - Xu\u00e2n H\u00f2a",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_001",
+        "gate_name": "Xu\u00e2n H\u00f2a",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.441,
+          10.317
+        ],
+        "connection_main_index": 26,
+        "gate_coordinate": [
+          106.444016,
+          10.332862
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.441,
+            10.317
+          ],
+          [
+            106.442508,
+            10.324931
+          ],
+          [
+            106.444016,
+            10.332862
+          ],
+          [
+            106.448966,
+            10.375612
+          ],
+          [
+            106.455016,
+            10.427862
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_005",
+      "properties": {
+        "id": "CANAL_GATE_TG_005",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - V\u00e0m Gi\u1ed3ng",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_005",
+        "gate_name": "V\u00e0m Gi\u1ed3ng",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.546,
+          10.284
+        ],
+        "connection_main_index": 28,
+        "gate_coordinate": [
+          106.548484,
+          10.300887
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.546,
+            10.284
+          ],
+          [
+            106.547242,
+            10.292444
+          ],
+          [
+            106.548484,
+            10.300887
+          ],
+          [
+            106.554784,
+            10.343637
+          ],
+          [
+            106.562484,
+            10.395887
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CANAL_GATE_TG_094",
+      "properties": {
+        "id": "CANAL_GATE_TG_094",
+        "name": "K\u00eanh m\u00f4 ph\u1ecfng - V\u00e0m K\u00eanh",
+        "type": "PRIMARY_CANAL",
+        "gate_code": "GATE_TG_094",
+        "gate_name": "V\u00e0m K\u00eanh",
+        "parent_river_id": "TIEN_MAIN",
+        "connection_coordinate": [
+          106.735,
+          10.224
+        ],
+        "connection_main_index": 32,
+        "gate_coordinate": [
+          106.736828,
+          10.275938
+        ],
+        "gate_path_index": 2,
+        "path_direction": "RIVER_TO_INLAND",
+        "gate_coordinate_source": "data/8file/03_sluice_gates_190_and_27_verified_gis.csv",
+        "gate_location_status": "EXACT_PLUS_CODE",
+        "gate_is_verified_27_headworks": true,
+        "geometry_status": "REPRESENTATIVE_SCHEMATIC",
+        "hydraulic_link_status": "SIMULATION_ONLY",
+        "coordinate_reference_system": "EPSG:4326",
+        "geometry_note": "Representative simulation geometry; not a surveyed river/canal centerline or verified hydraulic connectivity."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.735,
+            10.224
+          ],
+          [
+            106.735914,
+            10.249969
+          ],
+          [
+            106.736828,
+            10.275938
+          ],
+          [
+            106.728728,
+            10.309688
+          ],
+          [
+            106.718828,
+            10.350938
+          ]
+        ]
+      }
+    }
+  ]
+}

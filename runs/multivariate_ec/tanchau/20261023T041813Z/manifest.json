@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "model_version": "20261023T041813Z",
+  "station": "TANCHAU",
+  "model": "RandomForestRegressor",
+  "sklearn_version": "1.9.1",
+  "feature_order": [
+    "rainfall_mm",
+    "temperature_degC",
+    "wind_source_units",
+    "month_sin",
+    "month_cos"
+  ],
+  "feature_units": {
+    "rainfall_mm": "mm",
+    "temperature_degC": "degC",
+    "wind_source_units": "m/s",
+    "month_sin": "1",
+    "month_cos": "1"
+  },
+  "weather_lag_months": 2,
+  "training_cutoff": "2023-12-01",
+  "training_months": 464,
+  "source_sample_count": 464,
+  "target_unit": "mS/m",
+  "target_quality": "UNVERIFIED_SOURCE_QA_NOT_PROMOTED",
+  "source_qa_counts": {
+    "UNVERIFIED": 464
+  },
+  "source_observation_bundle_sha256": "dedc8b5e3b3a5895e421befaa3181a04e236d00e4b66edbd94f8113ab99301cb",
+  "input_sha256": {
+    "data\\research\\mrc_ec_monthly_samples.csv": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc",
+    "data\\external\\multivariate_weather\\manifest.json": "da9b80d2c54d52a427705d326160b1bacce17e94874ab6e5a757f3e75fd48443"
+  },
+  "weather_source_sha256": {
+    "data/external/multivariate_weather/era5_MyTho_1985-01-01_1989-12-31.json": "b7a44f1bc437e4e9232d96997f999238ed7811367831a6bfe805aa2859a95e37",
+    "data/external/multivariate_weather/era5_MyTho_1990-01-01_1994-12-31.json": "de14505996122950cbed03ee58394df29a46a9708699494a13140cef8b979088",
+    "data/external/multivariate_weather/era5_MyTho_1995-01-01_1999-12-31.json": "756665880ca14fe873fd24cdf535cd1f035189d94da66b6074fff912d1170ecb",
+    "data/external/multivariate_weather/era5_MyTho_2000-01-01_2004-12-31.json": "07bbcb21705c6acf53945f8858a40317002181b9deaf00a9fe625e347149dd95",
+    "data/external/multivariate_weather/era5_MyTho_2005-01-01_2009-12-31.json": "e371ef1a44f215485b7d5c2bba72c37a355df3b103f1dd9eca36ad1b3c8b4a48",
+    "data/external/multivariate_weather/era5_MyTho_2010-01-01_2014-12-31.json": "5b61bf193585eb3c114a80f12e44269f1b96ca98462417fcf70c8846c60a83dc",
+    "data/external/multivariate_weather/era5_MyTho_2015-01-01_2019-12-31.json": "70954940bece8bdbbf545ce3b35ccf72eed62ee57a2593505fc4bed08876e515",
+    "data/external/multivariate_weather/era5_MyTho_2020-01-01_2024-12-31.json": "44ae7303979eae69a11a4c2dce51391970cb56fe24d8e6266b7f51489bac26b7",
+    "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+    "data/external/multivariate_weather/era5_TanChau_1985-01-01_1989-12-31.json": "b6eaef2bbaa3985db3e2f89f1f5ac682738ab37d0e0c7aedb8ca803219f46657",
+    "data/external/multivariate_weather/era5_TanChau_1990-01-01_1994-12-31.json": "8eefee5b5e63ea116c76da0c267a8043d449958db2abddaa4d3c1548f74a3742",
+    "data/external/multivariate_weather/era5_TanChau_1995-01-01_1999-12-31.json": "1e0927dbb089cc7a47c54af64656d179e07c4952a98500047599e0acb29126aa",
+    "data/external/multivariate_weather/era5_TanChau_2000-01-01_2004-12-31.json": "b10c51d00915f042665383f00a74353d63e85ec279a1e8b97bc327d36911d3c4",
+    "data/external/multivariate_weather/era5_TanChau_2005-01-01_2009-12-31.json": "d513aace4198d682cb9e4ac9b244487938c955fdc7b86017f646e8e7822ad6b4",
+    "data/external/multivariate_weather/era5_TanChau_2010-01-01_2014-12-31.json": "4a26c8c8f644bb978daa5c01a31ef03fd323bd9f79fbb3993b87415092e53a32",
+    "data/external/multivariate_weather/era5_TanChau_2015-01-01_2019-12-31.json": "abc00a9db129ea38e4c720ce8a04eb96d18600a10e6be18174d561b17e11ccaf",
+    "data/external/multivariate_weather/era5_TanChau_2020-01-01_2024-12-31.json": "9058526e3833ed8ea53174c4e2ffa3f3edd2e894a36dea815f82e6e0fc56084f",
+    "data/external/multivariate_weather/era5_TanChau_2025-01-01_2026-09-30.json": "f87718b0b6d4a9acbae1ba4bd4477bacc87549905ff70b7f7fc096ebbc036fa7"
+  },
+  "parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "random_state": 42
+  },
+  "selection": "Fixed parameters before validation; holdout not used for selection.",
+  "evaluation": {
+    "validation": {
+      "RandomForest": {
+        "n": 36,
+        "mae_mS_m": 3.7325754313169335,
+        "rmse_mS_m": 4.782947016982618
+      },
+      "Persistence": {
+        "n": 36,
+        "mae_mS_m": 4.857777777777778,
+        "rmse_mS_m": 5.871893504938022
+      },
+      "SeasonalNaive": {
+        "n": 36,
+        "mae_mS_m": 2.5683333333333334,
+        "rmse_mS_m": 3.290801996136774
+      },
+      "MonthlyClimatology": {
+        "n": 36,
+        "mae_mS_m": 3.9058400178253105,
+        "rmse_mS_m": 4.816395026498176
+      }
+    },
+    "holdout": {
+      "RandomForest": {
+        "n": 24,
+        "mae_mS_m": 4.44793888095048,
+        "rmse_mS_m": 5.842373450569948
+      },
+      "Persistence": {
+        "n": 24,
+        "mae_mS_m": 4.864166666666667,
+        "rmse_mS_m": 6.061761982570194
+      },
+      "SeasonalNaive": {
+        "n": 24,
+        "mae_mS_m": 2.3820833333333336,
+        "rmse_mS_m": 3.19137705387502
+      },
+      "MonthlyClimatology": {
+        "n": 24,
+        "mae_mS_m": 3.7964720970970967,
+        "rmse_mS_m": 4.996081758777262
+      }
+    }
+  },
+  "evaluation_protocol": "Train <=2018 for validation 2019-2021; train <=2021 for holdout 2022-2023. Baseline inputs available through target minus two months. Final model refit on all labels.",
+  "feature_importance": {
+    "rainfall_mm": 0.5909755338413807,
+    "temperature_degC": 0.13518444802241827,
+    "wind_source_units": 0.12137282944924072,
+    "month_sin": 0.06020038211058962,
+    "month_cos": 0.09226680657637064
+  },
+  "missing_training_features": {
+    "rainfall_mm": 0,
+    "temperature_degC": 0,
+    "wind_source_units": 0,
+    "month_sin": 0,
+    "month_cos": 0
+  },
+  "deployment_ready": false,
+  "weather_unit_note": "Open-Meteo ERA5 daily mean 10m wind in explicit m/s; monthly arithmetic mean.",
+  "spatial_note": "Weather grid coordinates differ from EC sampling coordinates.",
+  "model_sha256": "9b01d1232a19b70621594f1fee4baee49bde3b0af6c4899d0aa811e876a00122",
+  "predictions_sha256": "bfbac55e1f2eacd0a90d2d6af55c27444116928fb57b17fcea5633583a3ca9cd"
+}

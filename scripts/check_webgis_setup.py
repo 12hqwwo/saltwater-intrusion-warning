@@ -22,7 +22,7 @@ def main():
             add(package,'OK',importlib.metadata.version(package))
         except importlib.metadata.PackageNotFoundError:
             add(package,'MISSING','Install requirements-prototype.txt in this Python environment.')
-    add('frontend_build','OK' if (ROOT/'frontend/dist/research.html').exists() else 'MISSING',
+    add('frontend_build','OK' if (ROOT/'frontend/dist/workspace.html').exists() else 'MISSING',
         'Run npm.cmd --prefix frontend run build after frontend changes.')
     try:
         from backend.research import validate_bundle

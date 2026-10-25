@@ -7,16 +7,18 @@ export const TIME_ZONE = 'Asia/Ho_Chi_Minh';
 
 export class APIError extends Error {}
 
-export async function requestJSON(path, { signal, fetcher = globalThis.fetch } = {}) {
+export async function requestJSON(path, { signal, fetcher = globalThis.fetch, method = 'GET', body: payload, timeoutMs = 15_000 } = {}) {
   const controller = new AbortController();
   const abort = () => controller.abort();
   let timedOut = false;
   if (signal?.aborted) abort();
   signal?.addEventListener('abort', abort, { once: true });
-  const timer = setTimeout(() => { timedOut = true; abort(); }, 15_000);
+  const timer = setTimeout(() => { timedOut = true; abort(); }, timeoutMs);
   try {
     const response = await fetcher(`${ROOT}${path}`, {
-      signal: controller.signal, headers: { Accept: 'application/json' },
+      signal: controller.signal, method,
+      headers: { Accept: 'application/json', ...(payload === undefined ? {} : { 'Content-Type': 'application/json' }) },
+      ...(payload === undefined ? {} : { body: JSON.stringify(payload) }),
     });
     let body;
     try { body = await response.json(); }
@@ -28,7 +30,7 @@ export async function requestJSON(path, { signal, fetcher = globalThis.fetch } =
     return body;
   } catch (error) {
     if (signal?.aborted) throw new DOMException('Đã hủy yêu cầu cũ.', 'AbortError');
-    if (timedOut) throw new APIError('Yêu cầu quá 15 giây. Hãy kiểm tra kết nối rồi thử lại.');
+    if (timedOut) throw new APIError(`Yêu cầu quá ${Math.ceil(timeoutMs / 1000)} giây. Hãy kiểm tra kết nối rồi thử lại.`);
     if (error instanceof APIError) throw error;
     throw new APIError('Không kết nối được API. Kiểm tra backend và thử tải lại.');
   } finally {
