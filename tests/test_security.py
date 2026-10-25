@@ -22,6 +22,14 @@ class SecurityTests(unittest.TestCase):
         self.assertEqual(response.headers['cache-control'], 'no-store')
         self.assertEqual(self.client.post('/api/v1/workspace/gate-drafts', json={}).status_code, 422)
 
+    def test_map_documents_allow_origin_referrer_for_external_tiles(self):
+        # Middleware also handles HTML/static responses, including this 404.
+        # Suppressing cross-origin Referer causes OSM policy-blocked tile images.
+        response = self.client.get('/workspace.html')
+        self.assertEqual(response.headers['referrer-policy'], 'strict-origin-when-cross-origin')
+        self.assertEqual(response.headers['x-content-type-options'], 'nosniff')
+        self.assertEqual(response.headers['x-frame-options'], 'DENY')
+
     def test_api_key_is_optional_but_enforced_when_configured(self):
         with patch.dict(os.environ, WEBGIS_WRITE_API_KEY='test-key'):
             for path in ['gate-drafts', 'multivariate/history']:

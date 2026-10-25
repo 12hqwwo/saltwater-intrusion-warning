@@ -18,6 +18,10 @@ import { formatWater, advisoryColor } from '../shared/simulation-display.js';
 import { smoothRiverSegments, smoothCoordinates } from './river-geometry.js';
 import { createMapParticles } from './map-particles.js';
 
+// Zero tangents keep every sampled point on its supplied vertex-to-vertex span.
+// The ribbon, canal display and particles must follow the same constrained path.
+const riverInterpolation = { tension: 0, samplesPerSpan: 12 };
+
 function riverColor(ec, alpha = 1) {
   const stops = [[0,[0,229,255]],[1,[16,185,129]],[2,[250,204,21]],[4,[249,115,22]],[6,[244,63,94]],[8,[168,85,247]]];
   const value = Math.max(0, Number(ec) * .0064), index = stops.findIndex(([limit]) => value <= limit);
@@ -34,10 +38,15 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   let initialSimulationFit = false, hoveredSegment = null, hoveredGate = null;
   const riverSource = new VectorSource(), canalSource = new VectorSource(), simulationGateSource = new VectorSource(), isoSource = new VectorSource();
   const ribbonStyles = new globalThis.Map();
-  const riverLayer = new VectorLayer({ source: riverSource, style: f => {
+  const riverLayer = new VectorLayer({ source: riverSource, updateWhileAnimating: true, updateWhileInteracting: true, style: (f, resolution) => {
     const ec = f.get('ec_mS_m'), key = Number(ec).toFixed(3);
-    if (!ribbonStyles.has(key)) ribbonStyles.set(key, [new Style({ stroke: new Stroke({ color: riverColor(ec, .22), width: 18 }) }),new Style({ stroke: new Stroke({ color: 'rgba(6,18,26,.85)', width: 10 }) }),new Style({ stroke: new Stroke({ color: riverColor(ec), width: 6 }) })]);
-    return ribbonStyles.get(key);
+    // EPSG:3857 resolution gives continuous fractional zoom without caching each zoom.
+    const zoom = Math.log2(156543.03392804097 / resolution);
+    const scale = Math.min(1.8, Math.max(.65, 2 ** ((zoom - 9) * .15)));
+    if (!ribbonStyles.has(key)) ribbonStyles.set(key, [new Style({ stroke: new Stroke({ color: riverColor(ec, .16), width: 13 }) }),new Style({ stroke: new Stroke({ color: 'rgba(6,18,26,.85)', width: 7.5 }) }),new Style({ stroke: new Stroke({ color: riverColor(ec), width: 4.5 }) })]);
+    const styles = ribbonStyles.get(key);
+    [13, 7.5, 4.5].forEach((width, index) => styles[index].getStroke().setWidth(width * scale));
+    return styles;
   } });
   const canalLayer = new VectorLayer({ source: canalSource, style: new Style({ stroke: new Stroke({ color: 'rgba(148,163,184,.55)', width: 2, lineDash: [5, 7] }) }) });
   const simulationGates = new VectorLayer({ source: simulationGateSource, style: f => {
@@ -178,13 +187,13 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   }
   function setSimulationCorridor(value) {
     corridor = value; canalSource.clear();
-    const features = (value?.corridor?.features || value?.features || []).map(feature => feature.geometry?.type === 'LineString' ? {...feature,geometry:{...feature.geometry,coordinates:smoothCoordinates(feature.geometry.coordinates)}} : feature);
+    const features = (value?.corridor?.features || value?.features || []).map(feature => feature.geometry?.type === 'LineString' ? {...feature,geometry:{...feature.geometry,coordinates:smoothCoordinates(feature.geometry.coordinates, riverInterpolation)}} : feature);
     canalSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features }, options));
     particles.setCanals(features.filter(feature => feature.properties?.type !== 'MAIN_RIVER'));
   }
   function setSimulationFrame(value) {
     frame = value; intakeGate = null; hoveredSegment = null; hoveredGate = null; updateRiverTooltip(); riverSource.clear(); simulationGateSource.clear(); isoSource.clear();
-    const smoothed = smoothRiverSegments(frame?.river_segments || []);
+    const smoothed = smoothRiverSegments(frame?.river_segments || [], riverInterpolation);
     // Subdivide only display geometry: particles retain the original 35 continuous paths.
     const ribbon = smoothed.segments.flatMap(feature => {
       const coordinates = feature.geometry.coordinates, count = Math.min(8, coordinates.length - 1), props = feature.properties;

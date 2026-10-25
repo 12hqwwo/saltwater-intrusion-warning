@@ -42,7 +42,9 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         except HTTPException as exc:
             response = JSONResponse({'detail': exc.detail}, status_code=exc.status_code)
         response.headers['X-Content-Type-Options'] = 'nosniff'
-        response.headers['Referrer-Policy'] = 'same-origin'
+        # External map tiles require a Referer; send only the origin cross-site,
+        # never the page path/query, and send nothing on an HTTPS downgrade.
+        response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
         response.headers['X-Frame-Options'] = 'DENY'
         if request.url.path.startswith('/api/'):
             response.headers['Cache-Control'] = 'no-store'
