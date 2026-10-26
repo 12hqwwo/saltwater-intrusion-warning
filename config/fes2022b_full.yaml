@@ -1,0 +1,39 @@
+# Requires all 34 local atlases. Does not approve the estuary candidate points.
+engine: darwin
+tide:
+  cartesian:
+    paths:
+      2N2: ${FES_DATA}/2n2_fes2022.nc
+      Eps2: ${FES_DATA}/eps2_fes2022.nc
+      J1: ${FES_DATA}/j1_fes2022.nc
+      K1: ${FES_DATA}/k1_fes2022.nc
+      K2: ${FES_DATA}/k2_fes2022.nc
+      L2: ${FES_DATA}/l2_fes2022.nc
+      Lambda2: ${FES_DATA}/lambda2_fes2022.nc
+      M2: ${FES_DATA}/m2_fes2022.nc
+      M3: ${FES_DATA}/m3_fes2022.nc
+      Mu2: ${FES_DATA}/mu2_fes2022.nc
+      N2: ${FES_DATA}/n2_fes2022.nc
+      Nu2: ${FES_DATA}/nu2_fes2022.nc
+      O1: ${FES_DATA}/o1_fes2022.nc
+      P1: ${FES_DATA}/p1_fes2022.nc
+      Q1: ${FES_DATA}/q1_fes2022.nc
+      R2: ${FES_DATA}/r2_fes2022.nc
+      S1: ${FES_DATA}/s1_fes2022.nc
+      S2: ${FES_DATA}/s2_fes2022.nc
+      T2: ${FES_DATA}/t2_fes2022.nc
+      Mf: ${FES_DATA}/mf_fes2022.nc
+      Mm: ${FES_DATA}/mm_fes2022.nc
+      MSqm: ${FES_DATA}/msqm_fes2022.nc
+      Mtm: ${FES_DATA}/mtm_fes2022.nc
+      Sa: ${FES_DATA}/sa_fes2022.nc
+      Ssa: ${FES_DATA}/ssa_fes2022.nc
+      M4: ${FES_DATA}/m4_fes2022.nc
+      M6: ${FES_DATA}/m6_fes2022.nc
+      M8: ${FES_DATA}/m8_fes2022.nc
+      MKS2: ${FES_DATA}/mks2_fes2022.nc
+      MN4: ${FES_DATA}/mn4_fes2022.nc
+      MS4: ${FES_DATA}/ms4_fes2022.nc
+      MSf: ${FES_DATA}/msf_fes2022.nc
+      N4: ${FES_DATA}/n4_fes2022.nc
+      S4: ${FES_DATA}/s4_fes2022.nc

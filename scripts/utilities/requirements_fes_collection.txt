@@ -1,0 +1,2 @@
+# Only needed for the authenticated SFTP download transport.
+paramiko>=4.0,<5

@@ -30,6 +30,9 @@ runs/setup_checks/
 runs/webgis_evidence/
 data/archive/
 # Raw sources, GIS, model artifacts, split manifests and metrics are retained.
+# FES atlas binaries stay local; commit only the lightweight collection inventory.
+data/raw/tide/fes2022b/ocean_tide_extrapolated/
+data/raw/tide/fes2022b/collection_last_error.json
 # Ephemeral docs/verification outputs and packages
 docs/*.zip
 docs/screenshots/
