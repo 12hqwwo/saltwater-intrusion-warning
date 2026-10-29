@@ -1,0 +1,13 @@
+{
+  "issue": "day 6 of target-minus-one month",
+  "ec_delay_days": [
+    5,
+    35
+  ],
+  "water_level_month": "target-minus-two month",
+  "water_level_assumed_delay_days": 5,
+  "water_level_month_requirement": "at least 20 days each with at least 80 quarter-hour samples; else missing",
+  "manual_level_requirement": "at least 20 days for monthly median; at least 10 days with 2+ samples for daily range median; no gauge-datum merging",
+  "source": "MRC My Thuan EC and Tien water level series; quality remains UNVERIFIED",
+  "warning": "No historical publication vintages or common gauge datum confirmation; water level is not discharge; 2022-23 retrospective period was previously inspected"
+}

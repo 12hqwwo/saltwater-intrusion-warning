@@ -1,0 +1,33 @@
+{
+  "selected_on": "validation_only",
+  "choices": [
+    {
+      "station": "MYTHO",
+      "ec_delay_days": 0,
+      "algorithm": "RIDGE_LOG",
+      "configuration": "AR",
+      "validation_mae": 14.518323530957389
+    },
+    {
+      "station": "MYTHO",
+      "ec_delay_days": 30,
+      "algorithm": "RIDGE_LOG",
+      "configuration": "AR",
+      "validation_mae": 15.972455224607934
+    },
+    {
+      "station": "TANCHAU",
+      "ec_delay_days": 0,
+      "algorithm": "RF",
+      "configuration": "PLUS_wind_direction",
+      "validation_mae": 1.2679697043712352
+    },
+    {
+      "station": "TANCHAU",
+      "ec_delay_days": 30,
+      "algorithm": "RF",
+      "configuration": "PLUS_wind_direction",
+      "validation_mae": 1.4305077434101392
+    }
+  ]
+}

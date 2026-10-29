@@ -117,7 +117,10 @@ def get_glofas():
 def get_tide():
     print("Loading Vung Tau Tide Max...")
     dfs = []
-    for f in glob.glob(str(DATA_DIR / "raw" / "tide" / "uhslc" / "*VungTau*.csv")):
+    # Legacy id142 was Langkawi, Malaysia despite its VungTau filename.
+    for f in [DATA_DIR / "external" / "uhslc_vungtau_hourly_20261030" / "vungtau_383b_daily_max.csv"]:
+        if not f.exists():
+            continue
         df = pd.read_csv(f)
         if df.empty: continue
         df['date'] = pd.to_datetime(df['date'])

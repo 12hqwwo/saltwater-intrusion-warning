@@ -1,0 +1,41 @@
+{
+  "doi": "10.5880/GFZ.4.4.2024.004",
+  "license": "CC BY 4.0",
+  "checked_at_utc": "2026-10-29T11:04:49.268010+00:00",
+  "files": [
+    {
+      "name": "2024-004_Apel_salinity_SONDOC_1996-2016.csv",
+      "url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel_salinity_SONDOC_1996-2016.csv",
+      "bytes": 465005,
+      "sha256": "c79c658321c73f2ff0e24a154fa09eca1fe9ce6d1119cc00a29d6777eb2332e2",
+      "audit": {
+        "rows": 18336,
+        "numeric_values": 18324,
+        "missing_values": 12,
+        "duplicate_timestamp_rows": 24,
+        "start": "1996-02-01 01:00:00",
+        "end": "2016-06-29 23:00:00",
+        "min_g_l": 0.0,
+        "max_g_l": 27.4,
+        "timezone": "not specified by source; do not join to hourly series as UTC"
+      }
+    },
+    {
+      "name": "2024-004_Apel-et-al_discharge_Qmonthly_TanChau_1964-2017_gaps-filled.csv",
+      "url": "https://datapub.gfz-potsdam.de/download/10.5880.GFZ.4.4.2024.004-QWn/2024-004_Apel-et-al_discharge_Qmonthly_TanChau_1964-2017_gaps-filled.csv",
+      "bytes": 7320,
+      "sha256": "d6479cb03b7d5dc4fc3df24cbc67adabdba8606c608cc1688441b76852be0a3f",
+      "audit": {
+        "rows": 444,
+        "start": "1980-01-01 00:00:00",
+        "end": "2016-12-01 00:00:00",
+        "min_m3_s": 1460,
+        "max_m3_s": 23238,
+        "reconstructed_months_1980_1994": 180,
+        "official_gauge_months_1995_2016": 264,
+        "note": "Filename says 1964-2017 but rows cover 1980-2016; source text specifies m3/s despite heading comment typo"
+      }
+    }
+  ],
+  "use": "historical mechanism/independent corroboration only; no 2019-2023 overlap"
+}

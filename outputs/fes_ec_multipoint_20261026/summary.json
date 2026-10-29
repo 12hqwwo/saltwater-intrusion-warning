@@ -1,0 +1,220 @@
+{
+  "status": "RESEARCH_ONLY_NOT_DEPLOYED",
+  "points": {
+    "near": {
+      "lon": 106.78333333333333,
+      "lat": 10.216666666666669,
+      "distance_to_mouth_km": 6.336869302136877,
+      "four_neighbor_mask_values": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selection": "nearest four-native-node cell center within 0.5 degrees",
+      "target_lon": 106.7503834,
+      "target_lat": 10.2635303,
+      "distance_to_cua_tieu_mouth_km": 6.336869302136877
+    },
+    "ese": {
+      "lon": 106.85,
+      "lat": 10.183333333333337,
+      "distance_to_mouth_km": 1.482666666667096,
+      "four_neighbor_mask_values": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selection": "nearest four-native-node cell center within 0.5 degrees",
+      "target_lon": 106.85,
+      "target_lat": 10.17,
+      "distance_to_cua_tieu_mouth_km": 14.083375095142065
+    },
+    "south": {
+      "lon": 106.78333333333333,
+      "lat": 10.049999999999997,
+      "distance_to_mouth_km": 6.118729733369724,
+      "four_neighbor_mask_values": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selection": "nearest four-native-node cell center within 0.5 degrees",
+      "target_lon": 106.76,
+      "target_lat": 10.1,
+      "distance_to_cua_tieu_mouth_km": 24.01673386867168
+    }
+  },
+  "feature_variants": {
+    "near_month": [
+      "fes_near_month_range_cm"
+    ],
+    "near_midmonth": [
+      "fes_near_midmonth_range_cm"
+    ],
+    "ese_midmonth": [
+      "fes_ese_midmonth_range_cm"
+    ],
+    "south_midmonth": [
+      "fes_south_midmonth_range_cm"
+    ],
+    "coastal_mean_midmonth": [
+      "fes_coastal_mean_midmonth_range_cm"
+    ]
+  },
+  "data_definition": "Hourly FES ocean tide, local daily max-min range; midmonth is days 9-15 inclusive",
+  "source": "FES2022b extrapolated atlas; 2x2 native-ocean nodes selected at each point",
+  "pyfes_version": "2026.5.2",
+  "sklearn_version": "1.9.1",
+  "model_feature_order": [
+    "rainfall_mm",
+    "temperature_degC",
+    "wind_source_units",
+    "month_sin",
+    "month_cos",
+    "fes_near_midmonth_range_cm"
+  ],
+  "experimental_model_sha256": "08f3af2b03d0a016de8305355471c4958fdfb3694ef90c69c585a257f23c5147",
+  "collection_status_sha256": "bad9272dd438f2b1c771d09828dc9f94bf9267392fd6dcf4c92b6019fa7241b8",
+  "fes_config_sha256": "992372230027f2e53b34f840b67d6587fbe29963628d6105a19b07e2c6823479",
+  "evaluation": {
+    "validation": {
+      "weather_month": {
+        "n": 36,
+        "mae_mS_m": 69.60919199945242,
+        "rmse_mS_m": 147.91888048065047
+      },
+      "near_month": {
+        "n": 36,
+        "mae_mS_m": 71.00646672732383,
+        "rmse_mS_m": 152.90386562547468
+      },
+      "near_midmonth": {
+        "n": 36,
+        "mae_mS_m": 69.63778299908299,
+        "rmse_mS_m": 148.99497636632356
+      },
+      "ese_midmonth": {
+        "n": 36,
+        "mae_mS_m": 71.30412702208955,
+        "rmse_mS_m": 151.9042875990962
+      },
+      "south_midmonth": {
+        "n": 36,
+        "mae_mS_m": 71.23411376048406,
+        "rmse_mS_m": 151.68207989208122
+      },
+      "coastal_mean_midmonth": {
+        "n": 36,
+        "mae_mS_m": 70.59386141025645,
+        "rmse_mS_m": 150.86615019101535
+      },
+      "persistence_t_minus_2": {
+        "n": 36,
+        "mae_mS_m": 93.38583333333332,
+        "rmse_mS_m": 192.89714159652837
+      },
+      "seasonal_naive": {
+        "n": 36,
+        "mae_mS_m": 115.5263888888889,
+        "rmse_mS_m": 234.8802087885558
+      },
+      "monthly_climatology": {
+        "n": 36,
+        "mae_mS_m": 70.22115146563675,
+        "rmse_mS_m": 167.37933864729885
+      }
+    },
+    "holdout": {
+      "weather_month": {
+        "n": 24,
+        "mae_mS_m": 18.318194282772282,
+        "rmse_mS_m": 49.31131910713888
+      },
+      "near_month": {
+        "n": 24,
+        "mae_mS_m": 19.215922165837412,
+        "rmse_mS_m": 47.19763928246036
+      },
+      "near_midmonth": {
+        "n": 24,
+        "mae_mS_m": 19.742273742826843,
+        "rmse_mS_m": 50.869335490512995
+      },
+      "ese_midmonth": {
+        "n": 24,
+        "mae_mS_m": 20.231398682249676,
+        "rmse_mS_m": 51.896901747053334
+      },
+      "south_midmonth": {
+        "n": 24,
+        "mae_mS_m": 18.442484501430467,
+        "rmse_mS_m": 48.65838414651888
+      },
+      "coastal_mean_midmonth": {
+        "n": 24,
+        "mae_mS_m": 20.334279395827906,
+        "rmse_mS_m": 51.89168713567233
+      },
+      "persistence_t_minus_2": {
+        "n": 24,
+        "mae_mS_m": 12.621249999999998,
+        "rmse_mS_m": 18.910940726644636
+      },
+      "seasonal_naive": {
+        "n": 24,
+        "mae_mS_m": 20.149583333333336,
+        "rmse_mS_m": 47.842282162330015
+      },
+      "monthly_climatology": {
+        "n": 24,
+        "mae_mS_m": 22.193940190190194,
+        "rmse_mS_m": 45.03354483728988
+      }
+    }
+  },
+  "selection": "near_midmonth",
+  "selection_rule": "Lowest 2019-2021 validation MAE among five predeclared FES variants; holdout not used for selection",
+  "baseline": "Served RF weather+month features; same train/test months, RF parameters, and weather data",
+  "limitations": [
+    "EC labels are monthly samples, mostly day 15, not monthly means",
+    "FES is predicted astronomical ocean tide; no local gauge or estuarine validation",
+    "FES2022b and revised ERA5 were not available in their present forms at historical issue times",
+    "2022-2023 holdout has previously been examined and is not a new blind test",
+    "No MRC EC after 2023 for verifying current forecasts",
+    "No gate-specific EC, water level, or operation inference"
+  ],
+  "forecast": {
+    "target_month": "2026-11-01",
+    "station": "MYTHO",
+    "selected_tide_variant": "near_midmonth",
+    "selected_on": "2019-2021 validation MAE only",
+    "predicted_ec_mS_m": 16.869882743842865,
+    "existing_served_model_ec_mS_m": 17.331244652727047,
+    "feature_values": {
+      "rainfall_mm": 313.0,
+      "temperature_degC": 27.85666666666667,
+      "wind_source_units": 2.261,
+      "month_sin": -0.5000000000000004,
+      "month_cos": 0.8660254037844384,
+      "fes_near_midmonth_range_cm": 298.1307483432045
+    },
+    "feature_units": {
+      "rainfall_mm": "mm",
+      "temperature_degC": "degC",
+      "wind_source_units": "m/s",
+      "month_sin": "1",
+      "month_cos": "1",
+      "fes_near_midmonth_range_cm": "cm"
+    },
+    "weather_input_month": "2026-09",
+    "source_ec_training_cutoff": "2023-12-01",
+    "quality_status": "EXPERIMENTAL_UNVERIFIED_NO_POST_2023_EC_VALIDATION",
+    "deployment_ready": false,
+    "gate_decision_eligible": false
+  },
+  "deployment_ready": false,
+  "gate_decision_eligible": false
+}

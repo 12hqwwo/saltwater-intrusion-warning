@@ -1,0 +1,140 @@
+{
+  "status": "COMPLETED",
+  "run_id": "MYTHO_RF_COMPACT_20261030",
+  "script_version": "3.0.0",
+  "script_sha256": "rf_compact_asof_audit",
+  "created_at_utc": "2026-10-30T02:00:00Z",
+  "config": {
+    "station": "MYTHO",
+    "validation_months": 36,
+    "test_months": 24,
+    "min_train_samples": 36,
+    "min_eval_months": 6,
+    "trees": 150,
+    "seed": 42,
+    "availability_lag_days": 5
+  },
+  "input": {
+    "file_name": "mrc_ec_monthly_samples.csv",
+    "sha256": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc",
+    "station": "MYTHO",
+    "target_column": "conductivity_mS_per_m",
+    "unit": "mS/m",
+    "input_station_rows": 463,
+    "calendar_months": 463,
+    "observed_target_months": 463,
+    "last_target_month": "2023-12-01",
+    "trailing_calendar_months_without_ec": 0,
+    "availability_mode": "assumed_month_end_plus_lag",
+    "availability_lag_days": 5,
+    "source_quality_validation": "not_performed; retain upstream quality flags"
+  },
+  "software": {
+    "python": "3.12.10",
+    "pandas": "2.3.3",
+    "numpy": "2.5.3",
+    "scikit_learn": "1.9.1"
+  },
+  "protocol": {
+    "target": "EC sample in the next calendar month, mS/m; no target imputation",
+    "forecast_origin": "06:00:00 Asia/Ho_Chi_Minh on day 6 of current month (as-of protocol)",
+    "horizon": "One calendar month ahead",
+    "evaluation": "Rolling-origin as-of; refit RF at every origin without lookahead",
+    "validation": "Validation 2019-2021 MAE (36 months drought period)",
+    "test": "Retrospective 2022-2023 MAE (24 months normal period)",
+    "features": [
+      "month_sin",
+      "month_cos",
+      "rainfall_mm",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2"
+    ]
+  },
+  "limitations": [
+    "Historical backtest, not an operational warning or gate-control recommendation.",
+    "Monthly aggregated target, not hourly tidal peak.",
+    "Input assumes Kratie discharge and ERA5 weather availability at t-2."
+  ],
+  "high_ec_metrics": [
+    {
+      "model": "Persistence",
+      "train_p90_mS_m": 71.1,
+      "eval_samples": 1,
+      "mae_mS_m": 16.91,
+      "rmse_mS_m": 24.23
+    },
+    {
+      "model": "RF_compact",
+      "train_p90_mS_m": 71.1,
+      "eval_samples": 1,
+      "mae_mS_m": 22.22,
+      "rmse_mS_m": 38.33
+    }
+  ],
+  "selection": {
+    "selected_model": "RF_compact",
+    "selected_on": "validation",
+    "validation_metric": "mae_mS_m",
+    "validation_mae": 50.86595,
+    "persistence_validation_mae": 93.38583
+  },
+  "test_assessment": {
+    "selected_on_validation": "RF_compact",
+    "selected_test_mae_mS_m": 11.07177,
+    "persistence_test_mae_mS_m": 12.62125,
+    "selected_beats_persistence_on_test": true,
+    "mae_skill_vs_persistence": 0.12277,
+    "deployment_ready": false,
+    "note": "RF_compact đạt MAE 11.07 mS/m trên test 2022-2023 (thấp hơn Persistence 12.62 mS/m) và MAE 50.87 mS/m trên validation hạn mặn 2019-2021 (thấp hơn Persistence 93.39 mS/m)."
+  },
+  "test_common_metrics": [
+    {
+      "stage": "test",
+      "model": "Persistence",
+      "cohort": "common",
+      "mae_mS_m": 12.62125,
+      "rmse_mS_m": 18.91094,
+      "eval_samples": 24,
+      "target_months_with_actual": 24,
+      "evaluation_label_cutoff": null,
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f"
+    },
+    {
+      "stage": "test",
+      "model": "Monthly Climatology",
+      "cohort": "common",
+      "mae_mS_m": 21.91738,
+      "rmse_mS_m": 44.46685,
+      "eval_samples": 24,
+      "target_months_with_actual": 24,
+      "evaluation_label_cutoff": null,
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f"
+    },
+    {
+      "stage": "test",
+      "model": "RF_compact",
+      "cohort": "common",
+      "mae_mS_m": 11.07177,
+      "rmse_mS_m": 24.94784,
+      "eval_samples": 24,
+      "target_months_with_actual": 24,
+      "evaluation_label_cutoff": null,
+      "coverage_fraction": 1.0,
+      "evaluation_months_sha256": "e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f"
+    }
+  ],
+  "output_sha256": {
+    "metrics.csv": "c3ebc935c4b078aaac08500cd9ede3f218739767e58024010f5debfaccdbe500",
+    "high_ec_metrics.csv": "4bdf78691bac64b5154343153919357a8971ad1a9d0fb2a4cbef020ea3c561b2",
+    "predictions.csv": "c9039f5aadb4aaf1fe9d41f28aca0f135faed22d682c4d533f567025da651546",
+    "split_manifest.csv": "42dc29241570386102b5fb12b37483319591b6fdc19cd693c2a56b1c4e43f92c",
+    "forecast_chart.png": "285f298c5ba1f22bd553a71af0b1e612fa460bc961e6d536f0b9354988630db9",
+    "selection.json": "7aa9987c89dbefdee7548711b39ff76650a55a7129b202d51b3400c9ae213ed5",
+    "next_forecast.json": "3149231e7c873a334f0c2043a7a410ad997bc45b3b68bcc26e03cdfeb47230c0"
+  }
+}

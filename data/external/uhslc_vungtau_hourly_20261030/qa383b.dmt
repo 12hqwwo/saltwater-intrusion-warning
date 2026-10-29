@@ -1,0 +1,190 @@
+                                                                                
+                            QUALITY ASSESSMENT OF SEA LEVEL DATA                
+                                           by the                               
+                   UH SEA LEVEL CENTER/NATIONAL OCEANOGRAPHIC DATA CENTER     
+                                 JOINT ARCHIVE FOR SEA LEVEL                    
+                                       updated: 18 Nov 2019
+              Station  : Vung Tau-B                Latitude:  10 20.4N
+              Country  : Vietnam                  Longitude: 107 04.3E          
+              JASL #   : 383B                 Time Meridian: 105E (GMT + 7 hr) 
+              GLOSS #  : none Originator #: 383      NODC #: 11100701
+              Contributor  : University of Hawaii Sea Level Center (UHSLC)
+                             1000 Pope Rd. MSB 317
+                             Honolulu, HI 96822
+              Originator   : UHSLC in collaboration with
+                             Marine Hydro-meteorological Center
+                             No. 4 Dang Thai Than Street
+                             Hanoi VIETNAM
+              Original Data: digital (PRS, RAD, ENC)
+              Instrmnt Type: starting 2007:
+                             1) radar (RAD) gauge (Vega Vegapuls 62)
+                             2) pressure transducer (PRS)
+                             3) Handar Encoder 436-A (ENC), float/well
+
+                             Primary channel used in JASL set:
+                             2007-2015: RAD
+                             2016-2018: ENC
+                            *short gaps in primary channel filled with
+                             other channels as available; see UHSLC for
+                             specific dates
+              Digitzd Intvl: 3 min (RAD); 2 min (PRS); 
+                             15 min (ENC)
+              Present Data : Hourly, daily, and monthly values obtained by:     
+                    Hourly : 3-point Hanning Filter centered on the hour
+                    Daily  : 119-point convolution filter (Bloomfield, 1976)    
+                             centered on noon applied to the hourly data        
+                             with respective periods of the 95, 50, and 5%      
+                             amplitude points at 124.0, 60.2, and 40.2 hours    
+                    Monthly: Simple average of all daily values; calculated if  
+                             7 or fewer days are missing                        
+              Span of data : 15 Oct 2007 - 31 Dec 2018
+              Gaps > 1 mon : none
+              Time Refernce: GMT (hours 00-23)   Space-filler Flag   :-9999     
+              Units        : millimeters         Missing Data Flag   : 9999     
+              Existing     : Yes                 Operational         : yes
+              Sat. Trans.  : Yes                 Distribution        : 2007-2018
+              Refernce Levl: Heights are referred to the station tide staff 
+                             zero, which is linked to land-based benchmarks. 
+                             This reference zero is unique to this station and
+                             is not an official datum (chart, national, etc.) 
+                             and is not relative to local tidal parameters, 
+                             such as mean lower low water.  See the Originators
+                             for benchmark descriptions, maps, and the geodetic
+                             levelling history.
+                             383A is separate from 383B since they have
+                             unique reference zeros.
+              Comment      : The daily  and monthly means reveal no apparent    
+                             changes in the reference level. Tidal analysis
+                             does not resolve all tidal components thus the
+                             residuals have fluctuations.  It is assumed the
+                             timing is good.
+
+                             JASL Nov 2019 update replaces 2016- 03 Sep 2017.
+                                                                                
+                    CI MISSING              REPLACED GAPS     QUESTIONABLE      
+              YEAR (%) DATA                 OR BAD DATA       FLUCTUATIONS      
+              ---- --- -------------------- --------------- --------------------
+              2007  21 none                 none            none
+              2008 100 none                 none            none
+              2009 100 none                 (07)123-(23)123 none
+              2010  93 298-328              (11)020-(23)020 none
+                                            (12)089-(03)090
+                                            (15)096-(23)096
+                                            (15)097-(23)097
+                                            (16)098-(23)098
+                                            (15)099-(23)099
+                                            (14)100-(23)100
+                                            (15)101-(23)101
+                                            (13)102-(23)102
+                                            (15)103-(23)103
+                                            (15)104-(23)104
+                                            (16)106-(23)106
+                                            (14)107-(23)107
+                                            (14)108-(23)108
+                                            (13)109-(23)109
+                                            (13)110-(00)111
+                                            (12)111-(23)111
+                                            (13)112-(23)112
+                                            (13)113-(23)113
+                                            (13)114-(23)114
+                                            (12)115-(23)115
+                                            (12)116-(23)116
+                                            (11)117-(23)117
+                                            (11)118-(23)118
+                                            (11)119-(23)119
+                                            (12)120-(00)121
+                                            (12)121-(23)121
+                                            (10)122-(23)122
+                                            (12)123-(00)124
+                                            (13)124-(23)124
+                                            (13)125-(23)125
+                                            (13)126-(23)126
+                                            (13)127-(23)127
+                                            (12)128-(23)128
+                                            (12)129-(00)130
+                                            (12)130-(23)130
+                                            (11)131-(23)131
+                                            (13)132-(23)132
+                                            (13)133-(23)133
+                                            (11)134-(23)134
+                                            (11)135-(23)135
+                                            (11)136-(00)137
+                                            (11)137-(23)137
+                                            (11)138-(23)138
+                                            (11)139-(23)139
+                                            (11)140-(00)141
+                                            (11)141-(23)141
+                                            (11)142-(23)142
+                                            (10)143-(23)143
+                                            (12)144-(23)144
+                                            (10)145-(01)146
+                                            (10)146-(00)147
+                                            (16)147-(00)148
+                                            (11)148-(00)149
+                                            (11)149-(23)149
+                                            (11)150-(00)151
+                                            (11)151-(23)151
+                                            (13)152-(00)153
+                                            (12)153-(00)154
+                                            (10)154-(23)154
+                                            (14)155-(23)155
+                                            (10)156-(23)156
+                                            (13)158-(00)159
+                                            (15)197-(23)197
+                                            (16)205-(01)206
+                                            (10)206-(01)207
+                                            (16)209-(23)209
+                                            (16)212-(00)213
+                                            (10)213-(00)214
+                                            (15)214-(23)214
+                                            (14)218-(00)219
+                                            (15)219-(00)220
+                                            (11)220-(00)221
+                                            (13)221-(23)221
+                                            (15)222-(23)222
+                                            (13)223-(23)223
+                                            (17)224-(00)225
+                                            (16)225-(23)225
+                                            (14)231-(23)231
+                                            (15)232-(23)232
+                                            (15)233-(00)234
+                                            (11)234-(00)235
+                                            (09)235-(00)236
+                                            (16)236-(23)236
+                                            (15)238-(23)238
+                                            (16)239-(23)239
+                                            (13)240-(00)241
+                                            (15)241-(00)242
+                                            (15)242-(23)242
+                                            (16)243-(23)243
+                                            (15)244-(23)244
+                                            (15)245-(23)245
+                                            (13)246-(23)246
+                                            (16)247-(23)247
+                                            (14)248-(23)248
+                                            (18)254-(01)255
+                                            (15)261-(23)261
+                                            (15)274-(01)275
+                                            (15)276-(23)276
+                                            (13)295-(10)296
+                                            (22)334-(07)335
+              2011  99 6-8                  (11)181-(18)181 none
+                                            (16)195-(00)196
+                                            (13)196-(00)197
+                                            (04)211-(01)212
+                                            (09)212-(20)212
+                                            (13)213-(00)214
+                                            (06)234-(20)234
+                                            (05)265-(19)265
+                                            (01)350-(17)350
+                                            (04)352-(14)352
+              2012  99 91-92                (04)005-(21)005 none
+                                            (17)127-(12)128
+                                            (08)211-(15)211
+              2013  99 65-67                (22)063-(05)064 none
+                                            (13)174-(00)175
+              2014 100 none                 none            none
+              2015 100 none                 none            none
+              2016 100 none                 none            none
+              2017  99 246-249              none            none
+              2018 100 none                 none            none

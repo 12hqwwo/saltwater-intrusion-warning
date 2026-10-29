@@ -1,0 +1,7 @@
+stage,model,cohort,mae_mS_m,rmse_mS_m,eval_samples,target_months_with_actual,evaluation_label_cutoff,coverage_fraction,evaluation_months_sha256
+test,Persistence,model_available,12.62125,18.91094,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,Persistence,common,12.62125,18.91094,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,Monthly Climatology,model_available,21.91738,44.46685,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,Monthly Climatology,common,21.91738,44.46685,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,RF_compact,model_available,11.07177,24.94784,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,RF_compact,common,11.07177,24.94784,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f

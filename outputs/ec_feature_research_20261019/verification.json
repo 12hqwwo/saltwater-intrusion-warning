@@ -1,0 +1,16 @@
+{
+  "unique_station_month_scenario": true,
+  "no_future_ec_weather_or_enso_by_declared_delay": true,
+  "future_weather_perturbation_does_not_change_past_feature": true,
+  "input_hashes_unchanged": true,
+  "validation_predictions.csv": {
+    "rows": 9504,
+    "common_cohorts": true,
+    "training_precedes_evaluation": true
+  },
+  "holdout_predictions.csv": {
+    "rows": 1152,
+    "common_cohorts": true,
+    "training_precedes_evaluation": true
+  }
+}

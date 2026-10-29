@@ -1,0 +1,13 @@
+{
+  "issue": "day 6 of preceding month",
+  "ec_delay_days": [
+    5,
+    35
+  ],
+  "weather_delay_days": 5,
+  "weather_month": "target t-2",
+  "validation": "2019-2021",
+  "retrospective_check": "2022-2023 previously inspected",
+  "feature_source": "MRC EC + ERA5 manifest + ERA5 extra; upstream is lagged Tan Chau EC only",
+  "warning": "No observed travel-time calibration, branch flow, contemporaneous salinity or historical source vintages. Upstream ablation is not proof of physical propagation."
+}

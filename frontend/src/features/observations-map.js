@@ -189,9 +189,9 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     add('p', `Ngoài sông (mô phỏng ${frame.year_month}): ${formatWater(gate.simulated_outside_ec_mS_m, displayUnit, gate.simulated_outside_salinity_g_l)}`);
     if (displayUnit === 'ec') add('p', `Độ mặn ${formatWater(gate.simulated_outside_ec_mS_m, 'salinity', gate.simulated_outside_salinity_g_l)}`);
     const advisory = add('p', gate.advisory_label_vi || gate.advisory_label || gate.advisory_code || gate.simulated_gate_state, 'simulation-advisory'); advisory.style.color = advisoryColor(gate);
-    add('p', 'Bắt buộc con người kiểm tra & quyết định vận hành. Đây là mô phỏng, không phải lệnh vận hành.');
+    add('p', 'Đây là EC nội suy theo kịch bản, chưa có số đo tại cống và không phải lệnh vận hành.');
     const actions = add('div', '', 'simulation-card-actions');
-    const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Đưa vào Hồ sơ cống để kiểm tra & quyết định vận hành →';
+    const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Đưa kịch bản vào Hồ sơ cống để rà soát →';
     apply.addEventListener('click', () => {
       const detail = { kind: 'SPATIAL_SIMULATION', gate, frame, year_month: frame.year_month, thresholds: frame.thresholds, simulation_layer: true };
       window.dispatchEvent(new CustomEvent('workspace:apply-simulation-gate', { detail }));
@@ -301,10 +301,19 @@ export function createResearchMap(target, { onSelect, onTileError }) {
       const features = items.filter(item => item.geometry?.type === 'Point').map(item => ({ type: 'Feature', properties: { site_code: item.site_code }, geometry: { type: 'LineString', coordinates: [geometry.coordinates, item.geometry.coordinates] } }));
       candidateSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features }, options));
     },
-    setGates(items) { gateSource.clear(); gateSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features: items.filter(r => r.geometry).map(r => ({ type: 'Feature', geometry: r.geometry, properties: r })) }, options)); },
+    setGates(items) { gateSource.clear(); gateSource.addFeatures(formatter.readFeatures(databaseGateFeatureCollection(items), options)); },
     select(code) { selected = code; stations.changed(); },
     fit: fitMap,
     setBase(value) { base.setVisible(value); },
     destroy() { disposed = true; particles.destroy(); canvases.forEach(canvas => canvas.remove()); target.removeEventListener('pointerleave', clearGateHover); document.removeEventListener('visibilitychange', resumeVisibleMap); riverTooltip.remove(); const picker = document.getElementById('simulationGatePicker'); if (picker) picker.onchange = null; listeners.forEach(([name, handler]) => window.removeEventListener(name, handler)); observer.disconnect(); map.setTarget(undefined); },
+  };
+}
+
+export function databaseGateFeatureCollection(items) {
+  return {
+    type: 'FeatureCollection',
+    features: items.filter(item => item.geometry).map(({ geometry, ...properties }) => ({
+      type: 'Feature', geometry, properties,
+    })),
   };
 }

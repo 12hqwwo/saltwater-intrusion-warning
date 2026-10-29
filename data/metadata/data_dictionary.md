@@ -2,6 +2,10 @@
 
 Cập nhật theo gói dự án ngày 02/10/2026. File, database và xác minh chuyên môn là các phạm vi khác nhau.
 
+**Đính chính 29/10/2026:** nhãn EC MRC chỉ có một phép đo mỗi trạm-tháng, không phải trung bình tháng. CSV khí tượng cũ không lưu đủ provenance để khẳng định mọi cột đến từ ERA5-Land hoặc khẳng định đơn vị cột `windspeed_10m_max`; bộ khí tượng đa biến tải riêng có manifest ERA5 và đơn vị gió m/s. Trạng thái FES hiện xem trong `data/raw/tide/fes2022b/collection_status.json`.
+
+**Đính chính 30/10/2026:** tệp cũ `uhslc_tides_VungTau_id142_daily.csv` tải từ UHSLC `h142.csv` là **Langkawi, Malaysia**, bị gắn nhãn Vũng Tàu sai; không dùng cho mô hình hoặc báo cáo. Chuỗi Vũng Tàu-B đúng là UHSLC `383B` research quality, giờ UTC, mm so với mốc trạm, 2007–2024; bản chuẩn hóa ở `data/external/uhslc_vungtau_hourly_20261030/`. FES2022b vẫn là nguồn triều thiên văn đã có; 383B chỉ là quan trắc ven biển để đối chiếu, không thay FES hoặc mực nước cửa Tiểu.
+
 ## Trạm và tọa độ EC
 
 | Mã trạm | Tên | Kinh độ | Vĩ độ | Nguồn | Trạng thái |
@@ -15,20 +19,20 @@ Không giả định điểm khí tượng, ô lưới GloFAS hoặc điểm DAH
 | Bien | Don vi | Tan suat goc | Tan suat processed | Nguon | Ngay tai | Pham vi |
 |---|---|---|---|---|---|---|
 | conductivity_mS_per_m | mS/m | Thang | Thang | MRC Data Portal | 2026-08-31 | 1985-05 -> 2023-12 |
-| precip_mm | mm | Ngay | Thang (tong) | Open-Meteo ERA5-Land | 2026-09-02 | 1985-01 -> 2026-08 |
-| temp_max/min/mean_c | C | Ngay | Thang (TB) | Open-Meteo ERA5-Land | 2026-09-02 | 1985-01 -> 2026-08 |
+| precip_mm | mm | Ngay | Thang (tong) | Open-Meteo CSV cũ; phiên bản mô hình chưa xác minh | 2026-09-02 | 1985-01 -> 2026-08 |
+| temp_max/min/mean_c | C | Ngay | Thang (TB) | Open-Meteo CSV cũ; phiên bản mô hình chưa xác minh | 2026-09-02 | 1985-01 -> 2026-08 |
 | et0_mm | mm | Ngay | Thang (tong) | Open-Meteo FAO PM | 2026-09-02 | 1985-01 -> 2026-08 |
-| wind_max_ms | m/s | Ngay | Thang (TB) | Open-Meteo | 2026-09-02 | 1985-01 -> 2026-08 |
+| windspeed_10m_max | chưa xác minh trong CSV cũ | Ngay | Thang (TB) | Open-Meteo | 2026-09-02 | 1985-01 -> 2026-08 |
 | rh_pct | % | Ngay | Thang (TB) | Open-Meteo | 2026-09-02 | 1985-01 -> 2026-08 |
 | radiation_mj | MJ/m2 | Ngay | Thang (tong) | Open-Meteo | 2026-09-02 | 1985-01 -> 2026-08 |
 | water_level_m | m | Khong deu | Thang (TB, chi thang co observation) | DAHITI altimetry | 2026-09-12 | TanChau 2002-06 -> 2016-05; MyTho 2008-07 -> 2026-08 |
 | glofas_discharge_m3s | m³/s | Ngay | Thang (TB) | Copernicus GloFAS | snapshot file 1985-2023 | 1985-01 -> 2024-01; chi grid TanChau, cell chua xac minh upstream area |
-| tide_max_m | m | Ngay | Thang (Max) | UHSLC Vung Tau | local snapshot | 1985-11 -> 2026-07; nguon phu, khong thay the FES2022b |
-| tide_mean/max/range | m | Gio | Thang | FES2022b + PyFES | Chua co | Chua sinh; giu NULL trong feature v2 |
+| tide_max_m | m | Ngày | Tháng (Max) | UHSLC Vũng Tàu-B 383B đúng trạm; loại tệp id142 | research quality 2007–2024 | 2007-10 -> 2025-01 theo ngày địa phương; không thay FES2022b, mốc cao độ trạm riêng |
+| tide_mean/max/range | m | Gio | Thang | FES2022b + PyFES | 34 thành phần và mask đã thu thập 26/10 | Điểm trích, hệ cao độ và tính đại diện chưa xác minh; feature v2 vẫn NULL |
 
 ## Ghi chu ky thuat
 - Temporal alignment: conductivity la thang -> meteo/water downsample ve thang
-- Open-Meteo nguon: ERA5-Land reanalysis (5 km resolution)
+- CSV khí tượng cũ không kèm metadata đủ để khẳng định phiên bản mô hình nguồn. Bộ tải riêng `data/external/multivariate_weather/manifest.json` xác nhận `models=era5` và đơn vị gió m/s cho các biến trong bộ đó.
 - Timezone: UTC+07:00
 - MyTho GloFAS giu NULL cho den khi cell dong chinh va upstream area duoc xac minh.
 - Feature/model v2 khong dung UHSLC thay cho FES2022b.
@@ -39,7 +43,7 @@ Không giả định điểm khí tượng, ô lưới GloFAS hoặc điểm DAH
 |---|---|---|
 | station | Khóa MyTho/TanChau để gộp dữ liệu | Không chứng minh các nguồn đo cùng vị trí |
 | month_start | Ngày đầu tháng làm khóa | Không phải thời điểm dữ liệu sẵn có/phát hành dự báo |
-| conductivity_mS_per_m | Trung bình EC trong tháng | mS/m; DB dùng conductivity_ms_per_m; không tự đổi thành ppt |
+| conductivity_mS_per_m | Giá trị một phép đo EC trong tháng của trạm | mS/m; DB dùng conductivity_ms_per_m; không tự đổi thành ppt |
 | precipitation_sum | Tổng trường lượng mưa ngày trong tháng | Đối chiếu đơn vị với metadata nguồn tải |
 | temperature_mean | Trung bình nhiệt độ trung bình ngày | Đối chiếu metadata nguồn tải |
 | temperature_max | Lớn nhất của nhiệt độ cao nhất ngày | Đối chiếu metadata nguồn tải |

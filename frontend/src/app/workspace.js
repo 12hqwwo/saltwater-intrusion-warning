@@ -7,7 +7,7 @@ import { createObservations } from "../features/observations.js";
 import { createForecasts } from "../features/forecasts.js";
 import { createWeatherEstimates } from "../features/weather-estimates.js";
 import { createGateDossiers } from "../features/gate-dossiers.js";
-import { renderOverview, bindDatabaseCheck } from "../features/overview.js";
+import { renderOverview, renderOverviewStations, bindDatabaseCheck } from "../features/overview.js";
 import { showIntake } from "../intake.js";
 import { bindNavigation } from "./navigation.js";
 import { createDatabaseHistory } from "../features/database-history.js";
@@ -20,6 +20,9 @@ const observations = createObservations({ onForecast: async (code) => {
   await multivariate.selectStation(code);
   forecasts.selectStation(code);
 } });
+window.addEventListener("workspace:select-station", event => {
+  if (event.detail?.site_code) observations.selectStation(event.detail.site_code);
+});
 window.addEventListener("workspace:multivariate-catalog", event => {
   $("statExperiments").textContent = event.detail.stations.length;
 });
@@ -68,7 +71,7 @@ async function loadWorkspace() {
   }
   if (stations.status === "fulfilled") {
     const sources = summary.status === "fulfilled" ? summary.value : { sources: [] };
-    jobs.push(observations.load(sources, stations.value));
+    jobs.push(observations.load(sources, stations.value).then(() => renderOverviewStations(stations.value)));
   } else {
     observations.showError(stations.reason.message);
   }

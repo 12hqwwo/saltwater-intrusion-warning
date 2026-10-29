@@ -1,0 +1,14 @@
+{
+  "gauge": "MRC Vam Kenh 985203 Water Level Telemetry, UNVERIFIED",
+  "source": "FES2022b extrapolated ocean tide, 3 native 2x2 ocean cells",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "unit": "cm",
+  "datum_policy": "daily demean; no absolute datum matching",
+  "gauge_hourly_requirement": "at least 2 quarter-hour samples",
+  "gauge_day_requirement": "at least 20 valid hourly medians",
+  "selection": "2019-2021 only",
+  "independent_check": "2022-2023 and 2024-2026",
+  "boundary_files": "south_hourly_boundary_2019_2026.csv and south_daily_boundary_2019_2026.csv",
+  "boundary_meaning": "Astronomical ocean tide and scaled tidal anomaly/range, not absolute river stage",
+  "caveat": "FES is offshore astronomical tide; gauge includes river flow and meteorological residual; no salt transport calibration"
+}

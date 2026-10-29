@@ -76,11 +76,17 @@
         <a class="panel workflow-card" href="#data-quality"><span class="tag">03 · NGUỒN &amp; KẾT QUẢ</span><h3>Truy nguồn dữ liệu</h3><p>Xem dữ liệu đầu vào, chất lượng nguồn và xuất kết quả dự báo.</p></a>
       </section>
       <section data-view="overview" class="panel source-summary"><h3>Nguồn đang phục vụ</h3><p id="workspaceSourceStatus" role="status">Đang tải thông tin nguồn…</p><div id="datasetSummary"></div></section>
+      <section data-view="overview" class="panel source-summary" aria-labelledby="overviewEcHeading">
+        <h3 id="overviewEcHeading">EC quan trắc gần nhất theo trạm</h3>
+        <p id="overviewEcStatus" class="subtle" role="status">Đang tải các điểm đo…</p>
+        <div id="overviewEcTable" class="table-wrap"></div>
+        <p id="overviewForecastStatus" class="subtle">Đang kiểm tra trạng thái dự báo…</p>
+      </section>
       <section data-view="observations" id="observations" class="section">
         <div class="section-title">
           <div>
             <p class="eyebrow">01 / QUAN TRẮC &amp; KHÔNG GIAN</p>
-            <h2>Nhìn dòng nước. Chủ động quyết định.</h2>
+            <h2>Nhìn dòng nước. Hiểu bối cảnh.</h2>
           </div>
           <span class="subtle">Sông Tiền · Quan trắc &amp; kịch bản không gian</span>
         </div>
@@ -101,7 +107,7 @@
                 <label><input type="radio" name="simulationUnit" value="ec" aria-label="EC (mS/m)" checked><span>EC <small>mS/m</small></span></label>
                 <label><input type="radio" name="simulationUnit" value="salinity" aria-label="Độ mặn quy đổi (g/L)"><span>Độ mặn <small>g/L</small></span></label>
               </fieldset>
-              <label class="crop-preset"><span class="visually-hidden">Ngưỡng khuyến nghị theo mục đích</span><select id="simulationThresholdPreset" title="Ngưỡng kịch bản theo mục đích · mS/m">
+              <label class="crop-preset"><span class="visually-hidden">Ngưỡng kịch bản theo mục đích</span><select id="simulationThresholdPreset" title="Ngưỡng kịch bản theo mục đích · mS/m">
                 <option value="durian">🌱 Sầu riêng (50/80)</option>
                 <option value="citrus" selected>🍊 Cây có múi (100/150)</option>
                 <option value="rice">🌾 Lúa &amp; nước ngọt (120/200)</option>
@@ -113,7 +119,7 @@
               <button id="simulationWindToggle" type="button" class="layer-pill" aria-pressed="true">💨 Gió ERA5</button>
               <button id="simulationGatesToggle" type="button" class="layer-pill" aria-pressed="true">🚧 27 Cống</button>
               <div id="simulationThresholdPopover" class="threshold-popover" hidden>
-                <strong>Ngưỡng khuyến nghị · mS/m</strong>
+                <strong>Ngưỡng kịch bản · mS/m</strong>
                 <form id="simulationThresholdForm" class="simulation-thresholds">
                   <label>Xem xét lấy dưới<input id="simulationOpenBelow" name="open_below_ec" type="number" min="0" step="any" value="100" required aria-label="Ngưỡng xem xét lấy nước dưới (mS/m)"></label>
                   <label>Ngăn mặn từ<input id="simulationCloseAbove" name="close_above_ec" type="number" min="0" step="any" value="150" required aria-label="Ngưỡng ngăn mặn từ (mS/m)"></label>
@@ -124,10 +130,10 @@
             </aside>
               <div class="map-header-actions"><button id="toggleStationList" type="button" aria-controls="stationPanel" aria-expanded="false">Hiện danh sách trạm</button><button id="fitMap" class="small-button" title="Về toàn trục Sông Tiền">↗ Toàn cảnh</button><label class="map-basemap-picker"><span class="visually-hidden">Nền bản đồ</span><select id="mapBaseTheme"><option value="dark" selected>Nền tối Thủy văn (Deep Navy)</option><option value="satellite">Ảnh vệ tinh (Esri Satellite Dark)</option><option value="light">Bản đồ sáng (OSM Standard)</option></select></label></div>
             </div>
-            <div id="researchMap" aria-label="Bản đồ dòng sông, quan trắc và khuyến nghị vận hành" tabindex="0"></div>
-            <div class="map-water-legend"><span>Ngọt</span><i></i><span>Mặn cao</span><small id="simulationConversionNote" hidden>Quy đổi thực nghiệm 0.0064 g/L trên 1 mS/m</small></div>
+            <div id="researchMap" aria-label="Bản đồ quan trắc và kịch bản mô phỏng dòng sông" tabindex="0"></div>
+            <div class="map-water-legend"><span>Giá trị thấp</span><i></i><span>Giá trị cao</span><small id="simulationConversionNote" hidden>Quy đổi thực nghiệm 0.0064 g/L trên 1 mS/m</small></div>
             <aside id="mapForecastBanner" class="forecast-map-banner" role="status" hidden><div><strong id="mapForecastValue"></strong><small id="mapForecastContext"></small></div><button id="mapForecastDismiss" type="button" aria-label="Ẩn dự báo trên bản đồ">✕</button></aside>
-            <aside id="simulationGateCard" class="simulation-gate-card" aria-label="Khuyến nghị vận hành tại cống" tabindex="-1" hidden></aside>
+            <aside id="simulationGateCard" class="simulation-gate-card" aria-label="Điều kiện mô phỏng tại cống" tabindex="-1" hidden></aside>
             <div id="simulationTimeline" class="simulation-timeline" aria-label="Dòng thời gian mô phỏng"></div>
             <div class="map-legend-control">
             <button id="mapLegendToggle" type="button" aria-expanded="false" aria-controls="mapLegendPopover">ⓘ Chú giải &amp; Nguồn</button>
@@ -141,7 +147,7 @@
               <label><input id="showBoundaries" type="checkbox" checked> Ranh giới</label>
               <label class="visually-hidden"><input id="showGates" type="checkbox" checked> Cống có tọa độ</label>
             </div>
-            <p id="simulationSourceNotice" class="map-note">Trục sông / kênh minh họa · EC nội suy, độ mặn quy đổi thực nghiệm · Đèn khuyến nghị cần người kiểm tra; không thể hiện trạng thái đóng / mở thực tế.</p>
+            <p id="simulationSourceNotice" class="map-note">Trục sông / kênh minh họa · EC nội suy, độ mặn quy đổi thực nghiệm · Màu cống chỉ thể hiện kịch bản; không phản ánh trạng thái đóng / mở thực tế.</p>
             <p id="coordinateNotice" class="map-note">Điểm RIA2 có viền đứt: tọa độ tham khảo với CRS giả định WGS84. Ranh giới từ tệp dự án.</p>
             <p id="mapComparisonLegend" class="map-note">Màu điểm thể hiện nguồn tọa độ. Mở đối chiếu nâng cao để so sánh EC.</p>
             <p id="mapForecastStatus" class="map-note" hidden></p>

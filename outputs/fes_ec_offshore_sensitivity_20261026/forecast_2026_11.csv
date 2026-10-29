@@ -1,0 +1,2 @@
+station,target_month,experimental_fes_ec_mS_m,existing_weather_ec_mS_m,fes_variant,weather_input_month,quality_status
+MYTHO,2026-11-01,16.869882743842865,17.33124465272705,near_midmonth,2026-09,EXPERIMENTAL_UNVERIFIED_NO_POST_2023_EC_VALIDATION

@@ -21,7 +21,8 @@ except ModuleNotFoundError:
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://timeseries.api.mrcmekong.org/api/v1/"
 INVENTORY = BASE + "ts/inventory/timeSeriesList"
-UNITS = {"Conductivity": "mS/m", "Water Temperature": "degC", "Water Level": "m"}
+UNITS = {"Conductivity": "mS/m", "Water Temperature": "degC", "Water Level": "m",
+         "Discharge": "m^3/s"}
 
 
 def instant(value):
@@ -56,7 +57,7 @@ def normalize(payload, metadata):
         if reasons:
             rejected.append({"source_point_index":n, "timestamp":point["Timestamp"], "reasons":";".join(reasons)})
             continue
-        result.append(dict(site_code="MRC_VN_" + metadata["stationCode"], unique_id=metadata["uniqueId"],
+        result.append(dict(site_code="MRC_" + metadata["countryCode"] + "_" + metadata["stationCode"], unique_id=metadata["uniqueId"],
             parameter=metadata["parameter"], series_label=metadata["label"], observed_at=when.astimezone(ZoneInfo("Asia/Ho_Chi_Minh")).isoformat(),
             value=value, unit=metadata["unit"], quality_flag="UNVERIFIED",
             source_approvals=json.dumps(active_values(payload,"Approvals","LevelDescription",when),ensure_ascii=False),

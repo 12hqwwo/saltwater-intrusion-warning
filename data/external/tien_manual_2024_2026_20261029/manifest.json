@@ -1,0 +1,45 @@
+{
+  "retrieved_at_utc": "2026-10-29T08:44:54.148490+00:00",
+  "source": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+  "license_status": "Public API; verify reuse terms before redistribution",
+  "source_qa": "Keep MRC grades and approvals; no automatic promotion",
+  "series": [
+    {
+      "file": "019803_Water_Level_Manual_3bd17f3a.csv",
+      "unique_id": "3bd17f3a15804c76bbad950867370528",
+      "station_code": "019803",
+      "station_name": "Tan Chau",
+      "parameter": "Water Level",
+      "label": "Manual",
+      "unit": "m",
+      "latitude": 10.80062008,
+      "longitude": 105.2480164,
+      "source_first": "1979-03-31T17:00:00Z",
+      "source_last": "2026-10-28T00:00:00Z",
+      "downloaded_rows": 7220,
+      "first_observed": "2024-01-01T00:30:00+07:00",
+      "last_observed": "2026-10-28T07:00:00+07:00",
+      "extracted_sha256": "f7ee1fb6fee877373fc341496eee8580502fe56e5e870f501252c0167140aab4",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    }
+  ],
+  "downloads": [
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+      "file": "inventory.json",
+      "bytes": 1124781,
+      "sha256": "d84bae8fff14fcc4db07589a1a6a80a109f4be30e80e0bdc9dd250d1f983899b",
+      "fetched_at": "2026-10-29T08:44:59.009399+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/3bd17f3a15804c76bbad950867370528?sd=2023-12-31T17%3A00%3A00%2B00%3A00&ed=2026-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/3bd17f3a15804c76bbad950867370528?sd=2023-12-31T17%3A00%3A00%2B00%3A00&ed=2026-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019803_Water_Level_Manual_3bd17f3a.json",
+      "bytes": 652319,
+      "sha256": "3b21dd698b071d5be51c0a6201cfea73b0fc790874947de696ae5884ff7ba4de",
+      "fetched_at": "2026-10-29T08:45:01.868402+00:00"
+    }
+  ],
+  "errors": []
+}

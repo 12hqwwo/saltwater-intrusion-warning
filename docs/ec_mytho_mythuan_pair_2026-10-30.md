@@ -1,0 +1,7 @@
+# Đối chiếu EC Mỹ Tho–Mỹ Thuận trước khi chọn biến thượng nguồn
+
+`scripts/audit_ec_station_pair.py` ghép hai chuỗi MRC theo **cùng tháng** mà không nội suy hay đổi đơn vị. Dữ liệu nguồn là EC Mỹ Tho `019805` và Mỹ Thuận `019804`, đều ghi mS/m; tệp gốc và cờ nguồn được giữ trong `data/external/`. Kết quả có thể tái lập ở `outputs/ec_station_pair_20261030/summary.json`, `paired_monthly_samples.csv` và `mytho_high_months.csv`.
+
+Có **450 tháng ghép được**, trong đó **387 tháng hai mẫu ghi cùng ngày**. Tương quan Pearson theo tháng là **0,353**, Spearman **0,820**: thứ hạng theo mùa khá giống, nhưng trị số đỉnh khác lớn. Trong **34 tháng Mỹ Tho ≥100 mS/m**, không có tháng nào Mỹ Thuận ≥100 mS/m; 26/34 cặp này ghi cùng ngày. Tháng 02–05/2020, Mỹ Tho lần lượt **558, 692, 607, 398 mS/m**, còn Mỹ Thuận **25,6; 27,5; 26,4; 28,1 mS/m** vào đúng các ngày lấy mẫu tương ứng.
+
+Vì vậy không thể coi EC Mỹ Thuận trễ là đại diện trực tiếp cho đỉnh EC Mỹ Tho; phép thử thêm EC Mỹ Thuận trễ trước đây cũng tăng sai số ở [backtest đa trạm](tien_multisite_acquisition_2026-10-29.md). Các mẫu MRC gắn cờ `UNVERIFIED`, cơ sở bù nhiệt EC chưa biết và thời gian trong ngày là `00:00` dạng ngày ghi mẫu, không phải giờ xác định pha triều. Cặp cùng ngày **không xác định thời gian muối lan truyền hay hệ số khuếch tán**. Cần EC/Cl⁻ đồng thời theo giờ hoặc ngày ở các nhánh và Q phân lưu có dấu để làm mô hình vận chuyển chất.

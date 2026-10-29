@@ -1,0 +1,14 @@
+{
+  "retrieved_at_utc": "2026-10-28T20:37:14.304683+00:00",
+  "source": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+  "license_status": "Public API; verify reuse terms before redistribution",
+  "source_qa": "Keep MRC grades and approvals; no automatic promotion",
+  "series": [],
+  "downloads": [],
+  "errors": [
+    {
+      "type": "RuntimeError",
+      "message": "Missing HTTPS dependencies. Run the project Python with -m pip install -r requirements-forecast-multivariate.txt (the updated file includes truststore and certifi)."
+    }
+  ]
+}

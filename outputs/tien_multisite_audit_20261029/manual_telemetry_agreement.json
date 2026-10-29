@@ -1,0 +1,38 @@
+{
+  "019803": {
+    "station": "Tan Chau",
+    "paired_days": 1809,
+    "pearson_r": 0.9862303848152321,
+    "median_offset_manual_minus_telemetry_m": 0.010000000000000009,
+    "median_absolute_difference_m": 0.04999999999999999,
+    "p95_absolute_difference_m": 0.275,
+    "caution": "Agreement does not establish common gauge datum or verified quality"
+  },
+  "019804": {
+    "station": "My Thuan",
+    "paired_days": 1095,
+    "pearson_r": 0.8601852330392559,
+    "median_offset_manual_minus_telemetry_m": 0.03500000000000003,
+    "median_absolute_difference_m": 0.08099999999999996,
+    "p95_absolute_difference_m": 0.36409999999999965,
+    "caution": "Agreement does not establish common gauge datum or verified quality"
+  },
+  "985203": {
+    "station": "Vam Kenh",
+    "paired_days": 924,
+    "pearson_r": 0.7200734329686601,
+    "median_offset_manual_minus_telemetry_m": 0.00675000000000002,
+    "median_absolute_difference_m": 0.09500000000000006,
+    "p95_absolute_difference_m": 0.6517749999999999,
+    "caution": "Agreement does not establish common gauge datum or verified quality"
+  },
+  "980601": {
+    "station": "Vam Nao",
+    "paired_days": 1045,
+    "pearson_r": 0.97607524925654,
+    "median_offset_manual_minus_telemetry_m": 0.018000000000000016,
+    "median_absolute_difference_m": 0.04800000000000004,
+    "p95_absolute_difference_m": 0.2261999999999999,
+    "caution": "Agreement does not establish common gauge datum or verified quality"
+  }
+}

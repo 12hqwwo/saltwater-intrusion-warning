@@ -1,0 +1,13 @@
+{
+  "source_zip_sha256": "66d9960eaea114c27f26b5ca90b669cb217fea7e4695bd0fa21a51bc6fa22ef5",
+  "records": 927,
+  "missing_or_mismatched": 0,
+  "duplicate_months": 0,
+  "missing_months": 0,
+  "negative_or_nonfinite": 0,
+  "flag_counts": {
+    "HIGH_VS_CALENDAR_MEDIAN_REVIEW_ONLY": 41
+  },
+  "model_value_changed": 0,
+  "note": "Calendar median flags are retrospective review markers, not deletion or model features."
+}

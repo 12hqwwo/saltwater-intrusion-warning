@@ -1,0 +1,7 @@
+{
+  "source_url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2026-09-01&end_date=2026-09-30&daily=soil_moisture_0_to_100cm_mean%2Cwind_speed_10m_mean%2Cwind_direction_10m_dominant&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms",
+  "retrieved_at_utc": "2026-10-29T08:54:21.670689+00:00",
+  "sha256": "f0cb0a3bbbdb8339da654a7b48fdef101b92a87a57773145e7cd08f4b1651226",
+  "daily_rows": 30,
+  "note": "ERA5 reanalysis product, not a historical issue-time forecast vintage"
+}

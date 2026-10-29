@@ -37,3 +37,6 @@ data/raw/tide/fes2022b/collection_last_error.json
 docs/*.zip
 docs/screenshots/
 docs/*-verification.json
+# Large external archives exceeding GitHub 100MB limit
+*.zip
+*.gpkg

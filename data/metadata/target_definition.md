@@ -18,37 +18,23 @@ Dữ liệu từ MRC được đo và lưu trữ dưới dạng **Conductivity (
 | Electrical Conductivity | EC | mS/m hoặc mS/cm hoặc µS/cm |
 | Salinity | S | ‰ (g/L) hoặc PSU |
 
-Công thức quy đổi xấp xỉ (chỉ dùng ở dải 1–40‰, nhiệt độ ~25°C):  
-`Salinity (‰) ≈ EC (mS/cm) × 0.64`
+**Đính chính 29/10/2026:** phép đổi đơn vị trong phiên bản cũ sai hệ số 10. Theo định nghĩa đơn vị,
+`1 mS/m = 0,01 mS/cm = 10 µS/cm`, nên `25 mS/m = 0,25 mS/cm`. Đây chỉ là đổi **đơn vị EC**, không phải đổi EC sang độ mặn.
+[Bảng đổi đơn vị của USGS](https://pubs.usgs.gov/of/2012/1176/OF12-1176.pdf) là nguồn kiểm tra phép đổi này.
 
-Vì dữ liệu MRC đơn vị **mS/m**, cần chuyển sang **mS/cm** trước:  
-`EC (mS/cm) = EC (mS/m) / 10`  
-`Salinity (‰) ≈ (EC_mS_per_m / 10) × 0.64 = EC_mS_per_m × 0.064`
+Không có một hệ số EC → ‰ hợp lệ cho mọi mẫu nước. Quan hệ còn phụ thuộc nhiệt độ đo/bù nhiệt và thành phần ion; [USGS](https://water.usgs.gov/water-resources/memos/documents/WQ.2011.03.pdf) cũng nêu giới hạn này. Gói EC MRC hiện chưa xác định cơ sở bù nhiệt, và bộ dữ liệu chưa có cặp EC–độ mặn đủ tin cậy để hiệu chuẩn tại hai trạm. Vì vậy:
 
-> **Ví dụ:** EC = 25 mS/m → 2.5 mS/cm → ≈ 1.6‰
-
-**Tuy nhiên**, công thức này chỉ là xấp xỉ. Đề xuất:
-1. **Dự báo EC (mS/m)** trong toàn bộ pipeline  
-2. Khi cần so sánh với ngưỡng quy chuẩn (‰), **quy đổi tại bước Decision Logic**
-3. Ghi rõ trong báo cáo rằng hệ thống dự báo EC (mS/m), sau đó quy đổi xấp xỉ sang ‰ để so sánh ngưỡng
+1. Huấn luyện, chấm và báo cáo **EC mS/m**; nhãn là **một phép đo trong tháng**, không phải trung bình hay cực đại tháng.
+2. Không dùng phép đổi tuyến tính cũ `EC × 0,064` để so với ngưỡng độ mặn.
+3. Nếu cần quyết định theo ngưỡng ‰, phải có cặp EC–độ mặn đồng thời tại cùng vị trí, nhiệt độ/cơ sở bù nhiệt và kiểm định hiệu chuẩn ngoài mẫu.
 
 ---
 
-## 3. Ngưỡng mặn áp dụng trong Decision Logic
+## 3. Ngưỡng trong Decision Logic
 
-> ⚠️ **Không được tự đặt ngưỡng 4‰ cho mọi cống.** Ngưỡng phải dựa trên mục đích sử dụng nước tại khu vực tương ứng.
+Chưa có ngưỡng EC vận hành đã được xác nhận cho từng cống và mục đích dùng nước. Không gán một ngưỡng độ mặn chung cho mọi cống, không chuyển ngưỡng độ mặn sang EC bằng hệ số cố định, và không diễn giải dự báo tại hai trạm MRC là dự báo tại từng cống.
 
-| Mục đích | Ngưỡng mặn tối đa | Nguồn tham khảo |
-|---|---|---|
-| Lúa (giống lúa nhạy cảm) | 1.0–2.0‰ | TCVN 8641:2011 – Công trình thủy lợi, kỹ thuật tưới tiêu |
-| Lúa (giống chịu mặn vừa) | 2.0–4.0‰ | QCVN 08:2023/BTNMT – Chất lượng nước mặt |
-| Hoa màu / rau | 0.5–1.5‰ | Tham chiếu FAO Irrigation Water Quality |
-| Nuôi trồng thủy sản nước ngọt | 0.5‰ | Tham chiếu QCVN 02-15:2009/BNNPTNT |
-| Cấp nước sinh hoạt | Chloride 250-300 mg/L | QCVN 01-1:2018/BYT |
-| Cấp nước nông thôn tối đa | 1.0‰ | QCVN 02:2009/BYT |
-
-**Trong prototype này:** Ngưỡng được gán tại cột `threshold_ppt` trong `sluice_gates.csv` (đơn vị **‰**).  
-Khi Decision Logic so sánh, quy đổi giá trị EC dự báo → ‰ rồi so sánh với ngưỡng.
+Một số màn hình mô phỏng cũ hiển thị hệ số thực nghiệm `0,0064 g/L trên 1 mS/m`; hệ số đó chưa được xác nhận là quan hệ của hai trạm và không phải kết quả của mô hình EC. Muốn xây dựng luật vận hành cần hồ sơ ngưỡng có nguồn, điểm đo tại cống, hiệu chuẩn cùng vị trí và kiểm định riêng.
 
 ---
 
@@ -60,10 +46,7 @@ Khi Decision Logic so sánh, quy đổi giá trị EC dự báo → ‰ rồi so
 
 ---
 
-## 5. Tài liệu tham khảo ngưỡng
+## 5. Tài liệu tham khảo
 
-- TCVN 8641:2011 - Công trình thủy lợi – Kỹ thuật tưới tiêu nước cho cây lương thực và cây thực phẩm
-- QCVN 08:2023/BTNMT - Quy chuẩn kỹ thuật quốc gia về chất lượng nước mặt
-- QCVN 01-1:2018/BYT - Quy chuẩn kỹ thuật quốc gia về chất lượng nước sạch sử dụng cho mục đích sinh hoạt
-- Phạm Văn Giáp và nnk (2016). Nghiên cứu xâm nhập mặn vùng Đồng bằng sông Cửu Long trong điều kiện biến đổi khí hậu.
-- FAO (1985). Water quality for agriculture. Irrigation and Drainage Paper 29 Rev.1.
+- [USGS: hệ đơn vị EC và specific conductance](https://pubs.usgs.gov/of/2012/1176/OF12-1176.pdf).
+- [USGS: giới hạn của phép suy độ mặn từ độ dẫn điện](https://water.usgs.gov/water-resources/memos/documents/WQ.2011.03.pdf).

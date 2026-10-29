@@ -1,0 +1,100 @@
+{
+  "model": "RandomForestRegressor",
+  "parameters": {
+    "n_estimators": 100,
+    "max_depth": 7,
+    "min_samples_leaf": 3,
+    "max_features": 0.8,
+    "random_state": 42
+  },
+  "feature_order": [
+    "month_sin",
+    "month_cos",
+    "rainfall_mm",
+    "temperature_degC",
+    "wind_source_units",
+    "soil_t2",
+    "wind_u_t2",
+    "wind_v_t2",
+    "kratie_q_t2",
+    "kratie_q3_t2",
+    "kratie_q_ratio_t2",
+    "tc_stage_t2",
+    "tc_stage3_t2"
+  ],
+  "feature_values": {
+    "month_sin": -0.5000000000000004,
+    "month_cos": 0.8660254037844384,
+    "rainfall_mm": 313.0,
+    "temperature_degC": 27.85666666666667,
+    "wind_source_units": 2.261,
+    "soil_t2": 0.4098999999999999,
+    "wind_u_t2": 1.4364152760572493,
+    "wind_v_t2": 0.8512975804764563,
+    "kratie_q_t2": 37754.472336666666,
+    "kratie_q3_t2": 29768.237952759868,
+    "kratie_q_ratio_t2": 1.2232563010763795,
+    "tc_stage_t2": 3.2649999999999997,
+    "tc_stage3_t2": 2.465
+  },
+  "predicted_ec_mS_m": 18.542931089597246,
+  "training_rows": 463,
+  "training_through": "2023-12",
+  "target_definition": "one MRC EC sample in target month, not monthly mean",
+  "backtest": {
+    "5": {
+      "retrospective_2022_2023": {
+        "n": 24,
+        "mae_mS_m": 13.52359619640798,
+        "old_rf_mae_mS_m": 18.63073974397243
+      },
+      "validation_2019_2021": {
+        "n": 36,
+        "mae_mS_m": 58.6825647777799,
+        "old_rf_mae_mS_m": 71.55722547234299
+      }
+    },
+    "35": {
+      "retrospective_2022_2023": {
+        "n": 24,
+        "mae_mS_m": 13.186708387759637,
+        "old_rf_mae_mS_m": 18.61122303111308
+      },
+      "validation_2019_2021": {
+        "n": 36,
+        "mae_mS_m": 60.72112898935908,
+        "old_rf_mae_mS_m": 71.26013516893394
+      }
+    }
+  },
+  "weather_source": {
+    "station": "MyTho",
+    "input_month": "2026-09",
+    "rainfall_mm": 313.0,
+    "temperature_degC": 27.85666666666667,
+    "wind_source_units": 2.261,
+    "observed_through": "2026-09-30",
+    "assumed_available_at": "2026-10-05",
+    "daily_count": 30,
+    "complete": true,
+    "availability_note": "Month end + 5 days is an assumed ERA5 release lag, not a historical publication timestamp.",
+    "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json",
+    "sha256": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+    "wind_unit": "m/s",
+    "wind_unit_status": "VERIFIED_RESPONSE_UNITS",
+    "wind_statistic": "monthly mean of daily mean 10m wind speed",
+    "source_model": "ERA5",
+    "retrieved_at": "2026-10-23T04:16:58.471583+00:00",
+    "source_url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2025-01-01&end_date=2026-09-30&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+    "target_month": "2026-11"
+  },
+  "source_sha256": {
+    "data\\research\\mrc_ec_monthly_samples.csv": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc",
+    "data\\external\\ec_hydrology_current_20261029\\era5_extra_MyTho_2026-09.json": "f0cb0a3bbbdb8339da654a7b48fdef101b92a87a57773145e7cd08f4b1651226",
+    "data\\external\\mrc_kratie_discharge_20261029\\014901_Discharge_Calculated daily discharge_22a8130e.csv": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+    "data\\external\\tien_manual_long_20261029\\019803_Water_Level_Manual_3bd17f3a.csv": "5d461321271099559d84e07d73c949171945ffc0e8fa32a813e722026cda72f8",
+    "data\\external\\tien_manual_2024_2026_20261029\\019803_Water_Level_Manual_3bd17f3a.csv": "f7ee1fb6fee877373fc341496eee8580502fe56e5e870f501252c0167140aab4"
+  },
+  "model_sha256": "8fe497a06362cd638a45f3e0bd27b606b6f573269bfc6e91810a7e230d052400",
+  "warning": "Research forecast. No observed EC after 2023, no historical publication vintages, MRC Q and level grades UNVERIFIED; no validated salt propagation or gate decision."
+}

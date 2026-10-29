@@ -1,0 +1,30 @@
+{
+  "source": "data/8file/06_river_and_interior_salinity_ec_observations_759.csv",
+  "source_sha256": "7d62e4161f3c9692f0cf60cdd2398fa7fb51e5b3ed73c022394ab2d47db90ac5",
+  "output": "data/external/new_data_search_20261029/official_tiengiang_salinity_2026_sep_oct_preserved.csv",
+  "rows": 67,
+  "station_counts": {
+    "ST_TIEN_VAMKENH": 29,
+    "ST_CUATRUNG_RACHMUONG": 29,
+    "ST_TIEN_LONGHAI": 9
+  },
+  "unique_dates": 12,
+  "date_start": "2026-09-17 06:15",
+  "date_end": "2026-10-13 07:00",
+  "source_urls": [
+    "http://thuyloitiengiang.vn/en/web/thuyloitiengiang/chi-tiet-tin-tuc?id=520630",
+    "http://thuyloitiengiang.vn/en/web/thuyloitiengiang/chi-tiet-tin-tuc?id=522066",
+    "http://thuyloitiengiang.vn/ja/web/thuyloitiengiang/chi-tiet-tin-tuc?id=520619",
+    "http://thuyloitiengiang.vn/ja/web/thuyloitiengiang/chi-tiet-tin-tuc?id=520621",
+    "http://thuyloitiengiang.vn/ja/web/thuyloitiengiang/chi-tiet-tin-tuc?id=520623",
+    "http://thuyloitiengiang.vn/web/thuyloitiengiang/chi-tiet-tin-tuc?id=464847",
+    "http://thuyloitiengiang.vn/web/thuyloitiengiang/chi-tiet-tin-tuc?id=464851",
+    "http://thuyloitiengiang.vn/web/thuyloitiengiang/chi-tiet-tin-tuc?id=464854"
+  ],
+  "caveats": [
+    "Not EC; no validated salinity-to-EC transformation at high salinity.",
+    "Source pages report peak/07:00 salinity; no sensor type, depth, salinity derivation, QA flags, or historical publication timestamp per reading.",
+    "Local time is inferred from Vietnamese operator bulletins, not an explicit time-zone field.",
+    "Only 12 sampled dates in Sep-Oct 2026; insufficient to calibrate seasonal propagation or validate the 2019-2023 MRC backtest."
+  ]
+}

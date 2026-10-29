@@ -41,7 +41,7 @@ export function createObservations({ onForecast } = {}) {
   function renderForecastBanner() {
     $('mapForecastBanner').hidden = !activeForecast;
     if (!activeForecast) return;
-    $('mapForecastValue').textContent = `${activeForecast.station_name || activeForecast.station || 'Trạm dự báo'} · ${num(activeForecast.predicted_ec_mS_m)} mS/m · ${num(activeForecast.predicted_ec_mS_m * 0.0064)} g/L (ước tính)`;
+    $('mapForecastValue').textContent = `${activeForecast.station_name || activeForecast.station || 'Trạm dự báo'} · ${num(activeForecast.predicted_ec_mS_m)} mS/m`;
     $('mapForecastContext').textContent = `Dự báo ${activeForecast.target_month} · Timeline ${baselineMonth || 'đang tải'} · Lớp sông và cống giữ kịch bản tháng nền`;
   }
   window.addEventListener('workspace:show-forecast-map', event => {
@@ -379,5 +379,5 @@ export function createObservations({ onForecast } = {}) {
     });
   }
 
-  return { map, load, showError };
+  return { map, load, showError, selectStation };
 }

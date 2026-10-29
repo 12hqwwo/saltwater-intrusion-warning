@@ -1,0 +1,19 @@
+{
+  "source_sha256": "342550fef91526cb73547ba36f53a8097bda2b8e28078eac6f3f0d3f2d5c8750",
+  "inventory_sha256": "c452980d642a0f4cdf4d14841dc768ddcec99821fa15adae13cf7d9465d7128c",
+  "way_count": 5,
+  "consecutive_endpoint_gaps_km": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "path_length_km": 226.03312936629501,
+  "station_count": 5,
+  "limitations": [
+    "Only five OSM ways and one Cua Tieu route; distributary and canal branches missing",
+    "OSM geometry order is not verified flow direction",
+    "Nearest line projection is not station hydraulic connectivity",
+    "No bathymetry, cross sections, gates, rating curves or travel time"
+  ]
+}

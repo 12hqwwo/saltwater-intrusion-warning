@@ -1,0 +1,10 @@
+{
+  "created_at": "2026-10-28T20:06:04.290958+00:00",
+  "python": "3.12.5",
+  "sklearn": "1.9.1",
+  "matrix_sha256": "6b926a46c79ffd9eda538c2c6136b09ca186be148f0a1bd29deff893a066c78c",
+  "script_sha256": "6c9218b08aea66d38ca9b267d037a957b657a35d88b94fa6ffc4d3834bfbe349",
+  "protocol_sha256": "9852f1b0ecaf313a86e529c967503929b4784698a5f7a54010b6d7a667395eaa",
+  "validation_prediction_rows": 9504,
+  "holdout_prediction_rows": 1152
+}

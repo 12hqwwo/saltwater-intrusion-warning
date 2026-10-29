@@ -54,7 +54,7 @@ export function createTimelineScrubber() {
   host.innerHTML = `<div id="simulationProfilePanel" hidden><div id="simulationRiverProfile" hidden></div></div><div class="timeline-banner"><div class="timeline-month"><small>THÁNG ĐANG XEM</small><strong id="simulationMonth">—</strong><span id="simulationRegime" class="timeline-regime">Đang đọc dữ liệu</span></div><div class="timeline-stations"><div><small>THƯỢNG LƯU · TÂN CHÂU</small><strong id="simulationTanChau">—</strong></div><div><small>HẠ LƯU · MỸ THO</small><strong id="simulationMyTho">—</strong></div></div><p id="simulationWeather" class="timeline-weather"></p></div>
     <div class="timeline-controls"><button id="simulationPlay" type="button" disabled>▶ Phát chu kỳ</button><label class="timeline-speed">Tốc độ<select id="simulationSpeed"><option value="1">1x</option><option value="2">2x</option><option value="4">4x</option></select></label><input id="simulationSlider" type="range" min="0" max="494" value="494" step="1" disabled aria-label="Tháng mô phỏng" aria-valuetext="Đang tải"><button id="simulationRetry" type="button" hidden>Thử lại</button></div>
     <div class="timeline-axis"><span id="simulationStart">1985-06</span><span>QUAN TRẮC MRC <i></i> KHÍ TƯỢNG &amp; ML</span><span id="simulationEnd">2026-08</span></div>
-    <div class="timeline-secondary"><div class="profile-dock-heading"><button id="simulationProfileToggle" type="button" aria-expanded="false" aria-controls="simulationProfilePanel">📈 Hiện cắt dọc sông</button><span class="profile-dock-title">Sơ đồ cắt dọc Sông Tiền &amp; Chuỗi 27 cống · km 0 → km 175</span><label class="profile-gate-picker"><span class="visually-hidden">Xem khuyến nghị tại cống</span><select id="simulationGatePicker" aria-label="Xem khuyến nghị tại cống" disabled><option value="">Đang tải danh mục cống…</option></select></label></div><div id="simulationJumps" class="timeline-jumps" aria-label="Chọn nhanh giai đoạn"></div></div><p id="simulationStatus" class="timeline-status" role="status">Đang tải trục sông và dòng thời gian…</p>`;
+    <div class="timeline-secondary"><div class="profile-dock-heading"><button id="simulationProfileToggle" type="button" aria-expanded="false" aria-controls="simulationProfilePanel">📈 Hiện cắt dọc sông</button><span class="profile-dock-title">Sơ đồ cắt dọc Sông Tiền &amp; Chuỗi 27 cống · km 0 → km 175</span><label class="profile-gate-picker"><span class="visually-hidden">Xem mô phỏng tại cống</span><select id="simulationGatePicker" aria-label="Xem mô phỏng tại cống" disabled><option value="">Đang tải danh mục cống…</option></select></label></div><div id="simulationJumps" class="timeline-jumps" aria-label="Chọn nhanh giai đoạn"></div></div><p id="simulationStatus" class="timeline-status" role="status">Đang tải trục sông và dòng thời gian…</p>`;
   host.dataset.profileExpanded = 'false';
   $('simulationProfileToggle').addEventListener('click', () => {
     const expanded = $('simulationProfilePanel').hidden;
@@ -97,7 +97,7 @@ export function createTimelineScrubber() {
   const loader = createSimulationFrameLoader({
     onLoading(detail) {
       host.dataset.loading = 'true';
-      status(`Đang tải khuyến nghị tháng ${detail.year_month}…`);
+      status(`Đang tải kịch bản tháng ${detail.year_month}…`);
       $('simulationRetry').hidden = true;
       emit('workspace:simulation-loading', detail);
     },
@@ -108,7 +108,7 @@ export function createTimelineScrubber() {
         count[gate.advisory_code] = (count[gate.advisory_code] || 0) + 1;
         return count;
       }, {});
-      status(`${frame.gates.length} đèn khuyến nghị · ${colors.ADVISORY_SAFE_INTAKE || 0} thuận lợi · ${colors.ADVISORY_CHECK_ONSITE || 0} cần đo kiểm · ${colors.ADVISORY_HIGH_SALINITY_RISK || 0} rủi ro mặn · Cần kỹ sư quyết định`);
+      status(`${frame.gates.length} cống mô phỏng · ${colors.ADVISORY_SAFE_INTAKE || 0} dưới ngưỡng lấy · ${colors.ADVISORY_CHECK_ONSITE || 0} chuyển tiếp · ${colors.ADVISORY_HIGH_SALINITY_RISK || 0} đạt ngưỡng ngừng lấy · Cần đo thực tế tại cống`);
     },
     onError(error) {
       host.dataset.loading = 'false';

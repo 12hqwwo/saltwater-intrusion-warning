@@ -1,0 +1,87 @@
+{
+  "status": "RESEARCH_ONLY_NOT_DEPLOYED",
+  "point": {
+    "lon": 106.78333333333333,
+    "lat": 10.216666666666669,
+    "distance_to_mouth_km": 6.336869302136877,
+    "four_neighbor_mask_values": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "selection": "nearest four-native-node cell center within 0.5 degrees"
+  },
+  "point_mask_source": "data/raw/tide/fes2022b/ocean_tide_extrapolated/mask_fes2022B.nc",
+  "feature": "fes_mean_daily_range_cm",
+  "feature_definition": "mean of hourly daily max-min ranges over each local calendar month",
+  "feature_unit": "cm",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "source": "FES2022b extrapolated atlas, native-ocean cells only",
+  "pyfes_version": "2026.5.2",
+  "collection_status_sha256": "bad9272dd438f2b1c771d09828dc9f94bf9267392fd6dcf4c92b6019fa7241b8",
+  "config_sha256": "992372230027f2e53b34f840b67d6587fbe29963628d6105a19b07e2c6823479",
+  "target_sha256": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc",
+  "folds": "train through 2018, validate 2019-2021; train through 2021, retrospective holdout 2022-2023",
+  "evaluation": {
+    "validation": {
+      "rf_weather_month": {
+        "n": 36,
+        "mae_mS_m": 69.6091919994524,
+        "rmse_mS_m": 147.91888048065047
+      },
+      "rf_weather_month_fes": {
+        "n": 36,
+        "mae_mS_m": 71.00646672732383,
+        "rmse_mS_m": 152.90386562547468
+      },
+      "persistence_t_minus_2": {
+        "n": 36,
+        "mae_mS_m": 93.38583333333332,
+        "rmse_mS_m": 192.89714159652837
+      },
+      "seasonal_naive": {
+        "n": 36,
+        "mae_mS_m": 115.5263888888889,
+        "rmse_mS_m": 234.8802087885558
+      },
+      "monthly_climatology": {
+        "n": 36,
+        "mae_mS_m": 70.22115146563675,
+        "rmse_mS_m": 167.37933864729885
+      },
+      "fes_vs_weather_mae_change_pct": 2.0073135281938326
+    },
+    "holdout": {
+      "rf_weather_month": {
+        "n": 24,
+        "mae_mS_m": 18.318194282772286,
+        "rmse_mS_m": 49.31131910713889
+      },
+      "rf_weather_month_fes": {
+        "n": 24,
+        "mae_mS_m": 19.215922165837412,
+        "rmse_mS_m": 47.19763928246036
+      },
+      "persistence_t_minus_2": {
+        "n": 24,
+        "mae_mS_m": 12.621249999999998,
+        "rmse_mS_m": 18.910940726644636
+      },
+      "seasonal_naive": {
+        "n": 24,
+        "mae_mS_m": 20.149583333333336,
+        "rmse_mS_m": 47.842282162330015
+      },
+      "monthly_climatology": {
+        "n": 24,
+        "mae_mS_m": 22.193940190190194,
+        "rmse_mS_m": 45.03354483728988
+      },
+      "fes_vs_weather_mae_change_pct": 4.900744414035474
+    }
+  },
+  "caution": "Monthly EC is a sample, not a monthly EC mean. FES is predicted astronomical ocean tide, not measured river tide or EC. Previously examined holdout is not a fresh blind test. No local tide-gauge validation.",
+  "deployment_ready": false,
+  "gate_decision_eligible": false
+}

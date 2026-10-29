@@ -1,0 +1,23 @@
+{
+  "point": "south",
+  "longitude": 106.78333333333333,
+  "latitude": 10.049999999999997,
+  "source_product": "FES2022b ocean_tide_extrapolated, 34 components, pyfes native four-node cell",
+  "gauge": "MRC Vam Kenh 985203 Water Level Telemetry, quality UNVERIFIED",
+  "calibration_factor": 0.9495357303695161,
+  "calibration_target": "daily tidal range only, cm",
+  "data_status": "MODELLED_ASTRONOMICAL_TIDE_BOUNDARY_NOT_OBSERVED_RIVER_STAGE",
+  "hourly_rows": 70128,
+  "daily_rows": 2922,
+  "source_sha256": {
+    "data\\raw\\tide\\fes2022b\\collection_status.json": "bad9272dd438f2b1c771d09828dc9f94bf9267392fd6dcf4c92b6019fa7241b8",
+    "config\\fes2022b_full.yaml": "992372230027f2e53b34f840b67d6587fbe29963628d6105a19b07e2c6823479",
+    "outputs\\fes_ec_multipoint_20261026\\summary.json": "b3878caa6659c0e0f515802ecbfb449cf16bac1d006c7a52039e6910402851a6",
+    "data\\external\\tien_multisite_20261029_verified\\985203_Water_Level_Telemetry_9305ab16.csv": "22855b66c8ad0fa40d5c8acd30160f7f8e84cfa62daf35bc325441705588044f",
+    "data\\external\\tien_multisite_supplement_20261029\\985203_Water_Level_Telemetry_9305ab16.csv": "13a41b0efe13a89e4f3dceb9e7024ae745273c1defff641798c97bef844af2ac"
+  },
+  "output_sha256": {
+    "south_hourly_boundary_2019_2026.csv": "5d6ec85b974d5ea26f77dbf540e08212f741006a4e200f8613919292133ebc54",
+    "south_daily_boundary_2019_2026.csv": "2ad402fb85efb3ac6dc340ff7eadc931c9d039ba7cc0353073d587483039c723"
+  }
+}
