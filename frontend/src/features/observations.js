@@ -407,5 +407,5 @@ export function createObservations({ onForecast } = {}) {
     });
   }
 
-  return { map, load, showError };
+  return { map, load, showError, selectStation };
 }

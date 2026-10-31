@@ -1,0 +1,3 @@
+# Kiểm toán lại ngày 30/10/2026
+
+Các tệp `predictions_{5,35}d.csv` và `metrics_{5,35}d.csv` được tạo trước khi sửa phép tính Persistence; cột Persistence trong chúng dùng nhãn EC tháng trước **chưa lọc ngày phát hành**. Giữ nguyên tệp như dấu vết thí nghiệm, không dùng cột/bảng Persistence cũ để so mô hình. `scripts/experiment_ec_final_candidates.py` đã sửa cho các lượt chạy tiếp theo. Bảng chấm lại khớp tháng, baseline đúng ngày phát hành và phép thử 2010–2018 ở `../ec_adaptive_asof_audit_20261030/`; diễn giải tại `../../docs/ec_adaptive_asof_audit_2026-10-30.md`. Các số dự báo Q50/Q90 cũ vẫn là đầu vào phép kiểm toán, chưa phải mô hình triển khai.

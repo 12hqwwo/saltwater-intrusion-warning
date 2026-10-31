@@ -1,0 +1,23 @@
+{
+  "source_sha256": {
+    "data\\external\\tien_multisite_20261029_verified\\019804_Water_Level_Telemetry_198f5577.csv": "e6ac18ef313a9415070bb4a68b967d7671efea31dded120663c596d5297231a6",
+    "data\\external\\tien_multisite_supplement_20261029\\019804_Water_Level_Telemetry_198f5577.csv": "cbb5d2edf20c5476bf77cbd86ccdd005ed88c4f3f4f1e6128fe4e67deddfcb02",
+    "data\\external\\tien_multisite_20261029_verified\\985203_Water_Level_Telemetry_9305ab16.csv": "22855b66c8ad0fa40d5c8acd30160f7f8e84cfa62daf35bc325441705588044f",
+    "data\\external\\tien_multisite_supplement_20261029\\985203_Water_Level_Telemetry_9305ab16.csv": "13a41b0efe13a89e4f3dceb9e7024ae745273c1defff641798c97bef844af2ac"
+  },
+  "timezone": "Asia/Ho_Chi_Minh",
+  "unit": "cm",
+  "source_quality": "UNVERIFIED",
+  "raw_interval_minutes": 15,
+  "complete_day_threshold_quarters": 80,
+  "comparison": "daily-demeaned stage wave; positive lag: Vam Kenh leads My Thuan",
+  "selection_period": "2019-2021",
+  "selection_lag_minutes": 135,
+  "selection_corr": 0.8598705091097079,
+  "selection_n": 21480,
+  "caveat": "Water-level tide-wave phase, not salinity propagation; daily demeaning does not remove meteorological and river-flow effects",
+  "output_sha256": {
+    "tide_wave_lag_metrics.csv": "e1a7a146ebe4d3b47233041d0a4961a18ad2e85af5c993d83456cb2abd037e80",
+    "tide_stage_day_coverage.csv": "df0381733d6eb60d3d10b79f254da620139d2be6b3960ec8004bfce904d211a5"
+  }
+}

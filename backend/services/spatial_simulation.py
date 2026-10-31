@@ -24,11 +24,11 @@ MY_THO = [106.35984003, 10.34514228]
 ESTUARY = [106.7503834, 10.2635303]
 GATE_ADVISORIES = {
     'OPEN_INTAKE': ('ADVISORY_SAFE_INTAKE', '#10b981',
-                    'Nguồn nước thuận lợi · Có thể xem xét lấy nước'),
+                    'EC mô phỏng dưới ngưỡng lấy nước của kịch bản'),
     'CAUTION_TRANSITION': ('ADVISORY_CHECK_ONSITE', '#f59e0b',
-                           'Chớm lợ / Chuyển tiếp · Cần đo kiểm tra tại mũi cống & canh chân triều'),
+                           'EC mô phỏng trong khoảng chuyển tiếp · Cần đo tại cống'),
     'CLOSED_SALINITY_BARRIER': ('ADVISORY_HIGH_SALINITY_RISK', '#ef4444',
-                              'Cảnh báo mặn vượt ngưỡng · Khuyến nghị ưu tiên ngăn mặn'),
+                              'EC mô phỏng đạt hoặc vượt ngưỡng ngừng lấy của kịch bản'),
 }
 
 
@@ -216,7 +216,7 @@ def _month(year_month):
 def _anchors(month):
     upstream = month['tan_chau_ec_mS_m']
     downstream = month['my_tho_ec_mS_m']
-    dry = int(month['year_month'][5:]) in {2, 3, 4, 5}
+    dry = int(month['year_month'][5:]) in {12, 1, 2, 3, 4}
     # Explicit uncalibrated estuary scenario: amplify both local EC and the
     # downstream gradient in dry months. No simulated boundary is an observation.
     amplification = 6.0 if dry else 1.5

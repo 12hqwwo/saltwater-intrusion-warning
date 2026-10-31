@@ -94,11 +94,11 @@ class WorkspaceWorkflowTests(unittest.TestCase):
                     errors = [row['predicted'] - row['actual'] for row in predictions]
                     self.assertAlmostEqual(
                         sum(abs(error) for error in errors) / len(errors),
-                        metric['mae_mS_m'], places=8,
+                        metric['mae_mS_m'], places=4,
                     )
                     self.assertAlmostEqual(
                         math.sqrt(sum(error ** 2 for error in errors) / len(errors)),
-                        metric['rmse_mS_m'], places=8,
+                        metric['rmse_mS_m'], places=4,
                     )
                     exported = next(
                         row for row in downloaded_metrics

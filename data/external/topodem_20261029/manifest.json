@@ -1,0 +1,33 @@
+{
+  "source": "https://zenodo.org/records/18348609",
+  "retrieved_at_utc": "2026-10-29T09:38:59.056167+00:00",
+  "file": "TopoDEM_v2.zip",
+  "size_bytes": 1647758,
+  "sha256": "9c7dcdf35613a45bc37fdf54eaedf972d673bcdb2e6c1e98ea8d4466bd6b18d1",
+  "members": [
+    {
+      "name": "TopoDEM_v2/",
+      "bytes": 0
+    },
+    {
+      "name": "TopoDEM_v2/(TopoDEM_v2_Mekong_Delta)README.txt",
+      "bytes": 3377
+    },
+    {
+      "name": "TopoDEM_v2/(TopoDEM_v2_Mekong_Delta+surroundings)README.txt",
+      "bytes": 3789
+    },
+    {
+      "name": "TopoDEM_v2/Topo_DEM_v2_MDT_HD_SLR_Mekong_delta_lesseq10_incl_provinces_all_UTM48N.tif",
+      "bytes": 1017806
+    },
+    {
+      "name": "TopoDEM_v2/Topo_DEM_v2_MDT_HD_SLR_Mekong_delta_lesseq10_UTM48N.tif",
+      "bytes": 711773
+    }
+  ],
+  "resolution_m": 500,
+  "horizontal_crs": "EPSG:32648",
+  "vertical_reference": "MSL via MDT HYBRID-CNES-CLS2022, per README",
+  "scope": "land topography; water bodies masked; not river channel bathymetry or gauge datum transformation"
+}

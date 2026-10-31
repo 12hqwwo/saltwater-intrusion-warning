@@ -1,0 +1,18 @@
+# Đối chiếu website với SEQUENCE DIAGRAM
+
+Đọc trực tiếp tám sơ đồ trong `D:\Study\BAOCAOTLCN\SEQUENCE DIAGRAM.docx` ngày 29/10/2026. Tệp đánh số sd 1–6, 8–9, không có sd 7. Đây là yêu cầu chức năng của tác giả; một sơ đồ không tự xác nhận hệ thống đã có dữ liệu hay quyền vận hành thật.
+
+| Sơ đồ | Trạng thái sau kiểm tra | Bằng chứng và phần còn thiếu |
+|---|---|---|
+| sd 1 Tổng quan | **Có, vừa bổ sung tóm tắt EC** | `/summary`, `/stations`, `/gates`; dashboard nay có bảng EC mẫu gần nhất theo trạm, ngày đo và liên kết mở lịch sử. Trạng thái dự báo ghi rõ chưa có dự báo vận hành đã kiểm định. Không tô màu cảnh báo nếu thiếu ngưỡng có nguồn. |
+| sd 2 Lịch sử EC | **Có** | Chọn marker/danh sách trạm, lọc khoảng ngày, biểu đồ, bảng và tải CSV qua `/stations/{site_code}/observations`. Ngưỡng trên biểu đồ là đối chiếu kịch bản có nguồn do người dùng chọn, không mặc định 150/620 mS/m như sơ đồ. |
+| sd 3 Dự báo EC và cảnh báo | **Một phần** | Dự báo đa biến có `/multivariate/catalog`, `/inputs`, `/predict`, `/evaluation`, MAE/RMSE, dữ liệu đầu vào, lưu kết quả PostgreSQL nếu bật. Chưa có chuỗi dự báo 1–3 tháng được phát hành vận hành và **chưa có khoảng dự báo được hiệu chuẩn**; MAE/RMSE không phải khoảng tin cậy từng dự báo. Không cấp mức cảnh báo 150/620 cố định khi chưa có cơ sở EC25/mục đích sử dụng. |
+| sd 4 Cống trên bản đồ | **Một phần** | Bản đồ và popup có vị trí cống/danh mục, kịch bản EC ngoài cống và nhãn tham chiếu. Chưa có EC đo trực tiếp hai phía, trạng thái thực hoặc liên kết thủy lực trạm–cống đã xác nhận; không trình bày EC Mỹ Tho như EC tại cống. |
+| sd 5 Phân tích kịch bản | **Một phần** | Có nhập khí tượng thủ công để chạy dự báo EC; có hồ sơ cống giả định và lưu bản nháp PostgreSQL. Chưa có API chuẩn cho thay đồng thời Q, triều, mưa và tính lại EC từ mô hình vật lý; RF đang phục vụ không học các biến đó. Không thể gọi đây là phân tích kịch bản thủy lực được hiệu chuẩn. |
+| sd 6 Cập nhật ngưỡng | **Một phần** | Người dùng đặt ngưỡng đối chiếu trong phiên trình duyệt và trong hồ sơ cống; preset PostgreSQL chỉ đọc, ghi rõ không phải quy tắc vận hành. Chưa có vai trò quản trị, phiên bản ngưỡng có ngày hiệu lực và nguồn phê duyệt. Không mở API sửa ngưỡng toàn hệ thống khi chưa có xác thực và thẩm quyền. |
+| sd 8 Xem/chọn mô hình | **Một phần** | Có bảng các mô hình/baseline, MAE/RMSE, chọn **thí nghiệm để xem**. Việc chọn trên giao diện không đổi mô hình đang phục vụ. Chưa có registry triển khai có kiểm định mù và quy trình quyền chọn mô hình. RF_compact/FES mới chỉ là ứng viên nghiên cứu. |
+| sd 9 Phê duyệt kế hoạch cống – dự kiến | **Chưa triển khai vận hành** | Chỉ có bản nháp và đánh giá kịch bản. Chưa có EC/mực nước/triều được xác minh tại cống, hồ sơ ngưỡng được duyệt, quyền cán bộ và nhật ký phê duyệt. Bản thân sơ đồ đánh dấu “Dự kiến”; không biến bản nháp thành quyết định đóng/mở thật. |
+
+Phần đã sửa trong lượt này: `frontend/workspace.html`, `frontend/src/features/overview.js`, `frontend/src/features/observations.js`, `frontend/src/app/workspace.js`. Bảng tổng quan chỉ chọn các trạm có mẫu EC và ngày đo; hiển thị tối đa tám trạm theo ngày gần nhất, cho mở đúng lịch sử trạm. Build Vite đã qua. Phần thiếu ở sd 3, 5, 6, 8, 9 là **năng lực hoặc dữ liệu chưa có**, không nên lấp bằng ngưỡng, độ tin cậy hay lệnh cống giả.
+
+Để hoàn thành đúng các sơ đồ còn lại cần: (1) chuỗi EC/Cl⁻ đồng thời và nhãn mới để kiểm định dự báo đa tháng/khoảng dự báo; (2) Q hai chiều, mực nước triều đo, mặt cắt và liên kết kênh–cống cho phân tích vật lý; (3) quy tắc EC25 theo mục đích, nguồn và phê duyệt; (4) xác thực vai trò, nhật ký thay đổi, lịch hiệu lực ngưỡng/mô hình và quy trình cán bộ. Khi chưa đủ, giao diện tiếp tục gọi rõ là nghiên cứu/kịch bản.

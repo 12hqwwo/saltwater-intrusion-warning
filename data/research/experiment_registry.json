@@ -1,11 +1,11 @@
 [
   {
     "experiment_id": "MYTHO_MONTHLY_LAG0",
-    "path": "runs/local_ec_backtest/MYTHO_20261014T065649Z_049e7fca"
+    "path": "runs/local_ec_backtest/MYTHO_RF_COMPACT_20261030"
   },
   {
     "experiment_id": "MYTHO_MONTHLY_LAG30",
-    "path": "runs/local_ec_backtest/MYTHO_20261014T065714Z_5f8ea991"
+    "path": "runs/local_ec_backtest/MYTHO_RF_COMPACT_LAG30_20261030"
   },
   {
     "experiment_id": "TANCHAU_MONTHLY_LAG0",

@@ -1,0 +1,7 @@
+{
+  "selected_model": "RF_compact",
+  "selected_on": "validation",
+  "validation_metric": "mae_mS_m",
+  "validation_mae": 50.86595,
+  "persistence_validation_mae": 93.38583
+}

@@ -1,0 +1,449 @@
+{
+  "model": "RF_compact",
+  "version": "research-2026-10-29",
+  "sklearn_version": "1.8.0",
+  "generated_at_utc": "2026-10-29T10:53:10.545946+00:00",
+  "feature_order": [
+    "month_sin",
+    "month_cos",
+    "rainfall_mm",
+    "kratie_q_t2",
+    "kratie_q3_t2",
+    "kratie_q_ratio_t2",
+    "tc_stage_t2",
+    "tc_stage3_t2"
+  ],
+  "feature_values": {
+    "month_sin": -0.5000000000000004,
+    "month_cos": 0.8660254037844384,
+    "rainfall_mm": 313.0,
+    "kratie_q_t2": 37754.472336666666,
+    "kratie_q3_t2": 29768.237952759868,
+    "kratie_q_ratio_t2": 1.2232563010763795,
+    "tc_stage_t2": 3.2649999999999997,
+    "tc_stage3_t2": 2.465
+  },
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": 7,
+    "min_samples_leaf": 3,
+    "max_features": 0.8,
+    "random_state": 42
+  },
+  "train_rows": 463,
+  "train_end": "2023-12",
+  "target": "single My Tho EC sample in target month, mS/m",
+  "hypothetical_issue_date": "2026-10-06",
+  "target_month": "2026-11",
+  "predicted_ec_mS_m": 15.005298987840929,
+  "weather_source": {
+    "station": "MyTho",
+    "input_month": "2026-09",
+    "rainfall_mm": 313.0,
+    "temperature_degC": 27.85666666666667,
+    "wind_source_units": 2.261,
+    "observed_through": "2026-09-30",
+    "assumed_available_at": "2026-10-05",
+    "daily_count": 30,
+    "complete": true,
+    "availability_note": "Month end + 5 days is an assumed ERA5 release lag, not a historical publication timestamp.",
+    "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json",
+    "sha256": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+    "wind_unit": "m/s",
+    "wind_unit_status": "VERIFIED_RESPONSE_UNITS",
+    "wind_statistic": "monthly mean of daily mean 10m wind speed",
+    "source_model": "ERA5",
+    "retrieved_at": "2026-10-23T04:16:58.471583+00:00",
+    "source_url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2025-01-01&end_date=2026-09-30&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+    "target_month": "2026-11"
+  },
+  "validation_selection": "RF_compact has lowest overall MAE among tested compact/weighted candidates on 2019-2021 under primary +5d release assumption",
+  "retrospective_status": "2022-2023 previously inspected; not blind holdout",
+  "source_sha256": {
+    "data\\research\\mrc_ec_monthly_samples.csv": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc",
+    "data\\external\\multivariate_weather\\manifest.json": "da9b80d2c54d52a427705d326160b1bacce17e94874ab6e5a757f3e75fd48443",
+    "data\\external\\ec_feature_research_20261019\\era5_extra_MyTho.json": "ca879c723c61b4fc263eba23200294c59e779fb392534aca53390a894519f3d9",
+    "data\\external\\mrc_kratie_discharge_20261029\\014901_Discharge_Calculated daily discharge_22a8130e.csv": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+    "data\\external\\tien_manual_long_20261029\\019803_Water_Level_Manual_3bd17f3a.csv": "5d461321271099559d84e07d73c949171945ffc0e8fa32a813e722026cda72f8",
+    "data\\external\\tien_manual_2024_2026_20261029\\019803_Water_Level_Manual_3bd17f3a.csv": "f7ee1fb6fee877373fc341496eee8580502fe56e5e870f501252c0167140aab4",
+    "data\\external\\ec_hydrology_current_20261029\\era5_extra_MyTho_2026-09.json": "f0cb0a3bbbdb8339da654a7b48fdef101b92a87a57773145e7cd08f4b1651226",
+    "scripts\\experiment_ec_extreme_robust.py": "417e6c189c2bc766d897f5f366219222ae021deee9c7858d1200e224e23ff547",
+    "scripts\\experiment_ec_long_hydrology.py": "0e7ce71187d2e9e4d88a7ff8573536e8d55a219027a85eb4fbc89aaedefaf567",
+    "scripts\\backtest_asof_ec.py": "253cc3b588ca94678ed60d72f7eea8ec795a2066f17fcb67372626886e92a390"
+  },
+  "artifact_sha256": "83f846f3858c1fb6da56ddaca14bdbdf9bd295c1244dc3ea7dc1d8d475487adb",
+  "backtest_metrics": {
+    "5": [
+      {
+        "split": "validation_2019_2021",
+        "subset": "all",
+        "model": "RF_old",
+        "n": 36,
+        "mae": 71.55722547234299,
+        "rmse": 151.5521688208914,
+        "bias": -44.916147861378576
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "all",
+        "model": "RF_flow_stage_no_ec",
+        "n": 36,
+        "mae": 58.6825647777799,
+        "rmse": 139.0520202754756,
+        "bias": -44.22136106879736
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "all",
+        "model": "Persistence",
+        "n": 36,
+        "mae": 93.38583333333332,
+        "rmse": 192.8971415965284,
+        "bias": -0.1958333333333283
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "all",
+        "model": "RF_compact",
+        "n": 36,
+        "mae": 50.86595254248248,
+        "rmse": 130.89657949141414,
+        "bias": -42.10720823053103
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "dry_dec_apr",
+        "model": "RF_old",
+        "n": 15,
+        "mae": 128.93986105872426,
+        "rmse": 220.4182089403791,
+        "bias": -109.80612312902431
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "dry_dec_apr",
+        "model": "RF_flow_stage_no_ec",
+        "n": 15,
+        "mae": 118.67701094781226,
+        "rmse": 212.6976174880208,
+        "bias": -107.43563777279958
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "dry_dec_apr",
+        "model": "Persistence",
+        "n": 15,
+        "mae": 109.65933333333332,
+        "rmse": 225.53145023846815,
+        "bias": -109.24466666666667
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "dry_dec_apr",
+        "model": "RF_compact",
+        "n": 15,
+        "mae": 106.86185465709065,
+        "rmse": 201.46530881020857,
+        "bias": -100.06234295381068
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "high_ge_100",
+        "model": "RF_old",
+        "n": 6,
+        "mae": 324.2382152473295,
+        "rmse": 357.77148152838447,
+        "bias": -324.2382152473295
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "high_ge_100",
+        "model": "RF_flow_stage_no_ec",
+        "n": 6,
+        "mae": 286.2804857408758,
+        "rmse": 337.1032608108223,
+        "bias": -286.2804857408758
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "high_ge_100",
+        "model": "Persistence",
+        "n": 6,
+        "mae": 305.71,
+        "rmse": 375.70269442738896,
+        "bias": -207.71
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "high_ge_100",
+        "model": "RF_compact",
+        "n": 6,
+        "mae": 259.36513565175864,
+        "rmse": 318.8565680849033,
+        "bias": -259.36513565175864
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "all",
+        "model": "RF_old",
+        "n": 24,
+        "mae": 18.63073974397243,
+        "rmse": 49.91794169939581,
+        "bias": 8.30221757254448
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "all",
+        "model": "RF_flow_stage_no_ec",
+        "n": 24,
+        "mae": 13.52359619640798,
+        "rmse": 29.672290317522428,
+        "bias": 5.938454346580002
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "all",
+        "model": "Persistence",
+        "n": 24,
+        "mae": 12.621249999999998,
+        "rmse": 18.91094072664464,
+        "bias": 0.3595833333333334
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "all",
+        "model": "RF_compact",
+        "n": 24,
+        "mae": 11.07176618122174,
+        "rmse": 24.94784495531523,
+        "bias": 4.086703493097631
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "dry_dec_apr",
+        "model": "RF_old",
+        "n": 10,
+        "mae": 35.37607507818983,
+        "rmse": 75.24380640137697,
+        "bias": 15.771757404225758
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "dry_dec_apr",
+        "model": "RF_flow_stage_no_ec",
+        "n": 10,
+        "mae": 26.90833301020488,
+        "rmse": 45.4141203014519,
+        "bias": 15.623248386890314
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "dry_dec_apr",
+        "model": "Persistence",
+        "n": 10,
+        "mae": 16.912,
+        "rmse": 24.22823353032573,
+        "bias": -11.492
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "dry_dec_apr",
+        "model": "RF_compact",
+        "n": 10,
+        "mae": 22.2249373937948,
+        "rmse": 38.3331183932678,
+        "bias": 10.629860616204883
+      }
+    ],
+    "35": [
+      {
+        "split": "validation_2019_2021",
+        "subset": "all",
+        "model": "RF_old",
+        "n": 36,
+        "mae": 71.26013516893394,
+        "rmse": 150.41513038139905,
+        "bias": -44.375499560845405
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "all",
+        "model": "RF_flow_stage_no_ec",
+        "n": 36,
+        "mae": 60.72112898935908,
+        "rmse": 143.38389364201137,
+        "bias": -47.694111729238365
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "all",
+        "model": "Persistence",
+        "n": 36,
+        "mae": 125.83833333333332,
+        "rmse": 239.5428869395485,
+        "bias": -0.2566666666666642
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "all",
+        "model": "RF_compact",
+        "n": 36,
+        "mae": 55.298413155092206,
+        "rmse": 137.17144945716873,
+        "bias": -45.99655409199328
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "dry_dec_apr",
+        "model": "RF_old",
+        "n": 15,
+        "mae": 127.55556284836992,
+        "rmse": 217.8580546893023,
+        "bias": -108.14687714021387
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "dry_dec_apr",
+        "model": "RF_flow_stage_no_ec",
+        "n": 15,
+        "mae": 121.36466805583152,
+        "rmse": 217.8439265765635,
+        "bias": -110.30140704358124
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "dry_dec_apr",
+        "model": "Persistence",
+        "n": 15,
+        "mae": 149.0593333333333,
+        "rmse": 272.2566336994075,
+        "bias": -148.898
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "dry_dec_apr",
+        "model": "RF_compact",
+        "n": 15,
+        "mae": 110.13003919676096,
+        "rmse": 207.28694751201783,
+        "bias": -103.2329103404806
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "high_ge_100",
+        "model": "RF_old",
+        "n": 6,
+        "mae": 321.7422123799986,
+        "rmse": 354.59788777734366,
+        "bias": -321.7422123799986
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "high_ge_100",
+        "model": "RF_flow_stage_no_ec",
+        "n": 6,
+        "mae": 302.6635897878244,
+        "rmse": 348.3992002322557,
+        "bias": -302.6635897878244
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "high_ge_100",
+        "model": "Persistence",
+        "n": 6,
+        "mae": 378.7283333333333,
+        "rmse": 434.8187756410709,
+        "bias": -325.395
+      },
+      {
+        "split": "validation_2019_2021",
+        "subset": "high_ge_100",
+        "model": "RF_compact",
+        "n": 6,
+        "mae": 285.2437030053747,
+        "rmse": 334.0880958835946,
+        "bias": -285.2437030053747
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "all",
+        "model": "RF_old",
+        "n": 24,
+        "mae": 18.61122303111308,
+        "rmse": 49.62420898840722,
+        "bias": 8.368447503811412
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "all",
+        "model": "RF_flow_stage_no_ec",
+        "n": 24,
+        "mae": 13.186708387759635,
+        "rmse": 28.466608603761763,
+        "bias": 5.808362845971861
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "all",
+        "model": "Persistence",
+        "n": 24,
+        "mae": 15.094583333333333,
+        "rmse": 20.67788986252385,
+        "bias": 0.3295833333333335
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "all",
+        "model": "RF_compact",
+        "n": 24,
+        "mae": 11.247335094625557,
+        "rmse": 24.736572321738723,
+        "bias": 4.218207860443186
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "dry_dec_apr",
+        "model": "RF_old",
+        "n": 10,
+        "mae": 35.18566040146623,
+        "rmse": 74.6170048733406,
+        "bias": 15.612154632477452
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "dry_dec_apr",
+        "model": "RF_flow_stage_no_ec",
+        "n": 10,
+        "mae": 26.10400503182487,
+        "rmse": 43.50773980668384,
+        "bias": 15.191678463159946
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "dry_dec_apr",
+        "model": "Persistence",
+        "n": 10,
+        "mae": 16.073999999999998,
+        "rmse": 24.29846126815441,
+        "bias": -16.073999999999998
+      },
+      {
+        "split": "retrospective_2022_2023",
+        "subset": "dry_dec_apr",
+        "model": "RF_compact",
+        "n": 10,
+        "mae": 22.36664923671184,
+        "rmse": 37.98660343687506,
+        "bias": 11.120747756924382
+      }
+    ]
+  },
+  "deployment_ready": false,
+  "gate_decision_eligible": false,
+  "limitations": [
+    "No EC observations after 2023 to validate 2026 prediction",
+    "No historical source vintages or actual EC publication timestamps",
+    "Extreme EC still badly underpredicted; no new extreme months in 2022-2023",
+    "Upstream Q/stage features are predictors, not validated salt propagation"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Long-term daily-averaged discharge time series in a megadelta",
+  "doi": "10.17632/xnzvfcyy68.1",
+  "dataset_url": "https://data.mendeley.com/datasets/xnzvfcyy68/1",
+  "file_url": "https://data.mendeley.com/public-files/datasets/xnzvfcyy68/files/e2560f1f-f8d9-4172-95fd-26226d81d998/file_downloaded",
+  "downloaded_at_utc": "2026-10-29T09:27:21.253704+00:00",
+  "file": "Daily-averaged_discharge_TanChau.xlsx",
+  "sha256": "c49d77185321485d3ac7cdbcff29cee8adb308da7de4d71112c8d144f57665df",
+  "size_bytes": 151897,
+  "sheets": {
+    "Training dataset": {
+      "rows": 6221,
+      "first": "1980-04-01",
+      "last": "2015-12-31"
+    },
+    "Testing dataset": {
+      "rows": 2648,
+      "first": "1984-04-10",
+      "last": "2011-12-31"
+    }
+  },
+  "duplicate_dates_across_sheets": 0,
+  "unit": "m^3/s",
+  "status": "historical calibration only; no 2019-2023 coverage; no observed or reconstructed flag per row"
+}

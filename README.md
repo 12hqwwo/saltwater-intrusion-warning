@@ -1,5 +1,7 @@
 # WebGIS và dự báo EC theo tháng
 
+[Bản đồ tài liệu, dữ liệu và kết quả nghiên cứu](docs/README.md) giúp tìm đúng tệp trước khi chỉnh sửa hoặc dọn dẹp.
+
 Ứng dụng tiểu luận kết hợp WebGIS và **dự báo EC tháng bằng mô hình đa biến**. Luồng chính: chọn trạm/tháng → tải lượng mưa, nhiệt độ, gió và chu kỳ mùa vụ → chạy Random Forest đã huấn luyện → xem EC dự báo, đầu vào, sai số lịch sử và vị trí trên bản đồ → xuất JSON/CSV.
 
 ## Chạy trên Windows

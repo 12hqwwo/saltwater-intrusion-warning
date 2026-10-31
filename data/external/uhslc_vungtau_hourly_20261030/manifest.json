@@ -1,0 +1,17 @@
+{
+  "station": "Vung Tau-B",
+  "uhslc_id": "383B",
+  "source_url": "https://uhslc.soest.hawaii.edu/data/csv/rqds/hourly/h383b.csv",
+  "source_sha256": "c372bb8e6c512c6bc5b022feb9548456d6dad6559ac5ed49b81dea82856737ce",
+  "unit": "mm relative to station zero",
+  "time_source": "UTC; local dates derived with Asia/Ho_Chi_Minh",
+  "source_rows": 150900,
+  "missing_sentinel_rows": 4332,
+  "first_time_utc": "2007-10-15 12:00:00+00:00",
+  "last_time_utc": "2024-12-31 23:00:00+00:00",
+  "valid_daily_range_min_hours": 22,
+  "valid_daily_ranges": 6000,
+  "availability_caution": "Research-quality archive has no historical daily publication vintages; use only pre-issue windows with an explicit assumed delay in forecast backtests.",
+  "datum_caution": "Station zero is not a common river gauge datum; do not subtract absolute FES or MRC stage without datum calibration.",
+  "mislabelled_legacy_file": "data/raw/tide/uhslc/uhslc_tides_VungTau_id142_daily.csv is UHSLC id142 Langkawi, Malaysia, not Vung Tau."
+}

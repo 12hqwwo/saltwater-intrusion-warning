@@ -1,0 +1,5 @@
+# Intake checksums cover exact bytes; the source CSV is CRLF and JSON is LF.
+data/external/user_v3_review_20261015/WebGIS_ML_Time_Series_Ready_v3.csv text eol=crlf
+data/external/user_v3_review_20261015/webgis_dongthap_tiengiang_spatial_v3.json text eol=lf
+data/external/user_v3_review_20261015/normalized_review.json text eol=lf
+data/biengioi/tien_osm_waterways_source.json text eol=lf

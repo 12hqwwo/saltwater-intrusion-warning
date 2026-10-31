@@ -47,11 +47,12 @@ def main():
     RAW_WATER = Path(__file__).resolve().parents[1] / "data" / "raw" / "tide" / "uhslc"
     RAW_WATER.mkdir(parents=True, exist_ok=True)
     
-    out_file = RAW_WATER / "uhslc_tides_VungTau_id142_daily.csv"
+    # UHSLC 142 is Langkawi, Malaysia. Vung Tau fast-delivery ID is 383.
+    out_file = RAW_WATER / "uhslc_tides_VungTau_id383_daily.csv"
     temp_csv = RAW_WATER / "temp_uhslc.csv"
     
     print("⏳ Đang tải chuỗi dữ liệu Thủy triều Vũng Tàu (hỗ trợ Auto-Resume)...")
-    url = "https://uhslc.soest.hawaii.edu/data/csv/fast/hourly/h142.csv"
+    url = "https://uhslc.soest.hawaii.edu/data/csv/fast/hourly/h383.csv"
     
     download_with_resume(url, temp_csv)
     

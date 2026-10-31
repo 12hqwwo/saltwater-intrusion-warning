@@ -1,0 +1,123 @@
+{
+  "retrieved_at_utc": "2026-10-29T08:28:28.233496+00:00",
+  "source": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+  "license_status": "Public API; verify reuse terms before redistribution",
+  "source_qa": "Keep MRC grades and approvals; no automatic promotion",
+  "series": [
+    {
+      "file": "988103_Conductivity_Water Quality_e2983e0a.csv",
+      "unique_id": "e2983e0ac39642fdbb274eefc9652faa",
+      "station_code": "988103",
+      "station_name": "Cai Mon",
+      "parameter": "Conductivity",
+      "label": "Water Quality",
+      "unit": "mS/m",
+      "latitude": 10.82108241,
+      "longitude": 105.7451784,
+      "source_first": "1986-03-12T17:00:00Z",
+      "source_last": "2003-12-14T17:00:00Z",
+      "downloaded_rows": 83,
+      "first_observed": "1986-03-13T00:00:00+07:00",
+      "last_observed": "2003-12-15T00:00:00+07:00",
+      "extracted_sha256": "862c23e9bd2cf9e8fc4824d502c709561fb376f9b7dec82e439ebe4610bc170b",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "988104_Conductivity_Water Quality_394bf55c.csv",
+      "unique_id": "394bf55c02d149e0913c6f94c3f595d3",
+      "station_code": "988104",
+      "station_name": "An Long",
+      "parameter": "Conductivity",
+      "label": "Water Quality",
+      "unit": "mS/m",
+      "latitude": 10.6922,
+      "longitude": 105.392,
+      "source_first": "1986-03-12T17:00:00Z",
+      "source_last": "2003-12-14T17:00:00Z",
+      "downloaded_rows": 83,
+      "first_observed": "1986-03-13T00:00:00+07:00",
+      "last_observed": "2003-12-15T00:00:00+07:00",
+      "extracted_sha256": "d2e20cf3b41fcc485c1f6579933fa09416c2899c73f0831e3d08c5a31cd59ecb",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "988108_Conductivity_Water Quality_83744e8d.csv",
+      "unique_id": "83744e8db7084369b8bde2f342cdfc23",
+      "station_code": "988108",
+      "station_name": "Tuyen Nhon",
+      "parameter": "Conductivity",
+      "label": "Water Quality",
+      "unit": "mS/m",
+      "latitude": 10.6492,
+      "longitude": 106.183,
+      "source_first": "1986-03-12T17:00:00Z",
+      "source_last": "2003-12-14T17:00:00Z",
+      "downloaded_rows": 76,
+      "first_observed": "1986-03-13T00:00:00+07:00",
+      "last_observed": "2003-12-15T00:00:00+07:00",
+      "extracted_sha256": "a4128d3a3ad892bb126534c524f149ea65d00b6bf59ec07e4d73c9f0242d12a9",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "039803_Conductivity_Water Quality_d7ae7f2f.csv",
+      "unique_id": "d7ae7f2f969945799a417eb168ee4717",
+      "station_code": "039803",
+      "station_name": "Can Tho",
+      "parameter": "Conductivity",
+      "label": "Water Quality",
+      "unit": "mS/m",
+      "latitude": 10.05288889,
+      "longitude": 105.7871389,
+      "source_first": "1985-05-14T17:00:00Z",
+      "source_last": "2023-12-14T17:00:00Z",
+      "downloaded_rows": 464,
+      "first_observed": "1985-05-15T00:00:00+07:00",
+      "last_observed": "2023-12-15T00:00:00+07:00",
+      "extracted_sha256": "ab7f5ab005882f2da8cdbbc9957668538e8808d04b6da63c9fe29d31063e5d87",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    }
+  ],
+  "downloads": [
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+      "file": "inventory.json",
+      "bytes": 1124781,
+      "sha256": "9139b77a1e2c2fc0ef10d06df3f3dc0ef717f4ab3ab274063c5cc63e56d10c4e",
+      "fetched_at": "2026-10-29T08:28:33.513558+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/e2983e0ac39642fdbb274eefc9652faa?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/e2983e0ac39642fdbb274eefc9652faa?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "988103_Conductivity_Water Quality_e2983e0a.json",
+      "bytes": 8803,
+      "sha256": "2b938e45a48b656d494681f80e04712f00c465433dd45a671a6bedf3adf7999c",
+      "fetched_at": "2026-10-29T08:28:34.273887+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/394bf55c02d149e0913c6f94c3f595d3?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/394bf55c02d149e0913c6f94c3f595d3?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "988104_Conductivity_Water Quality_394bf55c.json",
+      "bytes": 8800,
+      "sha256": "4c15956718ecae593e01304b0fe0da42ac88afc4b0224deefc36431c2d3ae171",
+      "fetched_at": "2026-10-29T08:28:34.983538+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/83744e8db7084369b8bde2f342cdfc23?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/83744e8db7084369b8bde2f342cdfc23?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "988108_Conductivity_Water Quality_83744e8d.json",
+      "bytes": 8179,
+      "sha256": "7a72e583ef1e52f6a66004ad3e6105d1ba3536ab534ee546deeab233e949b25b",
+      "fetched_at": "2026-10-29T08:28:35.689684+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/d7ae7f2f969945799a417eb168ee4717?sd=1984-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/d7ae7f2f969945799a417eb168ee4717?sd=1984-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "039803_Conductivity_Water Quality_d7ae7f2f.json",
+      "bytes": 43178,
+      "sha256": "989d5941e03077a06c65a5e7e4acdf792b23de03d21a8a26fadbaf64efb0bc0b",
+      "fetched_at": "2026-10-29T08:28:36.591110+00:00"
+    }
+  ],
+  "errors": []
+}

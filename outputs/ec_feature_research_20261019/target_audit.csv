@@ -1,0 +1,3 @@
+﻿station,source_samples,v2_labels,absent_from_v2,median_dropped,max_dropped,max_retained_v2
+MYTHO,463,365,98,58.55,841.0,50.7
+TANCHAU,464,445,19,13.3,60.9,30.4

@@ -1,0 +1,9 @@
+{
+  "source": "https://zenodo.org/records/17435232/files/GRITv1.0_segments_simple_GLOBAL_EPSG4326.gpkg.zip?download=1",
+  "downloaded_at_utc": "2026-10-29T10:12:54.346046+00:00",
+  "file": "GRITv1.0_segments_simple_GLOBAL_EPSG4326.gpkg.zip",
+  "size_bytes": 111044252,
+  "md5": "f5f378620eb1e59da7682a991bb51ccc",
+  "sha256": "af796b7139e7822f50bd030f9b59e6bf58163ff8dc9f3af713ff74ddc66d57e9",
+  "note": "Simplified global topology only; not bathymetry or validated delta canal connectivity"
+}

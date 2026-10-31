@@ -1,0 +1,47 @@
+{
+  "issue": "day 6 of previous month",
+  "ec_release_delay_days": 35,
+  "features": {
+    "RF_fine": [
+      "month_sin",
+      "month_cos",
+      "rainfall_mm",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2"
+    ],
+    "ET_fine": [
+      "month_sin",
+      "month_cos",
+      "rainfall_mm",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2"
+    ],
+    "GB_huber": [
+      "month_sin",
+      "month_cos",
+      "rainfall_mm",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2"
+    ],
+    "KNN_analog": [
+      "month_sin",
+      "month_cos",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2"
+    ]
+  },
+  "selection": "2019-2021 only",
+  "retrospective": "2022-2023 previously inspected",
+  "historical_publication_vintages": "unavailable",
+  "post2023_EC": "unavailable"
+}

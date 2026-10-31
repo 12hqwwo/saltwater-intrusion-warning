@@ -1,0 +1,15 @@
+{
+  "source": {
+    "mytho": "data\\external\\mrc_20261014_network\\019805_Conductivity_Water_Quality_acce65db.csv",
+    "mythuan": "data\\external\\tien_multisite_20261029_verified\\019804_Conductivity_Water Quality_4c105414.csv"
+  },
+  "unit": "mS/m",
+  "paired_months": 450,
+  "same_sample_date_months": 387,
+  "mytho_high_ge_100_paired_months": 34,
+  "mythuan_high_ge_100_paired_months": 0,
+  "mytho_high_and_same_sample_date": 26,
+  "pearson_monthly_ec": 0.35348155996234853,
+  "spearman_monthly_ec": 0.8203026842834147,
+  "note": "MRC flags are UNVERIFIED and EC temperature basis is UNKNOWN. The source timestamps are date-only 00:00 placeholders, not measured tidal phase. Same-day pairs do not establish salt travel time or a calibrated gradient."
+}

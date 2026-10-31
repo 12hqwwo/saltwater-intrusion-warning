@@ -1,0 +1,364 @@
+{
+  "checked_at_utc": "2026-10-26T03:43:51.080500+00:00",
+  "source": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/",
+  "expected_constituents": 34,
+  "mask_required": true,
+  "present_constituents": 34,
+  "missing_constituents": [],
+  "collection_complete": true,
+  "status": "FILES_VERIFIED_POINTS_STILL_REVIEW",
+  "point_status": "REVIEW; coastline, datum and representativeness require validation",
+  "observational_validation": "NOT_COMPLETED",
+  "files": [
+    {
+      "file": "2n2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/2n2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "60923fee11152c5095145d9cba6b15c9b203da299b500ec35f0bf5bf222eec68",
+      "archive_sha256": "7ee3d9136a645a751518dc47e18d9094e959e4b03c53a7e77052926382aee83c",
+      "download_source": ""
+    },
+    {
+      "file": "eps2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/eps2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "c65c1445ed35d9b1c1213935d76912448c6a88947fa8827292ef4912cf812af7",
+      "archive_sha256": "9676ab2677878d31083b0f0d4b81e34c693cf34859a1d81a1cd032217a92b30c",
+      "download_source": ""
+    },
+    {
+      "file": "j1_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/j1_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "52f3771e947ca927428c3424ddced61e5fd14f88d140c2e8bbc421f5b6162c98",
+      "archive_sha256": "5d840c3c7045f6123b3bc1c4cafa06f2d753c5344ebb7e731009ad430192e60b",
+      "download_source": ""
+    },
+    {
+      "file": "k1_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/k1_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "9f564cb7c6b6dfee8487e685747de8ea6d3e512a9f7dc67e834bbea83a8589d1",
+      "archive_sha256": "5b31a997edd2fdf21b24ff21eb8a6f78d99d6f097a5afbc9c7f09fa968efd7b6",
+      "download_source": ""
+    },
+    {
+      "file": "k2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/k2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "f72de82c101d4b3fa35b69b858dd6639e444fd0e8798f2d9d49d61a46e17e769",
+      "archive_sha256": "d62ac497ac463aac2ab19b2267937357e05366868724956231bfde87c83d273f",
+      "download_source": ""
+    },
+    {
+      "file": "l2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/l2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "438cf0c555fd326598d5cbbbf76296d9feba761684f3b5856e75b1498049f602",
+      "archive_sha256": "01ffd767fbec4ba86f5b1690a6aea8f8b54694c2678fdbd1baf76378e94c5447",
+      "download_source": ""
+    },
+    {
+      "file": "lambda2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/lambda2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "a0775ad08768a652bb6d0d50d1c1184de13be26f64fde1f0c880a9127c2d1c5c",
+      "archive_sha256": "2243c720de8590bcbdb80b3d2663ca25bd362232fd8d1fbd7ddf2b312892bc3c",
+      "download_source": ""
+    },
+    {
+      "file": "m2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/m2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "8661a73770741dfd46321df6fdd3c71f8e468c9b1eb27b7ab1668fed3a60ae33",
+      "archive_sha256": "616562ceab5dba29a5fd52aed2b98ebc706ebf177c1e0f393907b199d394232b",
+      "download_source": ""
+    },
+    {
+      "file": "m3_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/m3_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "291b67d95a5fd18b8d3e95f6a1332ae29d9d8c7588d7295770fb1855e34af1f0",
+      "archive_sha256": "e54e37843d577e6bbdba9f182ddb24481e01063c0bad66b8a18b8bc291d5e41e",
+      "download_source": ""
+    },
+    {
+      "file": "mu2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/mu2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "1aa8f661340a470ee570d3afbe7613575dd5686fa3b28f8de389548af34791c2",
+      "archive_sha256": "22252ebf2c315c72a7b2c2e280a4f809ac3e5007099cfd98f4a73a218d6f1450",
+      "download_source": ""
+    },
+    {
+      "file": "n2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/n2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "a5eb017cbb3204f905406c3ec21b54f449b9908f391897e4dc220c99057522e2",
+      "archive_sha256": "d0cb7bcdec2bd68190a09a24782c90ec61113ef947d2f9959a8cacb8a0831541",
+      "download_source": ""
+    },
+    {
+      "file": "nu2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/nu2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "87fd9c8c13f62eded280e2cbf7b68ea56067dedfd17466544379ec28e94fe674",
+      "archive_sha256": "7dbca75130bd9d40f646b05167ce11a93a5181acd5ac75c976aef23fbb01a598",
+      "download_source": ""
+    },
+    {
+      "file": "o1_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/o1_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "cb6f75a1b0df682c0933bd5e60e5b123dc76d5184b7726604f3b52952c314caf",
+      "archive_sha256": "a2fc85ab5cf3dc5f761283d17dd8b3f96f9edcb9d7f1c3aadfadf51ce9415ace",
+      "download_source": ""
+    },
+    {
+      "file": "p1_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/p1_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "8cee0fee938ccebe2fd5f702d39df847424c8a1e7e6a37328183e2f8c040e2b0",
+      "archive_sha256": "6155150d908b85fc8215d5a235c17f8a0adf3134a215095ae5c746bf2ba4b3e6",
+      "download_source": ""
+    },
+    {
+      "file": "q1_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/q1_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "5c91baa8191b739232793b23018de01479f44d5f821b77e2ef565daedd50832a",
+      "archive_sha256": "59978f2c81c9e77a055cc44aaeee9be3e0d1b52459ef22abf8f8caea14015036",
+      "download_source": ""
+    },
+    {
+      "file": "r2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/r2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "940bcd25a7be0dc706c1b7d0ce9961f1f1dd40afa7b31d4a1b91cfa3a2c85f57",
+      "archive_sha256": "112844bfde71d7804bc17cc9d0473b3f617096967360b5eeb2beebb5a6ec3c24",
+      "download_source": ""
+    },
+    {
+      "file": "s1_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/s1_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "852adc570974a9ebb44fdf2494a30ba23816cc6f8804e9d3f0ae923dc5694001",
+      "archive_sha256": "a50bab18f1c0fb1a5bd1f5aa1239dab14234c7ae0c376909d8af6dd770d129b5",
+      "download_source": ""
+    },
+    {
+      "file": "s2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/s2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "5c8b4a21dcc83448b11d8da7976aba703df4b37fd1841cf86bc569f39bbabff5",
+      "archive_sha256": "5a2fd7c79c1883377efc67167c2c542e7ff9495f7fbba7ea3f9521efafaf5cbe",
+      "download_source": ""
+    },
+    {
+      "file": "t2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/t2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "5359b546d6e4d5e44948f1bf22b5d45fd176d16c75c1f4c3bbc10cd34599a876",
+      "archive_sha256": "ff5dbe959cf1a28712b541c2eab35f89448e72c021cee434a2a9e49f58f4fa04",
+      "download_source": ""
+    },
+    {
+      "file": "mf_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/mf_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "00cf0eaaa922ff5390d693fdbc360955ca850d9ea420eedc9ed373a49b783d52",
+      "archive_sha256": "377444085c6d08451171740260f090989d044cbbfc31ab24e28907f9e14b4f4a",
+      "download_source": ""
+    },
+    {
+      "file": "mm_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/mm_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "adec8c29768db9eb9034e4274fcba746c253f4a78bbaa8919d24979990ad33ec",
+      "archive_sha256": "6e2f42bef9423a223f397628ac759263f1749008d62e5def4687feca783fc3bc",
+      "download_source": ""
+    },
+    {
+      "file": "msqm_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/msqm_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "186e1039a5b09e66993cce370c256d0b412ae26e4600584d8d4f454b5f2d92d0",
+      "archive_sha256": "062a69628fd1bdadd0bd7f858f740d8e2b327bd67ef19f581539de7213121af0",
+      "download_source": ""
+    },
+    {
+      "file": "mtm_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/mtm_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "7aa253cede3d385f977cad048a7832428a626f28f27ef7c422d54cdaa2c92561",
+      "archive_sha256": "d281a6c054736097639a13683ddb572bf083845fa4820d2d47e5adf3c24cb8dd",
+      "download_source": ""
+    },
+    {
+      "file": "sa_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/sa_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "c23d618b9c5dfe4b3df21ac95a8411b9140638cb41a10e2d12f461ca0e39f4a3",
+      "archive_sha256": "a37faa5785ff6b31a90ce9d160474e1f59c128a7f7e1617b985c7b1a43c37ce3",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/sa_fes2022.nc.xz"
+    },
+    {
+      "file": "ssa_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/ssa_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "35c64b66928770ddb586c3356a6938e83a8ec127cffa8ce515d415de95240aae",
+      "archive_sha256": "4a0ca7ab61273aeaaf65f3ab6bb9943826b26f6b3e305897b466426bae012e7d",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/ssa_fes2022.nc.xz"
+    },
+    {
+      "file": "m4_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/m4_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "25347616f8397c47759e445591c1e250591ba352a1578280cd8e738da82115c3",
+      "archive_sha256": "5d23005aabc974d7c54ed6a7a0640fbb8d6a7cf720b45282a54581ae7b598e79",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/m4_fes2022.nc.xz"
+    },
+    {
+      "file": "m6_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/m6_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "aa5e2eaa6f032691de9be8a4e16dd064e288e509ce02044b93143d1e2a83bcbf",
+      "archive_sha256": "bd8b7ec39b5dda76419468f59e9d46a98111f009b221d2182a4135f3b55887f7",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/m6_fes2022.nc.xz"
+    },
+    {
+      "file": "m8_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/m8_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "20f64c2bcccb91e8ade2d80099dda65ec74022d37703066f9cbab52bffdfb87f",
+      "archive_sha256": "2c72e064bed3388082e77e476931419286dc2075aad6ef8ccba2df43f3d3331a",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/m8_fes2022.nc.xz"
+    },
+    {
+      "file": "mks2_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/mks2_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "e21a1617d70852f3fe45c4f69f1bcb685095286555caf983c5dd89da5f57bc48",
+      "archive_sha256": "f414a021a7e6d463a73d42206a2bc1f3f4f87c3247b0ab4909bb37d2e20eb15e",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/mks2_fes2022.nc.xz"
+    },
+    {
+      "file": "mn4_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/mn4_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "1e8654fbb987b6c5960d1c7ab3633d57f9e2860a5cc6d2c25e17a6a5ea0af5f7",
+      "archive_sha256": "70a4bb27e904adedcfc7f27a815012665e0d5ceca290441140346bfa6bb55ff8",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/mn4_fes2022.nc.xz"
+    },
+    {
+      "file": "ms4_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/ms4_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "65ead0bdc8708e91641f27439af6c54362a8908af0d5dea61e1756a8af0a031f",
+      "archive_sha256": "ae17fabe525ab6f00fc60bd2e130345ef30705e5d5939de033effdccfb4c5979",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/ms4_fes2022.nc.xz"
+    },
+    {
+      "file": "msf_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/msf_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "664b3ded13fb7af861a05b85ad32ac6717ba968ebc9e517431aedfb264ef9db9",
+      "archive_sha256": "bd406022b23ea8365d5247034ca85daf7a4af26d9677accb8b29d1d929b99d55",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/msf_fes2022.nc.xz"
+    },
+    {
+      "file": "n4_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/n4_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "743b6b3e788eded3a23f48c08ba5ab5880aba1955f67c0a8b9d4c3d7ee9d38de",
+      "archive_sha256": "70a397eaf1db61d37fec9dad38d7c8a06a198b1331d7156c628eb1c6404a0689",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/n4_fes2022.nc.xz"
+    },
+    {
+      "file": "s4_fes2022.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/s4_fes2022.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "a938489105b4b11591df0a77b5db353b8c157a2e6678c791149736ce07a6994e",
+      "archive_sha256": "fe95c17c4809da913ff9ba04cce647dc40318832ad50d6d06b78b532349e66b1",
+      "download_source": "sftp://ftp-access.aviso.altimetry.fr:2221/auxiliary/tide_model/fes2022b/ocean_tide_extrapolated/s4_fes2022.nc.xz"
+    },
+    {
+      "file": "mask_fes2022B.nc",
+      "url": "https://tds-odatis.aviso.altimetry.fr/thredds/fileServer/dataset-auxiliary-fes-tide-model/fes2022b/ocean_tide_extrapolated/mask_fes2022B.nc.xz",
+      "netcdf_present": true,
+      "archive_present": true,
+      "status": "VERIFIED_PAIR",
+      "netcdf_sha256": "375fac5072b7ece1e3247845bf0238df7e076aeb101f8a52869f2173046c1576",
+      "archive_sha256": "689b8637c9f796313b79143d6eaf6a86df97d17371a6c3afd61bd1d040dc5da7",
+      "download_source": ""
+    }
+  ]
+}

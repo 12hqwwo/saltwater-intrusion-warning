@@ -147,7 +147,7 @@ def prepare():
     save_json(OUT / "protocol.json", PROTOCOL)
     source_paths = [ROOT / "data/research/mrc_ec_monthly_samples.csv", ROOT / "data/features/10_monthly_feature_v2.csv",
                     ROOT / "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv",
-                    ROOT / "data/raw/tide/uhslc/uhslc_tides_VungTau_id142_daily.csv",
+                    ROOT / "data/external/uhslc_vungtau_hourly_20261030/vungtau_383b_daily_max.csv",
                     ROOT / "data/external/research_tls_20261010_215230/tanchau_discharge_monthly.csv"]
     source_paths += [EXTERNAL / "noaa_nino34_anomaly.txt"] + sorted(EXTERNAL.glob("era5_extra_*.json"))
     source_paths += sorted((ROOT / "data/raw/dahiti").glob("*.csv"))

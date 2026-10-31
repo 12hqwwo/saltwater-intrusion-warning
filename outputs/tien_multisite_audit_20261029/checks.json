@@ -1,0 +1,9 @@
+{
+  "all_raw_checksums_match": true,
+  "all_extracted_checksums_match": true,
+  "all_row_counts_match": true,
+  "no_duplicate_timestamps": true,
+  "negative_ec_absent": true,
+  "series": 28,
+  "note": "No interpolation, gauge datum conversion, EC-to-salinity conversion or publication-vintage inference"
+}

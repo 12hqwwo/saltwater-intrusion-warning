@@ -1,0 +1,323 @@
+{
+  "retrieved_at_utc": "2026-10-28T20:37:58.367604+00:00",
+  "source": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+  "license_status": "Public API; verify reuse terms before redistribution",
+  "source_qa": "Keep MRC grades and approvals; no automatic promotion",
+  "series": [
+    {
+      "file": "019804_Conductivity_Water Quality_4c105414.csv",
+      "unique_id": "4c105414991e4a658aeb44e71ede3eaf",
+      "station_code": "019804",
+      "station_name": "My Thuan",
+      "parameter": "Conductivity",
+      "label": "Water Quality",
+      "unit": "mS/m",
+      "latitude": 10.27532005,
+      "longitude": 105.9263229,
+      "source_first": "1985-05-14T17:00:00Z",
+      "source_last": "2023-12-14T17:00:00Z",
+      "downloaded_rows": 451,
+      "first_observed": "1985-05-15T00:00:00+07:00",
+      "last_observed": "2023-12-15T00:00:00+07:00",
+      "extracted_sha256": "efc3cd6136024f87708b2834a04dbcd3761f2e156625722a4d2ad71b24120482",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "988101_Conductivity_Water Quality_63133090.csv",
+      "unique_id": "63133090a4bd44b2bf947ddeb7f37107",
+      "station_code": "988101",
+      "station_name": "Hong Ngu",
+      "parameter": "Conductivity",
+      "label": "Water Quality",
+      "unit": "mS/m",
+      "latitude": 10.805,
+      "longitude": 105.355,
+      "source_first": "1986-03-12T17:00:00Z",
+      "source_last": "2003-12-14T17:00:00Z",
+      "downloaded_rows": 83,
+      "first_observed": "1986-03-13T00:00:00+07:00",
+      "last_observed": "2003-12-15T00:00:00+07:00",
+      "extracted_sha256": "13c6b2855adca35272bc043cad65d2ca94e4f43ab55fba14f280df2f3bf41a55",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "988109_Conductivity_Water Quality_6d2cb0b2.csv",
+      "unique_id": "6d2cb0b2af8649c181308f91dcf04c62",
+      "station_code": "988109",
+      "station_name": "Phong My",
+      "parameter": "Conductivity",
+      "label": "Water Quality",
+      "unit": "mS/m",
+      "latitude": 10.522,
+      "longitude": 105.565,
+      "source_first": "1986-03-12T17:00:00Z",
+      "source_last": "2003-12-14T17:00:00Z",
+      "downloaded_rows": 83,
+      "first_observed": "1986-03-13T00:00:00+07:00",
+      "last_observed": "2003-12-15T00:00:00+07:00",
+      "extracted_sha256": "9aeab4e4da1f7f69e683eab27e0366f2ccc27cbafe7ecdf06778a29cbc934f92",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "988114_Conductivity_Water Quality_3ab408a3.csv",
+      "unique_id": "3ab408a3d6cf43f8916e5b605ef2cc1f",
+      "station_code": "988114",
+      "station_name": "Tu Thuong",
+      "parameter": "Conductivity",
+      "label": "Water Quality",
+      "unit": "mS/m",
+      "latitude": 10.8244,
+      "longitude": 105.337,
+      "source_first": "2004-07-14T17:00:00Z",
+      "source_last": "2023-12-14T17:00:00Z",
+      "downloaded_rows": 222,
+      "first_observed": "2004-07-15T00:00:00+07:00",
+      "last_observed": "2023-12-15T00:00:00+07:00",
+      "extracted_sha256": "16a6f50065698381b574738ac83995b23caa7a6ba4fc9214e2cf0ad3615e336d",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "019803_Water_Level_Telemetry_c27f981e.csv",
+      "unique_id": "c27f981e158745a292dbdb5217f41921",
+      "station_code": "019803",
+      "station_name": "Tan Chau",
+      "parameter": "Water Level",
+      "label": "Telemetry",
+      "unit": "m",
+      "latitude": 10.80062008,
+      "longitude": 105.2480164,
+      "source_first": "2010-08-16T06:00:00Z",
+      "source_last": "2026-10-28T20:30:00Z",
+      "downloaded_rows": 174521,
+      "first_observed": "2019-01-01T00:00:00+07:00",
+      "last_observed": "2023-12-31T23:45:00+07:00",
+      "extracted_sha256": "6f4b67efa5751488b7738a595dfeb77be715ada67410748c9ed986a1945d66e7",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "019804_Water_Level_Telemetry_198f5577.csv",
+      "unique_id": "198f5577f90641f0b885b76070d5fc00",
+      "station_code": "019804",
+      "station_name": "My Thuan",
+      "parameter": "Water Level",
+      "label": "Telemetry",
+      "unit": "m",
+      "latitude": 10.27532005,
+      "longitude": 105.9263229,
+      "source_first": "2018-04-25T07:30:00Z",
+      "source_last": "2026-10-28T20:30:00Z",
+      "downloaded_rows": 107452,
+      "first_observed": "2019-01-01T00:00:00+07:00",
+      "last_observed": "2023-12-31T23:45:00+07:00",
+      "extracted_sha256": "e6ac18ef313a9415070bb4a68b967d7671efea31dded120663c596d5297231a6",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "985203_Water_Level_Telemetry_9305ab16.csv",
+      "unique_id": "9305ab167bdc412ba94d55e34086ae5e",
+      "station_code": "985203",
+      "station_name": "Vam Kenh",
+      "parameter": "Water Level",
+      "label": "Telemetry",
+      "unit": "m",
+      "latitude": 10.27429962,
+      "longitude": 106.7371368,
+      "source_first": "2018-04-25T07:30:00Z",
+      "source_last": "2026-10-27T16:30:00Z",
+      "downloaded_rows": 91722,
+      "first_observed": "2019-01-01T00:00:00+07:00",
+      "last_observed": "2023-12-31T23:45:00+07:00",
+      "extracted_sha256": "22855b66c8ad0fa40d5c8acd30160f7f8e84cfa62daf35bc325441705588044f",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    },
+    {
+      "file": "019805_Water_Level_Manual_4f9acde8.csv",
+      "unique_id": "4f9acde855e74cbdaf85bb4b93b41dcf",
+      "station_code": "019805",
+      "station_name": "My Tho",
+      "parameter": "Water Level",
+      "label": "Manual",
+      "unit": "m",
+      "latitude": 10.35912163,
+      "longitude": 106.3529997,
+      "source_first": "1984-12-31T17:00:00Z",
+      "source_last": "2012-12-30T17:00:00Z",
+      "downloaded_rows": 9863,
+      "first_observed": "1985-01-01T00:00:00+07:00",
+      "last_observed": "2012-12-31T00:00:00+07:00",
+      "extracted_sha256": "1fa7ca1c9f5f705f975a695a635a720ab57fa9cc6aa2670e5f906d5419e06a21",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    }
+  ],
+  "downloads": [
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+      "file": "inventory.json",
+      "bytes": 1124781,
+      "sha256": "c452980d642a0f4cdf4d14841dc768ddcec99821fa15adae13cf7d9465d7128c",
+      "fetched_at": "2026-10-28T20:38:02.305300+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/4c105414991e4a658aeb44e71ede3eaf?sd=1984-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/4c105414991e4a658aeb44e71ede3eaf?sd=1984-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019804_Conductivity_Water Quality_4c105414.json",
+      "bytes": 42007,
+      "sha256": "4e895ebddaf64ad3b8047056b30c174d027830067344e6b648d33b78bac53267",
+      "fetched_at": "2026-10-28T20:38:03.178947+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/63133090a4bd44b2bf947ddeb7f37107?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/63133090a4bd44b2bf947ddeb7f37107?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "988101_Conductivity_Water Quality_63133090.json",
+      "bytes": 8798,
+      "sha256": "0746c1075861e71dc0ba1e3a54a84fddf8208c8a6573ce7093e73ea95b9b45bb",
+      "fetched_at": "2026-10-28T20:38:03.812336+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/6d2cb0b2af8649c181308f91dcf04c62?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/6d2cb0b2af8649c181308f91dcf04c62?sd=1985-12-31T17%3A00%3A00%2B00%3A00&ed=2003-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "988109_Conductivity_Water Quality_6d2cb0b2.json",
+      "bytes": 8801,
+      "sha256": "bc6db00f6768b003bbfdff1557855a78931ac80cfd149902aee44847a603b336",
+      "fetched_at": "2026-10-28T20:38:04.460916+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/3ab408a3d6cf43f8916e5b605ef2cc1f?sd=2003-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/3ab408a3d6cf43f8916e5b605ef2cc1f?sd=2003-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "988114_Conductivity_Water Quality_3ab408a3.json",
+      "bytes": 21377,
+      "sha256": "cfca410129b931229f31f48260b2acaaab11b3f2bd47182f5c18a7eeb6536a90",
+      "fetched_at": "2026-10-28T20:38:05.188390+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2018-12-31T17%3A00%3A00%2B00%3A00&ed=2019-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2018-12-31T17%3A00%3A00%2B00%3A00&ed=2019-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019803_Water_Level_Telemetry_c27f981e_2019.json",
+      "bytes": 3104354,
+      "sha256": "7c8ec5ad831760f3ebc80b40c4100a5a9f16409873cfc05675558cb6c0a6bbc7",
+      "fetched_at": "2026-10-28T20:38:10.172927+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2019-12-31T17%3A00%3A00%2B00%3A00&ed=2020-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2019-12-31T17%3A00%3A00%2B00%3A00&ed=2020-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019803_Water_Level_Telemetry_c27f981e_2020.json",
+      "bytes": 3163787,
+      "sha256": "796c6b4881bc44c85ee7f81377f22bccb6ae656e5722b3bb052415e886760d7b",
+      "fetched_at": "2026-10-28T20:38:15.415082+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2020-12-31T17%3A00%3A00%2B00%3A00&ed=2021-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2020-12-31T17%3A00%3A00%2B00%3A00&ed=2021-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019803_Water_Level_Telemetry_c27f981e_2021.json",
+      "bytes": 3154536,
+      "sha256": "4c9b907901bb5e2d5e3c9713c2fe92dd03f3500e58dac906a2fd947ab5246514",
+      "fetched_at": "2026-10-28T20:38:20.510510+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2021-12-31T17%3A00%3A00%2B00%3A00&ed=2022-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2021-12-31T17%3A00%3A00%2B00%3A00&ed=2022-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019803_Water_Level_Telemetry_c27f981e_2022.json",
+      "bytes": 3142758,
+      "sha256": "effee39dd8059e55fd3eaa72e14625f572e4a52e24593da64b4c4f07bf43edbc",
+      "fetched_at": "2026-10-28T20:38:26.505768+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2022-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/c27f981e158745a292dbdb5217f41921?sd=2022-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019803_Water_Level_Telemetry_c27f981e_2023.json",
+      "bytes": 3162741,
+      "sha256": "77924b0d974a3c4ec0eb1cc05d833902a94fcae023b81f8e26a86d30f9de3b5b",
+      "fetched_at": "2026-10-28T20:38:31.503165+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2018-12-31T17%3A00%3A00%2B00%3A00&ed=2019-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2018-12-31T17%3A00%3A00%2B00%3A00&ed=2019-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019804_Water_Level_Telemetry_198f5577_2019.json",
+      "bytes": 1081528,
+      "sha256": "b13b10f72cf5b1efb1443afb3cc793bfc827146dc7e2f3a7bf8145d69e336d7b",
+      "fetched_at": "2026-10-28T20:38:36.106230+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2019-12-31T17%3A00%3A00%2B00%3A00&ed=2020-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2019-12-31T17%3A00%3A00%2B00%3A00&ed=2020-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019804_Water_Level_Telemetry_198f5577_2020.json",
+      "bytes": 561632,
+      "sha256": "35c8a760b84b33d966581d57a3c2d5fc1f0eb1c86e06d2f05f2498768582c4d2",
+      "fetched_at": "2026-10-28T20:38:37.810305+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2020-12-31T17%3A00%3A00%2B00%3A00&ed=2021-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2020-12-31T17%3A00%3A00%2B00%3A00&ed=2021-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019804_Water_Level_Telemetry_198f5577_2021.json",
+      "bytes": 1775082,
+      "sha256": "db7b1486d6cdfa777c15d4dc5216b5b491bc39477095d0b48a57660338a6dfa4",
+      "fetched_at": "2026-10-28T20:38:40.829353+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2021-12-31T17%3A00%3A00%2B00%3A00&ed=2022-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2021-12-31T17%3A00%3A00%2B00%3A00&ed=2022-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019804_Water_Level_Telemetry_198f5577_2022.json",
+      "bytes": 3195112,
+      "sha256": "01e17c86351e0beae09384f3ec941145437819e9856134372f039836299a221a",
+      "fetched_at": "2026-10-28T20:38:44.174817+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2022-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/198f5577f90641f0b885b76070d5fc00?sd=2022-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019804_Water_Level_Telemetry_198f5577_2023.json",
+      "bytes": 3190848,
+      "sha256": "c809a7fb5d203c6557400e75b737d70d7ab91e1c60cc0f3c617e689044bcf428",
+      "fetched_at": "2026-10-28T20:38:48.826204+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2018-12-31T17%3A00%3A00%2B00%3A00&ed=2019-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2018-12-31T17%3A00%3A00%2B00%3A00&ed=2019-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "985203_Water_Level_Telemetry_9305ab16_2019.json",
+      "bytes": 1084845,
+      "sha256": "6735da50dab5bd02d6b63da23fa13d7c51cfe9bcbfc7afa85d67e3b790fc090b",
+      "fetched_at": "2026-10-28T20:38:52.502662+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2019-12-31T17%3A00%3A00%2B00%3A00&ed=2020-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2019-12-31T17%3A00%3A00%2B00%3A00&ed=2020-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "985203_Water_Level_Telemetry_9305ab16_2020.json",
+      "bytes": 560072,
+      "sha256": "d60c76f690e13cbd98411bacc4f07208a1f350e0518e3c2eed3302a9c2f8ae54",
+      "fetched_at": "2026-10-28T20:38:54.545218+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2020-12-31T17%3A00%3A00%2B00%3A00&ed=2021-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2020-12-31T17%3A00%3A00%2B00%3A00&ed=2021-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "985203_Water_Level_Telemetry_9305ab16_2021.json",
+      "bytes": 553789,
+      "sha256": "2b56d05169e97c521632f3cd5e05698c928766449c06567efd5cb5879bc63d58",
+      "fetched_at": "2026-10-28T20:38:56.808235+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2021-12-31T17%3A00%3A00%2B00%3A00&ed=2022-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2021-12-31T17%3A00%3A00%2B00%3A00&ed=2022-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "985203_Water_Level_Telemetry_9305ab16_2022.json",
+      "bytes": 3017329,
+      "sha256": "f0876a3a18f2d3f0f9db66cff471a82fae967f16cc4918b455b9f04b4e7409a4",
+      "fetched_at": "2026-10-28T20:39:00.762029+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2022-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/9305ab167bdc412ba94d55e34086ae5e?sd=2022-12-31T17%3A00%3A00%2B00%3A00&ed=2023-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "985203_Water_Level_Telemetry_9305ab16_2023.json",
+      "bytes": 3177372,
+      "sha256": "7d3acbff4c5be070d0433c0e3a871445c081580b8216d4006726bbec77ed93eb",
+      "fetched_at": "2026-10-28T20:39:05.972642+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/4f9acde855e74cbdaf85bb4b93b41dcf?sd=1984-12-31T17%3A00%3A00%2B00%3A00&ed=2012-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/4f9acde855e74cbdaf85bb4b93b41dcf?sd=1984-12-31T17%3A00%3A00%2B00%3A00&ed=2012-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "019805_Water_Level_Manual_4f9acde8.json",
+      "bytes": 890669,
+      "sha256": "1427b98c5a103da78a6affb5da218d0f27a5bb1e5e65aea92780c853823ec629",
+      "fetched_at": "2026-10-28T20:39:10.553523+00:00"
+    }
+  ],
+  "errors": []
+}

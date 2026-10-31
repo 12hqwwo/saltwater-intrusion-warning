@@ -1,4 +1,4 @@
-﻿# start.ps1 — Khoi dong Backend + Frontend cung luc
+# start.ps1 — Khoi dong Backend + Frontend cung luc
 # Chay: .\start.ps1
 
 [CmdletBinding()]
@@ -13,10 +13,13 @@ param(
 $ErrorActionPreference = 'Stop'
 $projectRoot = $PSScriptRoot
 $pythonPath = Join-Path $projectRoot '.venv\Scripts\python.exe'
+if (-not (Test-Path -LiteralPath $pythonPath)) {
+    $pythonPath = Join-Path $projectRoot '.venv-api\Scripts\python.exe'
+}
 $frontendPath = Join-Path $projectRoot 'frontend'
 
 if (-not (Test-Path -LiteralPath $pythonPath)) {
-    throw 'Python environment missing. Follow docs/run_guide.md to set up .venv.'
+    throw 'Python environment missing. Follow docs/run_guide.md to set up .venv or .venv-api.'
 }
 
 if (-not $SkipBuild) {

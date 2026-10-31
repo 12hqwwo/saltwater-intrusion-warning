@@ -1,0 +1,38 @@
+{
+  "version": "20261023T041813Z",
+  "top_n_per_station_split": 15,
+  "evaluated_months": 120,
+  "dry_months": [
+    12,
+    1,
+    2,
+    3,
+    4
+  ],
+  "high_ec_rule": "actual >= nearest-rank 90th percentile of pre-split training EC",
+  "thresholds_mS_m": {
+    "MYTHO/holdout": 73.8,
+    "MYTHO/validation": 60.6,
+    "TANCHAU/holdout": 21.3,
+    "TANCHAU/validation": 20.8
+  },
+  "mrc_export_check": {
+    "zip_sha256": "66d9960eaea114c27f26b5ca90b669cb217fea7e4695bd0fa21a51bc6fa22ef5",
+    "source_records": 927,
+    "source_months": 927,
+    "project_months": 927,
+    "source_months_by_station": {
+      "TANCHAU": 464,
+      "MYTHO": 463
+    },
+    "grade_counts": {
+      "Unverified data": 927
+    },
+    "approval_counts": {
+      "Raw - Not Yet Reviewed": 927
+    },
+    "missing_in_project": [],
+    "extra_in_project": [],
+    "value_or_count_mismatches": []
+  }
+}

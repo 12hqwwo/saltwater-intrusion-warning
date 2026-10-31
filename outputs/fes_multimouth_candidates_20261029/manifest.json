@@ -1,0 +1,90 @@
+{
+  "anchor_source": "https://macau.uni-kiel.de/servlets/MCRFileNodeServlet/dissertation_derivate_00004674/Thanh-Thesis_060213.pdf",
+  "anchor_meaning": "published near-mouth tide gauges select provisional GRIT coastal outlets; FES cells selected from those outlets",
+  "grit_outlet_audit_sha256": "4276cf37c8d46536cea7bf03cc4332f481e53c714ad8658061df40d446e1c161",
+  "points": {
+    "cua_dai": {
+      "gauge_anchor_lon": 106.711222,
+      "gauge_anchor_lat": 10.197028,
+      "grit_outlet": {
+        "global_id": 330069160,
+        "lon": 106.74267901590841,
+        "lat": 10.195390842656515,
+        "distance_to_published_gauge_km": 3.452,
+        "gauge_anchor_lon": 106.711222,
+        "gauge_anchor_lat": 10.197028,
+        "status": "PROVISIONAL_NEAREST_GRIT_COASTAL_OUTLET"
+      },
+      "lon": 106.78333333333333,
+      "lat": 10.216666666666669,
+      "four_neighbor_mask_values": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selection": "nearest four-native-node cell center within 0.5 degrees",
+      "distance_to_grit_outlet_km": 5.03927582784013,
+      "validation": "UNVALIDATED_AT_THIS_MOUTH"
+    },
+    "ham_luong": {
+      "gauge_anchor_lon": 106.605222,
+      "gauge_anchor_lat": 9.966667,
+      "grit_outlet": {
+        "global_id": 330069187,
+        "lon": 106.63615174392025,
+        "lat": 9.959136093702826,
+        "distance_to_published_gauge_km": 3.492,
+        "gauge_anchor_lon": 106.605222,
+        "gauge_anchor_lat": 9.966667,
+        "status": "PROVISIONAL_NEAREST_GRIT_COASTAL_OUTLET"
+      },
+      "lon": 106.68333333333334,
+      "lat": 9.950000000000003,
+      "four_neighbor_mask_values": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selection": "nearest four-native-node cell center within 0.5 degrees",
+      "distance_to_grit_outlet_km": 5.266452827727104,
+      "validation": "UNVALIDATED_AT_THIS_MOUTH"
+    },
+    "co_chien": {
+      "gauge_anchor_lon": 106.529,
+      "gauge_anchor_lat": 9.880889,
+      "grit_outlet": {
+        "global_id": 330069201,
+        "lon": 106.56713315795135,
+        "lat": 9.798231067031491,
+        "distance_to_published_gauge_km": 10.054,
+        "gauge_anchor_lon": 106.529,
+        "gauge_anchor_lat": 9.880889,
+        "status": "PROVISIONAL_NEAREST_GRIT_COASTAL_OUTLET"
+      },
+      "lon": 106.58333333333333,
+      "lat": 9.783333333333331,
+      "four_neighbor_mask_values": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selection": "nearest four-native-node cell center within 0.5 degrees",
+      "distance_to_grit_outlet_km": 2.4281035861029374,
+      "validation": "UNVALIDATED_AT_THIS_MOUTH"
+    }
+  },
+  "product": "FES2022b ocean_tide_extrapolated, 34 constituents",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "unit": "cm",
+  "hourly_rows": 70128,
+  "daily_rows": 2922,
+  "datum_policy": "use anomalies and ranges only; no river-gauge absolute level conversion",
+  "data_status": "PROVISIONAL_OFFSHORE_ASTRONOMICAL_TIDE_NOT_OBSERVED_RIVER_STAGE",
+  "output_sha256": {
+    "offshore_fes_hourly_2019_2026.csv": "502f22d1196c1f1b3b8ef8595087b38c7d8234ff56077131b3df89f0785f4c8e",
+    "offshore_fes_daily_ranges_2019_2026.csv": "89afc98265de9264eb717b7b037b5ada398eb07d7a764c2974f8a124bb94f025"
+  }
+}

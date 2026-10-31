@@ -1,0 +1,28 @@
+{
+  "source": "FES2022b ocean_tide_extrapolated, 34 constituents",
+  "point": {
+    "lon": 106.78333333333333,
+    "lat": 10.049999999999997,
+    "selection": "south, validated against Vam Kenh tidal range"
+  },
+  "feature": "fes_south_days13_17_mean_daily_range_cm",
+  "definition": "mean of five local-calendar-day hourly max-minus-min ranges, days 13\u201317 inclusive",
+  "sample_day_policy": "fixed at day 15 before reading any target sample date; observed sample dates are never used",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "unit": "cm",
+  "monthly_rows": 463,
+  "hourly_rows": 55560,
+  "historical_vintage": "FES2022b atlas is retrospective; not a model vintage available at historical issue dates",
+  "data_status": "MODELLED_ASTRONOMICAL_OFFSHORE_TIDE_NOT_EC_OR_OBSERVED_RIVER_STAGE",
+  "source_sha256": {
+    "data\\raw\\tide\\fes2022b\\collection_status.json": "bad9272dd438f2b1c771d09828dc9f94bf9267392fd6dcf4c92b6019fa7241b8",
+    "config\\fes2022b_full.yaml": "992372230027f2e53b34f840b67d6587fbe29963628d6105a19b07e2c6823479",
+    "data\\raw\\tide\\fes2022b\\ocean_tide_extrapolated\\mask_fes2022B.nc": "375fac5072b7ece1e3247845bf0238df7e076aeb101f8a52869f2173046c1576",
+    "outputs\\fes_ec_multipoint_20261026\\summary.json": "b3878caa6659c0e0f515802ecbfb449cf16bac1d006c7a52039e6910402851a6"
+  },
+  "output_sha256": {
+    "fes_south_hourly_days13_17_1985_2023.csv": "e711a5ddc7d4754c3619db2866316d4713a74165a923d2d8c26b8d8928b09f9e",
+    "fes_south_daily_days13_17_1985_2023.csv": "75569c73887905f016ab04e8cd48a57aae4d7d4701f770349506bf84a8977608",
+    "fes_south_feature_days13_17_1985_2023.csv": "1cdec13c917f0a03f1d2c5160cb156fef5f24bac4a38a32d929ae8508c5f74b5"
+  }
+}

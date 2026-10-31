@@ -1,0 +1,86 @@
+{
+  "created_at": "2026-10-28T20:03:38.015145+00:00",
+  "protocol_sha256": "9852f1b0ecaf313a86e529c967503929b4784698a5f7a54010b6d7a667395eaa",
+  "inputs": [
+    {
+      "path": "data\\research\\mrc_ec_monthly_samples.csv",
+      "sha256": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc"
+    },
+    {
+      "path": "data\\features\\10_monthly_feature_v2.csv",
+      "sha256": "9b8c761b4a390cca9f15f710264d557470ba08a4ec4d4d9c4d4c9313b7665c67"
+    },
+    {
+      "path": "data\\raw\\meteorology\\openmeteo\\openmeteo_all_stations_daily.csv",
+      "sha256": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6"
+    },
+    {
+      "path": "data\\raw\\tide\\uhslc\\uhslc_tides_VungTau_id142_daily.csv",
+      "sha256": "f4e5d483f0a9c485a90c31bcfa6d9ba27f7672481b51ed4cefef0f93fe88407b"
+    },
+    {
+      "path": "data\\external\\research_tls_20261010_215230\\tanchau_discharge_monthly.csv",
+      "sha256": "67e348f2bbbe5cfc0fc32c5b4cc2312f67dce9c97344d93a53b9855a991dc1c2"
+    },
+    {
+      "path": "data\\external\\ec_feature_research_20261019\\noaa_nino34_anomaly.txt",
+      "sha256": "3d9fa950c9a3da36c2cdbf07da0ce80682e527146026e6f051d3cbde6b2fa180"
+    },
+    {
+      "path": "data\\external\\ec_feature_research_20261019\\era5_extra_MyTho.json",
+      "sha256": "ca879c723c61b4fc263eba23200294c59e779fb392534aca53390a894519f3d9"
+    },
+    {
+      "path": "data\\external\\ec_feature_research_20261019\\era5_extra_TanChau.json",
+      "sha256": "4f2aa9ff2a24a7a07c5e431f4e8c153538868d19235a1ab348c29d50a824b538"
+    },
+    {
+      "path": "data\\raw\\dahiti\\dahiti_waterlevel_MyTho_id3316.csv",
+      "sha256": "3bbe14e944a97316abbb14501247c9471c02d9a836312ed3339b8d2913e1b10b"
+    },
+    {
+      "path": "data\\raw\\dahiti\\dahiti_waterlevel_TanChau_id627.csv",
+      "sha256": "30ff90a9340540c41f2a3fc9fee9ed2e409d798229234c4ada053481f43943ac"
+    }
+  ],
+  "outputs": {
+    "rows": 2000,
+    "stations": 2,
+    "months_per_station": 500,
+    "availability_scenarios": 2
+  },
+  "target_audit": [
+    {
+      "station": "MYTHO",
+      "source_samples": 463,
+      "v2_labels": 365,
+      "absent_from_v2": 98,
+      "median_dropped": 58.55,
+      "max_dropped": 841.0,
+      "max_retained_v2": 50.7
+    },
+    {
+      "station": "TANCHAU",
+      "source_samples": 464,
+      "v2_labels": 445,
+      "absent_from_v2": 19,
+      "median_dropped": 13.3,
+      "max_dropped": 60.9,
+      "max_retained_v2": 30.4
+    }
+  ],
+  "noaa_source_footer": [
+    "  -99.99",
+    "  NINA34",
+    " 5N-5S 170W-120W ",
+    " ERSST V6 ",
+    "  Anomaly from 1981-2010",
+    " https://psl.noaa.gov/data/timeseries/month/DS/NINO34/",
+    " units=degC",
+    " https://psl.noaa.gov/data/timeseries/month/DS/NINO34/",
+    " units=degC"
+  ],
+  "noaa_warning": "Actual retrieved source is ERSST V6, 1981-2010 anomaly baseline; do not label V5",
+  "source_wind_unit": "Legacy CSV does not carry unit metadata; keep as source units, not asserted m/s",
+  "temperature_warning": "Air temperature is not water temperature; EC compensation basis remains unknown"
+}

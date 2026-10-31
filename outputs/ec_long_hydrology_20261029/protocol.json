@@ -1,0 +1,11 @@
+{
+  "issue": "day 6 of preceding month",
+  "ec_delay_days": 5,
+  "water_level_month": "target t-2",
+  "water_level_assumed_delay_days": 5,
+  "kratie_flow_month": "target t-2; same-month prior 15-year median for ratio",
+  "manual_stage_requirement": "at least 20 observed daily medians/month; 3-month median at least 2 months",
+  "target": "single monthly My Tho EC sample, not monthly mean",
+  "source_qa": "UNVERIFIED",
+  "warning": "Historical publication vintage unavailable. Stage is not discharge. 2022-23 retrospective period already inspected."
+}

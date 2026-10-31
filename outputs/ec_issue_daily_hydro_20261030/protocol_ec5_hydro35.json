@@ -1,0 +1,60 @@
+{
+  "ec_release_delay_days": 5,
+  "hydro_release_delay_days": 35,
+  "issue": "day 6 of previous month",
+  "source_cutoff": "issue minus hydro_release_delay_days",
+  "source_window_days": [
+    7,
+    30,
+    60
+  ],
+  "source_window_min_valid_days": [
+    5,
+    20,
+    40
+  ],
+  "coarse_hydrology_month": "t-2 if hydro delay 5d, t-3 if hydro delay 35d",
+  "weather_month": "t-2, assumed released end of source month +5d",
+  "selection": "development_2010_2018 only; historical period previously inspected",
+  "validation": "2019-2021; previously inspected",
+  "retrospective": "2022-2023; previously inspected; no high-EC months",
+  "historical_publication_vintages": "unavailable",
+  "target": "single My Tho EC sample in target month, mS/m; not monthly mean",
+  "models": {
+    "RF_coarse_available": [
+      "month_sin",
+      "month_cos",
+      "rainfall_mm",
+      "available_kratie_q_t2",
+      "available_kratie_q3_t2",
+      "available_kratie_q_ratio_t2",
+      "available_tc_stage_t2",
+      "available_tc_stage3_t2"
+    ],
+    "RF_coarse_plus_latest7d": [
+      "month_sin",
+      "month_cos",
+      "rainfall_mm",
+      "available_kratie_q_t2",
+      "available_kratie_q3_t2",
+      "available_kratie_q_ratio_t2",
+      "available_tc_stage_t2",
+      "available_tc_stage3_t2",
+      "q_mean_7d",
+      "h_median_7d"
+    ],
+    "RF_daily_7_30_60": [
+      "month_sin",
+      "month_cos",
+      "rainfall_mm",
+      "q_mean_7d",
+      "q_mean_30d",
+      "q_mean_60d",
+      "q_ratio_7_60",
+      "h_median_7d",
+      "h_median_30d",
+      "h_median_60d",
+      "h_delta_7_60"
+    ]
+  }
+}

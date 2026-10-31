@@ -1,0 +1,12 @@
+{
+  "source_sha256": {
+    "outputs\\ec_extreme_robust_20261029\\predictions_5d.csv": "bdff77b6ea9119d1d92a22d4463179db6481543d8704747f0dafc22e98d3489d",
+    "outputs\\ec_extreme_robust_20261029\\predictions_35d.csv": "9c7740beb56bc648e102c4cceb34c5ab2f7f70c5225e1329cd8d6acefc89e59d"
+  },
+  "subsets": "dry=December-April; high EC>=100 mS/m; same months per model",
+  "selection": "primary +5d validation overall MAE only; 2022-2023 previously inspected",
+  "output_sha256": {
+    "matched_metrics.csv": "b50664f1f6773c457bb068d3461cacc3a44140d9def36364e15e666a4ecf51fa",
+    "largest_15_errors_per_split.csv": "8c199a1f8e5c21748b1eb00626007afb8c17b11d3b3c49612c856c519d4c3e99"
+  }
+}

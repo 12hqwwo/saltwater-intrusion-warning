@@ -1,0 +1,8 @@
+{
+  "status": "Exploratory separate cohorts; never used to select primary model",
+  "gfz": "Gauge period only from 1996; Tanchau upstream discharge proxy for MyTho, not local flow. Source ends 2016.",
+  "dahiti": "Latest observation assumed available after 30 days, discarded after 90 days old. Sparse proxy; min_train=48.",
+  "tide": "Mean of Vung Tau daily sea-level maxima, NOT tidal range or gate tide; assumed 90-day latency.",
+  "glofas": "Existing Tanchau cell remains SUSPECT; lag 4 plus exact 90-day availability mask. No MyTho imputation from Tanchau.",
+  "caveat": "Different time cohorts cannot be ranked against primary validation or each other. Historical source vintages are unavailable."
+}

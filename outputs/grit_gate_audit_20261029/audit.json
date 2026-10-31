@@ -1,0 +1,39 @@
+{
+  "source_sha256": {
+    "outputs\\grit_delta_network_20261029\\grit_lower_mekong_subset.gpkg": "6fbacb33944b0273ca1534fbaf4d5d14db834bcecc32e7f98eab0fade1082cdf",
+    "outputs\\grit_delta_network_20261029\\audit.json": "4276cf37c8d46536cea7bf03cc4332f481e53c714ad8658061df40d446e1c161",
+    "data\\8file\\03_sluice_gates_190_and_27_verified_gis.csv": "e6af13023f93d49de00e90f2ea03e7a36c1a8493a890912751948db18878f2d0",
+    "data\\external\\tien_multisite_20261029_verified\\inventory.json": "c452980d642a0f4cdf4d14841dc768ddcec99821fa15adae13cf7d9465d7128c",
+    "data\\raw\\gis\\spatial\\dong_thap_boundary.geojson": "13c1138aba9f9406d4d65d5e436b0bf473b9d7dca9924cdfe82f4cfcbe519f06",
+    "data\\biengioi\\Tiền Giang - 63.geojson": "a9ec088bf253cab7392463162271d681ffc0827a363347155e4e8e0928bd68b9"
+  },
+  "grit_node_count": 497,
+  "grit_unique_directed_edges": 572,
+  "source_gpkg_node_rows": 484,
+  "source_gpkg_unique_node_ids": 484,
+  "gate_count": 27,
+  "gate_in_legacy_tien_giang": 27,
+  "gate_in_new_dong_thap": 27,
+  "gate_distance_km": {
+    "min": 0.221,
+    "median": 0.852,
+    "max": 8.319,
+    "within_0_5_km": 8,
+    "beyond_2_km": 10
+  },
+  "station_distance_km": {
+    "tan_chau": 0.4071057268337597,
+    "vam_nao": 0.19161397365293556,
+    "my_thuan": 0.5933170946217242,
+    "my_tho": 1.5108737925912958,
+    "vam_kenh": 0.6115700743251473
+  },
+  "route_method": "GRIT directed path from nearest segment downstream node; excludes partial segment and ignores tidal reversal",
+  "gate_method": "nearest line only; no link from gate into GRIT canal graph was verified",
+  "warning": "No gate EC or Q, no bathymetry/cross-sections, no calibrated salinity transport or travel times",
+  "output_sha256": {
+    "gate_nearest_grit.csv": "213b9d886dd7ed0beb4889ce3588cb05678caaeddd8205863487d41b8105083e",
+    "station_routes.csv": "a0390993e875f00bd5d3ec5cc7a17a3076b91530c4eead35f0999a8486d2328b",
+    "gate_proximity.geojson": "a5bbba7f7606c1c7642f2b53685c5a50ba2c50aac969f0ab56f926d91ddef10e"
+  }
+}

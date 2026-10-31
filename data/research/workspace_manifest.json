@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "sha256": "dedc8b5e3b3a5895e421befaa3181a04e236d00e4b66edbd94f8113ab99301cb",
+  "sha256": "ffbaa5fbd82207357b650934e24f276c8f7f325ae9cccbfb708eff6be337dd7e",
   "file": "workspace.json",
   "builder_sha256": "8e1afea19d0ef8c152001b5309094592c6cf770c5bcb883ea96bbe817b076530",
   "generated_at": "2026-10-15T11:27:30.466391+00:00",

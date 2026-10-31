@@ -1,0 +1,78 @@
+{
+  "issue": "day 6 of preceding month",
+  "ec_delay_days": 5,
+  "features": {
+    "RF_flow_no_ec": [
+      "rf",
+      [
+        "month_sin",
+        "month_cos",
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "soil_t2",
+        "wind_u_t2",
+        "wind_v_t2",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2"
+      ]
+    ],
+    "RF_flow_stage_no_ec": [
+      "rf",
+      [
+        "month_sin",
+        "month_cos",
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "soil_t2",
+        "wind_u_t2",
+        "wind_v_t2",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2",
+        "tc_stage_t2",
+        "tc_stage3_t2"
+      ]
+    ],
+    "ET_flow_stage_no_ec": [
+      "extra",
+      [
+        "month_sin",
+        "month_cos",
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "soil_t2",
+        "wind_u_t2",
+        "wind_v_t2",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2",
+        "tc_stage_t2",
+        "tc_stage3_t2"
+      ]
+    ],
+    "HGB_flow_stage_no_ec": [
+      "hgb_log",
+      [
+        "month_sin",
+        "month_cos",
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "soil_t2",
+        "wind_u_t2",
+        "wind_v_t2",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2",
+        "tc_stage_t2",
+        "tc_stage3_t2"
+      ]
+    ]
+  },
+  "ec_predictor_policy": "No target-station EC values or derived EC lags in X",
+  "limitation": "Historical EC publication vintages unknown; source weather reanalysis vintages unknown; no measured EC after 2023"
+}

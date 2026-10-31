@@ -1,0 +1,109 @@
+{
+  "retrieved_at_utc": "2026-10-29T08:34:44.753535+00:00",
+  "source": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+  "license_status": "Public API; verify reuse terms before redistribution",
+  "source_qa": "Keep MRC grades and approvals; no automatic promotion",
+  "series": [
+    {
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e.csv",
+      "unique_id": "22a8130e3593419784367fb4f1d864c0",
+      "station_code": "014901",
+      "station_name": "Kratie",
+      "parameter": "Discharge",
+      "label": "Calculated daily discharge",
+      "unit": "m^3/s",
+      "latitude": 12.48141003,
+      "longitude": 106.0176163,
+      "source_first": "1924-01-01T00:00:00Z",
+      "source_last": "2026-10-28T00:00:00Z",
+      "downloaded_rows": 22161,
+      "first_observed": "1985-01-01T07:00:00+07:00",
+      "last_observed": "2026-10-28T07:00:00+07:00",
+      "extracted_sha256": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+      "note": "Date windows are inclusive; publication vintage unknown; no imputation"
+    }
+  ],
+  "downloads": [
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/inventory/timeSeriesList",
+      "file": "inventory.json",
+      "bytes": 1124781,
+      "sha256": "05298b72e8946199c64b6bde536989824c2e8a9961417930ed7494a5f2100e0f",
+      "fetched_at": "2026-10-29T08:34:50.385502+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=1984-12-31T17%3A00%3A00%2B00%3A00&ed=1989-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=1984-12-31T17%3A00%3A00%2B00%3A00&ed=1989-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e_1985.json",
+      "bytes": 171623,
+      "sha256": "21702587e4829e4426deade390fff5654e865d28fbc10873ba48cfccc70f467d",
+      "fetched_at": "2026-10-29T08:34:52.458756+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=1989-12-31T17%3A00%3A00%2B00%3A00&ed=1994-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=1989-12-31T17%3A00%3A00%2B00%3A00&ed=1994-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e_1990.json",
+      "bytes": 170027,
+      "sha256": "c97ba88468d08a42f4235d51ea147e9db491a7b06926bd407d67285a49a8c727",
+      "fetched_at": "2026-10-29T08:34:53.937623+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=1994-12-31T17%3A00%3A00%2B00%3A00&ed=1999-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=1994-12-31T17%3A00%3A00%2B00%3A00&ed=1999-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e_1995.json",
+      "bytes": 170035,
+      "sha256": "3405a86d3c1da173a0b5902ff3662bdf933a189960181285ff44f3b5c36a4c22",
+      "fetched_at": "2026-10-29T08:34:55.243390+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=1999-12-31T17%3A00%3A00%2B00%3A00&ed=2004-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=1999-12-31T17%3A00%3A00%2B00%3A00&ed=2004-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e_2000.json",
+      "bytes": 169841,
+      "sha256": "6a7e48abca7902cad77237f89d0231f9dd07b9af979be151cebc6a0a32824dd8",
+      "fetched_at": "2026-10-29T08:34:57.056099+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2004-12-31T17%3A00%3A00%2B00%3A00&ed=2009-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2004-12-31T17%3A00%3A00%2B00%3A00&ed=2009-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e_2005.json",
+      "bytes": 244029,
+      "sha256": "7cdfe5d60a412354814cf99aabb19c86ea95a7fc41c59b35270a785c723af252",
+      "fetched_at": "2026-10-29T08:34:58.948871+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2009-12-31T17%3A00%3A00%2B00%3A00&ed=2014-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2009-12-31T17%3A00%3A00%2B00%3A00&ed=2014-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e_2010.json",
+      "bytes": 354843,
+      "sha256": "e244c73f57134e74c37d044b41187a7a3c0e926165f9dc2eda85c0e09f74e814",
+      "fetched_at": "2026-10-29T08:35:01.000941+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2014-12-31T17%3A00%3A00%2B00%3A00&ed=2019-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2014-12-31T17%3A00%3A00%2B00%3A00&ed=2019-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e_2015.json",
+      "bytes": 354974,
+      "sha256": "db1b2cccae7d7d501889a7950f8569cdcd7038400499541caa728c9a098053cd",
+      "fetched_at": "2026-10-29T08:35:02.545668+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2019-12-31T17%3A00%3A00%2B00%3A00&ed=2024-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2019-12-31T17%3A00%3A00%2B00%3A00&ed=2024-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e_2020.json",
+      "bytes": 355520,
+      "sha256": "9e393d51881ad87502898447db2fcfdfba49cee4e77b8ecd7450294d1a5611e4",
+      "fetched_at": "2026-10-29T08:35:04.450775+00:00"
+    },
+    {
+      "url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2024-12-31T17%3A00%3A00%2B00%3A00&ed=2026-12-31T16%3A59%3A59%2B00%3A00",
+      "final_url": "https://timeseries.api.mrcmekong.org/api/v1/ts/data/timeSeriesCorrectedData/22a8130e3593419784367fb4f1d864c0?sd=2024-12-31T17%3A00%3A00%2B00%3A00&ed=2026-12-31T16%3A59%3A59%2B00%3A00",
+      "file": "014901_Discharge_Calculated daily discharge_22a8130e_2025.json",
+      "bytes": 132407,
+      "sha256": "7d4101646c49abd82968e27f6d5ad6b367073d6fb5ad1188246708b5207ce370",
+      "fetched_at": "2026-10-29T08:35:05.714505+00:00"
+    }
+  ],
+  "errors": []
+}

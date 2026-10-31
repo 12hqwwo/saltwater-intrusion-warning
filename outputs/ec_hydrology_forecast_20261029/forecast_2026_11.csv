@@ -1,0 +1,2 @@
+station,target_month,forecast_generated_at_utc,hypothetical_issue_date,weather_month,predicted_ec_mS_m,status,model
+MYTHO,2026-11,2026-10-29T08:55:49.841906+00:00,2026-10-06,2026-09,18.542931089597246,RESEARCH_FORECAST_NO_POST_2023_EC_VALIDATION,RF_flow_stage_no_ec

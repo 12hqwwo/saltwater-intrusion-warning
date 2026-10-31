@@ -1,0 +1,74 @@
+{
+  "source": "https://zenodo.org/records/17435232",
+  "source_archive": "data\\external\\grit_20261029\\GRITv1.0_segments_simple_GLOBAL_EPSG4326.gpkg.zip",
+  "source_md5": "f5f378620eb1e59da7682a991bb51ccc",
+  "bbox_epsg4326_lon_min_lat_min_lon_max_lat_max": [
+    105.0,
+    9.5,
+    107.0,
+    11.5
+  ],
+  "line_count": 585,
+  "node_count": 484,
+  "domain_counts": {
+    "MEKO": 585
+  },
+  "node_type_counts": {
+    "confluence": 292,
+    "bifurcation": 111,
+    "inlet": 43,
+    "grwl_change": 22,
+    "coastal_outlet": 16
+  },
+  "named_lines": 446,
+  "upstream_node_ids_outside_subset": 9,
+  "downstream_node_ids_outside_subset": 7,
+  "continuity_violated_nodes": 0,
+  "cycle_flagged_lines": 0,
+  "mouth_outlet_candidates": {
+    "cua_tieu": {
+      "global_id": 330013181,
+      "lon": 106.74872823636277,
+      "lat": 10.261529640044648,
+      "distance_to_published_gauge_km": 1.315,
+      "gauge_anchor_lon": 106.740194,
+      "gauge_anchor_lat": 10.269889,
+      "status": "PROVISIONAL_NEAREST_GRIT_COASTAL_OUTLET"
+    },
+    "cua_dai": {
+      "global_id": 330069160,
+      "lon": 106.74267901590841,
+      "lat": 10.195390842656515,
+      "distance_to_published_gauge_km": 3.452,
+      "gauge_anchor_lon": 106.711222,
+      "gauge_anchor_lat": 10.197028,
+      "status": "PROVISIONAL_NEAREST_GRIT_COASTAL_OUTLET"
+    },
+    "ham_luong": {
+      "global_id": 330069187,
+      "lon": 106.63615174392025,
+      "lat": 9.959136093702826,
+      "distance_to_published_gauge_km": 3.492,
+      "gauge_anchor_lon": 106.605222,
+      "gauge_anchor_lat": 9.966667,
+      "status": "PROVISIONAL_NEAREST_GRIT_COASTAL_OUTLET"
+    },
+    "co_chien": {
+      "global_id": 330069201,
+      "lon": 106.56713315795135,
+      "lat": 9.798231067031491,
+      "distance_to_published_gauge_km": 10.054,
+      "gauge_anchor_lon": 106.529,
+      "gauge_anchor_lat": 9.880889,
+      "status": "PROVISIONAL_NEAREST_GRIT_COASTAL_OUTLET"
+    }
+  },
+  "limitations": [
+    "bbox clipping does not create a closed directed graph",
+    "global simplified river topology may omit local canals, gates, and mouth geometry",
+    "width_adjusted is an estimated width, not surveyed cross section or depth",
+    "flow direction and reversal under tides are not calibrated",
+    "no salt transport, flow split, travel time, or vertical datum is supplied"
+  ],
+  "output_sha256": "6fbacb33944b0273ca1534fbaf4d5d14db834bcecc32e7f98eab0fade1082cdf"
+}

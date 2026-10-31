@@ -1,0 +1,18 @@
+{
+  "issue_rule": "day 6 of preceding month, Asia/Ho_Chi_Minh",
+  "weather_rule": "target month t uses complete ERA5 month t-2, assumed available month end + 5 days",
+  "ec_scenarios": {
+    "EC_MONTH_END_PLUS_5D": 5,
+    "EC_MONTH_END_PLUS_35D": 35
+  },
+  "model_parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "random_state": 42
+  },
+  "sklearn_version": "1.9.1",
+  "target_sha256": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc",
+  "weather_manifest_sha256": "da9b80d2c54d52a427705d326160b1bacce17e94874ab6e5a757f3e75fd48443",
+  "limitation": "Retrospective source versions and historical EC publication dates are unknown. 2022-2023 has already been inspected; do not call it a fresh blind holdout."
+}

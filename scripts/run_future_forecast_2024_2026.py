@@ -72,9 +72,9 @@ def run_future_forecast():
     res_df.to_csv(OUTPUT_FILE, index=False, encoding="utf-8-sig")
     print(f"\n[OK] Đã hoàn thành dự báo và lưu kết quả vào:\n     {OUTPUT_FILE.relative_to(ROOT)}")
     
-    # Hiển thị mẫu kết quả các tháng mùa khô năm 2024, 2025, 2026
-    print("\n--- MẪU DỰ BÁO CÁC THÁNG MÙA KHÔ (ĐỈNH MẶN) TẠI MỸ THO VÀ TÂN CHÂU ---")
-    dry_season = res_df[res_df["year_month"].str.endswith(("-02", "-03", "-04", "-05"))]
+    # Mùa khô của đồ án: tháng 12 đến tháng 4 năm sau.
+    print("\n--- MẪU DỰ BÁO CÁC THÁNG MÙA KHÔ TẠI MỸ THO VÀ TÂN CHÂU ---")
+    dry_season = res_df[res_df["year_month"].str.endswith(("-12", "-01", "-02", "-03", "-04"))]
     print(f"{'Trạm':<10} | {'Tháng':<8} | {'EC Dự Báo (mS/m)':<18} | {'Lượng mưa (mm)':<15} | {'Nhiệt độ (°C)':<12}")
     print("-" * 75)
     for _, r in dry_season.head(16).iterrows():
