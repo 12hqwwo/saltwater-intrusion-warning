@@ -1,4 +1,6 @@
 """Persisted monthly EC regression using weather from two calendar months earlier."""
+from functools import lru_cache
+from io import BytesIO
 from pathlib import Path
 import hashlib
 import json
@@ -48,21 +50,68 @@ def monthly_weather(frame):
     return result.reset_index()
 
 
-def load_model(station, registry_path=None):
+@lru_cache(maxsize=8)
+def _load_cached_artifact(model_path, model_sha, manifest_raw):
     import joblib
     import sklearn
+    manifest = json.loads(manifest_raw)
+    if manifest['sklearn_version'] != sklearn.__version__:
+        raise ValueError('Model requires scikit-learn ' + manifest['sklearn_version'])
+    # Deserialize exactly the bytes that were verified (also avoids a check/load race).
+    raw = Path(model_path).read_bytes()
+    if hashlib.sha256(raw).hexdigest() != model_sha:
+        raise ValueError('Model artifact checksum mismatch.')
+    model = joblib.load(BytesIO(raw))
+    forest = model.steps[-1][1] if hasattr(model, 'steps') else model
+    if hasattr(forest, 'n_jobs'):
+        forest.n_jobs = 1
+    return model, manifest
+
+
+def load_model(station, registry_path=None):
     station = normalize_station(station)
     registry = json.loads(Path(registry_path or ROOT / 'data/models/multivariate_registry.json').read_text())
     entry = registry['models'][station]
     model_path, manifest_path = ROOT / entry['model_path'], ROOT / entry['manifest_path']
-    if sha256(manifest_path) != entry['manifest_sha256'] or sha256(model_path) != entry['model_sha256']:
+    manifest_raw = manifest_path.read_bytes()
+    # Verify on every access, including cache hits: changed/tampered files cannot
+    # silently reuse a previously trusted model. Cache only expensive deserialization.
+    if (hashlib.sha256(manifest_raw).hexdigest() != entry['manifest_sha256']
+            or sha256(model_path) != entry['model_sha256']):
         raise ValueError('Model artifact checksum mismatch.')
-    manifest = json.loads(manifest_path.read_text())
-    if manifest['sklearn_version'] != sklearn.__version__:
-        raise ValueError('Model requires scikit-learn ' + manifest['sklearn_version'])
+    manifest = json.loads(manifest_raw)
+    if manifest.get('model_sha256', entry['model_sha256']) != entry['model_sha256']:
+        raise ValueError('Model manifest artifact identity mismatch.')
     if manifest['feature_order'] != FEATURES or manifest['station'] != station:
         raise ValueError('Model feature/station contract mismatch.')
-    return joblib.load(model_path), manifest
+    return _load_cached_artifact(str(model_path.resolve()), entry['model_sha256'], manifest_raw)
+
+
+def warmup_models():
+    """Load registered artifacts only; no weather, database access, or training."""
+    failures = {}
+    for station in STATIONS:
+        try:
+            load_model(station)
+        except Exception as exc:
+            # Optional model failures must not prevent historical API startup.
+            failures[station] = type(exc).__name__
+    return failures
+
+
+def ensemble_distribution(model, features):
+    """Uncalibrated tree dispersion, not a forecast uncertainty guarantee."""
+    import numpy as np
+    forest = model.steps[-1][1] if hasattr(model, 'steps') else model
+    transformed = model[:-1].transform(features) if hasattr(model, 'steps') and len(model.steps) > 1 else features
+    predictions = np.asarray([tree.predict(transformed)[0] for tree in forest.estimators_], dtype=float)
+    if not len(predictions) or not np.isfinite(predictions).all() or (predictions < 0).any():
+        raise ValueError('Model produced invalid tree EC.')
+    quantiles = np.quantile(predictions, [.1, .25, .5, .75, .9])
+    return dict(zip(['p10', 'p25', 'p50', 'p75', 'p90'], map(float, quantiles)),
+        iqr=float(quantiles[3] - quantiles[1]), std=float(predictions.std()),
+        n_estimators=len(predictions), unit='mS/m', method='RANDOM_FOREST_TREE_PREDICTIONS',
+        interpretation='Dispersion of individual tree predictions; not a calibrated prediction or confidence interval. Does not include all forecast error.')
 
 
 def model_catalog(registry_path=None):
@@ -129,13 +178,19 @@ def predict_month(station, target_month, weather_features, registry_path=None):
     values.update(month_sin=math.sin(2 * math.pi * target.month / 12),
                   month_cos=math.cos(2 * math.pi * target.month / 12))
     model, manifest = load_model(station, registry_path)
-    prediction = float(model.predict(pd.DataFrame([values], columns=FEATURES))[0])
+    features = pd.DataFrame([values], columns=FEATURES)
+    prediction = float(model.predict(features)[0])
+    distribution = ensemble_distribution(model, features)
     if not math.isfinite(prediction) or prediction < 0:
         raise ValueError('Model produced invalid EC.')
     return dict(station=STATIONS[normalize_station(station)][0], target_month=target.date().isoformat(),
         weather_month=(target - pd.DateOffset(months=2)).date().isoformat(),
-        predicted_ec_mS_m=prediction, unit='mS/m', model='RandomForestRegressor',
-        model_version=manifest['model_version'], feature_values=values,
+        predicted_ec_mS_m=prediction, ensemble_distribution=distribution, unit='mS/m', model='RandomForestRegressor',
+        model_version=manifest['model_version'],
+        model_provenance=dict(model_sha256=manifest.get('model_sha256'),
+            training_input_sha256=manifest.get('input_sha256', {}),
+            weather_source_sha256=manifest.get('weather_source_sha256', {})),
+        feature_values=values,
         feature_units=UNITS, training_cutoff=manifest['training_cutoff'],
         quality_status='EXPERIMENTAL_SOURCE_EC_UNVERIFIED',
         deployment_ready=False, gate_decision_eligible=False,

@@ -2,12 +2,15 @@ import { createRequestGate } from '../api.js';
 import { workspaceAPI } from '../shared/workspace-api.js';
 import { $, node, num } from '../shared/ui.js';
 import { formatWater } from '../shared/simulation-display.js';
+import { validMonth, validEc } from '../shared/forecast-contract.js';
 
-export const ADVISORY_PRESETS = {
-  durian: { open_below_ec: 50, close_above_ec: 80 },
-  citrus: { open_below_ec: 100, close_above_ec: 150 },
-  rice: { open_below_ec: 120, close_above_ec: 200 },
-};
+import { ADVISORY_PRESETS } from '../shared/water-advisory.js';
+export { ADVISORY_PRESETS };
+
+export function simulationInputLabel(item) {
+  if (item?.data_regime === 'OBSERVED_MRC') return `Mẫu nguồn MRC${item.imputed ? ' + nội suy thời gian' : ''}`;
+  return item?.data_regime === 'ML_FORECAST_ERA5' ? 'Ước tính hồi cứu · khí tượng ERA5' : 'Nguồn đầu vào chưa xác định';
+}
 
 export function validateThresholds(opening, closing) {
   if (opening === '' || closing === '') throw new Error('Nhập đủ hai ngưỡng EC.');
@@ -32,6 +35,8 @@ export function createSimulationFrameLoader({ api = workspaceAPI, onFrame, onErr
         if (!req.isCurrent()) return null;
         if (frame.year_month !== year_month || frame.simulation_layer !== true ||
             !Array.isArray(frame.river_segments) || !Array.isArray(frame.gates) ||
+            (frame.inputs && frame.inputs.year_month !== year_month) ||
+            (Array.isArray(frame.gates) && frame.gates.some(gate => !gate?.gate_code || !validEc(gate.simulated_outside_ec_mS_m))) ||
             frame.thresholds?.open_below_ec_ms_m !== thresholds.open_below_ec ||
             frame.thresholds?.close_at_or_above_ec_ms_m !== thresholds.close_above_ec) {
           throw new Error('Khung mô phỏng không khớp tháng hoặc ngưỡng đang chọn.');
@@ -46,12 +51,56 @@ export function createSimulationFrameLoader({ api = workspaceAPI, onFrame, onErr
   };
 }
 
+export function renderSpatialSummary(frame) {
+  const box = $('simulationSpatialSummary');
+  if (!box) return;
+  box.replaceChildren();
+  box.hidden = !frame;
+  if (!frame) return;
+  const counts = new Map();
+  for (const gate of frame.gates || []) counts.set(gate.simulated_gate_state, (counts.get(gate.simulated_gate_state) || 0) + 1);
+  const group = node('div', undefined, 'spatial-kpi-group');
+  group.append(node('strong', `Mô phỏng · ${(frame.gates || []).length} cống`));
+  for (const [code, label, color] of [
+    ['OPEN_INTAKE', 'thuận lợi theo ngưỡng', 'safe'],
+    ['CAUTION_TRANSITION', 'cần đo kiểm', 'caution'],
+    ['CLOSED_SALINITY_BARRIER', 'ngăn mặn', 'risk'],
+  ]) {
+    group.append(node('span', `${counts.get(code) || 0} ${label}`, `spatial-pill pill-${color}`));
+    counts.delete(code);
+  }
+  const unknown = [...counts.values()].reduce((sum, count) => sum + count, 0);
+  if (unknown) group.append(node('span', `${unknown} chưa xác định`, 'spatial-pill'));
+  const fronts = node('div', undefined, 'spatial-kpi-group');
+  for (const salinity of [1, 4]) {
+    const boundary = frame.isohaline_boundaries?.find(item => item.salinity_g_l === salinity);
+    const label = `Ranh mô phỏng ${salinity} g/L`;
+    const coord = boundary?.coordinate;
+    if (boundary?.status === 'WITHIN_CORRIDOR' && Array.isArray(coord) && coord.length === 2 &&
+        coord.every(Number.isFinite) && Math.abs(coord[0]) <= 180 && Math.abs(coord[1]) <= 90 &&
+        Number.isFinite(boundary.intrusion_distance_km)) {
+      const distance = boundary.intrusion_distance_km.toLocaleString('vi-VN', { maximumFractionDigits: 1 });
+      const button = node('button', `${label}: ${distance} km từ biển ↗`, `spatial-front-btn front-${salinity === 4 ? 'high' : 'low'}`);
+      button.type = 'button';
+      button.addEventListener('click', () => window.dispatchEvent(new CustomEvent('workspace:focus-coordinate', {
+        detail: { coordinate: [...coord], zoom: 10.8 },
+      })));
+      fronts.append(button);
+    } else {
+      const description = boundary?.status === 'NOT_REACHED_AT_ESTUARY' ? 'chưa đạt ngưỡng tại cửa sông'
+        : boundary?.status === 'ENTIRE_CORRIDOR_ABOVE_THRESHOLD' ? 'toàn tuyến vượt ngưỡng' : 'chưa có vị trí hợp lệ';
+      fronts.append(node('span', `${label}: ${description}`, 'spatial-pill'));
+    }
+  }
+  box.append(group, fronts, node('small', `${frame.inputs ? `Đầu vào ${frame.year_month}: ${simulationInputLabel(frame.inputs)}. ` : ''}Ranh mặn quy đổi gần đúng từ EC; bấm bản đồ để tra cứu nguồn nước lân cận.`, 'spatial-click-hint'));
+}
+
 export function createTimelineScrubber() {
   const host = $('simulationTimeline');
   const state = { items: [], index: 0, unit: 'ec', thresholds: { ...ADVISORY_PRESETS.citrus }, playing: false, speed: 1 };
   const initialRequests = createRequestGate();
   let playbackTimer, scrubTimer, thresholdTimer, playbackGeneration = 0, pendingMonth = null;
-  host.innerHTML = `<div id="simulationProfilePanel" hidden><div id="simulationRiverProfile" hidden></div></div><div class="timeline-banner"><div class="timeline-month"><small>THÁNG ĐANG XEM</small><strong id="simulationMonth">—</strong><span id="simulationRegime" class="timeline-regime">Đang đọc dữ liệu</span></div><div class="timeline-stations"><div><small>THƯỢNG LƯU · TÂN CHÂU</small><strong id="simulationTanChau">—</strong></div><div><small>HẠ LƯU · MỸ THO</small><strong id="simulationMyTho">—</strong></div></div><p id="simulationWeather" class="timeline-weather"></p></div>
+  host.innerHTML = `<div id="simulationSpatialSummary" class="timeline-spatial-kpis" aria-live="polite" hidden></div><div id="simulationProfilePanel" hidden><div id="simulationRiverProfile" hidden></div></div><div class="timeline-banner"><div class="timeline-month"><small>THÁNG ĐANG XEM</small><strong id="simulationMonth">—</strong><span id="simulationRegime" class="timeline-regime">Đang đọc dữ liệu</span></div><div class="timeline-stations"><div><small>THƯỢNG LƯU · TÂN CHÂU</small><strong id="simulationTanChau">—</strong></div><div><small>HẠ LƯU · MỸ THO</small><strong id="simulationMyTho">—</strong></div></div><p id="simulationWeather" class="timeline-weather"></p></div>
     <div class="timeline-controls"><button id="simulationPlay" type="button" disabled>▶ Phát chu kỳ</button><label class="timeline-speed">Tốc độ<select id="simulationSpeed"><option value="1">1x</option><option value="2">2x</option><option value="4">4x</option></select></label><input id="simulationSlider" type="range" min="0" max="494" value="494" step="1" disabled aria-label="Tháng mô phỏng" aria-valuetext="Đang tải"><button id="simulationRetry" type="button" hidden>Thử lại</button></div>
     <div class="timeline-axis"><span id="simulationStart">1985-06</span><span>QUAN TRẮC MRC <i></i> KHÍ TƯỢNG &amp; ML</span><span id="simulationEnd">2026-08</span></div>
     <div class="timeline-secondary"><div class="profile-dock-heading"><button id="simulationProfileToggle" type="button" aria-expanded="false" aria-controls="simulationProfilePanel">📈 Hiện cắt dọc sông</button><span class="profile-dock-title">Sơ đồ cắt dọc Sông Tiền &amp; Chuỗi 27 cống · km 0 → km 175</span><label class="profile-gate-picker"><span class="visually-hidden">Xem khuyến nghị tại cống</span><select id="simulationGatePicker" aria-label="Xem khuyến nghị tại cống" disabled><option value="">Đang tải danh mục cống…</option></select></label></div><div id="simulationJumps" class="timeline-jumps" aria-label="Chọn nhanh giai đoạn"></div></div><p id="simulationStatus" class="timeline-status" role="status">Đang tải trục sông và dòng thời gian…</p>`;
@@ -86,9 +135,9 @@ export function createTimelineScrubber() {
     slider.style.setProperty('--progress', `${state.index / Math.max(1, state.items.length - 1) * 100}%`);
     $('simulationMonth').textContent = item.year_month;
     const observed = item.data_regime === 'OBSERVED_MRC';
-    $('simulationRegime').textContent = observed ? 'Quan trắc thực đo MRC' : 'Dự báo ML + Khí tượng ERA5';
-    $('simulationRegime').dataset.regime = observed ? 'observed' : 'forecast';
-    $('simulationRegime').title = observed ? 'Đầu vào quan trắc có nguồn; đoạn sông và cống vẫn là mô phỏng.' : 'Ước tính hồi cứu lưu trữ; chưa phải dự báo vận hành được kiểm chứng.';
+    $('simulationRegime').textContent = simulationInputLabel(item);
+    $('simulationRegime').dataset.regime = observed ? 'observed' : 'estimate';
+    $('simulationRegime').title = observed ? 'Tổng hợp các mẫu nguồn sẵn có, giữ cờ O/E và chất lượng; không đại diện chuỗi đo liên tục cả tháng. Đoạn sông và cống là mô phỏng.' : 'Ước tính hồi cứu lưu trữ; chưa phải dự báo vận hành được kiểm chứng.';
     $('simulationTanChau').textContent = formatWater(item.tan_chau_ec_mS_m, state.unit, item.tan_chau_salinity_g_l);
     $('simulationMyTho').textContent = formatWater(item.my_tho_ec_mS_m, state.unit, item.my_tho_salinity_g_l);
     const direction = item.wind?.direction_from_degrees;
@@ -96,12 +145,14 @@ export function createTimelineScrubber() {
   }
   const loader = createSimulationFrameLoader({
     onLoading(detail) {
+      renderSpatialSummary(null);
       host.dataset.loading = 'true';
       status(`Đang tải khuyến nghị tháng ${detail.year_month}…`);
       $('simulationRetry').hidden = true;
       emit('workspace:simulation-loading', detail);
     },
     onFrame(frame) {
+      renderSpatialSummary(frame);
       host.dataset.loading = 'false';
       emit('workspace:simulation-frame', frame);
       const colors = frame.gates.reduce((count, gate) => {
@@ -111,6 +162,7 @@ export function createTimelineScrubber() {
       status(`${frame.gates.length} đèn khuyến nghị · ${colors.ADVISORY_SAFE_INTAKE || 0} thuận lợi · ${colors.ADVISORY_CHECK_ONSITE || 0} cần đo kiểm · ${colors.ADVISORY_HIGH_SALINITY_RISK || 0} rủi ro mặn · Cần kỹ sư quyết định`);
     },
     onError(error) {
+      renderSpatialSummary(null);
       host.dataset.loading = 'false';
       stop();
       status(error.message, true);
@@ -126,6 +178,7 @@ export function createTimelineScrubber() {
       state.thresholds = validateThresholds($('simulationOpenBelow').value, $('simulationCloseAbove').value);
     } catch (error) {
       loader.cancel();
+      renderSpatialSummary(null);
       emit('workspace:simulation-loading', { year_month: state.items[state.index].year_month, thresholds: null });
       host.dataset.loading = 'false';
       stop();
@@ -134,10 +187,13 @@ export function createTimelineScrubber() {
     }
     return loader.load(state.items[state.index].year_month, { ...state.thresholds });
   }
-  function chooseIndex(index, debounce = false) {
+  function chooseIndex(index, debounce = false, source = 'user') {
+    if (!state.items.length) return Promise.resolve(null);
     state.index = Math.max(0, Math.min(state.items.length - 1, index));
+    emit('workspace:simulation-selection', { year_month: state.items[state.index].year_month, source });
     renderBanner();
     loader.cancel();
+    renderSpatialSummary(null);
     emit('workspace:simulation-loading', { year_month: state.items[state.index]?.year_month, thresholds: state.thresholds });
     if (debounce) {
       clearTimeout(scrubTimer);
@@ -154,13 +210,26 @@ export function createTimelineScrubber() {
     return state.items.reduce((best, item, index) =>
       Math.abs(ordinal(item.year_month) - target) < Math.abs(ordinal(state.items[best].year_month) - target) ? index : best, 0);
   }
-  function selectMonth(month) {
-    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) return Promise.resolve(null);
+  function selectMonth(month, { source = 'user' } = {}) {
+    if (!validMonth(month)) return Promise.resolve(null);
     stop(); clearTimeout(scrubTimer); clearTimeout(thresholdTimer);
     if (!state.items.length) { pendingMonth = month; return Promise.resolve(null); }
     pendingMonth = null;
-    return chooseIndex(closestMonthIndex(month));
+    return chooseIndex(closestMonthIndex(month), false, source);
   }
+  function selectScenario({ month, preset } = {}) {
+    const thresholds = ADVISORY_PRESETS[preset];
+    if (thresholds) {
+      state.thresholds = { ...thresholds };
+      $('simulationThresholdPreset').value = preset;
+      $('simulationOpenBelow').value = thresholds.open_below_ec;
+      $('simulationCloseAbove').value = thresholds.close_above_ec;
+    }
+    if (month) return selectMonth(month);
+    stop(); clearTimeout(scrubTimer); clearTimeout(thresholdTimer);
+    return requestFrame();
+  }
+  window.addEventListener('workspace:simulation-scenario', event => selectScenario(event.detail));
   async function tick(generation) {
     if (!state.playing || generation !== playbackGeneration || document.hidden) return;
     await chooseIndex((state.index + 1) % state.items.length);
@@ -195,6 +264,7 @@ export function createTimelineScrubber() {
     stop();
     clearTimeout(scrubTimer);
     loader.cancel();
+    renderSpatialSummary(null);
     emit('workspace:simulation-loading', { year_month: state.items[state.index]?.year_month, thresholds: null });
     status('Đang nhập ngưỡng kịch bản…');
     clearTimeout(thresholdTimer);
@@ -211,6 +281,16 @@ export function createTimelineScrubber() {
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
   async function load() {
     stop();
+    clearTimeout(scrubTimer); clearTimeout(thresholdTimer); loader.cancel();
+    if (!pendingMonth && state.items.length) pendingMonth = state.items[state.index]?.year_month;
+    state.items = [];
+    renderSpatialSummary(null);
+    emit('workspace:simulation-loading', { year_month: pendingMonth, thresholds: null });
+    host.dataset.loading = 'true';
+    for (const id of ['simulationMonth', 'simulationTanChau', 'simulationMyTho']) $(id).textContent = '—';
+    $('simulationRegime').textContent = 'Đang tải đầu vào mô phỏng';
+    $('simulationWeather').textContent = '';
+    $('simulationJumps').replaceChildren();
     const req = initialRequests.next();
     play.disabled = slider.disabled = true;
     $('simulationRetry').hidden = true;
@@ -220,7 +300,8 @@ export function createTimelineScrubber() {
         workspaceAPI('/simulation/corridor', req), workspaceAPI('/simulation/timeline', req),
       ]);
       if (!req.isCurrent()) return;
-      if (!Array.isArray(timeline.items) || !timeline.items.length || !Array.isArray(corridor.gates) || !corridor.corridor) throw new Error('Chưa có dữ liệu không gian / thời gian hợp lệ.');
+      if (!Array.isArray(timeline.items) || !timeline.items.length || !Array.isArray(corridor.gates) || !corridor.corridor ||
+          timeline.items.some((item, index) => !validMonth(item.year_month) || (index && item.year_month <= timeline.items[index - 1].year_month))) throw new Error('Chưa có dữ liệu không gian / thời gian hợp lệ.');
       state.items = timeline.items;
       state.index = pendingMonth ? closestMonthIndex(pendingMonth) : state.items.length - 1;
       pendingMonth = null;
@@ -243,9 +324,10 @@ export function createTimelineScrubber() {
       await requestFrame();
     } catch (error) {
       if (!req.isCurrent()) return;
+      host.dataset.loading = 'false';
       status(error.message, true);
       $('simulationRetry').hidden = false;
     }
   }
-  return { load, stop, selectMonth };
+  return { load, stop, selectMonth, selectScenario };
 }

@@ -1,0 +1,14 @@
+[
+  {
+    "level": "warn",
+    "message": "No map visible because the map container's width or height are 0.",
+    "timestamp": "2026-10-26T05:15:26.026Z",
+    "url": "http://127.0.0.1:8000/assets/chart-B4qn6gGg.js"
+  },
+  {
+    "level": "warn",
+    "message": "No map visible because the map container's width or height are 0.",
+    "timestamp": "2026-10-26T05:15:26.031Z",
+    "url": "http://127.0.0.1:8000/assets/chart-B4qn6gGg.js"
+  }
+]

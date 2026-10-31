@@ -1,0 +1,590 @@
+{
+  "checked_at": "2026-10-26T12:26:53.590275+07:00",
+  "selected_stations": 12,
+  "selected_observations": 977,
+  "export_rows": {
+    "mytho_2023": 12,
+    "tanchau_all": 464
+  },
+  "prediction_csv_matches_expected": true,
+  "forecast_history": {
+    "items": [
+      {
+        "prediction": {
+          "note": "Dự báo tính trực tiếp từ mô hình đã huấn luyện. Sai số lịch sử giữ riêng với dự báo mới; EC chưa quy đổi thành độ mặn.",
+          "unit": "mS/m",
+          "model": "RandomForestRegressor",
+          "inputs": [
+            {
+              "name": "rainfall_mm",
+              "unit": "mm",
+              "label": "Lượng mưa tháng",
+              "value": 313.0,
+              "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json"
+            },
+            {
+              "name": "temperature_degC",
+              "unit": "degC",
+              "label": "Nhiệt độ trung bình tháng",
+              "value": 27.85666666666667,
+              "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json"
+            },
+            {
+              "name": "wind_source_units",
+              "unit": "m/s",
+              "label": "Tốc độ gió trung bình tháng",
+              "value": 2.261,
+              "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json"
+            },
+            {
+              "name": "month_sin",
+              "unit": "1",
+              "label": "Chu kỳ tháng (sin)",
+              "value": -0.5000000000000004,
+              "source": "CALENDAR"
+            },
+            {
+              "name": "month_cos",
+              "unit": "1",
+              "label": "Chu kỳ tháng (cos)",
+              "value": 0.8660254037844384,
+              "source": "CALENDAR"
+            }
+          ],
+          "metrics": {
+            "n": 24,
+            "mae_mS_m": 18.318194282772282,
+            "rmse_mS_m": 49.31131910713888
+          },
+          "station": "MyTho",
+          "training": {
+            "samples": 463,
+            "through": "2023-12-01"
+          },
+          "data_kind": "MULTIVARIATE_MONTHLY_FORECAST",
+          "issued_at": "2026-10-26T12:03:29.773110+07:00",
+          "site_code": "MRC_VN_019805",
+          "evaluation": {
+            "holdout": {
+              "Persistence": {
+                "n": 24,
+                "mae_mS_m": 12.621249999999998,
+                "rmse_mS_m": 18.910940726644636
+              },
+              "RandomForest": {
+                "n": 24,
+                "mae_mS_m": 18.318194282772282,
+                "rmse_mS_m": 49.31131910713888
+              },
+              "SeasonalNaive": {
+                "n": 24,
+                "mae_mS_m": 20.149583333333336,
+                "rmse_mS_m": 47.842282162330015
+              },
+              "MonthlyClimatology": {
+                "n": 24,
+                "mae_mS_m": 22.193940190190194,
+                "rmse_mS_m": 45.03354483728988
+              }
+            },
+            "validation": {
+              "Persistence": {
+                "n": 36,
+                "mae_mS_m": 93.38583333333332,
+                "rmse_mS_m": 192.89714159652837
+              },
+              "RandomForest": {
+                "n": 36,
+                "mae_mS_m": 69.60919199945242,
+                "rmse_mS_m": 147.91888048065047
+              },
+              "SeasonalNaive": {
+                "n": 36,
+                "mae_mS_m": 115.5263888888889,
+                "rmse_mS_m": 234.8802087885558
+              },
+              "MonthlyClimatology": {
+                "n": 36,
+                "mae_mS_m": 70.22115146563675,
+                "rmse_mS_m": 167.37933864729885
+              }
+            }
+          },
+          "input_mode": "ARCHIVE",
+          "input_month": "2026-09",
+          "target_month": "2026-11",
+          "feature_units": {
+            "month_cos": "1",
+            "month_sin": "1",
+            "rainfall_mm": "mm",
+            "temperature_degC": "degC",
+            "wind_source_units": "m/s"
+          },
+          "model_version": "20261023T041813Z",
+          "prediction_id": "4be2b3e4-7d88-4216-a713-60db1436039b",
+          "weather_month": "2026-09-01",
+          "feature_values": {
+            "month_cos": 0.8660254037844384,
+            "month_sin": -0.5000000000000004,
+            "rainfall_mm": 313.0,
+            "temperature_degC": 27.85666666666667,
+            "wind_source_units": 2.261
+          },
+          "quality_status": "EXPERIMENTAL_SOURCE_EC_UNVERIFIED",
+          "training_cutoff": "2023-12-01",
+          "deployment_ready": false,
+          "input_provenance": {
+            "sha256": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+            "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json",
+            "station": "MyTho",
+            "complete": true,
+            "wind_unit": "m/s",
+            "source_url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2025-01-01&end_date=2026-09-30&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+            "daily_count": 30,
+            "input_month": "2026-09",
+            "rainfall_mm": 313.0,
+            "retrieved_at": "2026-10-23T04:16:58.471583+00:00",
+            "source_model": "ERA5",
+            "target_month": "2026-11",
+            "wind_statistic": "monthly mean of daily mean 10m wind speed",
+            "observed_through": "2026-09-30",
+            "temperature_degC": 27.85666666666667,
+            "wind_unit_status": "VERIFIED_RESPONSE_UNITS",
+            "availability_note": "Month end + 5 days is an assumed ERA5 release lag, not a historical publication timestamp.",
+            "wind_source_units": 2.261,
+            "assumed_available_at": "2026-10-05T23:59:59+07:00"
+          },
+          "predicted_ec_mS_m": 17.331244652727047,
+          "feature_importance": [
+            {
+              "name": "rainfall_mm",
+              "label": "Lượng mưa tháng",
+              "importance": 0.6247366033468785
+            },
+            {
+              "name": "temperature_degC",
+              "label": "Nhiệt độ trung bình tháng",
+              "importance": 0.11965251455030809
+            },
+            {
+              "name": "wind_source_units",
+              "label": "Tốc độ gió trung bình tháng",
+              "importance": 0.2235987855857314
+            },
+            {
+              "name": "month_sin",
+              "label": "Chu kỳ tháng (sin)",
+              "importance": 0.01907912540584793
+            },
+            {
+              "name": "month_cos",
+              "label": "Chu kỳ tháng (cos)",
+              "importance": 0.012932971111234088
+            }
+          ],
+          "validation_metrics": {
+            "holdout": {
+              "Persistence": {
+                "n": 24,
+                "mae_mS_m": 12.621249999999998,
+                "rmse_mS_m": 18.910940726644636
+              },
+              "RandomForest": {
+                "n": 24,
+                "mae_mS_m": 18.318194282772282,
+                "rmse_mS_m": 49.31131910713888
+              },
+              "SeasonalNaive": {
+                "n": 24,
+                "mae_mS_m": 20.149583333333336,
+                "rmse_mS_m": 47.842282162330015
+              },
+              "MonthlyClimatology": {
+                "n": 24,
+                "mae_mS_m": 22.193940190190194,
+                "rmse_mS_m": 45.03354483728988
+              }
+            },
+            "validation": {
+              "Persistence": {
+                "n": 36,
+                "mae_mS_m": 93.38583333333332,
+                "rmse_mS_m": 192.89714159652837
+              },
+              "RandomForest": {
+                "n": 36,
+                "mae_mS_m": 69.60919199945242,
+                "rmse_mS_m": 147.91888048065047
+              },
+              "SeasonalNaive": {
+                "n": 36,
+                "mae_mS_m": 115.5263888888889,
+                "rmse_mS_m": 234.8802087885558
+              },
+              "MonthlyClimatology": {
+                "n": 36,
+                "mae_mS_m": 70.22115146563675,
+                "rmse_mS_m": 167.37933864729885
+              }
+            }
+          },
+          "gate_decision_eligible": false,
+          "availability_assumption": "Complete weather from target minus two months; archive release latency not independently verified.",
+          "conditional_on_user_inputs": false,
+          "target_is_before_current_month": false
+        },
+        "saved_at": "2026-10-26T12:03:29.976527+07:00"
+      },
+      {
+        "prediction": {
+          "note": "Dự báo tính trực tiếp từ mô hình đã huấn luyện. Sai số lịch sử giữ riêng với dự báo mới; EC chưa quy đổi thành độ mặn.",
+          "unit": "mS/m",
+          "model": "RandomForestRegressor",
+          "inputs": [
+            {
+              "name": "rainfall_mm",
+              "unit": "mm",
+              "label": "Lượng mưa tháng",
+              "value": 313.0,
+              "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json"
+            },
+            {
+              "name": "temperature_degC",
+              "unit": "degC",
+              "label": "Nhiệt độ trung bình tháng",
+              "value": 27.85666666666667,
+              "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json"
+            },
+            {
+              "name": "wind_source_units",
+              "unit": "m/s",
+              "label": "Tốc độ gió trung bình tháng",
+              "value": 2.261,
+              "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json"
+            },
+            {
+              "name": "month_sin",
+              "unit": "1",
+              "label": "Chu kỳ tháng (sin)",
+              "value": -0.5000000000000004,
+              "source": "CALENDAR"
+            },
+            {
+              "name": "month_cos",
+              "unit": "1",
+              "label": "Chu kỳ tháng (cos)",
+              "value": 0.8660254037844384,
+              "source": "CALENDAR"
+            }
+          ],
+          "metrics": {
+            "n": 24,
+            "mae_mS_m": 18.318194282772282,
+            "rmse_mS_m": 49.31131910713888
+          },
+          "station": "MyTho",
+          "training": {
+            "samples": 463,
+            "through": "2023-12-01"
+          },
+          "data_kind": "MULTIVARIATE_MONTHLY_FORECAST",
+          "issued_at": "2026-10-23T22:47:34.825865+07:00",
+          "site_code": "MRC_VN_019805",
+          "evaluation": {
+            "holdout": {
+              "Persistence": {
+                "n": 24,
+                "mae_mS_m": 12.621249999999998,
+                "rmse_mS_m": 18.910940726644636
+              },
+              "RandomForest": {
+                "n": 24,
+                "mae_mS_m": 18.318194282772282,
+                "rmse_mS_m": 49.31131910713888
+              },
+              "SeasonalNaive": {
+                "n": 24,
+                "mae_mS_m": 20.149583333333336,
+                "rmse_mS_m": 47.842282162330015
+              },
+              "MonthlyClimatology": {
+                "n": 24,
+                "mae_mS_m": 22.193940190190194,
+                "rmse_mS_m": 45.03354483728988
+              }
+            },
+            "validation": {
+              "Persistence": {
+                "n": 36,
+                "mae_mS_m": 93.38583333333332,
+                "rmse_mS_m": 192.89714159652837
+              },
+              "RandomForest": {
+                "n": 36,
+                "mae_mS_m": 69.60919199945242,
+                "rmse_mS_m": 147.91888048065047
+              },
+              "SeasonalNaive": {
+                "n": 36,
+                "mae_mS_m": 115.5263888888889,
+                "rmse_mS_m": 234.8802087885558
+              },
+              "MonthlyClimatology": {
+                "n": 36,
+                "mae_mS_m": 70.22115146563675,
+                "rmse_mS_m": 167.37933864729885
+              }
+            }
+          },
+          "input_mode": "ARCHIVE",
+          "input_month": "2026-09",
+          "target_month": "2026-11",
+          "feature_units": {
+            "month_cos": "1",
+            "month_sin": "1",
+            "rainfall_mm": "mm",
+            "temperature_degC": "degC",
+            "wind_source_units": "m/s"
+          },
+          "model_version": "20261023T041813Z",
+          "prediction_id": "6329b0fe-3a00-4999-be4d-deb9486a2984",
+          "weather_month": "2026-09-01",
+          "feature_values": {
+            "month_cos": 0.8660254037844384,
+            "month_sin": -0.5000000000000004,
+            "rainfall_mm": 313.0,
+            "temperature_degC": 27.85666666666667,
+            "wind_source_units": 2.261
+          },
+          "quality_status": "EXPERIMENTAL_SOURCE_EC_UNVERIFIED",
+          "training_cutoff": "2023-12-01",
+          "deployment_ready": false,
+          "input_provenance": {
+            "sha256": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+            "source": "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json",
+            "station": "MyTho",
+            "complete": true,
+            "wind_unit": "m/s",
+            "source_url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2025-01-01&end_date=2026-09-30&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+            "daily_count": 30,
+            "input_month": "2026-09",
+            "rainfall_mm": 313.0,
+            "retrieved_at": "2026-10-23T04:16:58.471583+00:00",
+            "source_model": "ERA5",
+            "target_month": "2026-11",
+            "wind_statistic": "monthly mean of daily mean 10m wind speed",
+            "observed_through": "2026-09-30",
+            "temperature_degC": 27.85666666666667,
+            "wind_unit_status": "VERIFIED_RESPONSE_UNITS",
+            "availability_note": "Month end + 5 days is an assumed ERA5 release lag, not a historical publication timestamp.",
+            "wind_source_units": 2.261,
+            "assumed_available_at": "2026-10-05T23:59:59+07:00"
+          },
+          "predicted_ec_mS_m": 17.33124465272705,
+          "feature_importance": [
+            {
+              "name": "rainfall_mm",
+              "label": "Lượng mưa tháng",
+              "importance": 0.6247366033468785
+            },
+            {
+              "name": "temperature_degC",
+              "label": "Nhiệt độ trung bình tháng",
+              "importance": 0.11965251455030809
+            },
+            {
+              "name": "wind_source_units",
+              "label": "Tốc độ gió trung bình tháng",
+              "importance": 0.2235987855857314
+            },
+            {
+              "name": "month_sin",
+              "label": "Chu kỳ tháng (sin)",
+              "importance": 0.01907912540584793
+            },
+            {
+              "name": "month_cos",
+              "label": "Chu kỳ tháng (cos)",
+              "importance": 0.012932971111234088
+            }
+          ],
+          "validation_metrics": {
+            "holdout": {
+              "Persistence": {
+                "n": 24,
+                "mae_mS_m": 12.621249999999998,
+                "rmse_mS_m": 18.910940726644636
+              },
+              "RandomForest": {
+                "n": 24,
+                "mae_mS_m": 18.318194282772282,
+                "rmse_mS_m": 49.31131910713888
+              },
+              "SeasonalNaive": {
+                "n": 24,
+                "mae_mS_m": 20.149583333333336,
+                "rmse_mS_m": 47.842282162330015
+              },
+              "MonthlyClimatology": {
+                "n": 24,
+                "mae_mS_m": 22.193940190190194,
+                "rmse_mS_m": 45.03354483728988
+              }
+            },
+            "validation": {
+              "Persistence": {
+                "n": 36,
+                "mae_mS_m": 93.38583333333332,
+                "rmse_mS_m": 192.89714159652837
+              },
+              "RandomForest": {
+                "n": 36,
+                "mae_mS_m": 69.60919199945242,
+                "rmse_mS_m": 147.91888048065047
+              },
+              "SeasonalNaive": {
+                "n": 36,
+                "mae_mS_m": 115.5263888888889,
+                "rmse_mS_m": 234.8802087885558
+              },
+              "MonthlyClimatology": {
+                "n": 36,
+                "mae_mS_m": 70.22115146563675,
+                "rmse_mS_m": 167.37933864729885
+              }
+            }
+          },
+          "gate_decision_eligible": false,
+          "availability_assumption": "Complete weather from target minus two months; archive release latency not independently verified.",
+          "conditional_on_user_inputs": false,
+          "target_is_before_current_month": false
+        },
+        "saved_at": "2026-10-23T22:47:34.898413+07:00"
+      }
+    ],
+    "total": 2,
+    "limit": 20,
+    "offset": 0
+  },
+  "latest_test_gate_draft": {
+    "items": [
+      {
+        "draft_id": 7,
+        "gate_code": "DT_PLIII_001",
+        "input": {
+          "mode": "INTAKE",
+          "is_demo": false,
+          "gate_code": "DT_PLIII_001",
+          "issue_time": null,
+          "observations": {
+            "inside_level": {
+              "unit": "m",
+              "value": 0.5,
+              "gate_code": "DT_PLIII_001",
+              "observed_at": "2026-10-26T09:00:00+07:00",
+              "available_at": null,
+              "quality_flag": "UNVERIFIED",
+              "vertical_datum": "UAT_HYPOTHETICAL_DATUM",
+              "source_reference": "UAT 26/10/2026 - SO LIEU GIA DINH KIEM THU, KHONG PHAI QUAN TRAC"
+            },
+            "outside_level": {
+              "unit": "m",
+              "value": 1.2,
+              "gate_code": "DT_PLIII_001",
+              "observed_at": "2026-10-26T09:00:00+07:00",
+              "available_at": null,
+              "quality_flag": "UNVERIFIED",
+              "vertical_datum": "UAT_HYPOTHETICAL_DATUM",
+              "source_reference": "UAT 26/10/2026 - SO LIEU GIA DINH KIEM THU, KHONG PHAI QUAN TRAC"
+            },
+            "inside_quality": {
+              "unit": "mS/m",
+              "value": 70,
+              "ec_basis": "RAW",
+              "gate_code": "DT_PLIII_001",
+              "parameter": "EC",
+              "observed_at": "2026-10-26T09:00:00+07:00",
+              "available_at": null,
+              "quality_flag": "UNVERIFIED",
+              "method_reference": "UAT synthetic scenario",
+              "source_reference": "UAT 26/10/2026 - SO LIEU GIA DINH KIEM THU, KHONG PHAI QUAN TRAC"
+            },
+            "outside_quality": {
+              "unit": "mS/m",
+              "value": 150,
+              "ec_basis": "RAW",
+              "gate_code": "DT_PLIII_001",
+              "parameter": "EC",
+              "observed_at": "2026-10-26T09:00:00+07:00",
+              "available_at": null,
+              "quality_flag": "UNVERIFIED",
+              "method_reference": "UAT synthetic scenario",
+              "source_reference": "UAT 26/10/2026 - SO LIEU GIA DINH KIEM THU, KHONG PHAI QUAN TRAC"
+            }
+          },
+          "_instructions": "Hồ sơ lập kế hoạch; chỉ điền số đo có nguồn của đúng công trình. Không dùng mẫu EC tháng để quyết định giờ đóng/mở cống.",
+          "current_state": "UNKNOWN",
+          "schema_version": 1,
+          "evaluation_mode": "SIMULATION",
+          "last_changed_at": null,
+          "operating_status": {
+            "emergency": null,
+            "gate_code": "DT_PLIII_001",
+            "observed_at": null,
+            "available_at": null,
+            "quality_flag": "UNVERIFIED",
+            "water_demand": null,
+            "mechanical_ok": null,
+            "source_reference": null
+          }
+        },
+        "policy": {
+          "levels": {
+            "min_head_m": 0.1,
+            "inside_max_m": 2,
+            "inside_min_m": 0,
+            "max_abs_head_m": 2
+          },
+          "is_demo": false,
+          "approval": {
+            "status": "DRAFT",
+            "reference": null
+          },
+          "gate_code": "DT_PLIII_001",
+          "parameter": {
+            "name": "EC",
+            "unit": "mS/m",
+            "ec_basis": "RAW"
+          },
+          "allowed_modes": [
+            "INTAKE",
+            "DRAIN"
+          ],
+          "schema_version": 1,
+          "vertical_datum": "UAT_HYPOTHETICAL_DATUM",
+          "quality_thresholds": {
+            "open_below": 100,
+            "close_at_or_above": 150
+          },
+          "allow_drainage_with_saline_outside": false
+        },
+        "created_at": "2026-10-26T12:01:44.839978+07:00",
+        "status": "DRAFT_UNVERIFIED",
+        "declarations_verified_by_server": false
+      }
+    ],
+    "total": 2,
+    "limit": 1,
+    "offset": 0
+  },
+  "app_health": {
+    "status": "ok",
+    "research_mode": "postgres",
+    "database_checked": false
+  },
+  "database_health": {
+    "status": "ok",
+    "database_name": "dongthap_gis",
+    "transaction_read_only": true
+  }
+}

@@ -67,7 +67,9 @@ def monthly_estimates(station: str | None = None):
         for row in rows:
             if not row['station'] or not row['model']:
                 raise ValueError('Missing station or model.')
-            datetime.strptime(row['year_month'], '%Y-%m')
+            parsed_month = datetime.strptime(row['year_month'], '%Y-%m')
+            if parsed_month.strftime('%Y-%m') != row['year_month']:
+                raise ValueError('Estimate month must use YYYY-MM.')
             key = (row['station'], row['year_month'])
             if key in keys:
                 raise ValueError('Duplicate station month.')
@@ -76,7 +78,7 @@ def monthly_estimates(station: str | None = None):
                 row[field] = float(row[field])
                 if not math.isfinite(row[field]):
                     raise ValueError('Non-finite estimate value.')
-            if row['predicted_ec_mS_m'] < 0:
+            if any(row[key] < 0 for key in ('predicted_ec_mS_m', 'rainfall_mm', 'wind_m_s')):
                 raise ValueError('Negative EC estimate.')
     except (OSError, ValueError, KeyError, TypeError) as exc:
         raise WorkspaceError(503, 'Monthly estimate artifact unavailable or invalid.') from exc
@@ -101,6 +103,8 @@ def monthly_estimates(station: str | None = None):
         generated_by=', '.join(sorted({row['model'] for row in rows})),
         horizon=f"{min(row['year_month'] for row in rows)} to {max(row['year_month'] for row in rows)}",
         total_months=len(rows),
+        total_station_months=len(rows),
+        total_calendar_months=len({row['year_month'] for row in rows}),
         max_ec=max(rows, key=lambda row: row['predicted_ec_mS_m']),
         min_ec=min(rows, key=lambda row: row['predicted_ec_mS_m']),
         avg_ec=round(sum(row['predicted_ec_mS_m'] for row in rows) / len(rows), 2),

@@ -26,6 +26,29 @@ def stamp(value):
     return t.astimezone(timezone.utc)
 
 
+def validate_chronology(data):
+    """Check supplied dossier dates without inventing absent measurements."""
+    issue = stamp(data['issue_time']) if data.get('issue_time') is not None else None
+    changed = stamp(data['last_changed_at']) if data.get('last_changed_at') is not None else None
+    if issue is not None and changed is not None and changed > issue:
+        raise GateInputError('Thời điểm đổi trạng thái nằm sau thời điểm lập hồ sơ.')
+    observations = data.get('observations', {})
+    if not isinstance(observations, dict):
+        raise GateInputError('Observations phải là đối tượng.')
+    records = list(observations.values())
+    if data.get('operating_status') is not None:
+        records.append(data['operating_status'])
+    for row in records:
+        if not isinstance(row, dict):
+            raise GateInputError('Bản ghi số đo/trạng thái phải là đối tượng.')
+        observed = stamp(row['observed_at']) if row.get('observed_at') is not None else None
+        available = stamp(row['available_at']) if row.get('available_at') is not None else None
+        if observed is not None and available is not None and available < observed:
+            raise GateInputError('Thời điểm có dữ liệu nằm trước thời điểm đo.')
+        if issue is not None and any(t is not None and t > issue for t in (observed, available)):
+            raise GateInputError('Số đo/trạng thái chưa sẵn có tại thời điểm lập hồ sơ.')
+
+
 def numeric(value, name):
     if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
         raise GateInputError(f"{name}: cần số hữu hạn, không nhận giá trị thiếu.")
@@ -55,11 +78,17 @@ def evaluate(policy, data):
         result.update(status="INVALID_INPUT", reasons=["POLICY_AND_INPUT_MUST_BE_OBJECTS"])
         return result
     result['gate_code'] = data.get('gate_code')
-    if policy.get('schema_version') != 1 or data.get('schema_version') != 1:
+    if (type(policy.get('schema_version')) is not int or policy.get('schema_version') != 1
+            or type(data.get('schema_version')) is not int or data.get('schema_version') != 1):
         result.update(status="INVALID_INPUT", reasons=["SCHEMA_VERSION_MISMATCH"])
         return result
     if policy.get('is_demo') is not False or data.get('is_demo') is not False:
         result.update(status="INVALID_INPUT", reasons=["REAL_SOURCED_RECORDS_REQUIRED"])
+        return result
+    try:
+        validate_chronology(data)
+    except GateInputError as exc:
+        result.update(status='INVALID_INPUT', reasons=[str(exc)])
         return result
     result['reasons'] = [
         "SERVER_VERIFIED_GATE_EVIDENCE_NOT_AVAILABLE",

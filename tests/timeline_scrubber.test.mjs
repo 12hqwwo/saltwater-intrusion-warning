@@ -1,6 +1,7 @@
+import { mountQuickScenarios } from '../frontend/src/features/overview.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { ADVISORY_PRESETS, validateThresholds, createSimulationFrameLoader, createTimelineScrubber } from '../frontend/src/features/timeline-scrubber.js';
+import { ADVISORY_PRESETS, validateThresholds, createSimulationFrameLoader, createTimelineScrubber, renderSpatialSummary, simulationInputLabel } from '../frontend/src/features/timeline-scrubber.js';
 
 const thresholds = { open_below_ec: 100, close_above_ec: 150 };
 function frame(month, values = thresholds) {
@@ -82,6 +83,7 @@ test('current frame must match selected month, thresholds and simulation contrac
   for (const mutation of [
     { year_month: '2016-03' }, { simulation_layer: false }, { river_segments: null },
     { gates: {} }, { thresholds: { open_below_ec_ms_m: 99, close_at_or_above_ec_ms_m: 150 } },
+    { inputs: { year_month: '2024-03' } }, { gates: [{ gate_code: 'G1', simulated_outside_ec_mS_m: -1 }] },
   ]) {
     const h = harness();
     const result = h.loader.load('2024-04', thresholds);
@@ -181,4 +183,136 @@ test('invalid threshold edits after scrubbing cannot reload old advisories throu
   assert.equal(queries[1].get('close_above_ec'), '80');
   assert.equal(frames.length, 2, 'valid replacement thresholds restore advisories');
   scrubber.stop();
+});
+
+function installDOM(t) {
+  class Element extends EventTarget {
+    value = ''; textContent = ''; dataset = {}; children = []; hidden = false;
+    classList = { toggle() {} }; style = { setProperty() {} };
+    setAttribute() {} replaceChildren() { this.children = []; }
+    append(...children) { this.children.push(...children); }
+  }
+  const elements = new Map();
+  const get = id => { if (!elements.has(id)) elements.set(id, new Element()); return elements.get(id); };
+  const previous = { document: globalThis.document, window: globalThis.window };
+  globalThis.document = Object.assign(new EventTarget(), {
+    getElementById: get, querySelectorAll: () => [], createElement: () => new Element(), hidden: false,
+  });
+  globalThis.window = new EventTarget();
+  t.after(() => { for (const [key, value] of Object.entries(previous)) {
+    if (value === undefined) delete globalThis[key]; else globalThis[key] = value;
+  } });
+  return get;
+}
+
+test('simulation source labels distinguish archived estimates and filled source samples', t => {
+  const get = installDOM(t);
+  assert.equal(simulationInputLabel({ data_regime: 'OBSERVED_MRC', imputed: false }), 'Mẫu nguồn MRC');
+  assert.match(simulationInputLabel({ data_regime: 'OBSERVED_MRC', imputed: true }), /nội suy thời gian/);
+  assert.match(simulationInputLabel({ data_regime: 'ML_FORECAST_ERA5' }), /Ước tính hồi cứu/);
+  renderSpatialSummary({ year_month: '2024-04', inputs: { data_regime: 'ML_FORECAST_ERA5' }, gates: [] });
+  assert.match(get('simulationSpatialSummary').children.at(-1).textContent, /Đầu vào 2024-04: Ước tính hồi cứu/);
+});
+
+test('timeline reload clears the displayed month and cancels a prior frame even if replacement load fails', async t => {
+  const get = installDOM(t), frames = [], loading = [];
+  get('simulationOpenBelow').value = '100'; get('simulationCloseAbove').value = '150';
+  window.addEventListener('workspace:simulation-frame', event => frames.push(event.detail));
+  window.addEventListener('workspace:simulation-loading', event => loading.push(event.detail));
+  let failTimeline = false, delayedFrame;
+  t.mock.method(globalThis, 'fetch', async path => {
+    const url = new URL(path, 'https://test.invalid');
+    const result = body => ({ ok: true, json: async () => body });
+    if (url.pathname.endsWith('/timeline')) {
+      if (failTimeline) throw new Error('replacement unavailable');
+      return result({ items: [{ year_month: '2016-03' }, { year_month: '2026-08' }] });
+    }
+    if (url.pathname.endsWith('/corridor')) return result({ gates: [], corridor: {} });
+    if (url.searchParams.get('year_month') === '2016-03') return new Promise(resolve => { delayedFrame = () => resolve(result(frame('2016-03'))); });
+    return result(frame(url.searchParams.get('year_month')));
+  });
+  const scrubber = createTimelineScrubber(); await scrubber.load();
+  assert.equal(frames.length, 1);
+  const older = scrubber.selectMonth('2016-03');
+  failTimeline = true; const reload = scrubber.load();
+  assert.equal(get('simulationMonth').textContent, '—');
+  assert.equal(get('simulationSpatialSummary').hidden, true);
+  delayedFrame(); await older; await reload;
+  assert.equal(frames.length, 1, 'previous month must not reappear after reload');
+  assert.equal(get('simulationPlay').disabled, true); assert.equal(get('simulationRetry').hidden, false);
+  assert.equal(get('simulationTimeline').dataset.loading, 'false');
+  assert.ok(loading.length >= 3); scrubber.stop();
+});
+
+test('scenario event before timeline load preserves preset and selects nearest available month', async t => {
+  const get = installDOM(t), queries = [], selections = [];
+  window.addEventListener('workspace:simulation-selection', event => selections.push(event.detail));
+  get('simulationOpenBelow').value = '100'; get('simulationCloseAbove').value = '150';
+  t.mock.method(globalThis, 'fetch', async path => {
+    const url = new URL(path, 'https://test.invalid');
+    let body;
+    if (url.pathname.endsWith('/timeline')) body = { items: [{ year_month: '2022-10' }, { year_month: '2024-03' }] };
+    else if (url.pathname.endsWith('/corridor')) body = { gates: [], corridor: {} };
+    else { queries.push(url.searchParams); body = frame(url.searchParams.get('year_month'), ADVISORY_PRESETS.durian); }
+    return { ok: true, json: async () => body };
+  });
+  const scrubber = createTimelineScrubber();
+  window.dispatchEvent(new CustomEvent('workspace:simulation-scenario', { detail: { month: '2024-04', preset: 'durian' } }));
+  await scrubber.load();
+  assert.equal(get('simulationMonth').textContent, '2024-03');
+  assert.equal(get('simulationThresholdPreset').value, 'durian');
+  assert.equal(queries.length, 1);
+  assert.equal(queries[0].get('year_month'), '2024-03');
+  assert.equal(queries[0].get('open_below_ec'), '50');
+  assert.equal(queries[0].get('close_above_ec'), '80');
+  await scrubber.selectMonth('2024-04', { source: 'forecast' });
+  assert.deepEqual(selections.at(-1), { year_month: '2024-03', source: 'forecast' });
+  await scrubber.selectMonth('2024-04');
+  assert.equal(selections.at(-1).source, 'user', 'user month changes must let the map invalidate a prior forecast overlay');
+  scrubber.stop();
+});
+
+test('spatial summary counts simulated states and only focuses valid requested boundaries', t => {
+  const get = installDOM(t), focused = [];
+  window.addEventListener('workspace:focus-coordinate', event => focused.push(event.detail));
+  renderSpatialSummary({ gates: [
+    { simulated_gate_state: 'OPEN_INTAKE' }, { simulated_gate_state: 'CAUTION_TRANSITION' },
+    { simulated_gate_state: 'CLOSED_SALINITY_BARRIER' }, { simulated_gate_state: 'UNKNOWN' },
+  ], isohaline_boundaries: [
+    { salinity_g_l: 1, status: 'WITHIN_CORRIDOR', intrusion_distance_km: 12, coordinate: [106, 10] },
+    { salinity_g_l: 4, status: 'NOT_REACHED_AT_ESTUARY' },
+    { salinity_g_l: 2, status: 'WITHIN_CORRIDOR', intrusion_distance_km: 10, coordinate: [106, 10] },
+  ] });
+  const box = get('simulationSpatialSummary'), [counts, fronts] = box.children;
+  assert.equal(box.hidden, false);
+  assert.deepEqual(counts.children.map(item => item.textContent), [
+    'Mô phỏng · 4 cống', '1 thuận lợi theo ngưỡng', '1 cần đo kiểm', '1 ngăn mặn', '1 chưa xác định',
+  ]);
+  assert.equal(fronts.children.length, 2);
+  fronts.children[0].dispatchEvent(new Event('click'));
+  assert.deepEqual(focused, [{ coordinate: [106, 10], zoom: 10.8 }]);
+  assert.match(fronts.children[1].textContent, /chưa đạt ngưỡng/);
+  renderSpatialSummary(null);
+  assert.equal(box.hidden, true);
+  assert.deepEqual(box.children, []);
+});
+
+test('overview actions dispatch scenario contracts directly and navigate to forecast tool', t => {
+  const get = installDOM(t), actions = [], panels = [];
+  const workflow = { after(panel) { panels.push(panel); } };
+  document.querySelector = selector => selector === '.workflow-cards' ? workflow : null;
+  // This DOM stub ordinarily auto-creates IDs; mimic missing dynamically mounted panel.
+  const originalGet = document.getElementById;
+  document.getElementById = id => id === 'quickSpatialScenarios' ? panels[0] || null : originalGet(id);
+  const previousLocation = globalThis.location;
+  globalThis.location = { hash: '#overview' };
+  t.after(() => { if (previousLocation === undefined) delete globalThis.location; else globalThis.location = previousLocation; });
+  window.addEventListener('workspace:simulation-scenario', event => actions.push(event.detail));
+  mountQuickScenarios(); mountQuickScenarios();
+  assert.equal(panels.length, 1, 'summary reload must not duplicate quick actions');
+  const grid = panels[0].children.at(-1);
+  assert.equal(grid.children.length, 4);
+  for (const card of grid.children) card.children.at(-1).dispatchEvent(new Event('click'));
+  assert.deepEqual(actions, [{ month: '2024-04' }, { month: '2022-10' }, { preset: 'durian' }]);
+  assert.equal(location.hash, 'forecasts');
 });

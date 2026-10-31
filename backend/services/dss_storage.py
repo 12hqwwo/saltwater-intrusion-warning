@@ -6,7 +6,7 @@ import psycopg
 from backend.repositories import dss_storage as store
 from backend.services import multivariate
 from backend.services.workspace import WorkspaceError
-from backend.domain.gates import stamp
+from backend.domain.gates import stamp, validate_chronology
 
 
 def storage_errors(function):
@@ -78,9 +78,12 @@ def validate_draft(gate_code, data, policy):
                 or not math.isfinite(value) or (nonnegative and value < 0)):
             raise ValueError('Invalid numeric dossier field.')
     try:
+        if not isinstance(data, dict) or not isinstance(policy, dict):
+            raise ValueError('Input and policy must be objects.')
         if len(json.dumps([data, policy], allow_nan=False).encode('utf-8')) > 240000:
             raise ValueError('Dossier exceeds size limit.')
         walk(data); walk(policy)
+        validate_chronology(data)
         for obj in (data, policy):
             if obj.get('gate_code') != gate_code or type(obj.get('schema_version')) is not int or obj['schema_version'] != 1:
                 raise ValueError('Gate/schema mismatch.')
@@ -101,6 +104,8 @@ def validate_draft(gate_code, data, policy):
             if not isinstance(row, dict):
                 raise ValueError('Observation must be an object.')
             numeric(row.get('value'), 'quality' in key)
+            if 'level' in key and row.get('unit') not in (None, 'm'):
+                raise ValueError('Level observation must use metres.')
             if 'quality' in key and (row.get('unit') not in (None, 'mS/m') or row.get('parameter') not in (None, 'EC')
                     or row.get('ec_basis') not in (None, 'UNKNOWN', 'EC25', 'RAW')):
                 raise ValueError('EC observation unit/basis mismatch.')

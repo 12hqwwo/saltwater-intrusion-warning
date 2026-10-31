@@ -321,7 +321,7 @@ def simulation_frame(year_month, open_below_ec=120.0, close_above_ec=150.0):
                           simulated_outside_salinity_g_l=ec_to_salinity_g_l(ec),
                           simulated_gate_state=state, state_color=colors[state],
                           advisory_code=advisory_code, advisory_color=advisory_color,
-                          advisory_label=advisory_label, human_in_the_loop_Required=True,
+                          advisory_label=advisory_label, human_in_the_loop_Required=True, human_in_the_loop_required=True,
                           canal_particle_intake_enabled=False))
     return dict(year_month=year_month, inputs=month, river_segments=_segments(month, axis, close_above_ec),
                 gates=gates, catalog=catalog, isohaline_boundaries=_isohalines(anchors, axis),

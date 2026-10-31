@@ -1,0 +1,17 @@
+{
+  "checks": [
+    {
+      "role": "webgis_reader",
+      "non_admin": true,
+      "forbidden_operations_denied": true
+    },
+    {
+      "role": "webgis_writer",
+      "non_admin": true,
+      "forbidden_operations_denied": true
+    }
+  ],
+  "writes_rolled_back": true,
+  "observation_count": 1017,
+  "audit_trigger_verified": true
+}

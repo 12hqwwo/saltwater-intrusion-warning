@@ -1,5 +1,5 @@
 """Explicit hypothetical hydraulic/EC screening, never an operating command."""
-from backend.domain.gates import numeric, stamp, GateInputError
+from backend.domain.gates import numeric, stamp, GateInputError, validate_chronology
 
 
 def simulate(policy, data):
@@ -25,10 +25,15 @@ def simulate(policy, data):
         except GateInputError:
             invalid.append(label + ': cần số hữu hạn' + (' không âm' if nonnegative else ''))
             return None
-    if data.get('schema_version') != 1 or policy.get('schema_version') != 1:
+    if (type(data.get('schema_version')) is not int or data.get('schema_version') != 1
+            or type(policy.get('schema_version')) is not int or policy.get('schema_version') != 1):
         invalid.append('Phiên bản hồ sơ phải là 1.')
     if not data.get('gate_code') or policy.get('gate_code') != data.get('gate_code'):
         invalid.append('Mã cống đầu vào và quy trình phải khớp.')
+    try:
+        validate_chronology(data)
+    except GateInputError as exc:
+        invalid.append(str(exc))
     mode = data.get('mode')
     if mode not in ('INTAKE', 'DRAIN'):
         invalid.append('Mục tiêu phải là INTAKE hoặc DRAIN.')

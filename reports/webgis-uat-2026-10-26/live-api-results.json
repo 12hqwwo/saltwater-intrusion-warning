@@ -1,0 +1,1868 @@
+{
+  "base_url": "http://127.0.0.1:8000",
+  "generated_at": "2026-10-26T11:59:56.016505+07:00",
+  "checks": [
+    {
+      "name": "Runtime uses PostgreSQL",
+      "status": "PASS",
+      "seconds": 0.187,
+      "detail": {
+        "status": "ok",
+        "research_mode": "postgres",
+        "database_checked": false
+      }
+    },
+    {
+      "name": "Actual database health",
+      "status": "PASS",
+      "seconds": 0.204,
+      "detail": {
+        "status": "ok",
+        "database_name": "dongthap_gis",
+        "transaction_read_only": true
+      }
+    },
+    {
+      "name": "All 12 station histories agree with served catalogue",
+      "status": "PASS",
+      "seconds": 13.38,
+      "detail": {
+        "stations": 12,
+        "observations": 977
+      }
+    },
+    {
+      "name": "Date filter 2023 returns 12 My Tho samples",
+      "status": "PASS",
+      "seconds": 0.438,
+      "detail": true
+    },
+    {
+      "name": "Empty observation interval stays empty",
+      "status": "PASS",
+      "seconds": 0.345,
+      "detail": true
+    },
+    {
+      "name": "Reversed observation dates rejected",
+      "status": "PASS",
+      "seconds": 0.384,
+      "detail": {
+        "http_status": 422,
+        "seconds": 0.383
+      }
+    },
+    {
+      "name": "Unknown observation station rejected",
+      "status": "PASS",
+      "seconds": 0.369,
+      "detail": {
+        "http_status": 404,
+        "seconds": 0.369
+      }
+    },
+    {
+      "name": "Spatial corridor available",
+      "status": "PASS",
+      "seconds": 0.627,
+      "detail": {
+        "gates": 27
+      }
+    },
+    {
+      "name": "35 segments and 27 advisory gates 2016-03",
+      "status": "PASS",
+      "seconds": 1.084,
+      "detail": {
+        "ADVISORY_HIGH_SALINITY_RISK": 27
+      }
+    },
+    {
+      "name": "35 segments and 27 advisory gates 2022-10",
+      "status": "PASS",
+      "seconds": 1.008,
+      "detail": {
+        "ADVISORY_SAFE_INTAKE": 27
+      }
+    },
+    {
+      "name": "35 segments and 27 advisory gates 2024-04",
+      "status": "PASS",
+      "seconds": 1.344,
+      "detail": {
+        "ADVISORY_SAFE_INTAKE": 14,
+        "ADVISORY_HIGH_SALINITY_RISK": 11,
+        "ADVISORY_CHECK_ONSITE": 2
+      }
+    },
+    {
+      "name": "35 segments and 27 advisory gates 2026-08",
+      "status": "PASS",
+      "seconds": 1.03,
+      "detail": {
+        "ADVISORY_SAFE_INTAKE": 27
+      }
+    },
+    {
+      "name": "Missing simulation month returns 404",
+      "status": "PASS",
+      "seconds": 0.464,
+      "detail": {
+        "http_status": 404,
+        "seconds": 0.464
+      }
+    },
+    {
+      "name": "Equal simulation thresholds rejected",
+      "status": "PASS",
+      "seconds": 0.007,
+      "detail": {
+        "http_status": 422,
+        "seconds": 0.007
+      }
+    },
+    {
+      "name": "Invalid simulation month rejected",
+      "status": "PASS",
+      "seconds": 0.016,
+      "detail": {
+        "http_status": 422,
+        "seconds": 0.013
+      }
+    },
+    {
+      "name": "Actual model inference, archive input MyTho",
+      "status": "PASS",
+      "seconds": 54.552,
+      "detail": {
+        "ec": 17.33124465272705,
+        "target": "2026-11",
+        "input_month": "2026-09",
+        "seconds": 54.551,
+        "persisted": false
+      }
+    },
+    {
+      "name": "Evaluation artifact MyTho",
+      "status": "PASS",
+      "seconds": 0.038,
+      "detail": {
+        "rows": 24
+      }
+    },
+    {
+      "name": "Actual model inference, archive input TanChau",
+      "status": "PASS",
+      "seconds": 0.368,
+      "detail": {
+        "ec": 13.708926984009649,
+        "target": "2026-11",
+        "input_month": "2026-09",
+        "seconds": 0.368,
+        "persisted": false
+      }
+    },
+    {
+      "name": "Evaluation artifact TanChau",
+      "status": "PASS",
+      "seconds": 0.048,
+      "detail": {
+        "rows": 24
+      }
+    },
+    {
+      "name": "Forecast during training period rejected",
+      "status": "PASS",
+      "seconds": 0.014,
+      "detail": {
+        "http_status": 422,
+        "seconds": 0.014
+      }
+    },
+    {
+      "name": "Forecast at unregistered gate rejected",
+      "status": "PASS",
+      "seconds": 0.007,
+      "detail": {
+        "http_status": 404,
+        "seconds": 0.007
+      }
+    },
+    {
+      "name": "Manual forecast missing weather rejected",
+      "status": "PASS",
+      "seconds": 0.011,
+      "detail": {
+        "http_status": 422,
+        "seconds": 0.01
+      }
+    },
+    {
+      "name": "Negative rainfall rejected",
+      "status": "PASS",
+      "seconds": 0.008,
+      "detail": {
+        "http_status": 422,
+        "seconds": 0.007
+      }
+    },
+    {
+      "name": "Future unavailable weather rejected",
+      "status": "PASS",
+      "seconds": 0.023,
+      "detail": {
+        "http_status": 422,
+        "seconds": 0.022
+      }
+    },
+    {
+      "name": "Intake favorable EC and hydraulic head",
+      "status": "PASS",
+      "seconds": 0.015,
+      "detail": {
+        "outcome": "CONDITIONS_MET",
+        "reasons": [
+          "Các điều kiện EC và thủy lực đã nhập phù hợp với mục tiêu INTAKE trong kịch bản."
+        ]
+      }
+    },
+    {
+      "name": "Intake EC at lower boundary",
+      "status": "PASS",
+      "seconds": 0.023,
+      "detail": {
+        "outcome": "REVIEW_REQUIRED",
+        "reasons": [
+          "EC nằm trong dải chuyển tiếp; không kết luận đủ điều kiện."
+        ]
+      }
+    },
+    {
+      "name": "Intake EC at closing boundary",
+      "status": "PASS",
+      "seconds": 0.006,
+      "detail": {
+        "outcome": "BLOCKED",
+        "reasons": [
+          "EC ngoài đạt hoặc vượt ngưỡng chặn."
+        ]
+      }
+    },
+    {
+      "name": "Intake wrong flow direction",
+      "status": "PASS",
+      "seconds": 0.008,
+      "detail": {
+        "outcome": "BLOCKED",
+        "reasons": [
+          "Chênh mực nước không đủ theo chiều INTAKE."
+        ]
+      }
+    },
+    {
+      "name": "Drain correct flow direction",
+      "status": "PASS",
+      "seconds": 0.011,
+      "detail": {
+        "outcome": "CONDITIONS_MET",
+        "reasons": [
+          "Các điều kiện EC và thủy lực đã nhập phù hợp với mục tiêu DRAIN trong kịch bản."
+        ]
+      }
+    },
+    {
+      "name": "Drain saline exterior without override",
+      "status": "PASS",
+      "seconds": 0.018,
+      "detail": {
+        "outcome": "BLOCKED",
+        "reasons": [
+          "EC ngoài đạt hoặc vượt ngưỡng chặn."
+        ]
+      }
+    },
+    {
+      "name": "Drain saline exterior explicit scenario override",
+      "status": "PASS",
+      "seconds": 0.01,
+      "detail": {
+        "outcome": "CONDITIONS_MET",
+        "reasons": [
+          "Các điều kiện EC và thủy lực đã nhập phù hợp với mục tiêu DRAIN trong kịch bản.",
+          "Kịch bản cho phép thoát nước khi EC ngoài cao; chỉ xét dòng chảy hướng ra ngoài."
+        ]
+      }
+    },
+    {
+      "name": "Cross-origin write rejected before persistence",
+      "status": "PASS",
+      "seconds": 0.004,
+      "detail": {
+        "http_status": 403,
+        "seconds": 0.004
+      }
+    },
+    {
+      "name": "Model binary download blocked",
+      "status": "PASS",
+      "seconds": 0.007,
+      "detail": {
+        "http_status": 404,
+        "seconds": 0.007
+      }
+    },
+    {
+      "name": "DSS forecast history readable",
+      "status": "PASS",
+      "seconds": 0.256,
+      "detail": {
+        "total": 1
+      }
+    },
+    {
+      "name": "DSS gate drafts readable",
+      "status": "PASS",
+      "seconds": 0.286,
+      "detail": {
+        "total": 1
+      }
+    },
+    {
+      "name": "Database gate inventory readable",
+      "status": "PASS",
+      "seconds": 0.239,
+      "detail": {
+        "count": 0
+      }
+    },
+    {
+      "name": "Intake review coverage readable",
+      "status": "PASS",
+      "seconds": 0.023,
+      "detail": {
+        "items": [
+          {
+            "station": "ST_BD_BAODINH",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_BD_COCHI",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_BD_DANGHUNGPHUOC",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_BD_GOCAT",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_BD_HOATINH",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_BD_TANTHUANBINH",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_CHOGAO_CAUCHOGAO",
+            "rows": 20,
+            "unique_dates": 20,
+            "first": "2016-02-15",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 3198,
+            "next1d_labels": 14,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_CHOGAO_XUANDONG",
+            "rows": 25,
+            "unique_dates": 25,
+            "first": "2016-02-15",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1737,
+            "next1d_labels": 18,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_CUATRUNG_RACHMUONG",
+            "rows": 12,
+            "unique_dates": 12,
+            "first": "2026-09-17",
+            "last": "2026-10-13",
+            "longest_daily_run": 7,
+            "largest_gap_days": 16,
+            "next1d_labels": 10,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_CAUHL2",
+            "rows": 7,
+            "unique_dates": 7,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 3,
+            "largest_gap_days": 18,
+            "next1d_labels": 4,
+            "full_hydromet_next1d": 4
+          },
+          {
+            "station": "ST_GC_CAUTANTHANH",
+            "rows": 7,
+            "unique_dates": 7,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 3,
+            "largest_gap_days": 18,
+            "next1d_labels": 4,
+            "full_hydromet_next1d": 4
+          },
+          {
+            "station": "ST_GC_CONG862",
+            "rows": 7,
+            "unique_dates": 7,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 3,
+            "largest_gap_days": 18,
+            "next1d_labels": 4,
+            "full_hydromet_next1d": 4
+          },
+          {
+            "station": "ST_GC_GIATHUAN",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_GOCONG",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_LONGUONG",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_RACHBUN",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_RACHGIA",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_RAMVE",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_SO1ST",
+            "rows": 20,
+            "unique_dates": 20,
+            "first": "2016-02-15",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 3198,
+            "next1d_labels": 14,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_GC_SO3ST",
+            "rows": 34,
+            "unique_dates": 34,
+            "first": "2016-02-15",
+            "last": "2026-10-13",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1737,
+            "next1d_labels": 24,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_SO4ST",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_VAMGIONG",
+            "rows": 34,
+            "unique_dates": 34,
+            "first": "2016-02-15",
+            "last": "2026-10-13",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1737,
+            "next1d_labels": 24,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_GC_VAMTHAP",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 5,
+            "largest_gap_days": 18,
+            "next1d_labels": 6,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_HAMLUONG_ANHIEP",
+            "rows": 26,
+            "unique_dates": 26,
+            "first": "2016-02-15",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1737,
+            "next1d_labels": 18,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_HAMLUONG_CHOLACH",
+            "rows": 2,
+            "unique_dates": 2,
+            "first": "2024-03-11",
+            "last": "2025-02-28",
+            "longest_daily_run": 1,
+            "largest_gap_days": 354,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_HAMLUONG_MYHOA",
+            "rows": 26,
+            "unique_dates": 26,
+            "first": "2016-02-15",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1737,
+            "next1d_labels": 18,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_HAMLUONG_VAMMON",
+            "rows": 7,
+            "unique_dates": 7,
+            "first": "2024-05-09",
+            "last": "2025-03-22",
+            "longest_daily_run": 1,
+            "largest_gap_days": 273,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_SOAIRAP_MYDIEN",
+            "rows": 12,
+            "unique_dates": 12,
+            "first": "2026-09-17",
+            "last": "2026-10-13",
+            "longest_daily_run": 7,
+            "largest_gap_days": 16,
+            "next1d_labels": 10,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_SOAIRAP_RACHBANG",
+            "rows": 10,
+            "unique_dates": 10,
+            "first": "2026-09-19",
+            "last": "2026-10-13",
+            "longest_daily_run": 7,
+            "largest_gap_days": 16,
+            "next1d_labels": 8,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_SONGTRA_SONGCUI",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2024-03-02",
+            "last": "2026-04-08",
+            "longest_daily_run": 1,
+            "largest_gap_days": 362,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_SONGTRA_TAMVU",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2024-03-02",
+            "last": "2026-04-08",
+            "longest_daily_run": 1,
+            "largest_gap_days": 362,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_BENDOTANPHU",
+            "rows": 5,
+            "unique_dates": 5,
+            "first": "2024-03-04",
+            "last": "2025-04-04",
+            "longest_daily_run": 1,
+            "largest_gap_days": 359,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_CAUKIMSON",
+            "rows": 4,
+            "unique_dates": 4,
+            "first": "2024-03-01",
+            "last": "2025-03-16",
+            "longest_daily_run": 1,
+            "largest_gap_days": 307,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_CAUKINHXANG",
+            "rows": 5,
+            "unique_dates": 5,
+            "first": "2024-02-12",
+            "last": "2024-05-13",
+            "longest_daily_run": 1,
+            "largest_gap_days": 59,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_CAUPHUPHONG",
+            "rows": 4,
+            "unique_dates": 4,
+            "first": "2024-03-01",
+            "last": "2024-05-13",
+            "longest_daily_run": 1,
+            "largest_gap_days": 67,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_CAUXOAIHOT",
+            "rows": 10,
+            "unique_dates": 10,
+            "first": "2024-02-12",
+            "last": "2026-04-20",
+            "longest_daily_run": 1,
+            "largest_gap_days": 381,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_CVLACHONG",
+            "rows": 40,
+            "unique_dates": 40,
+            "first": "2016-02-15",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1371,
+            "next1d_labels": 18,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_HOADINH",
+            "rows": 26,
+            "unique_dates": 26,
+            "first": "2016-02-15",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1737,
+            "next1d_labels": 18,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_LONGHAI",
+            "rows": 12,
+            "unique_dates": 12,
+            "first": "2026-09-17",
+            "last": "2026-10-13",
+            "longest_daily_run": 7,
+            "largest_gap_days": 16,
+            "next1d_labels": 10,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_TIEN_NGUYENTANTHANH",
+            "rows": 2,
+            "unique_dates": 2,
+            "first": "2025-03-16",
+            "last": "2025-04-04",
+            "longest_daily_run": 1,
+            "largest_gap_days": 19,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_TANMYCHANH",
+            "rows": 27,
+            "unique_dates": 27,
+            "first": "2016-02-15",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1737,
+            "next1d_labels": 18,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_THOILOC",
+            "rows": 1,
+            "unique_dates": 1,
+            "first": "2024-03-11",
+            "last": "2024-03-11",
+            "longest_daily_run": 1,
+            "largest_gap_days": 0,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_TRUONGCHINHTRI",
+            "rows": 33,
+            "unique_dates": 33,
+            "first": "2016-05-11",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1457,
+            "next1d_labels": 17,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_TIEN_VAMKENH",
+            "rows": 12,
+            "unique_dates": 12,
+            "first": "2026-09-17",
+            "last": "2026-10-13",
+            "longest_daily_run": 7,
+            "largest_gap_days": 16,
+            "next1d_labels": 10,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_TIEN_XUANHOA",
+            "rows": 48,
+            "unique_dates": 48,
+            "first": "2016-02-15",
+            "last": "2026-10-13",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1371,
+            "next1d_labels": 24,
+            "full_hydromet_next1d": 6
+          },
+          {
+            "station": "ST_VAMCO_CAUTANAN",
+            "rows": 26,
+            "unique_dates": 26,
+            "first": "2016-02-15",
+            "last": "2026-05-15",
+            "longest_daily_run": 6,
+            "largest_gap_days": 1737,
+            "next1d_labels": 18,
+            "full_hydromet_next1d": 0
+          },
+          {
+            "station": "ST_VAMCO_RACHCHANH",
+            "rows": 8,
+            "unique_dates": 8,
+            "first": "2024-03-02",
+            "last": "2026-04-08",
+            "longest_daily_run": 1,
+            "largest_gap_days": 362,
+            "next1d_labels": 0,
+            "full_hydromet_next1d": 0
+          }
+        ],
+        "training_eligible": false
+      }
+    }
+  ],
+  "evidence": {
+    "app_health": {
+      "status": "ok",
+      "research_mode": "postgres",
+      "database_checked": false
+    },
+    "database_health": {
+      "status": "ok",
+      "database_name": "dongthap_gis",
+      "transaction_read_only": true
+    },
+    "summary": {
+      "storage_mode": "postgres",
+      "stations": 12,
+      "observations": 977,
+      "observation_source": "POSTGRESQL_PUBLIC_RAW_EC"
+    },
+    "stations": [
+      {
+        "site": "MRC_VN_019803",
+        "count": 464,
+        "mapped": true
+      },
+      {
+        "site": "MRC_VN_019805",
+        "count": 463,
+        "mapped": true
+      },
+      {
+        "site": "RIA2_DT_01",
+        "count": 5,
+        "mapped": false
+      },
+      {
+        "site": "RIA2_DT_02",
+        "count": 5,
+        "mapped": false
+      },
+      {
+        "site": "RIA2_DT_03",
+        "count": 5,
+        "mapped": false
+      },
+      {
+        "site": "RIA2_DT_04",
+        "count": 5,
+        "mapped": false
+      },
+      {
+        "site": "RIA2_DT_05",
+        "count": 5,
+        "mapped": false
+      },
+      {
+        "site": "RIA2_DT_06",
+        "count": 5,
+        "mapped": false
+      },
+      {
+        "site": "RIA2_DT_07",
+        "count": 5,
+        "mapped": false
+      },
+      {
+        "site": "RIA2_DT_08",
+        "count": 5,
+        "mapped": false
+      },
+      {
+        "site": "RIA2_DT_09",
+        "count": 5,
+        "mapped": false
+      },
+      {
+        "site": "RIA2_DT_10",
+        "count": 5,
+        "mapped": false
+      }
+    ],
+    "corridor_counts": {
+      "gates": 27
+    },
+    "timeline": {
+      "count": 495,
+      "first": "1985-06",
+      "last": "2026-08"
+    },
+    "frames": {
+      "2016-03": {
+        "ADVISORY_HIGH_SALINITY_RISK": 27
+      },
+      "2022-10": {
+        "ADVISORY_SAFE_INTAKE": 27
+      },
+      "2024-04": {
+        "ADVISORY_SAFE_INTAKE": 14,
+        "ADVISORY_HIGH_SALINITY_RISK": 11,
+        "ADVISORY_CHECK_ONSITE": 2
+      },
+      "2026-08": {
+        "ADVISORY_SAFE_INTAKE": 27
+      }
+    },
+    "forecasts": {
+      "MyTho": {
+        "ec": 17.33124465272705,
+        "target": "2026-11",
+        "input_month": "2026-09",
+        "seconds": 54.551,
+        "persisted": false
+      },
+      "TanChau": {
+        "ec": 13.708926984009649,
+        "target": "2026-11",
+        "input_month": "2026-09",
+        "seconds": 0.368,
+        "persisted": false
+      }
+    },
+    "gate_cases": {
+      "Intake favorable EC and hydraulic head": {
+        "schema_version": 1,
+        "evaluation_mode": "SIMULATION",
+        "status": "SIMULATED",
+        "simulation_outcome": "CONDITIONS_MET",
+        "recommendation": null,
+        "actuator_command": null,
+        "deployment_ready": false,
+        "requires_operator_review": true,
+        "gate_code": "DT_PLIII_001",
+        "reasons": [
+          "Các điều kiện EC và thủy lực đã nhập phù hợp với mục tiêu INTAKE trong kịch bản."
+        ],
+        "missing_evidence": [],
+        "evidence": {
+          "head_outside_minus_inside_m": 0.7,
+          "directional_head_m": 0.7,
+          "outside_ec_ms_m": 80.0,
+          "mode": "INTAKE"
+        },
+        "limitations": [
+          "Kịch bản giả định, không phải lệnh đóng/mở.",
+          "EC tháng không xác định thời điểm vận hành.",
+          "Chưa kiểm tra cơ khí, triều tương lai và liên kết thủy lực."
+        ],
+        "checklist": [
+          {
+            "code": "outside_level",
+            "label": "Mực nước phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_level",
+            "label": "Mực nước phía trong cống",
+            "declared_present": true
+          },
+          {
+            "code": "outside_quality",
+            "label": "Chỉ số EC phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_quality",
+            "label": "Chỉ số EC phía trong cống",
+            "declared_present": true
+          }
+        ],
+        "declarations_verified_by_server": false,
+        "evaluated_at": "2026-10-26T04:59:55.060065+00:00",
+        "note": "Hypothetical scenario only. Submitted declarations are not server-verified evidence; monthly EC cannot determine gate switching times."
+      },
+      "Intake EC at lower boundary": {
+        "schema_version": 1,
+        "evaluation_mode": "SIMULATION",
+        "status": "SIMULATED",
+        "simulation_outcome": "REVIEW_REQUIRED",
+        "recommendation": null,
+        "actuator_command": null,
+        "deployment_ready": false,
+        "requires_operator_review": true,
+        "gate_code": "DT_PLIII_001",
+        "reasons": [
+          "EC nằm trong dải chuyển tiếp; không kết luận đủ điều kiện."
+        ],
+        "missing_evidence": [],
+        "evidence": {
+          "head_outside_minus_inside_m": 0.7,
+          "directional_head_m": 0.7,
+          "outside_ec_ms_m": 100.0,
+          "mode": "INTAKE"
+        },
+        "limitations": [
+          "Kịch bản giả định, không phải lệnh đóng/mở.",
+          "EC tháng không xác định thời điểm vận hành.",
+          "Chưa kiểm tra cơ khí, triều tương lai và liên kết thủy lực."
+        ],
+        "checklist": [
+          {
+            "code": "outside_level",
+            "label": "Mực nước phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_level",
+            "label": "Mực nước phía trong cống",
+            "declared_present": true
+          },
+          {
+            "code": "outside_quality",
+            "label": "Chỉ số EC phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_quality",
+            "label": "Chỉ số EC phía trong cống",
+            "declared_present": true
+          }
+        ],
+        "declarations_verified_by_server": false,
+        "evaluated_at": "2026-10-26T04:59:55.086683+00:00",
+        "note": "Hypothetical scenario only. Submitted declarations are not server-verified evidence; monthly EC cannot determine gate switching times."
+      },
+      "Intake EC at closing boundary": {
+        "schema_version": 1,
+        "evaluation_mode": "SIMULATION",
+        "status": "SIMULATED",
+        "simulation_outcome": "BLOCKED",
+        "recommendation": null,
+        "actuator_command": null,
+        "deployment_ready": false,
+        "requires_operator_review": true,
+        "gate_code": "DT_PLIII_001",
+        "reasons": [
+          "EC ngoài đạt hoặc vượt ngưỡng chặn."
+        ],
+        "missing_evidence": [],
+        "evidence": {
+          "head_outside_minus_inside_m": 0.7,
+          "directional_head_m": 0.7,
+          "outside_ec_ms_m": 150.0,
+          "mode": "INTAKE"
+        },
+        "limitations": [
+          "Kịch bản giả định, không phải lệnh đóng/mở.",
+          "EC tháng không xác định thời điểm vận hành.",
+          "Chưa kiểm tra cơ khí, triều tương lai và liên kết thủy lực."
+        ],
+        "checklist": [
+          {
+            "code": "outside_level",
+            "label": "Mực nước phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_level",
+            "label": "Mực nước phía trong cống",
+            "declared_present": true
+          },
+          {
+            "code": "outside_quality",
+            "label": "Chỉ số EC phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_quality",
+            "label": "Chỉ số EC phía trong cống",
+            "declared_present": true
+          }
+        ],
+        "declarations_verified_by_server": false,
+        "evaluated_at": "2026-10-26T04:59:55.098252+00:00",
+        "note": "Hypothetical scenario only. Submitted declarations are not server-verified evidence; monthly EC cannot determine gate switching times."
+      },
+      "Intake wrong flow direction": {
+        "schema_version": 1,
+        "evaluation_mode": "SIMULATION",
+        "status": "SIMULATED",
+        "simulation_outcome": "BLOCKED",
+        "recommendation": null,
+        "actuator_command": null,
+        "deployment_ready": false,
+        "requires_operator_review": true,
+        "gate_code": "DT_PLIII_001",
+        "reasons": [
+          "Chênh mực nước không đủ theo chiều INTAKE."
+        ],
+        "missing_evidence": [],
+        "evidence": {
+          "head_outside_minus_inside_m": -0.2,
+          "directional_head_m": -0.2,
+          "outside_ec_ms_m": 80.0,
+          "mode": "INTAKE"
+        },
+        "limitations": [
+          "Kịch bản giả định, không phải lệnh đóng/mở.",
+          "EC tháng không xác định thời điểm vận hành.",
+          "Chưa kiểm tra cơ khí, triều tương lai và liên kết thủy lực."
+        ],
+        "checklist": [
+          {
+            "code": "outside_level",
+            "label": "Mực nước phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_level",
+            "label": "Mực nước phía trong cống",
+            "declared_present": true
+          },
+          {
+            "code": "outside_quality",
+            "label": "Chỉ số EC phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_quality",
+            "label": "Chỉ số EC phía trong cống",
+            "declared_present": true
+          }
+        ],
+        "declarations_verified_by_server": false,
+        "evaluated_at": "2026-10-26T04:59:55.110795+00:00",
+        "note": "Hypothetical scenario only. Submitted declarations are not server-verified evidence; monthly EC cannot determine gate switching times."
+      },
+      "Drain correct flow direction": {
+        "schema_version": 1,
+        "evaluation_mode": "SIMULATION",
+        "status": "SIMULATED",
+        "simulation_outcome": "CONDITIONS_MET",
+        "recommendation": null,
+        "actuator_command": null,
+        "deployment_ready": false,
+        "requires_operator_review": true,
+        "gate_code": "DT_PLIII_001",
+        "reasons": [
+          "Các điều kiện EC và thủy lực đã nhập phù hợp với mục tiêu DRAIN trong kịch bản."
+        ],
+        "missing_evidence": [],
+        "evidence": {
+          "head_outside_minus_inside_m": -0.6000000000000001,
+          "directional_head_m": 0.6000000000000001,
+          "outside_ec_ms_m": 80.0,
+          "mode": "DRAIN"
+        },
+        "limitations": [
+          "Kịch bản giả định, không phải lệnh đóng/mở.",
+          "EC tháng không xác định thời điểm vận hành.",
+          "Chưa kiểm tra cơ khí, triều tương lai và liên kết thủy lực."
+        ],
+        "checklist": [
+          {
+            "code": "outside_level",
+            "label": "Mực nước phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_level",
+            "label": "Mực nước phía trong cống",
+            "declared_present": true
+          },
+          {
+            "code": "outside_quality",
+            "label": "Chỉ số EC phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_quality",
+            "label": "Chỉ số EC phía trong cống",
+            "declared_present": true
+          }
+        ],
+        "declarations_verified_by_server": false,
+        "evaluated_at": "2026-10-26T04:59:55.125848+00:00",
+        "note": "Hypothetical scenario only. Submitted declarations are not server-verified evidence; monthly EC cannot determine gate switching times."
+      },
+      "Drain saline exterior without override": {
+        "schema_version": 1,
+        "evaluation_mode": "SIMULATION",
+        "status": "SIMULATED",
+        "simulation_outcome": "BLOCKED",
+        "recommendation": null,
+        "actuator_command": null,
+        "deployment_ready": false,
+        "requires_operator_review": true,
+        "gate_code": "DT_PLIII_001",
+        "reasons": [
+          "EC ngoài đạt hoặc vượt ngưỡng chặn."
+        ],
+        "missing_evidence": [],
+        "evidence": {
+          "head_outside_minus_inside_m": -0.6000000000000001,
+          "directional_head_m": 0.6000000000000001,
+          "outside_ec_ms_m": 200.0,
+          "mode": "DRAIN"
+        },
+        "limitations": [
+          "Kịch bản giả định, không phải lệnh đóng/mở.",
+          "EC tháng không xác định thời điểm vận hành.",
+          "Chưa kiểm tra cơ khí, triều tương lai và liên kết thủy lực."
+        ],
+        "checklist": [
+          {
+            "code": "outside_level",
+            "label": "Mực nước phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_level",
+            "label": "Mực nước phía trong cống",
+            "declared_present": true
+          },
+          {
+            "code": "outside_quality",
+            "label": "Chỉ số EC phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_quality",
+            "label": "Chỉ số EC phía trong cống",
+            "declared_present": true
+          }
+        ],
+        "declarations_verified_by_server": false,
+        "evaluated_at": "2026-10-26T04:59:55.148474+00:00",
+        "note": "Hypothetical scenario only. Submitted declarations are not server-verified evidence; monthly EC cannot determine gate switching times."
+      },
+      "Drain saline exterior explicit scenario override": {
+        "schema_version": 1,
+        "evaluation_mode": "SIMULATION",
+        "status": "SIMULATED",
+        "simulation_outcome": "CONDITIONS_MET",
+        "recommendation": null,
+        "actuator_command": null,
+        "deployment_ready": false,
+        "requires_operator_review": true,
+        "gate_code": "DT_PLIII_001",
+        "reasons": [
+          "Các điều kiện EC và thủy lực đã nhập phù hợp với mục tiêu DRAIN trong kịch bản.",
+          "Kịch bản cho phép thoát nước khi EC ngoài cao; chỉ xét dòng chảy hướng ra ngoài."
+        ],
+        "missing_evidence": [],
+        "evidence": {
+          "head_outside_minus_inside_m": -0.6000000000000001,
+          "directional_head_m": 0.6000000000000001,
+          "outside_ec_ms_m": 200.0,
+          "mode": "DRAIN"
+        },
+        "limitations": [
+          "Kịch bản giả định, không phải lệnh đóng/mở.",
+          "EC tháng không xác định thời điểm vận hành.",
+          "Chưa kiểm tra cơ khí, triều tương lai và liên kết thủy lực."
+        ],
+        "checklist": [
+          {
+            "code": "outside_level",
+            "label": "Mực nước phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_level",
+            "label": "Mực nước phía trong cống",
+            "declared_present": true
+          },
+          {
+            "code": "outside_quality",
+            "label": "Chỉ số EC phía ngoài cống",
+            "declared_present": true
+          },
+          {
+            "code": "inside_quality",
+            "label": "Chỉ số EC phía trong cống",
+            "declared_present": true
+          }
+        ],
+        "declarations_verified_by_server": false,
+        "evaluated_at": "2026-10-26T04:59:55.166543+00:00",
+        "note": "Hypothetical scenario only. Submitted declarations are not server-verified evidence; monthly EC cannot determine gate switching times."
+      }
+    },
+    "intake_coverage": {
+      "items": [
+        {
+          "station": "ST_BD_BAODINH",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_BD_COCHI",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_BD_DANGHUNGPHUOC",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_BD_GOCAT",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_BD_HOATINH",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_BD_TANTHUANBINH",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_CHOGAO_CAUCHOGAO",
+          "rows": 20,
+          "unique_dates": 20,
+          "first": "2016-02-15",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 3198,
+          "next1d_labels": 14,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_CHOGAO_XUANDONG",
+          "rows": 25,
+          "unique_dates": 25,
+          "first": "2016-02-15",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1737,
+          "next1d_labels": 18,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_CUATRUNG_RACHMUONG",
+          "rows": 12,
+          "unique_dates": 12,
+          "first": "2026-09-17",
+          "last": "2026-10-13",
+          "longest_daily_run": 7,
+          "largest_gap_days": 16,
+          "next1d_labels": 10,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_CAUHL2",
+          "rows": 7,
+          "unique_dates": 7,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 3,
+          "largest_gap_days": 18,
+          "next1d_labels": 4,
+          "full_hydromet_next1d": 4
+        },
+        {
+          "station": "ST_GC_CAUTANTHANH",
+          "rows": 7,
+          "unique_dates": 7,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 3,
+          "largest_gap_days": 18,
+          "next1d_labels": 4,
+          "full_hydromet_next1d": 4
+        },
+        {
+          "station": "ST_GC_CONG862",
+          "rows": 7,
+          "unique_dates": 7,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 3,
+          "largest_gap_days": 18,
+          "next1d_labels": 4,
+          "full_hydromet_next1d": 4
+        },
+        {
+          "station": "ST_GC_GIATHUAN",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_GOCONG",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_LONGUONG",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_RACHBUN",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_RACHGIA",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_RAMVE",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_SO1ST",
+          "rows": 20,
+          "unique_dates": 20,
+          "first": "2016-02-15",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 3198,
+          "next1d_labels": 14,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_GC_SO3ST",
+          "rows": 34,
+          "unique_dates": 34,
+          "first": "2016-02-15",
+          "last": "2026-10-13",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1737,
+          "next1d_labels": 24,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_SO4ST",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_VAMGIONG",
+          "rows": 34,
+          "unique_dates": 34,
+          "first": "2016-02-15",
+          "last": "2026-10-13",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1737,
+          "next1d_labels": 24,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_GC_VAMTHAP",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 5,
+          "largest_gap_days": 18,
+          "next1d_labels": 6,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_HAMLUONG_ANHIEP",
+          "rows": 26,
+          "unique_dates": 26,
+          "first": "2016-02-15",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1737,
+          "next1d_labels": 18,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_HAMLUONG_CHOLACH",
+          "rows": 2,
+          "unique_dates": 2,
+          "first": "2024-03-11",
+          "last": "2025-02-28",
+          "longest_daily_run": 1,
+          "largest_gap_days": 354,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_HAMLUONG_MYHOA",
+          "rows": 26,
+          "unique_dates": 26,
+          "first": "2016-02-15",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1737,
+          "next1d_labels": 18,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_HAMLUONG_VAMMON",
+          "rows": 7,
+          "unique_dates": 7,
+          "first": "2024-05-09",
+          "last": "2025-03-22",
+          "longest_daily_run": 1,
+          "largest_gap_days": 273,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_SOAIRAP_MYDIEN",
+          "rows": 12,
+          "unique_dates": 12,
+          "first": "2026-09-17",
+          "last": "2026-10-13",
+          "longest_daily_run": 7,
+          "largest_gap_days": 16,
+          "next1d_labels": 10,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_SOAIRAP_RACHBANG",
+          "rows": 10,
+          "unique_dates": 10,
+          "first": "2026-09-19",
+          "last": "2026-10-13",
+          "longest_daily_run": 7,
+          "largest_gap_days": 16,
+          "next1d_labels": 8,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_SONGTRA_SONGCUI",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2024-03-02",
+          "last": "2026-04-08",
+          "longest_daily_run": 1,
+          "largest_gap_days": 362,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_SONGTRA_TAMVU",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2024-03-02",
+          "last": "2026-04-08",
+          "longest_daily_run": 1,
+          "largest_gap_days": 362,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_BENDOTANPHU",
+          "rows": 5,
+          "unique_dates": 5,
+          "first": "2024-03-04",
+          "last": "2025-04-04",
+          "longest_daily_run": 1,
+          "largest_gap_days": 359,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_CAUKIMSON",
+          "rows": 4,
+          "unique_dates": 4,
+          "first": "2024-03-01",
+          "last": "2025-03-16",
+          "longest_daily_run": 1,
+          "largest_gap_days": 307,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_CAUKINHXANG",
+          "rows": 5,
+          "unique_dates": 5,
+          "first": "2024-02-12",
+          "last": "2024-05-13",
+          "longest_daily_run": 1,
+          "largest_gap_days": 59,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_CAUPHUPHONG",
+          "rows": 4,
+          "unique_dates": 4,
+          "first": "2024-03-01",
+          "last": "2024-05-13",
+          "longest_daily_run": 1,
+          "largest_gap_days": 67,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_CAUXOAIHOT",
+          "rows": 10,
+          "unique_dates": 10,
+          "first": "2024-02-12",
+          "last": "2026-04-20",
+          "longest_daily_run": 1,
+          "largest_gap_days": 381,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_CVLACHONG",
+          "rows": 40,
+          "unique_dates": 40,
+          "first": "2016-02-15",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1371,
+          "next1d_labels": 18,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_HOADINH",
+          "rows": 26,
+          "unique_dates": 26,
+          "first": "2016-02-15",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1737,
+          "next1d_labels": 18,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_LONGHAI",
+          "rows": 12,
+          "unique_dates": 12,
+          "first": "2026-09-17",
+          "last": "2026-10-13",
+          "longest_daily_run": 7,
+          "largest_gap_days": 16,
+          "next1d_labels": 10,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_TIEN_NGUYENTANTHANH",
+          "rows": 2,
+          "unique_dates": 2,
+          "first": "2025-03-16",
+          "last": "2025-04-04",
+          "longest_daily_run": 1,
+          "largest_gap_days": 19,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_TANMYCHANH",
+          "rows": 27,
+          "unique_dates": 27,
+          "first": "2016-02-15",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1737,
+          "next1d_labels": 18,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_THOILOC",
+          "rows": 1,
+          "unique_dates": 1,
+          "first": "2024-03-11",
+          "last": "2024-03-11",
+          "longest_daily_run": 1,
+          "largest_gap_days": 0,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_TRUONGCHINHTRI",
+          "rows": 33,
+          "unique_dates": 33,
+          "first": "2016-05-11",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1457,
+          "next1d_labels": 17,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_TIEN_VAMKENH",
+          "rows": 12,
+          "unique_dates": 12,
+          "first": "2026-09-17",
+          "last": "2026-10-13",
+          "longest_daily_run": 7,
+          "largest_gap_days": 16,
+          "next1d_labels": 10,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_TIEN_XUANHOA",
+          "rows": 48,
+          "unique_dates": 48,
+          "first": "2016-02-15",
+          "last": "2026-10-13",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1371,
+          "next1d_labels": 24,
+          "full_hydromet_next1d": 6
+        },
+        {
+          "station": "ST_VAMCO_CAUTANAN",
+          "rows": 26,
+          "unique_dates": 26,
+          "first": "2016-02-15",
+          "last": "2026-05-15",
+          "longest_daily_run": 6,
+          "largest_gap_days": 1737,
+          "next1d_labels": 18,
+          "full_hydromet_next1d": 0
+        },
+        {
+          "station": "ST_VAMCO_RACHCHANH",
+          "rows": 8,
+          "unique_dates": 8,
+          "first": "2024-03-02",
+          "last": "2026-04-08",
+          "longest_daily_run": 1,
+          "largest_gap_days": 362,
+          "next1d_labels": 0,
+          "full_hydromet_next1d": 0
+        }
+      ],
+      "training_eligible": false
+    }
+  }
+}

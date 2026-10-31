@@ -1,4 +1,5 @@
 """Serve persisted multivariate models with explicit input dates and provenance."""
+import calendar
 from datetime import date, datetime
 import math
 from uuid import uuid4
@@ -53,7 +54,7 @@ def evaluation(station: str):
 
 
 def inputs(station: str, target_month: str):
-    _target(target_month)
+    target = _target(target_month)
     selected = _station(station)
     if selected is None:
         raise WorkspaceError(404, 'Chưa đăng ký mô hình cho trạm này.')
@@ -64,10 +65,18 @@ def inputs(station: str, target_month: str):
     if result.get('wind_unit') != 'm/s' or result.get('complete') is not True:
         raise WorkspaceError(422, 'Khí tượng chưa đủ ngày hoặc chưa xác nhận đơn vị gió m/s để chạy mô hình này.')
     try:
+        expected_month = _input_month(target)
+        expected_date = date.fromisoformat(expected_month + '-01')
+        month_end = expected_date.replace(day=calendar.monthrange(expected_date.year, expected_date.month)[1])
+        if (result['input_month'] != expected_month
+                or models.normalize_station(result['station']) != models.normalize_station(selected['station'])
+                or result['observed_through'] != month_end.isoformat()):
+            raise ValueError('Weather input station/month mismatch.')
         available = datetime.fromisoformat(result['assumed_available_at'])
         if available.tzinfo is None and len(result['assumed_available_at']) == 10:
             available = available.replace(hour=23, minute=59, second=59, tzinfo=LOCAL_TZ)
-        if available.tzinfo is None or available > datetime.now(LOCAL_TZ):
+        if (available.tzinfo is None or available > datetime.now(LOCAL_TZ)
+                or available.astimezone(LOCAL_TZ).date() < month_end):
             raise ValueError('Future or timezone-free availability.')
     except (KeyError, ValueError, TypeError) as exc:
         raise WorkspaceError(422, 'Kỳ khí tượng này chưa đủ điều kiện sẵn có tại thời điểm phát hành.') from exc
@@ -97,6 +106,9 @@ def predict(payload):
         prediction = models.predict_month(selected['station'], target.isoformat(), values)
     except (OSError, ValueError, KeyError, TypeError, ImportError) as exc:
         raise WorkspaceError(503, 'Không chạy được mô hình đa biến. Kiểm tra artifact và phiên bản thư viện đã huấn luyện.') from exc
+    if (prediction['model_version'] != selected['model_version']
+            or prediction['training_cutoff'] != selected['trained_through']):
+        raise WorkspaceError(503, 'Mô hình vừa thay đổi; tải lại danh mục và chạy lại dự báo để giữ đúng nguồn.')
     now = datetime.now(LOCAL_TZ)
     raw_features = prediction['feature_values']
     features = [dict(name=key, label=models.LABELS[key], value=value, unit=models.UNITS[key],

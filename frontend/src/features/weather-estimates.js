@@ -2,6 +2,7 @@ import { $, num, node, saveCSV } from "../shared/ui.js";
 import { workspaceAPI as api } from "../shared/workspace-api.js";
 import { createRequestGate } from "../api.js";
 import { drawSeries } from "../research-chart.js";
+import { validMonth, validEc } from '../shared/forecast-contract.js';
 
 export function createWeatherEstimates() {
   const requests = createRequestGate();
@@ -18,6 +19,12 @@ export function createWeatherEstimates() {
     try {
       const data = await api(`/monthly-estimates?station=${encodeURIComponent(station)}`, req);
       if (!req.isCurrent()) return;
+      const normalize = value => typeof value === 'string' ? value.toLowerCase().replace(/[_\s]/g, '') : '';
+      if (data.unit !== 'mS/m' || data.data_kind !== 'RETROSPECTIVE_WEATHER_ESTIMATE' || data.live_forecast_available !== false ||
+          data.gate_decision_eligible !== false || !Array.isArray(data.items) || data.items.some(row =>
+            normalize(row.station) !== normalize(station) || !validMonth(row.year_month) || !validEc(row.predicted_ec_mS_m) ||
+            !validEc(row.rainfall_mm) || !validEc(row.wind_m_s) || !Number.isFinite(row.temperature_degC)) ||
+          new Set(data.items.map(row => row.year_month)).size !== data.items.length) throw new Error('Ước tính trả về không khớp trạm, tháng, nguồn hoặc đơn vị hợp lệ.');
       displayed = {
         station,
         items: data.items.map((row) => ({
@@ -30,9 +37,10 @@ export function createWeatherEstimates() {
       };
       $("futureStatus").textContent = `${data.items.length} tháng · ước tính hồi cứu từ khí tượng Open-Meteo; chưa có đánh giá với EC thực đo cùng kỳ. Không suy ra độ mặn hoặc an toàn lấy nước.`;
       $("downloadFutureCsv").disabled = !data.items.length;
-      $("kpiFutureMax").textContent = Number.isFinite(data.max_ec?.predicted_ec_mS_m) ? num(data.max_ec.predicted_ec_mS_m) : "—";
-      $("kpiFutureMaxMonth").textContent = data.max_ec?.year_month || "—";
-      $("kpiFutureAvg").textContent = Number.isFinite(data.avg_ec) && data.items.length ? num(data.avg_ec) : "—";
+      const maximum = data.items.reduce((best, row) => !best || row.predicted_ec_mS_m > best.predicted_ec_mS_m ? row : best, null);
+      $("kpiFutureMax").textContent = maximum ? num(maximum.predicted_ec_mS_m) : "—";
+      $("kpiFutureMaxMonth").textContent = maximum?.year_month || "—";
+      $("kpiFutureAvg").textContent = data.items.length ? num(data.items.reduce((sum, row) => sum + row.predicted_ec_mS_m, 0) / data.items.length) : "—";
       const series = [{
         label: "EC ước tính hồi cứu",
         color: "#087f78",

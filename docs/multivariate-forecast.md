@@ -22,6 +22,14 @@ Chức năng đính kèm vào hồ sơ cống giữ dự báo tháng ở phần 
 
 Đầu vào thủ công phải cùng cách tổng hợp và đơn vị với mô hình. Kết quả ghi `input_mode=MANUAL`; đây là dự báo có điều kiện theo dữ liệu người dùng cung cấp. API từ chối tháng nằm trong tập đã dùng huấn luyện cuối cùng.
 
+## Tải mô hình và phân tán giữa các cây
+
+Máy chủ thử nạp trước hai mô hình trong vòng đời khởi động. Bộ nhớ đệm giữ phần giải tuần tự artifact, theo đường dẫn và nội dung đã kiểm tra; mỗi lần truy cập vẫn kiểm tra SHA-256 mô hình/manifest và hợp đồng trạm/biến. Không huấn luyện hoặc tải khí tượng khi khởi động. Nếu nạp trước thất bại, máy chủ ghi cảnh báo và request dự báo vẫn kiểm tra lại artifact. Không cam kết thời gian cố định cho lượt dự báo; API hiện chưa trả số đo thời gian chạy.
+
+Kết quả mới có `ensemble_distribution`: P10/P25/P50/P75/P90, IQR, độ lệch chuẩn và số cây, tính từ dự đoán của từng cây trên cùng đầu vào đã biến đổi của pipeline. Đây là **phân tán giữa các cây**, chưa phải khoảng dự báo hay khoảng tin cậy được hiệu chuẩn, không bao gồm toàn bộ sai số khí tượng, sai lệch mô hình hoặc thay đổi theo thời gian. Giá trị EC chính vẫn là dự đoán của toàn bộ Random Forest, không bị thay bằng trung vị cây. JSON và CSV kết quả giữ các trường phân phối; lịch sử cũ có thể chưa có trường này.
+
+Bảng cây trồng chỉ đối chiếu EC với ba cặp ngưỡng minh họa dùng chung với bản đồ: sầu riêng 50/80, cây có múi 100/150 và lúa 120/200 mS/m. Dưới ngưỡng thấp vẫn cần đo kiểm tại nơi lấy nước; các ngưỡng chưa là tiêu chuẩn tưới. Không suy ra chất lượng nước sinh hoạt từ EC hoặc dự báo tháng. Lớp mô phỏng bản đồ có quy đổi độ mặn theo giả định riêng; kết quả dự báo đa biến giữ nguyên EC, không tự quy đổi sang g/L.
+
 ## Đánh giá và giới hạn
 
 Đánh giá theo thời gian: huấn luyện đến 2018 để xem 2019–2021; huấn luyện đến 2021 để đánh giá hồi cứu 2022–2023. Mô hình phục vụ sau đó được fit lại trên toàn bộ nhãn đến 2023. Các baseline Persistence, Seasonal Naive và trung bình theo tháng được so trên cùng cohort.

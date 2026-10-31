@@ -1,0 +1,118 @@
+[
+  {
+    "name": "Tổng quan và kết nối PostgreSQL",
+    "status": "PASS",
+    "detail": "12 điểm, 977 số đo, PostgreSQL kết nối thành công"
+  },
+  {
+    "name": "Timeline, cắt dọc, quy đổi đơn vị",
+    "status": "PASS",
+    "detail": "27 đèn khuyến nghị · 27 thuận lợi · 0 cần đo kiểm · 0 rủi ro mặn · Cần kỹ sư quyết định"
+  },
+  {
+    "name": "Bản đồ → cống Bảo Định → hồ sơ",
+    "status": "PASS",
+    "detail": "Giữ mã GATE_TG_002 và tháng 2022-10; gắn SIMULATION/UNVERIFIED; không tự có mực nước và cơ sở EC"
+  },
+  {
+    "name": "INTAKE đủ điều kiện và lưu nháp trình duyệt",
+    "status": "PASS",
+    "detail": "Mô phỏng: đáp ứng điều kiện đã nhập"
+  },
+  {
+    "name": "INTAKE EC bằng ngưỡng 150 mS/m",
+    "status": "PASS",
+    "detail": "Mô phỏng: không đáp ứng điều kiện"
+  },
+  {
+    "name": "Lưu nháp cống PostgreSQL",
+    "status": "PASS",
+    "detail": "Đã lưu bản nháp PostgreSQL #7 · 2026-10-26T12:01:44.839978+07:00. Thông tin chưa xác minh; không phải lệnh vận hành."
+  },
+  {
+    "name": "Khôi phục nháp cống PostgreSQL",
+    "status": "PASS",
+    "detail": "Đã khôi phục bản nháp PostgreSQL #7 · 2026-10-26T12:01:44.839978+07:00. Khai báo chưa được xác minh.",
+    "restoredEC": "150"
+  },
+  {
+    "name": "DRAIN cho phép EC ngoài cao theo kịch bản",
+    "status": "PASS",
+    "detail": "Mực nước phía ngoài cống\nĐã khai báo thông tin; chưa xác minh độc lập.\nMực nước phía trong cống\nĐã khai báo thông tin; chưa xác minh độc lập.\nChỉ số EC phía ngoài cống\nĐã khai báo thông tin; chưa xác minh độc lập.\nChỉ số EC phía trong cống\nĐã khai báo thông tin; chưa xác minh độc lập.\nCác điều kiện EC và thủy lực đã nhập phù hợp với mục tiêu DRAIN trong kịch bản.\nKịch bản cho phép thoát nước khi EC ngoài cao; chỉ xét dòng chảy hướng ra ngoài.\nMực ngoài − mực trong: -0,6 m · mục tiêu DRAIN\nChỉ mô phỏng theo dữ liệu khai báo; không phải lệnh vận hành hay quy trình được phê duyệt."
+  },
+  {
+    "name": "Dự báo Mỹ Tho từ khí tượng lưu trữ, lưu PostgreSQL",
+    "status": "PASS",
+    "detail": "17.33124465272705 mS/m; target 2026-11, input 2026-09; prediction_id 4be2b3e4-7d88-4216-a713-60db1436039b"
+  },
+  {
+    "name": "Xuất JSON/CSV và đọc lại lịch sử dự báo",
+    "status": "PASS",
+    "detail": "Tải tệp thực qua nút UI; lịch sử có 2 lượt, gồm ID mới 4be2b3e4-7d88-4216-a713-60db1436039b"
+  },
+  {
+    "name": "Dự báo đã lưu → bản đồ",
+    "status": "PASS",
+    "detail": "Dự báo 2026-11 · Timeline 2026-08 · Lớp sông và cống giữ kịch bản tháng nền"
+  },
+  {
+    "name": "Lọc quan trắc Mỹ Tho 2023 và CSV",
+    "status": "PASS",
+    "detail": "12/463 mẫu · Quan trắc nguồn PostgreSQL; không nội suy · Khoảng trống dài nhất: 45 ngày."
+  },
+  {
+    "name": "Khoảng thời gian không có quan trắc",
+    "status": "PASS",
+    "detail": "Năm 2026 trả 0/463, không tạo số đo và khóa xuất CSV"
+  },
+  {
+    "name": "Lịch sử PostgreSQL nguồn MRC / Tân Châu / phân trang",
+    "status": "PASS",
+    "detail": "464 số đo; trang 1:1–20, trang 2:21–40"
+  },
+  {
+    "name": "Chất lượng dữ liệu và rà soát v3",
+    "status": "PASS",
+    "detail": "640 dòng/47 trạm; 890 giá trị rà soát; đổi điểm đo Xuân Hòa; giữ UNVERIFIED, nguồn dòng và kỳ đo"
+  },
+  {
+    "name": "Dự báo Tân Châu từ lưu trữ không lưu DB",
+    "status": "PASS",
+    "detail": "13,709 mS/m"
+  },
+  {
+    "name": "Dự báo MANUAL và vô hiệu hóa kết quả cũ",
+    "status": "PASS",
+    "detail": "Tân Châu tháng 2026-11: 12,433 mS/m với mưa200/nhiệt28/gió2; kết quả cũ xóa khi chỉnh đầu vào; không lưu DB"
+  },
+  {
+    "name": "Tháng dự báo thiếu khí tượng lưu trữ",
+    "status": "PASS",
+    "detail": "2027-01 yêu cầu khí tượng 2026-11 chưa có, hiển thị lỗi và khóa chạy/xem bản đồ"
+  },
+  {
+    "name": "Mùa khô, nền bản đồ và bật tắt lớp",
+    "status": "PASS",
+    "detail": "2024-04: 14 thuận lợi, 2 cần đo kiểm, 11 rủi ro; đã chuyển Satellite/OSM/dark, bật tắt hạt dòng chảy/gió/cống rồi khôi phục"
+  },
+  {
+    "name": "Ngưỡng mô phỏng không hợp lệ",
+    "status": "PASS",
+    "detail": "150/150 hiện lỗi ngưỡng lấy nước phải nhỏ hơn ngưỡng ngăn mặn; đã khôi phục 100/150"
+  },
+  {
+    "name": "Phát chu kỳ 4x và chuyển mục",
+    "status": "PASS",
+    "detail": "2024-04 tiến sang 2024-05; chuyển Tổng quan rồi trở về: nút Phát chu kỳ ở trạng thái dừng; đã khôi phục 1x"
+  },
+  {
+    "name": "Xuất JSON hồ sơ cống giả định",
+    "status": "PASS",
+    "detail": "Nút Chạy mô phỏng và xuất hồ sơ tải JSON DRAIN, DT_PLIII_001, giữ số đo khai báo; chỉ là input, không chứa toàn bộ policy"
+  },
+  {
+    "name": "Nạp hai tệp JSON và kiểm tra quy trình thiếu",
+    "status": "PASS",
+    "detail": "Nạp lại input đã xuất và policy mẫu chưa điền: INVALID_INPUT; liệt kê thiếu cơ sở EC, hệ cao độ và ngưỡng; tải kết quả JSON thành công; khôi phục nháp trình duyệt sau đó"
+  }
+]

@@ -17,14 +17,17 @@ bindDatabaseCheck();
 const forecasts = createForecasts();
 const multivariate = createMultivariateForecast();
 const observations = createObservations({ onForecast: async (code) => {
-  await multivariate.selectStation(code);
   forecasts.selectStation(code);
+  await multivariate.selectStation(code);
 } });
 window.addEventListener("workspace:multivariate-catalog", event => {
   $("statExperiments").textContent = event.detail.stations.length;
 });
 function showMapForecast(prediction) {
-  observations.map.setForecast(prediction);
+  if (!observations.map.setForecast(prediction)) {
+    $("mapForecastStatus").hidden = true;
+    return;
+  }
   $("mapForecastStatus").hidden = false;
   $("mapForecastStatus").textContent = `Vòng xanh dương: EC dự báo đa biến ${prediction.target_month} tại ${prediction.station}; các điểm quan trắc vẫn giữ giá trị và thời điểm đo riêng.`;
 }
@@ -46,6 +49,10 @@ bindNavigation();
 const requests = createRequestGate();
 async function loadWorkspace() {
   const req = requests.next();
+  // Invalidate child requests immediately, before replacement catalogues arrive.
+  forecasts.showError('Đang tải danh sách thí nghiệm…');
+  observations.showError('Đang tải nguồn quan trắc…');
+  gates.load([]);
   $("loadError").hidden = true;
   $("retryWorkspace").hidden = true;
   $("modeBadge").textContent = "Đang tải…";

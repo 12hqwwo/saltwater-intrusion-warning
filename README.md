@@ -22,21 +22,23 @@ Mở http://127.0.0.1:8000/workspace.html. `start.ps1` build giao diện rồi c
 
 Mục **Dự báo EC đa biến** chạy suy luận thật từ model đã lưu; không huấn luyện theo request và không lấy kết quả từ CSV ước tính cũ. Dùng ERA5 tháng `t−2` để dự báo EC tháng `t`; ví dụ tháng 11/2026 dùng khí tượng tháng 9/2026. Mô hình khí tượng không yêu cầu EC trễ mới để chạy. Chuỗi EC mới vẫn cần để đánh giá chất lượng dự báo ở giai đoạn hiện tại. [Chi tiết mô hình và cách cập nhật](docs/multivariate-forecast.md).
 
-1. **Tổng quan:** xem phạm vi dữ liệu, số trạm và tình trạng nguồn.
+1. **Tổng quan:** xem phạm vi dữ liệu, số trạm và tình trạng nguồn; mở nhanh mô phỏng mùa khô 04/2024, mùa mưa 10/2022, ngưỡng mẫu sầu riêng hoặc công cụ dự báo. Nếu thiếu đúng tháng, dòng thời gian chọn tháng gần nhất và hiển thị tháng thực sự đang xem.
 2. **Quan trắc:** chọn trạm → lọc ngày → xem bản đồ, biểu đồ, nguồn → xuất CSV. Nhập ngưỡng EC hoặc chọn ví dụ từ danh mục PostgreSQL để đổi màu điểm và vẽ đường đối chiếu. Các ví dụ chưa được xác nhận là ngưỡng cây trồng/cấp nước. Tra cứu PostgreSQL có chọn nguồn, trạm, phiên bản, QA và phân trang ngay trong cùng mục.
 3. **Dự báo EC đa biến:** chọn trạm và tháng → nạp khí tượng hoặc cung cấp đầu vào đúng đơn vị → chạy dự báo → xem EC, độ quan trọng biến, kỳ huấn luyện và sai số → xem trên bản đồ / tải JSON hoặc CSV. Có bảng so sánh các lượt chạy trong phiên và chức năng chạy lại, lưu, lọc lịch sử trong PostgreSQL. Các mô hình EC trễ và kết quả hồi cứu cũ nằm trong phần tham khảo riêng.
 4. **Chất lượng dữ liệu:** xem nguồn, độ phủ và hồ sơ tiếp nhận chưa xác minh.
 5. **Hồ sơ cống:** chọn công trình → nhập EC, mực nước và ngưỡng → mô phỏng INTAKE/DRAIN → xem điều kiện đạt/chặn/thiếu → lưu và khôi phục nháp trên trình duyệt hoặc PostgreSQL, nhập/xuất JSON. Có thể đính kèm dự báo tháng để tham khảo riêng; dự báo không thay số đo hai phía cống. Chưa có phê duyệt trực tuyến.
 
+Bản đồ có lớp mô phỏng trục Sông Tiền, thống kê trạng thái cống theo cặp ngưỡng đang chọn và ranh mô phỏng 1/4 g/L có nút phóng tới vị trí. Bấm vùng trống để tra cứu đoạn sông, cống và trạm gần nhất; thông tin nước thuộc đoạn sông lân cận, không phải phép đo tại điểm chọn.
+
 Lưu trữ bổ trợ sử dụng schema `dss_reference`, không sửa bảng quan trắc `public`. Xem [cấu hình và migration DSS](docs/dss-storage.md). Nếu chưa cấu hình kho DSS, dự báo, tải JSON/CSV và bản nháp trình duyệt vẫn hoạt động.
 
 ## Dữ liệu và giới hạn
 
-- Snapshot có 977 mẫu EC: 927 MRC tại Mỹ Tho/Tân Châu, 50 RIA2 tại 10 điểm. PostgreSQL hiện có 927 mẫu tại 2 trạm. Chuỗi MRC kết thúc năm 2023; cờ chất lượng nguồn được giữ nguyên.
+- Snapshot có 977 mẫu EC: 927 MRC tại Mỹ Tho/Tân Châu, 50 RIA2 tại 10 điểm. Kiểm tra PostgreSQL chỉ đọc ngày 28/10/2026 ghi nhận 977 mẫu tại 12 trạm; số liệu thực tế phụ thuộc DB và phiên bản được chọn. Chuỗi MRC kết thúc năm 2023; cờ chất lượng nguồn được giữ nguyên.
 - Bốn thí nghiệm tháng: hai trạm × giả định độ trễ 0/30 ngày. Giữ train/validation/test theo thời gian, baseline, metrics, predictions và manifest. Kết quả hồi cứu không phải dự báo hiện tại.
-- EC dùng mS/m. **Chưa đủ căn cứ ước tính độ mặn**: chưa xác định cơ sở EC25/phương pháp hiệu chuẩn, phạm vi và sai số phù hợp. Không dùng hệ số chuyển đổi tùy ý.
-- Bản đồ hiển thị điểm có tọa độ; không tạo bề mặt mặn liên tục. Chưa đủ ngưỡng và số đo để phân loại nguy cơ hoặc định lượng độ tin cậy.
-- Danh mục bốn cống có nguồn; mô phỏng dùng ngưỡng tự nhập, không tự coi là quy trình được phê duyệt. Lớp bản đồ và sàng lọc trạm ứng viên dùng tọa độ thật khi có trong PostgreSQL; danh mục DB hiện chưa có cống.
+- EC quan trắc và dự báo dùng mS/m; chưa có hiệu chuẩn để chuyển EC dự báo thành độ mặn. Riêng lớp mô phỏng dùng giả định minh họa `g/L = 0,0064 × EC (mS/m)` để vẽ ranh 1/4 g/L. Hệ số này chưa được hiệu chuẩn tại địa phương; không xác nhận nước tưới hoặc sinh hoạt.
+- Bản đồ phân biệt 2 trạm có hình học DB với 10 điểm RIA2 dùng tọa độ tham khảo từ nguồn khi bật lớp tương ứng; tọa độ tham khảo không trở thành tọa độ DB đã xác minh. Các đoạn sông là nội suy một chiều theo trục sơ đồ, không phải bề mặt mặn đo liên tục hoặc mô hình thủy động lực.
+- Hồ sơ nghiên cứu bốn cống và lớp 27 công trình đầu mối phục vụ mô phỏng là các phạm vi khác nhau. Trạng thái trên bản đồ được tính từ EC mô phỏng và ngưỡng đang chọn, không phản ánh lệnh vận hành thật. Ngưỡng mẫu sầu riêng 50/80, cây có múi 100/150 và lúa 120/200 mS/m chưa phải tiêu chuẩn tưới đã xác nhận. Không suy ra cả 27 cống cùng thuận lợi hoặc cùng ngăn mặn nếu khung dữ liệu không cho kết quả đó.
 
 ## Tái lập và kiểm toán
 
@@ -84,7 +86,7 @@ Các phân tích lịch sử không dùng làm chứng nhận chất lượng m�
 ```powershell
 .venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 .venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py" -v
-node --test tests/frontend_api.test.mjs
+node --test tests/*.test.mjs
 npm.cmd --prefix frontend run build
 ```
 

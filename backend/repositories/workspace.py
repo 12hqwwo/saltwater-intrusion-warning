@@ -58,6 +58,7 @@ def load_bundle():
 
 def _postgres_bundle(bundle):
     stations, observations, datasets = [], [], []
+    bundle_stations = {station['site_code']: station for station in bundle.get('stations', [])}
     # Keep one immutable dataset per site; never blend overlapping imports.
     wanted = json.loads(os.getenv('WEBGIS_WORKSPACE_DATASETS', '{}'))
     if not isinstance(wanted, dict) or any(not isinstance(v, str) for v in wanted.values()):
@@ -73,6 +74,7 @@ def _postgres_bundle(bundle):
             source.update(provider=source['source_code'],
                 url=source['reference'] if source['reference'].startswith('https://') else None)
         for site in site_rows:
+            fallback = bundle_stations.get(site['site_code'], {})
             site_id = conn.execute('SELECT site_id FROM public.measurement_site WHERE site_code=%s',
                                    (site['site_code'],)).fetchone()['site_id']
             available = conn.execute(DATASETS_SELECT + DATASETS_GROUP, (site_id,)).fetchall()
@@ -106,8 +108,13 @@ def _postgres_bundle(bundle):
             dates = [date.fromisoformat(row['observed_date']) for row in station_rows]
             gaps = [(right - left).days for left, right in zip(dates, dates[1:])]
             stations.append(dict(site, provider=site['source_code'], unit='mS/m',
+                # Reference coordinates remain separate from verified DB geometry.
+                source_coordinates=site.get('source_coordinates') or fallback.get('source_coordinates'),
+                admin_label_source=site.get('admin_label_source') or fallback.get('admin_label_source'),
+                coordinate_crs=site.get('coordinate_crs') or fallback.get('coordinate_crs'),
+                location_reference=site.get('location_reference') or fallback.get('location_reference'),
                 study_role='Quan trắc EC lịch sử; chưa đủ căn cứ vận hành cống',
-                sampling_label='Quan trắc nguồn PostgreSQL; không nội suy',
+                sampling_label='Mẫu EC nguồn PostgreSQL; giữ cờ O/E, không nội suy',
                 max_gap_days=max(gaps, default=0), median_gap_days=median(gaps) if gaps else 0,
                 observation_count=len(rows), first_observed_date=station_rows[0]['observed_date'] if rows else None,
                 last_observed_date=station_rows[-1]['observed_date'] if rows else None,

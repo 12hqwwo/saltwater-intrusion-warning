@@ -9,11 +9,21 @@ import { loadThresholdPresets, populateThresholdPresets, presetReference } from 
 import { createTimelineScrubber } from "./timeline-scrubber.js";
 import { formatWater } from "../shared/simulation-display.js";
 import { createRiverProfile } from './river-profile.js';
+import { createObservationLoader } from '../shared/observation-contract.js';
+import { validPrediction } from '../shared/forecast-contract.js';
 
 export function createObservations({ onForecast } = {}) {
-  const state = { collection: { features: [] }, summary: { sources: [] }, rows: [], shown: [] };
-  const stationRequests = createRequestGate();
-  let displayUnit = 'ec';
+  const state = { collection: { features: [] }, summary: { sources: [] }, rows: [], shown: [], rowsStatus: 'idle', filterDirty: false };
+  const loadRequests = createRequestGate();
+  const stationLoader = createObservationLoader({
+    onResult(result) {
+      state.rows = result.items;
+      state.rowsStatus = 'ready';
+      state.filterDirty = false;
+      renderObservations();
+    },
+    onError(error) { state.rowsStatus = 'error'; $('observationStatus').textContent = error.message; },
+  });
   let hasFitted = false;
   const map = createResearchMap($("researchMap"), { onSelect: selectStation, onTileError: () => {
     $("tileError").hidden = false;
@@ -41,20 +51,26 @@ export function createObservations({ onForecast } = {}) {
   function renderForecastBanner() {
     $('mapForecastBanner').hidden = !activeForecast;
     if (!activeForecast) return;
-    $('mapForecastValue').textContent = `${activeForecast.station_name || activeForecast.station || 'Trạm dự báo'} · ${num(activeForecast.predicted_ec_mS_m)} mS/m · ${num(activeForecast.predicted_ec_mS_m * 0.0064)} g/L (ước tính)`;
-    $('mapForecastContext').textContent = `Dự báo ${activeForecast.target_month} · Timeline ${baselineMonth || 'đang tải'} · Lớp sông và cống giữ kịch bản tháng nền`;
+    $('mapForecastValue').textContent = `${activeForecast.station_name || activeForecast.station || 'Trạm dự báo'} · EC dự báo ${num(activeForecast.predicted_ec_mS_m)} mS/m`;
+    $('mapForecastContext').textContent = `Dự báo ${activeForecast.target_month} · ${baselineMonth ? `Mô phỏng nền ${baselineMonth}` : 'Mô phỏng nền chưa có khung hợp lệ'} · Dự báo chỉ tại trạm; sông và cống dùng tháng nền riêng`;
   }
   window.addEventListener('workspace:show-forecast-map', event => {
     const prediction = event.detail;
-    if (!Number.isFinite(prediction?.predicted_ec_mS_m) || prediction.predicted_ec_mS_m < 0 || !/^\d{4}-(0[1-9]|1[0-2])$/.test(prediction.target_month)) return;
+    if (!validPrediction(prediction) || !state.collection.features.some(feature => feature.properties.site_code === prediction.site_code && feature.geometry)) {
+      clearForecastBanner(); return;
+    }
     activeForecast = prediction;
     baselineMonth = null;
     renderForecastBanner();
     location.hash = 'observations';
-    timeline.selectMonth(prediction.target_month);
+    timeline.selectMonth(prediction.target_month, { source: 'forecast' });
     requestAnimationFrame(() => { map.refresh(); map.fit(); });
   });
   function clearForecastBanner() { activeForecast = null; renderForecastBanner(); }
+  window.addEventListener('workspace:simulation-selection', event => {
+    if (event.detail?.source === 'forecast') return;
+    clearForecastBanner(); map.setForecast(null); $('mapForecastStatus').hidden = true;
+  });
   window.addEventListener('workspace:multivariate-prediction', clearForecastBanner);
   window.addEventListener('workspace:multivariate-clear', clearForecastBanner);
   $('mapForecastDismiss').addEventListener('click', () => {
@@ -72,7 +88,9 @@ export function createObservations({ onForecast } = {}) {
       profileHasFitted = true;
     });
   });
-  window.addEventListener('workspace:simulation-loading', () => profile.clear());
+  window.addEventListener('workspace:simulation-loading', () => {
+    profile.clear(); baselineMonth = null; renderForecastBanner();
+  });
   window.addEventListener('workspace:simulation-unit', event => { profile.setUnit(event.detail.unit); polishProfile(); });
   const dockSize = new ResizeObserver(() => {
     const scene = $('researchMap').parentElement;
@@ -133,17 +151,12 @@ export function createObservations({ onForecast } = {}) {
     document.querySelector('.windy-map-panel').dataset.baseTheme = event.target.value;
   });
   $('stationDetails').addEventListener('toggle', () => {
-    if ($('stationDetails').open && state.site) renderObservations();
-  });
-  window.addEventListener('workspace:simulation-unit', event => {
-    displayUnit = event.detail.unit;
-    renderStations();
-    renderSiteValue();
+    if ($('stationDetails').open && state.site && !state.filterDirty) renderObservations();
   });
   function renderSiteValue() {
     const ec = state.site?.latest_ec_mS_m;
-    $('siteEC').textContent = Number.isFinite(ec) ? num(displayUnit === 'salinity' ? Math.round(ec * 6.4) / 1000 : ec) : '—';
-    $('siteECUnit').textContent = displayUnit === 'salinity' ? `g/L quy đổi · (${num(ec)} mS/m) · mẫu mới nhất` : 'mS/m · mẫu mới nhất của điểm';
+    $('siteEC').textContent = Number.isFinite(ec) ? num(ec) : '—';
+    $('siteECUnit').textContent = 'mS/m · mẫu nguồn mới nhất của điểm';
   }
   function refreshMap() {
     if ($("observations").hidden) return;
@@ -160,6 +173,8 @@ export function createObservations({ onForecast } = {}) {
   });
   function clearObservations() {
     state.rows = [];
+    state.rowsStatus = 'idle';
+    state.filterDirty = false;
     state.shown = [];
     $("observationChart").replaceChildren();
     $("observationRows").replaceChildren();
@@ -167,7 +182,8 @@ export function createObservations({ onForecast } = {}) {
   }
 
   function showError(message) {
-    stationRequests.next();
+    stationLoader.cancel(); loadRequests.next();
+    clearForecastBanner(); map.setForecast(null); $('mapForecastStatus').hidden = true;
     state.site = null;
     hasFitted = false;
     state.collection = { type: "FeatureCollection", features: [] };
@@ -177,6 +193,8 @@ export function createObservations({ onForecast } = {}) {
     $("observationStatus").textContent = message;
     $("siteTitle").textContent = "Chưa có điểm đo";
     $("siteEC").textContent = "—";
+    $('siteECUnit').textContent = 'mS/m · mẫu nguồn mới nhất của điểm';
+    $('stationComparisonStatus').textContent = '';
     $("siteProvider").textContent = "QUAN TRẮC";
     $("siteRole").textContent = "";
     $("siteWarning").textContent = "";
@@ -194,7 +212,7 @@ export function createObservations({ onForecast } = {}) {
     for (const f of state.collection.features.filter((f2) => (f2.properties.site_name + f2.properties.site_code).toLocaleLowerCase("vi").includes(search))) {
       const p = f.properties, button = node("button", undefined, "station-button" + (state.site?.site_code === p.site_code ? " selected" : ""));
       button.setAttribute("aria-pressed", String(state.site?.site_code === p.site_code));
-      button.append(node("strong", p.site_name), node("small", `${p.provider} · ${p.observation_count} mẫu · ${dateOnly(p.last_observed_date)}`), node('span', formatWater(p.latest_ec_mS_m, displayUnit), 'station-water-value'));
+      button.append(node("strong", p.site_name), node("small", `${p.provider} · ${p.observation_count} mẫu · ${dateOnly(p.last_observed_date)}`), node('span', formatWater(p.latest_ec_mS_m), 'station-water-value'));
       button.addEventListener("click", () => selectStation(p.site_code));
       $("stationList").append(button);
     }
@@ -205,11 +223,12 @@ export function createObservations({ onForecast } = {}) {
 
   async function selectStation(code) {
     const site = state.collection.features.find((f) => f.properties.site_code === code)?.properties;
-    if (!site) return;
-    const req = stationRequests.next();
+    clearForecastBanner(); map.setForecast(null); $('mapForecastStatus').hidden = true;
+    if (!site) { stationLoader.cancel(); clearObservations(); return; }
     sessionStorage.setItem("workspace.station", code);
     state.site = site;
     clearObservations();
+    state.rowsStatus = 'loading';
     $("retryObservations").disabled = false;
     renderStations();
     map.select(code);
@@ -234,17 +253,11 @@ export function createObservations({ onForecast } = {}) {
     $("observationChart").replaceChildren();
     $("observationRows").replaceChildren();
     $("downloadRows").disabled = true;
-    try {
-      const result = await api(`/stations/${encodeURIComponent(code)}/observations`, req);
-      if (!req.isCurrent()) return;
-      state.rows = result.items;
-      renderObservations();
-    } catch (error) {
-      if (req.isCurrent()) $("observationStatus").textContent = error.message;
-    }
+    await stationLoader.load(code);
   }
 
   function renderObservations() {
+    if (!state.site || state.rowsStatus !== 'ready' || state.filterDirty) return;
     try {
       state.shown = filterObservations(state.rows, $("dateFrom").value, $("dateTo").value);
     } catch (error) {
@@ -256,14 +269,18 @@ export function createObservations({ onForecast } = {}) {
       return;
     }
     const gap = state.site.max_gap_days;
-    $("observationStatus").textContent = `${state.shown.length}/${state.rows.length} mẫu · ${state.site.sampling_label || "Mẫu từ nguồn quan trắc"}${Number.isFinite(gap) ? ` · Khoảng trống dài nhất: ${gap} ngày.` : "."}`;
+    const estimated = state.shown.filter(row => row.observed_or_estimated === 'E').length;
+    $("observationStatus").textContent = `${state.shown.length}/${state.rows.length} mẫu nguồn${estimated ? ` · ${estimated} ước tính (E)` : ''} · ${state.site.sampling_label || "Mẫu có nguồn"}${Number.isFinite(gap) ? ` · Khoảng trống dài nhất: ${gap} ngày.` : "."}`;
     $("downloadRows").disabled = !state.shown.length;
-    drawSeries($("observationChart"), [{ label: "EC quan trắc", color: "#087f78", points: state.shown.map((r) => ({ date: r.observed_date, value: r.ec_mS_m })) }], { title: `EC quan trắc ${state.site.site_name}; từng điểm là một mẫu có nguồn.`, referenceLines: comparisonLines() });
+    drawSeries($("observationChart"), [
+      { label: "EC mẫu nguồn quan trắc", color: "#087f78", points: state.shown.filter(r => r.observed_or_estimated !== 'E').map(r => ({ date: r.observed_date, value: r.ec_mS_m })) },
+      { label: "EC ước tính (E)", color: "#b57428", points: state.shown.filter(r => r.observed_or_estimated === 'E').map(r => ({ date: r.observed_date, value: r.ec_mS_m })) },
+    ], { title: `EC ${state.site.site_name}; từng điểm là một mẫu có nguồn, ước tính (E) được ghi riêng.`, referenceLines: comparisonLines() });
     $("observationRows").replaceChildren();
     for (const r of state.shown) {
       const row = node("tr"), source = state.summary.sources.find((s) => s.source_id === r.source_id), cell = node("td");
       cell.append(sourceAnchor(source, r.source_id), node("small", r.source_locator));
-      row.append(node("td", dateOnly(r.observed_date)), node("td", num(r.ec_mS_m)), node("td", labels[r.quality_flag] || r.quality_flag), cell);
+      row.append(node("td", r.time_precision === 'SOURCE_TIMESTAMP' && r.observed_at ? new Date(r.observed_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) + ' (UTC+7)' : dateOnly(r.observed_date)), node("td", num(r.ec_mS_m)), node("td", `${r.observed_or_estimated === 'E' ? 'Ước tính (E) · ' : r.observed_or_estimated === 'O' ? 'Quan trắc (O) · ' : ''}${labels[r.quality_flag] || r.quality_flag}`), cell);
       $("observationRows").append(row);
     }
   }
@@ -276,12 +293,19 @@ export function createObservations({ onForecast } = {}) {
   $("stationSearch").addEventListener("input", renderStations);
   $("dateFilter").addEventListener("submit", (e) => {
     e.preventDefault();
+    state.filterDirty = false;
     if (state.site) renderObservations();
+  });
+  for (const id of ['dateFrom', 'dateTo']) $(id).addEventListener('input', () => {
+    state.filterDirty = true; state.shown = [];
+    $('observationChart').replaceChildren(); $('observationRows').replaceChildren(); $('downloadRows').disabled = true;
+    $('observationStatus').textContent = 'Khoảng ngày đã đổi. Áp dụng bộ lọc để xem và xuất số đo.';
   });
   $("allDates").addEventListener("click", () => {
     if (!state.site) return;
     $("dateFrom").value = state.site.first_observed_date;
     $("dateTo").value = state.site.last_observed_date;
+    state.filterDirty = false;
     renderObservations();
   });
   $("downloadRows").addEventListener("click", exportRows);
@@ -315,7 +339,7 @@ export function createObservations({ onForecast } = {}) {
     $("mapComparisonLegend").textContent = value ? `Đỏ: mẫu mới nhất đạt / vượt ${num(value.threshold)} mS/m · Xanh: thấp hơn ngưỡng · Viền đứt: tọa độ tham khảo.` : "Màu điểm thể hiện nguồn tọa độ. Mở đối chiếu nâng cao để so sánh EC.";
     map.refreshComparison();
     renderStationComparison();
-    if (state.site) renderObservations();
+    if (state.site && !state.filterDirty) renderObservations();
   }
   let comparisonPresets = [];
   if ($("ecComparisonPreset")) loadThresholdPresets().then(items => {
@@ -357,6 +381,7 @@ export function createObservations({ onForecast } = {}) {
   $("fitMap").addEventListener("click", () => map.fit());
   $("retryObservations").addEventListener("click", () => selectStation(state.site?.site_code));
   async function load(summary, collection) {
+    const req = loadRequests.next();
     state.summary = summary;
     state.collection = collection;
     if (!collection.features.length) {
@@ -371,10 +396,13 @@ export function createObservations({ onForecast } = {}) {
       || collection.features.find(f => f.properties.provider === "MRC")
       || collection.features[0];
     await selectStation(collection.features.some((f) => f.properties.site_code === saved) ? saved : preferred.properties.site_code);
-    api("/boundaries").then((data) => {
+    if (!req.isCurrent()) return;
+    api("/boundaries", req).then((data) => {
+      if (!req.isCurrent()) return;
       map.setBoundaries(data);
       refreshMap();
     }).catch(() => {
+      if (!req.isCurrent()) return;
       $("coordinateNotice").textContent = "Chưa tải được ranh giới tham khảo.";
     });
   }

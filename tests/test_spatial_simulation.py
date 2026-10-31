@@ -66,6 +66,7 @@ class SpatialSimulationTests(unittest.TestCase):
             EXPECTED_ADVISORIES[expected_state],
         )
         self.assertIs(gate['human_in_the_loop_Required'], True)
+        self.assertIs(gate['human_in_the_loop_required'], True)
         self.assertIs(gate['canal_particle_intake_enabled'], False)
         self.assertIs(gate['gate_decision_eligible'], False)
         self.assertIsNone(gate['actuator_command'])

@@ -3,7 +3,7 @@ import { workspaceAPI as api } from "../shared/workspace-api.js";
 import { createRequestGate } from "../api.js";
 import { labels } from "../research-utils.js";
 import { loadThresholdPresets, populateThresholdPresets, presetReference } from "../shared/threshold-presets.js";
-import { createSpatialGateDraft } from "./gate-simulation-draft.js";
+import { createSpatialGateDraft, validateGateDraftPart, validateGateDraftPair, validForecastReference } from "./gate-simulation-draft.js";
 
 export function createGateDossiers(map) {
   const state = { gates: [], input: null, policy: null, evaluation: null };
@@ -12,6 +12,7 @@ export function createGateDossiers(map) {
   const fieldRequests = createRequestGate();
   const databaseDraftRequests = createRequestGate();
   let presets = [], selectedPreset = null, forecastContext = null, simulationContext = null;
+  const exportRequests = createRequestGate();
   const fileRequests = { input: createRequestGate(), policy: createRequestGate() };
   const draftKey = () => `gate-scenario-v1:${$("gateSelect").value}`;
   function populateForm() {
@@ -32,7 +33,7 @@ export function createGateDossiers(map) {
     selectedPreset = state.policy?.scenario_preset || null;
     if ($("gateScenarioPreset")) $("gateScenarioPreset").value = selectedPreset?.preset_code || "";
     forecastContext = state.input?.forecast_context || null;
-    simulationContext = state.input?.simulation_context || null;
+    simulationContext = state.input?.simulation_context || state.input?.observations?.outside_quality?.simulation_context || null;
     renderForecastContext();
   }
   function renderForecastContext() {
@@ -42,7 +43,10 @@ export function createGateDossiers(map) {
     host.hidden = !forecastContext && !simulationContext;
     if (simulationContext) {
       host.append(node("strong", "SIMULATION · UNVERIFIED · Cần kỹ sư rà soát"));
-      host.append(node("p", `Tháng ${simulationContext.year_month || "chưa rõ"} · nguồn ${simulationContext.source_reference} · EC ngoài mô phỏng ${num(simulationContext.simulated_outside_ec_mS_m)} mS/m. Đây là nội suy kịch bản, chưa xác minh tại cống. Nhập mực nước thực đo ngoài, trong và hệ cao độ chung trước khi rà soát. Không phải lệnh vận hành.`));
+      const raw = $("fieldForm").elements.outside_quality.value;
+      const current = raw === "" ? null : Number(raw);
+      if (current !== simulationContext.simulated_outside_ec_mS_m) host.append(node("p", `EC kịch bản hiện tại: ${num(current)} mS/m · người dùng chỉnh, không phải đầu ra khung sông gốc và không phải số đo tại cống.`));
+      host.append(node("p", `Khung tham khảo gốc · tháng ${simulationContext.year_month || "chưa rõ"} · nguồn ${simulationContext.source_reference} · EC ngoài mô phỏng ${num(simulationContext.simulated_outside_ec_mS_m)} mS/m. Đây là nội suy kịch bản, chưa xác minh tại cống. Nhập mực nước thực đo ngoài, trong và hệ cao độ chung trước khi rà soát. Không phải lệnh vận hành.`));
     }
     if (!forecastContext) return;
     host.append(node("strong", "Dự báo tháng đính kèm để tham khảo"));
@@ -50,12 +54,14 @@ export function createGateDossiers(map) {
   }
   function invalidateEditedDraft() {
     gateRequests.next();
+    exportRequests.next();
     fileRequests.input.next();
     fileRequests.policy.next();
     databaseDraftRequests.next();
     fieldRequests.next();
     evaluationRequests.next();
     clearResult();
+    databaseStatus("");
     state.input = null;
   }
   function databaseStatus(message) {
@@ -80,6 +86,8 @@ export function createGateDossiers(map) {
       $("gateEvaluationStatus").textContent = "Cần có bản nháp đầu vào và hồ sơ quy trình trước khi rà soát.";
       return;
     }
+    try { validateGateDraftPair(state.input, state.policy, $("gateSelect").value); }
+    catch (error) { clearResult(); $("gateEvaluationStatus").textContent = error.message; return; }
     const req = evaluationRequests.next();
     clearResult();
     $("evaluateGate").disabled = true;
@@ -89,6 +97,8 @@ export function createGateDossiers(map) {
     try {
       const result = await api("/gate-evaluation", { ...req, method: "POST", body: { policy: state.policy, input: { ...state.input, evaluation_mode: "SIMULATION" } } });
       if (!req.isCurrent()) return;
+      if (result.gate_code !== state.input?.gate_code || result.gate_code !== $("gateSelect").value ||
+          result.evaluation_mode !== "SIMULATION" || !Array.isArray(result.checklist)) throw new Error("Kết quả mô phỏng không khớp hồ sơ cống đang chọn.");
       state.evaluation = result;
       $("downloadEvaluation").disabled = false;
       const outcomes = { CONDITIONS_MET: "Mô phỏng: đáp ứng điều kiện đã nhập", BLOCKED: "Mô phỏng: không đáp ứng điều kiện", REVIEW_REQUIRED: "Mô phỏng: cần rà soát dải chuyển tiếp" };
@@ -116,6 +126,13 @@ export function createGateDossiers(map) {
   }
 
   async function selectGate() {
+    gateRequests.next();
+    evaluationRequests.next();
+    exportRequests.next();
+    state.input = state.policy = null;
+    clearResult();
+    map.setCandidates?.(null, []);
+    $("databaseGateStatus").textContent = "";
     databaseDraftRequests.next();
     selectedPreset = null;
     forecastContext = null;
@@ -125,6 +142,12 @@ export function createGateDossiers(map) {
     fileRequests.input.next();
     fileRequests.policy.next();
     fieldRequests.next();
+    $("gateInputFile").value = "";
+    $("gatePolicyFile").value = "";
+    $("fieldForm").reset();
+    $("fieldStatus").textContent = "";
+    $("gateInfo").textContent = "";
+    $("gateEvaluationStatus").textContent = "Chọn cống để tạo hồ sơ.";
     const code = $("gateSelect").value, gate = state.gates.find((g) => g.gate_code === code);
     if (!gate) return;
     const req = gateRequests.next();
@@ -144,8 +167,8 @@ export function createGateDossiers(map) {
     try {
       const [input, policy] = await Promise.all([api(`/gate-template/input?gate_code=${encodeURIComponent(code)}`, req), api(`/gate-template/policy?gate_code=${encodeURIComponent(code)}`, req)]);
       if (!req.isCurrent()) return;
-      state.input = input;
-      state.policy = policy;
+      state.input = validateGateDraftPart(input, "input", code);
+      state.policy = validateGateDraftPart(policy, "policy", code);
       populateForm();
       await evaluateGate();
       if (gate.source_id !== "DT_GATE_CATALOG_2025" && req.isCurrent()) {
@@ -171,6 +194,7 @@ export function createGateDossiers(map) {
       evaluationRequests.next();
       fieldRequests.next();
       clearResult();
+      state[key] = null;
       try {
         const file = event.target.files[0];
         if (!file) return;
@@ -179,8 +203,10 @@ export function createGateDossiers(map) {
         if (!req.isCurrent() || code !== $("gateSelect").value) return;
         if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error("Tệp phải chứa một object JSON.");
         if (data.gate_code !== code) throw new Error("Mã cống trong tệp không khớp cống đang chọn.");
-        state[key] = data;
+        state[key] = validateGateDraftPart(data, key, code);
         populateForm();
+        $("fieldStatus").textContent = "Đã nạp tệp vào phiếu; chưa lưu lại bản nháp hiện tại.";
+        databaseStatus("");
         $("gateEvaluationStatus").textContent = `Đã nạp ${file.name}. Nhấn Mô phỏng kịch bản.`;
       } catch (error) {
         if (!req.isCurrent() || code !== $("gateSelect").value) return;
@@ -191,7 +217,7 @@ export function createGateDossiers(map) {
     });
   }
   for (const [id, kind] of [["downloadGateInput", "input"], ["downloadGatePolicy", "policy"], ["downloadGateLink", "link"]]) $(id).addEventListener("click", async () => {
-    const code = $("gateSelect").value;
+    const code = $("gateSelect").value, req = exportRequests.next();
     if (simulationContext) {
       if (kind === "link") {
         $("gateEvaluationStatus").textContent = "Mô phỏng không xác lập liên kết trạm–cống. Cần kỹ sư xác minh liên kết thủy lực thực tế.";
@@ -203,10 +229,12 @@ export function createGateDossiers(map) {
       return;
     }
     try {
-      const template = await api(`/gate-template/${kind}?gate_code=${encodeURIComponent(code)}`);
+      const template = await api(`/gate-template/${kind}?gate_code=${encodeURIComponent(code)}`, req);
+      if (!req.isCurrent() || code !== $("gateSelect").value) return;
+      if (kind !== "link") validateGateDraftPart(template, kind, code);
       save(`${code}_${kind}.json`, template);
     } catch (error) {
-      $("gateEvaluationStatus").textContent = error.message;
+      if (req.isCurrent()) $("gateEvaluationStatus").textContent = error.message;
     }
   });
   $("gateSelect").addEventListener("change", () => fieldRequests.next());
@@ -216,12 +244,15 @@ export function createGateDossiers(map) {
       selectedPreset = null;
       if ($("gateScenarioPreset")) $("gateScenarioPreset").value = "";
     }
+    renderForecastContext();
+    $("fieldStatus").textContent = "Phiếu đã thay đổi; các giá trị hiện tại chưa được lưu lại.";
     $("gateEvaluationStatus").textContent = "Phiếu đã thay đổi. Nhấn lưu hoặc xuất bản nháp để chạy kịch bản mới.";
   });
   $("fieldForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     gateRequests.next();
     databaseDraftRequests.next();
+    fileRequests.input.next(); fileRequests.policy.next();
     const req = fieldRequests.next(), code = $("gateSelect").value;
     evaluationRequests.next();
     clearResult();
@@ -229,12 +260,16 @@ export function createGateDossiers(map) {
     try {
       const form = new FormData(event.target);
       const draft = await api(`/gate-template/input?gate_code=${encodeURIComponent(code)}`, req);
-      if (!req.isCurrent()) return;
+      if (!req.isCurrent() || code !== $("gateSelect").value) return;
+      validateGateDraftPart(draft, "input", code);
       const observed = form.get("observed") ? form.get("observed") + ":00+07:00" : null;
       draft.mode = form.get("mode");
       draft.evaluation_mode = "SIMULATION";
       if (forecastContext) draft.forecast_context = forecastContext;
       if (simulationContext) {
+        const current = form.get("outside_quality") === "" ? null : Number(form.get("outside_quality"));
+        simulationContext = { ...simulationContext, current_scenario_ec_mS_m: current,
+          current_value_origin: current === simulationContext.simulated_outside_ec_mS_m ? "SPATIAL_FRAME" : "USER_SCENARIO" };
         draft.simulation_context = simulationContext;
         draft.data_kind = "SIMULATION";
         draft.quality_flag = "UNVERIFIED";
@@ -259,7 +294,8 @@ export function createGateDossiers(map) {
         draft.observations.outside_quality.data_kind = "SIMULATION";
         draft.observations.outside_quality.simulation_context = simulationContext;
         draft.observations.outside_quality.observed_at = null;
-        draft.observations.outside_quality.source_reference = simulationContext.source_reference;
+        draft.observations.outside_quality.source_reference = simulationContext.current_value_origin === "USER_SCENARIO"
+          ? `USER_SCENARIO:${code}:${simulationContext.year_month}` : simulationContext.source_reference;
       }
       state.input = draft;
       state.policy = {
@@ -276,6 +312,8 @@ export function createGateDossiers(map) {
       }
       if (selectedPreset) state.policy.scenario_preset = selectedPreset;
       if (simulationContext) state.policy.simulation_context = simulationContext;
+      validateGateDraftPair(state.input, state.policy, code);
+      renderForecastContext();
       let stored = true;
       try { persistDraft(); } catch { stored = false; }
       if (!["saveGateDraft", "saveGateDatabaseDraft"].includes(event.submitter?.id)) {
@@ -304,6 +342,7 @@ export function createGateDossiers(map) {
   if ($("saveGateDraft")) $("saveGateDraft").type = "submit";
   if ($("saveGateDatabaseDraft")) $("saveGateDatabaseDraft").type = "submit";
   $("restoreGateDraft")?.addEventListener("click", async () => {
+    invalidateEditedDraft();
     try {
       const stored = localStorage.getItem(draftKey());
       if (!stored) throw new Error("Chưa có bản nháp cục bộ cho cống này.");
@@ -314,6 +353,7 @@ export function createGateDossiers(map) {
       databaseDraftRequests.next();
       fileRequests.input.next();
       fileRequests.policy.next();
+      validateGateDraftPair(draft.input, draft.policy, code);
       state.input = draft.input;
       state.policy = draft.policy;
       populateForm();
@@ -338,6 +378,7 @@ export function createGateDossiers(map) {
       const draft = response.items[0];
       if (!draft) { databaseStatus("Chưa có bản nháp PostgreSQL cho cống này."); return; }
       if (!draft.input || !draft.policy || Array.isArray(draft.input) || Array.isArray(draft.policy) || draft.gate_code !== code || draft.input.gate_code !== code || draft.policy.gate_code !== code) throw new Error("Bản nháp không hợp lệ hoặc không khớp cống.");
+      validateGateDraftPair(draft.input, draft.policy, code);
       state.input = draft.input;
       state.policy = draft.policy;
       populateForm();
@@ -396,6 +437,8 @@ export function createGateDossiers(map) {
     if (!draft) return;
     invalidateEditedDraft();
     const gate = event.detail.gate;
+    map.setCandidates?.(null, []);
+    $("databaseGateStatus").textContent = "";
     if (!state.gates.some(item => item.gate_code === gate.gate_code)) {
       state.gates.push(gate);
       const option = node("option", `${gate.gate_name || gate.gate_code} · SIMULATION`);
@@ -419,9 +462,10 @@ export function createGateDossiers(map) {
   window.addEventListener("workspace:apply-forecast-to-gate", event => {
     const forecast = event.detail;
     if (forecast?.kind === "SPATIAL_SIMULATION") return;
-    if (!forecast || !Number.isFinite(forecast.predicted_ec_mS_m) || forecast.unit !== "mS/m") return;
+    if (!validForecastReference(forecast) || !state.gates.some(gate => gate.gate_code === $("gateSelect").value)) return;
     invalidateEditedDraft();
     forecastContext = {
+      attached_gate_code: $("gateSelect").value,
       prediction_id: forecast.prediction_id || null,
       model_version: forecast.model_version || null,
       station: forecast.station || null,

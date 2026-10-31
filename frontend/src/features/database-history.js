@@ -168,7 +168,9 @@ export function createDatabaseHistory({ onSelectStation } = {}) {
   station.addEventListener('change', () => { if (station.value) selectStation(station.value); else chooseSource(); });
   form.addEventListener('submit', event => { event.preventDefault(); loadHistory(); });
   for (const input of [from, to, kind]) input.addEventListener('input', () => {
-    state.applied = null; sync(); status.textContent = 'Bộ lọc đã đổi. Biểu đồ và bảng vẫn là lần tải trước; nhấn Tải lịch sử để cập nhật và xuất CSV.';
+    gate.next(); state.busy = false;
+    clear('Bộ lọc đã đổi. Tải lịch sử để xem số đo theo lựa chọn mới.');
+    status.textContent = 'Bộ lọc đã đổi. Nhấn Tải lịch sử để cập nhật và xuất CSV.';
   });
   full.addEventListener('click', () => {
     if (!state.dataset) return;

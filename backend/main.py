@@ -1,5 +1,6 @@
 """Chạy từ gốc repo: python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000."""
 
+from contextlib import asynccontextmanager
 import logging
 import os
 from datetime import date
@@ -23,7 +24,19 @@ from backend.schemas import (
 )
 
 logger = logging.getLogger("webgis.api")
+
+
+@asynccontextmanager
+async def lifespan(app):
+    from backend.domain.multivariate_ec import warmup_models
+    failures = warmup_models()
+    if failures:
+        logger.warning('Multivariate model warmup unavailable: %s', failures)
+    yield
+
+
 app = FastAPI(
+    lifespan=lifespan,
     title="WebGIS Đồng Tháp — API dữ liệu lịch sử",
     version="0.1.0",
     description=(

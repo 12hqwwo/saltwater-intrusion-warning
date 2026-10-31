@@ -1,10 +1,15 @@
 import { node, num, save, saveCSV } from "../shared/ui.js";
 import { workspaceAPI as api } from "../shared/workspace-api.js";
 import { createRequestGate } from "../api.js";
+import { validPrediction, validMonth } from '../shared/forecast-contract.js';
 
 export function createPredictionHistory(host, { onSaved } = {}) {
   const requests = createRequestGate();
-  let candidate = null, candidateVersion = 0, saving = false, rows = [], offset = 0, total = 0;
+  let candidate = null, candidateVersion = 0, saving = false, rows = [], offset = 0, total = 0, knownStations = [];
+  const catalogIdentity = name => {
+    const item = knownStations.find(row => row.station === name);
+    return item ? { site_code: item.site_code } : {};
+  };
   const session = [];
   const saveButton = node("button", "Chạy và lưu dự báo vào PostgreSQL", "secondary");
   saveButton.type = "button"; saveButton.disabled = true;
@@ -44,19 +49,20 @@ export function createPredictionHistory(host, { onSaved } = {}) {
     comparison.hidden = !session.length;
     summary.textContent = `So sánh các lượt dự báo trong phiên (${session.length})`;
     comparisonTable.replaceChildren();
-    const { element, body } = table(["Lượt", "Trạm", "Tháng", "Nguồn", "Mưa (mm)", "Nhiệt (°C)", "Gió (m/s)", "EC (mS/m)", "Chênh so với mốc cùng nhóm"]);
+    const { element, body } = table(["Lượt", "Trạm", "Tháng", "Nguồn", "Mưa (mm)", "Nhiệt (°C)", "Gió (đơn vị từng lượt)", "EC (mS/m)", "Chênh so với mốc cùng nhóm"]);
     for (const item of session) {
       const first = session.find(row => row.station === item.station && row.target_month === item.target_month && row.model_version === item.model_version);
       const diff = item.predicted_ec_mS_m - first.predicted_ec_mS_m;
       const tr = node("tr");
-      for (const value of [item.run_index, item.station, item.target_month, item.input_mode, num(item.rainfall_mm), num(item.temperature_degC), num(item.wind_source_units), num(item.predicted_ec_mS_m), first === item ? "Mốc nhóm" : `${diff >= 0 ? "+" : ""}${num(diff)} mS/m`]) tr.append(node("td", String(value)));
+      for (const value of [item.run_index, item.station, item.target_month, item.input_mode, num(item.rainfall_mm), num(item.temperature_degC), `${num(item.wind_source_units)} ${item.wind_unit || 'chưa rõ'}`, num(item.predicted_ec_mS_m), first === item ? "Mốc nhóm" : `${diff >= 0 ? "+" : ""}${num(diff)} mS/m`]) tr.append(node("td", String(value)));
       body.append(tr);
     }
     comparisonTable.append(element);
   }
   function record(data) {
+    if (!validPrediction(data)) return;
     const get = name => data.inputs?.find(item => item.name === name)?.value;
-    session.push({ run_index: session.length + 1, prediction_id: data.prediction_id, station: data.station, target_month: data.target_month, input_mode: data.input_mode, input_month: data.input_month, rainfall_mm: get("rainfall_mm"), temperature_degC: get("temperature_degC"), wind_source_units: get("wind_source_units"), predicted_ec_mS_m: data.predicted_ec_mS_m, model_version: data.model_version, issued_at: data.issued_at });
+    session.push({ run_index: session.length + 1, prediction_id: data.prediction_id, station: data.station, target_month: data.target_month, input_mode: data.input_mode, input_month: data.input_month, rainfall_mm: get("rainfall_mm"), temperature_degC: get("temperature_degC"), wind_source_units: get("wind_source_units"), wind_unit: data.inputs.find(item => item.name === 'wind_source_units')?.unit, predicted_ec_mS_m: data.predicted_ec_mS_m, unit: data.unit, model_version: data.model_version, issued_at: data.issued_at });
     renderComparison();
   }
   function renderHistory() {
@@ -78,7 +84,9 @@ export function createPredictionHistory(host, { onSaved } = {}) {
     tableHost.append(element);
   }
   async function loadHistory(pageOffset = 0) {
+    if (month.value && !validMonth(month.value)) { status.textContent = 'Chọn tháng hợp lệ.'; return; }
     const req = requests.next(); offset = pageOffset;
+    const expected = { ...(station.value ? { station: station.value } : {}), ...(month.value ? { target_month: month.value } : {}) };
     reload.disabled = previous.disabled = next.disabled = true;
     rows = []; tableHost.replaceChildren(); count.textContent = "Đang tải…";
     status.textContent = "Đang đọc lịch sử PostgreSQL…";
@@ -88,7 +96,7 @@ export function createPredictionHistory(host, { onSaved } = {}) {
     try {
       const data = await api(`/multivariate/history?${params}`, req);
       if (!req.isCurrent()) return;
-      if (!Array.isArray(data.items) || !Number.isSafeInteger(data.total) || data.offset !== offset || data.items.some(item => !item.prediction || !Number.isFinite(item.prediction.predicted_ec_mS_m))) throw new Error("Lịch sử trả về không hợp lệ.");
+      if (!Array.isArray(data.items) || !Number.isSafeInteger(data.total) || data.total < 0 || data.offset !== offset || data.items.some(item => !validPrediction(item.prediction, { ...expected, ...catalogIdentity(item.prediction?.station) }))) throw new Error("Lịch sử trả về không hợp lệ hoặc không khớp bộ lọc.");
       rows = data.items; total = data.total; renderHistory();
       count.textContent = rows.length ? `${offset + 1}–${offset + rows.length} / ${total} lượt` : "0 lượt";
       status.textContent = "Lịch sử đã lưu trong PostgreSQL; xem từng lượt để đối chiếu đầu vào và phiên bản mô hình.";
@@ -104,7 +112,7 @@ export function createPredictionHistory(host, { onSaved } = {}) {
     try {
       const saved = await api("/multivariate/history", { method: "POST", body: payload, timeoutMs: 120_000 });
       const prediction = saved.prediction;
-      if (!prediction || prediction.station !== payload.station || prediction.target_month !== payload.target_month || prediction.unit !== "mS/m" || !Number.isFinite(prediction.predicted_ec_mS_m)) throw new Error("Phản hồi lưu dự báo không khớp yêu cầu.");
+      if (!validPrediction(prediction, { ...payload, ...catalogIdentity(payload.station) })) throw new Error("Phản hồi lưu dự báo không khớp yêu cầu.");
       record(prediction);
       if (version === candidateVersion) onSaved?.(prediction);
       saveStatus.textContent = `Đã lưu lượt máy chủ tạo ${prediction.prediction_id} lúc ${saved.saved_at}.${version !== candidateVersion ? " Bộ chọn hiện tại đã thay đổi; kết quả lưu nằm trong lịch sử." : " Kết quả hiển thị đã cập nhật theo lượt được lưu."}`;
@@ -126,6 +134,7 @@ export function createPredictionHistory(host, { onSaved } = {}) {
     record,
     setCandidate(payload) { candidate = payload ? { ...payload } : null; candidateVersion++; saveButton.disabled = saving || !candidate; },
     setStations(items) {
+      knownStations = items;
       const selected = station.value;
       station.replaceChildren(new Option("Tất cả trạm", ""), ...items.map(item => new Option(item.site_name || item.station, item.station)));
       if (!selected || items.some(item => item.station === selected)) {

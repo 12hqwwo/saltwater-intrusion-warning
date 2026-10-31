@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "evaluation_mode": "SIMULATION",
+  "status": "INVALID_INPUT",
+  "simulation_outcome": null,
+  "recommendation": null,
+  "actuator_command": null,
+  "deployment_ready": false,
+  "requires_operator_review": true,
+  "gate_code": "DT_PLIII_001",
+  "reasons": [
+    "outside_level: hệ cao độ không khớp",
+    "inside_level: hệ cao độ không khớp",
+    "outside_quality: cơ sở EC không khớp quy trình",
+    "inside_quality: cơ sở EC không khớp quy trình"
+  ],
+  "missing_evidence": [
+    "Cơ sở EC của quy trình (EC25 hoặc RAW)",
+    "Hệ cao độ chung",
+    "Ngưỡng EC cho phép",
+    "Ngưỡng EC chặn",
+    "Chênh mực nước tối thiểu",
+    "Chênh mực nước tối đa",
+    "Mực nước trong tối thiểu",
+    "Mực nước trong tối đa"
+  ],
+  "evidence": {},
+  "limitations": [
+    "Kịch bản giả định, không phải lệnh đóng/mở.",
+    "EC tháng không xác định thời điểm vận hành.",
+    "Chưa kiểm tra cơ khí, triều tương lai và liên kết thủy lực."
+  ],
+  "checklist": [
+    {
+      "code": "outside_level",
+      "label": "Mực nước phía ngoài cống",
+      "declared_present": true
+    },
+    {
+      "code": "inside_level",
+      "label": "Mực nước phía trong cống",
+      "declared_present": true
+    },
+    {
+      "code": "outside_quality",
+      "label": "Chỉ số EC phía ngoài cống",
+      "declared_present": true
+    },
+    {
+      "code": "inside_quality",
+      "label": "Chỉ số EC phía trong cống",
+      "declared_present": true
+    }
+  ],
+  "declarations_verified_by_server": false,
+  "evaluated_at": "2026-10-26T05:22:08.484439+00:00",
+  "note": "Hypothetical scenario only. Submitted declarations are not server-verified evidence; monthly EC cannot determine gate switching times."
+}

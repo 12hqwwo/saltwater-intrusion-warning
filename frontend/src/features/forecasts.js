@@ -5,6 +5,7 @@ import { experimentAssessment } from "../research-utils.js";
 import { drawSeries } from "../shared/time-series.js";
 import { comparisonLines } from "../shared/ec-scenario.js";
 import { createNextForecast } from "./next-forecast.js";
+import { validMonth, validEc } from '../shared/forecast-contract.js';
 
 export function createForecasts() {
   const nextForecast = createNextForecast();
@@ -78,6 +79,10 @@ export function createForecasts() {
     try {
       const ex = await api(`/experiments/${encodeURIComponent(id)}`, req);
       if (!req.isCurrent()) return;
+      const expected = availableExperiments.find(item => item.experiment_id === id);
+      if (ex.experiment_id !== id || ex.unit !== 'mS/m' || ex.site_code !== expected?.site_code || !Array.isArray(ex.predictions) ||
+          ex.predictions.some(row => row.unit !== 'mS/m' || row.station !== ex.station || !validMonth(row.target_month?.slice(0, 7)) || !/^\d{4}-\d{2}-01$/.test(row.target_month) ||
+            (row.actual != null && !validEc(row.actual)) || (row.status === 'SUCCESS' && !validEc(row.predicted)))) throw new Error('Thí nghiệm trả về không khớp trạm, tháng hoặc đơn vị hợp lệ.');
       const { selected, baseline, beatsBaseline } = experimentAssessment(ex);
       $("forecastStatus").textContent = `Trạm ${ex.station} · EC khả dụng theo giả định: cuối tháng + ${ex.availability_lag_days} ngày · ${selected.eval_samples} tháng test chung.`;
       $("modelAssessment").classList.toggle("good", beatsBaseline);
@@ -109,7 +114,7 @@ export function createForecasts() {
         $("artifactLinks").append(a);
       }
     } catch (error) {
-      if (req.isCurrent()) $("forecastStatus").textContent = error.message;
+      if (req.isCurrent()) clearForecast(error.message);
     }
   }
   $("experimentSelect").addEventListener("change", selectExperiment);
@@ -126,6 +131,7 @@ export function createForecasts() {
     if (!selected) {
       experimentRequests.next();
       clearForecast("Chưa có thí nghiệm kiểm chứng EC tháng cho điểm đo này.");
+      $("experimentSelect").value = '';
       return;
     }
     $("experimentSelect").value = selected.experiment_id;

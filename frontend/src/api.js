@@ -22,7 +22,7 @@ export async function requestJSON(path, { signal, fetcher = globalThis.fetch, me
     });
     let body;
     try { body = await response.json(); }
-    catch { throw new APIError('API chưa trả về dữ liệu JSON. Kiểm tra backend đang chạy ở cổng 8000.'); }
+    catch { throw new APIError('API chưa trả về dữ liệu JSON. Kiểm tra backend của địa chỉ đang mở.'); }
     if (!response.ok) {
       const message = typeof body.detail === 'string' ? body.detail : body.detail?.message;
       throw new APIError(message || `Không đọc được dữ liệu (HTTP ${response.status}).`);

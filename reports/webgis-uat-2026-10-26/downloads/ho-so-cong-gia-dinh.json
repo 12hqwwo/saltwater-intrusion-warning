@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "is_demo": false,
+  "_instructions": "Hồ sơ lập kế hoạch; chỉ điền số đo có nguồn của đúng công trình. Không dùng mẫu EC tháng để quyết định giờ đóng/mở cống.",
+  "gate_code": "DT_PLIII_001",
+  "issue_time": null,
+  "mode": "DRAIN",
+  "current_state": "UNKNOWN",
+  "last_changed_at": null,
+  "operating_status": {
+    "gate_code": "DT_PLIII_001",
+    "observed_at": null,
+    "available_at": null,
+    "quality_flag": "UNVERIFIED",
+    "source_reference": null,
+    "mechanical_ok": null,
+    "emergency": null,
+    "water_demand": null
+  },
+  "observations": {
+    "outside_quality": {
+      "gate_code": "DT_PLIII_001",
+      "observed_at": "2026-10-26T09:00:00+07:00",
+      "available_at": null,
+      "quality_flag": "UNVERIFIED",
+      "source_reference": "UAT 26/10/2026 - SO LIEU GIA DINH KIEM THU, KHONG PHAI QUAN TRAC",
+      "value": 200,
+      "parameter": "EC",
+      "unit": "mS/m",
+      "ec_basis": "RAW",
+      "method_reference": "UAT synthetic scenario"
+    },
+    "inside_quality": {
+      "gate_code": "DT_PLIII_001",
+      "observed_at": "2026-10-26T09:00:00+07:00",
+      "available_at": null,
+      "quality_flag": "UNVERIFIED",
+      "source_reference": "UAT 26/10/2026 - SO LIEU GIA DINH KIEM THU, KHONG PHAI QUAN TRAC",
+      "value": 70,
+      "parameter": "EC",
+      "unit": "mS/m",
+      "ec_basis": "RAW",
+      "method_reference": "UAT synthetic scenario"
+    },
+    "outside_level": {
+      "gate_code": "DT_PLIII_001",
+      "observed_at": "2026-10-26T09:00:00+07:00",
+      "available_at": null,
+      "quality_flag": "UNVERIFIED",
+      "source_reference": "UAT 26/10/2026 - SO LIEU GIA DINH KIEM THU, KHONG PHAI QUAN TRAC",
+      "value": 0.2,
+      "unit": "m",
+      "vertical_datum": "UAT_HYPOTHETICAL_DATUM"
+    },
+    "inside_level": {
+      "gate_code": "DT_PLIII_001",
+      "observed_at": "2026-10-26T09:00:00+07:00",
+      "available_at": null,
+      "quality_flag": "UNVERIFIED",
+      "source_reference": "UAT 26/10/2026 - SO LIEU GIA DINH KIEM THU, KHONG PHAI QUAN TRAC",
+      "value": 0.8,
+      "unit": "m",
+      "vertical_datum": "UAT_HYPOTHETICAL_DATUM"
+    }
+  },
+  "evaluation_mode": "SIMULATION"
+}

@@ -3,6 +3,8 @@ import { workspaceAPI as api } from "../shared/workspace-api.js";
 import { createRequestGate } from "../api.js";
 import { drawSeries } from "../shared/time-series.js";
 import { createPredictionHistory } from "./prediction-history.js";
+import { cropAdvisories } from "../shared/water-advisory.js";
+import { validMonth, inputMonthFor, validPrediction } from '../shared/forecast-contract.js';
 
 export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const host = document.getElementById("multivariateForecastHost");
@@ -142,7 +144,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const currentStation = () => stations.find(item => item.station === station.value);
   const textValue = value => value == null ? "Chưa có" : typeof value === "object" ? JSON.stringify(value) : String(value);
   function refreshButton() {
-    submit.disabled = busy || !currentStation() || !month.value || (mode.value === "ARCHIVE" && archive?.complete !== true);
+    submit.disabled = busy || !currentStation() || !validMonth(month.value) || !inputMonthFor(month.value) || (mode.value === "ARCHIVE" && archive?.complete !== true);
   }
   function clearResult(message = "Đầu vào đã thay đổi. Chạy lại mô hình để xem dự báo mới.") {
     predictionRequests.next();
@@ -161,7 +163,8 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     const cutoff = String(selected.trained_through || "").slice(0, 7);
     if (/^\d{4}-(0[1-9]|1[0-2])$/.test(cutoff)) {
       const [year, number] = cutoff.split("-").map(Number);
-      month.min = new Date(Date.UTC(year, number, 1)).toISOString().slice(0, 7);
+      const index = year * 12 + number;
+      month.min = `${String(Math.floor(index / 12)).padStart(4, '0')}-${String(index % 12 + 1).padStart(2, '0')}`;
     } else month.removeAttribute("min");
     modelInfo.textContent = `Mô hình: ${textValue(selected.model)} · huấn luyện đến ${textValue(selected.trained_through)} · trạm ${selected.site_name || selected.station}.`;
     for (const field of fields) {
@@ -188,18 +191,19 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     describeModel();
     if (evaluationStation !== station.value) loadEvaluation();
     applyMode();
-    if (!station.value || !/^\d{4}-\d{2}$/.test(month.value)) {
+    if (!station.value || !validMonth(month.value) || !inputMonthFor(month.value)) {
+      inputMonth.textContent = 'Chưa xác định kỳ khí tượng đầu vào.';
       status.textContent = "Chọn trạm và tháng dự báo hợp lệ.";
       return;
     }
     const target = month.value;
-    const [year, number] = target.split("-").map(Number);
-    const previous = new Date(Date.UTC(year, number - 3, 1)).toISOString().slice(0, 7);
+    const previous = inputMonthFor(target);
     inputMonth.textContent = `Dự báo EC tháng ${target} từ dữ liệu khí tượng tháng ${previous}.`;
     try {
       const data = await api(`/multivariate/inputs?${new URLSearchParams({ station: station.value, target_month: target })}`, req);
       if (!req.isCurrent()) return;
-      if (data.station !== station.value || data.target_month !== target) throw new Error("Đầu vào trả về không khớp trạm hoặc tháng đã chọn.");
+      if (data.station !== station.value || data.target_month !== target || data.input_month !== previous || data.wind_unit !== 'm/s' ||
+          (data.complete === true && fields.some(field => !Number.isFinite(data[field.name]) || (field.min === '0' && data[field.name] < 0)))) throw new Error("Đầu vào trả về không khớp trạm, kỳ khí tượng hoặc đơn vị hợp lệ.");
       archive = data;
       inputMonth.textContent = `Dự báo EC tháng ${target} · kỳ khí tượng đầu vào: ${data.input_month || previous}.`;
       if (data.wind_unit) fieldLabels.get("wind_source_units").textContent = `Gió (${data.wind_unit})`;
@@ -218,6 +222,36 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     output.append(node("span", "DỰ BÁO EC THÁNG · MÔ HÌNH ĐA BIẾN", "tag"));
     output.append(node("h3", `${num(data.predicted_ec_mS_m)} mS/m`, "mv-predicted-ec"));
     output.append(node("p", `${currentStation()?.site_name || data.station} · tháng ${data.target_month} · nguồn đầu vào ${data.input_mode === "MANUAL" ? "người dùng cung cấp" : "lưu trữ"}`));
+    const distribution = data.ensemble_distribution;
+    if (distribution?.unit === 'mS/m' && [distribution.p10, distribution.p90].every(Number.isFinite) && distribution.p10 <= distribution.p90) {
+      const spread = node('section', undefined, 'mv-tree-spread');
+      spread.append(node('h4', 'Mức phân tán giữa các cây Random Forest'));
+      spread.append(node('p', `P10–P90: ${num(distribution.p10)}–${num(distribution.p90)} mS/m`, 'mv-spread-range'));
+      const details = [
+        ['P25', distribution.p25], ['P50', distribution.p50], ['P75', distribution.p75],
+        ['IQR', distribution.iqr], ['Độ lệch chuẩn', distribution.std],
+      ].filter(([, value]) => Number.isFinite(value)).map(([label, value]) => `${label}: ${num(value)} mS/m`);
+      if (details.length) spread.append(node('p', details.join(' · '), 'subtle'));
+      spread.append(node('p', `${Number.isInteger(distribution.n_estimators) ? `${distribution.n_estimators} cây. ` : ''}P10–P90 mô tả phân tán dự đoán giữa các cây; chưa phải khoảng dự báo hoặc khoảng tin cậy được hiệu chuẩn và không bao quát toàn bộ sai số thực tế.`, 'subtle'));
+      output.append(spread);
+    } else {
+      output.append(node('p', 'Lượt chạy này chưa có phân phối dự đoán giữa các cây. Có thể chạy lại mô hình để cập nhật.', 'subtle'));
+    }
+    const cropSection = node('section', undefined, 'mv-crop-advisory');
+    cropSection.append(node('h4', 'Đối chiếu EC dự báo với kịch bản cây trồng'));
+    const cropTable = node('table'), cropHead = node('thead'), cropHeader = node('tr'), cropBody = node('tbody');
+    for (const label of ['Cây trồng', 'Ngưỡng thấp / cao (mS/m)', 'Đối chiếu kịch bản']) cropHeader.append(node('th', label));
+    cropHead.append(cropHeader);
+    for (const item of cropAdvisories(data.predicted_ec_mS_m)) {
+      const row = node('tr', undefined, `crop-advisory-${item.status}`);
+      for (const text of [item.label, `${item.openBelowEc} / ${item.closeAboveEc}`, item.text]) row.append(node('td', text));
+      cropBody.append(row);
+    }
+    cropTable.append(cropHead, cropBody);
+    const cropTableWrap = node('div', undefined, 'table-wrap');
+    cropTableWrap.append(cropTable);
+    cropSection.append(cropTableWrap, node('p', 'Các ngưỡng minh họa dùng chung với mô phỏng bản đồ, chưa được xác nhận là tiêu chuẩn tưới. EC trung bình tháng không thay số đo tại vườn/cống và không xác nhận nước dùng cho sinh hoạt. Chưa quy đổi EC dự báo sang độ mặn vì thiếu hiệu chuẩn phù hợp.', 'subtle'));
+    output.append(cropSection);
     if (data.target_is_before_current_month) output.append(node("p", "Dự báo hồi cứu: tháng mục tiêu nằm trong quá khứ. Đối chiếu mốc huấn luyện và thời điểm sẵn có của đầu vào khi diễn giải kết quả.", "mv-retrospective"));
     output.append(node("p", `Phiên bản ${textValue(data.model_version)} · phát hành ${textValue(data.issued_at)} · mã ${textValue(data.prediction_id)}`, "subtle"));
     const table = node("table", undefined, "mv-input-table");
@@ -265,7 +299,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       const response = await api(persist ? '/multivariate/history' : '/multivariate/predict', { ...req, method: 'POST', body: payload, timeoutMs: 120_000 });
       const data = persist ? response.prediction : response;
       if (!req.isCurrent()) return;
-      if (data.station !== payload.station || data.target_month !== payload.target_month || data.unit !== "mS/m" || !Number.isFinite(data.predicted_ec_mS_m)) throw new Error("Kết quả dự báo không khớp yêu cầu hoặc thiếu giá trị EC hợp lệ.");
+      if (!validPrediction(data, { ...payload, site_code: currentStation()?.site_code })) throw new Error("Kết quả dự báo không khớp yêu cầu, đầu vào hoặc đơn vị hợp lệ.");
       result = data;
       renderResult(data);
       predictionHistory.setCandidate(persist ? null : payload);
@@ -305,13 +339,18 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   });
   csvButton.addEventListener("click", () => {
     if (!result) return;
-    const common = { prediction_id: result.prediction_id, model_version: result.model_version, station: result.station, site_code: result.site_code, target_month: result.target_month, predicted_ec_mS_m: result.predicted_ec_mS_m, input_mode: result.input_mode, input_month: result.input_month, issued_at: result.issued_at };
+    const common = { prediction_id: result.prediction_id, model_version: result.model_version, station: result.station, site_code: result.site_code, target_month: result.target_month, predicted_ec_mS_m: result.predicted_ec_mS_m, unit: result.unit, data_kind: result.data_kind, input_mode: result.input_mode, input_month: result.input_month, issued_at: result.issued_at };
+    for (const key of ['p10', 'p25', 'p50', 'p75', 'p90', 'iqr', 'std', 'n_estimators', 'unit', 'method', 'interpretation']) common[`ensemble_${key}`] = result.ensemble_distribution?.[key] ?? '';
     const rows = (result.inputs?.length ? result.inputs : [{}]).map(item => ({ ...common, input_name: item.name, input_value: item.value, input_unit: item.unit, input_source: textValue(item.source) }));
     saveCSV(`${result.station}_${result.target_month}_multivariate.csv`, rows, Object.keys(rows[0]));
   });
   async function load() {
     const req = catalogRequests.next();
     inputRequests.next();
+    archive = null; stations = [];
+    station.replaceChildren();
+    for (const control of controls.values()) control.value = '';
+    modelInfo.textContent = ''; source.textContent = ''; inputMonth.textContent = 'Chưa xác định kỳ khí tượng đầu vào.';
     evaluationRequests.next();
     evaluationStation = null;
     evaluationChart.replaceChildren();
@@ -332,7 +371,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
         option.value = item.station;
         station.append(option);
       }
-      if (/^\d{4}-\d{2}$/.test(data.default_target_month || "")) month.value = data.default_target_month;
+      month.value = validMonth(data.default_target_month) ? data.default_target_month : '';
       if (!stations.length) { status.textContent = "Chưa có mô hình đa biến sẵn sàng."; refreshButton(); return; }
       await loadInputs();
     } catch (error) {
@@ -341,7 +380,19 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   }
   async function selectStation(code) {
     const match = stations.find(item => item.site_code === code || item.station === code);
-    if (!match) return false;
+    if (!match) {
+      inputRequests.next();
+      archive = null;
+      station.value = '';
+      for (const control of controls.values()) control.value = '';
+      modelInfo.textContent = ''; source.textContent = '';
+      inputMonth.textContent = 'Chưa xác định kỳ khí tượng đầu vào.';
+      evaluationRequests.next(); evaluationStation = null;
+      evaluationChart.replaceChildren(); evaluationMetrics.replaceChildren(); evaluationLegend.hidden = true;
+      evaluationStatus.textContent = 'Điểm này chưa có mô hình đa biến đã đăng ký.';
+      clearResult('Điểm này chưa có mô hình đa biến đã đăng ký. Chọn một trạm trong danh mục để chạy dự báo.');
+      return false;
+    }
     if (station.value !== match.station) { station.value = match.station; await loadInputs(); }
     return true;
   }

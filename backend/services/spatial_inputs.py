@@ -1,6 +1,6 @@
 """Read-only monthly evidence adapted for the isolated spatial simulation."""
 import calendar
-from collections import defaultdict
+from collections import Counter, defaultdict
 from functools import lru_cache
 import hashlib
 import json
@@ -87,13 +87,23 @@ def _winds(station):
 
 def _observed_months(bundle, site):
     groups = defaultdict(list)
+    excluded_invalid = Counter()
     for row in bundle['observations']:
         if row['site_code'] == site and row['observed_date'][:7] <= '2023-12':
+            if row.get('quality_flag') == 'INVALID':
+                excluded_invalid[row['observed_date'][:7]] += 1
+                continue
             _number(row['ec_mS_m'], True)
             groups[row['observed_date'][:7]].append(row)
     return {month: dict(value=mean(_number(r['ec_mS_m'], True) for r in rows),
-        site_code=site, imputed=False, evidence_kind='MRC_MONTHLY_MEAN',
+        site_code=site, imputed=False, evidence_kind='SOURCE_SAMPLE_MONTHLY_AGGREGATE',
+        observed_or_estimated_counts=dict(Counter(r.get('observed_or_estimated') or 'UNKNOWN' for r in rows)),
+        excluded_invalid_sample_count=excluded_invalid[month],
         aggregation='arithmetic mean of available source samples', sample_count=len(rows),
+        temporal_coverage='AVAILABLE_SOURCE_SAMPLES_ONLY_NOT_CONTINUOUS_MONTHLY_MEAN',
+        source_locators=sorted({r['source_locator'] for r in rows if r.get('source_locator')}),
+        source_sha256=sorted({r['source_sha256'] for r in rows if r.get('source_sha256')}),
+        dataset_codes=sorted({r['dataset_code'] for r in rows if r.get('dataset_code')}),
         source_months=[month], source_dates=sorted({r['observed_date'] for r in rows}),
         source_ids=sorted({r['source_id'] for r in rows}),
         quality_flags=sorted({r.get('quality_flag', 'UNKNOWN') for r in rows}),
@@ -118,14 +128,22 @@ def _observation_or_fill(month, records):
     return dict(value=value, site_code=records[sources[0]]['site_code'], imputed=True,
         evidence_kind='SIMULATION_ONLY_IMPUTATION', imputation_method=method,
         source_months=sources, source_dates=sorted({d for m in sources for d in records[m]['source_dates']}),
-        verified_observation=False, sample_count=0)
+        verified_observation=False, sample_count=0,
+        source_ids=sorted({v for m in sources for v in records[m].get('source_ids', [])}),
+        source_sha256=sorted({v for m in sources for v in records[m].get('source_sha256', [])}),
+        dataset_codes=sorted({v for m in sources for v in records[m].get('dataset_codes', [])}),
+        quality_flags=sorted({v for m in sources for v in records[m].get('quality_flags', [])}),
+        observed_or_estimated_counts=dict(sum((Counter(records[m].get('observed_or_estimated_counts', {})) for m in sources), Counter())))
 
 
 def _monthly_inputs():
     """Return 1985-06 onward; imputation never modifies Tier 1 source records."""
     bundle = load_bundle()
     observed = {station: _observed_months(bundle, site) for station, site in STATIONS.items()}
+    invalid_samples = Counter((row['site_code'], row['observed_date'][:7])
+        for row in bundle['observations'] if row.get('quality_flag') == 'INVALID')
     forecasts = {}
+    forecast_sha = hashlib.sha256((ROOT / 'data/models/future_ec_forecast_2024_2026.csv').read_bytes()).hexdigest()
     for row in estimate_rows():
         month, station = row['year_month'], row['station']
         _index(month)
@@ -135,7 +153,7 @@ def _monthly_inputs():
             raise ValueError('Duplicate simulation forecast station/month.')
         forecasts[station, month] = dict(value=_number(row['predicted_ec_mS_m'], True),
             site_code=STATIONS[station], model=row['model'], imputed=False,
-            source='data/models/future_ec_forecast_2024_2026.csv', source_months=[month],
+            source='data/models/future_ec_forecast_2024_2026.csv', sha256=forecast_sha, source_months=[month],
             evidence_kind='ML_FORECAST_ERA5', verified_observation=False,
             data_kind='RETROSPECTIVE_WEATHER_ESTIMATE', live_forecast_available=False,
             rainfall_mm=_number(row['rainfall_mm'], True),
@@ -150,6 +168,7 @@ def _monthly_inputs():
         for station in STATIONS:
             if month < '2024-01':
                 boundaries[station] = _observation_or_fill(month, observed[station])
+                boundaries[station]['excluded_invalid_sample_count'] = invalid_samples[STATIONS[station], month]
             else:
                 if (station, month) not in forecasts:
                     raise ValueError(f'Missing forecast boundary: {station} {month}')
@@ -158,7 +177,7 @@ def _monthly_inputs():
                 record = forecasts[station, month]
                 station_weather[station] = dict(rainfall_mm=record['rainfall_mm'],
                     temperature_degC=record['temperature_degC'], wind_speed_ms=record['wind_speed_ms'],
-                    source=record['source'], source_month=month, source_model=record['model'],
+                    source=record['source'], sha256=record['sha256'], source_month=month, source_model=record['model'],
                     data_kind='RETROSPECTIVE_WEATHER_ESTIMATE',
                     wind_unit='m/s', wind_unit_status='FORECAST_CSV_DECLARED_UNITS', imputed=False)
             else:

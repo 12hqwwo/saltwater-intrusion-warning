@@ -5,6 +5,7 @@ export const labels = {
   REVIEW_REQUIRED: 'Cần chuyên môn xem xét', ADVISORY_AVAILABLE: 'Có kết quả xét quy tắc',
 };
 export function dateOnly(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}/.test(value)) return 'chưa có ngày';
   const [year, month, day] = value.slice(0, 10).split('-');
   return `${day}/${month}/${year}`;
 }

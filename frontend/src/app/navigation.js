@@ -10,6 +10,9 @@ export function bindNavigation() {
     }
     document.title = `WebGIS Đồng Tháp · ${document.querySelector("nav a[aria-current]")?.textContent || "Tổng quan"}`;
     window.dispatchEvent(new CustomEvent("workspace:viewchange", { detail: { view } }));
+    // Reveal the newly selected panel before scrolling to its hash target.
+    // Native fragment scrolling may otherwise run while that panel is hidden.
+    document.getElementById(view)?.scrollIntoView({ block: 'start' });
   }
   window.addEventListener("hashchange", navigate);
   navigate();
