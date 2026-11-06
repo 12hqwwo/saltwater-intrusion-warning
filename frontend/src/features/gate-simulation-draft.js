@@ -1,6 +1,8 @@
 const MONTH = /^(?!0000)\d{4}-(0[1-9]|1[0-2])$/;
 const object = value => value && typeof value === "object" && !Array.isArray(value);
 
+export { DEFAULT_GATE_RULE_PROFILE, deriveForecastAdvisoryForGate, evaluateGateIntakeCondition } from '../shared/gate-intake-rules.js';
+
 export function validateGateDraftPart(data, kind, code) {
   if (!object(data) || data.gate_code !== code || data.schema_version !== 1) throw new Error("Hồ sơ không hợp lệ hoặc không khớp cống.");
   if (kind === "input") {
@@ -44,7 +46,7 @@ export function validateGateDraftPair(input, policy, code) {
 }
 
 export function validForecastReference(forecast) {
-  const sites = { MYTHO: "MRC_VN_019805", TANCHAU: "MRC_VN_019803" };
+  const sites = { MYTHO: "MRC_VN_019805", MYTHUAN: "MRC_VN_019804", TANCHAU: "MRC_VN_019803" };
   const station = typeof forecast?.station === "string" ? forecast.station.toUpperCase().replace(/[ _]/g, "") : "";
   return Boolean(forecast && (forecast.gate_observation === undefined || forecast.gate_observation === false) && forecast.unit === "mS/m" && Number.isFinite(forecast.predicted_ec_mS_m) && forecast.predicted_ec_mS_m >= 0 &&
     MONTH.test(forecast.target_month) && sites[station] && (!forecast.site_code || forecast.site_code === sites[station]));

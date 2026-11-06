@@ -5,6 +5,7 @@ import { drawSeries } from "../shared/time-series.js";
 import { createPredictionHistory } from "./prediction-history.js";
 import { cropAdvisories } from "../shared/water-advisory.js";
 import { validMonth, inputMonthFor, validPrediction } from '../shared/forecast-contract.js';
+import { DIRECT_FORECAST_SUBTITLE } from '../shared/forecast-map-overlay.js';
 
 export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const host = document.getElementById("multivariateForecastHost");
@@ -77,22 +78,34 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const exports = node("div", undefined, "download-links mv-exports");
   const jsonButton = node("button", "Tải dự báo JSON ↓", "secondary");
   const csvButton = node("button", "Tải dự báo CSV ↓", "secondary");
-  const mapButton = node("button", "Xem dự báo trên bản đồ", "secondary");
-  const gateButton = node("button", "Tham khảo trong mô phỏng cống", "secondary");
+  const mapButton = node("button", "Áp dụng kịch bản dự báo lên bản đồ", "secondary");
+  const restoreButton = node('button', 'Quay về dữ liệu Timeline gốc', 'secondary');
+  restoreButton.type = 'button';
+  const gateButton = node("button", "Dùng dự báo để kiểm tra cống", "secondary");
   gateButton.type = "button";
   gateButton.disabled = true;
   jsonButton.type = csvButton.type = mapButton.type = "button";
   jsonButton.disabled = csvButton.disabled = mapButton.disabled = true;
-  exports.append(mapButton, jsonButton, csvButton, gateButton);
-  host.append(form, status, modelInfo, output, exports);
+  exports.append(mapButton, restoreButton, jsonButton, csvButton, gateButton);
+  host.append(node('p', DIRECT_FORECAST_SUBTITLE, 'subtle forecast-model-subtitle'), form, status, modelInfo, output, exports);
   const evaluation = node("details", undefined, "mv-evaluation");
-  const evaluationSummary = node("summary", "Đánh giá mô hình đa biến và các mô hình tham chiếu");
+  const evaluationSummary = node("summary", "Kiểm chứng dự báo khi EC ngừng cập nhật");
+  const evaluationExperiment = node('select');
+  evaluationExperiment.name = 'gap_experiment';
+  for (const [value, label] of [['gap_2021_2023', '2021–2023 · thiếu EC liên tục 36 tháng'], ['gap_2022_2023', '2022–2023 · thiếu EC liên tục 24 tháng'], ['gap_2019_2021', '2019–2021 · giai đoạn đối chiếu 36 tháng']]) {
+    const option = node('option', label); option.value = value; evaluationExperiment.append(option);
+  }
+  const evaluationDelay = node('select');
+  evaluationDelay.name = 'gap_ec_delay';
+  for (const [value, label] of [['5', 'EC khả dụng sau cuối tháng 5 ngày'], ['35', 'Kiểm tra độ nhạy: EC chậm 35 ngày']]) {
+    const option = node('option', label); option.value = value; evaluationDelay.append(option);
+  }
   const evaluationStatus = node("p", "", "subtle");
   evaluationStatus.setAttribute("role", "status");
   const evaluationChart = node("div", undefined, "mv-evaluation-chart");
-  const evaluationLegend = node("p", "Thực đo: xanh đậm · Random Forest: cam · Persistence: xanh lam nét đứt.", "subtle");
+  const evaluationLegend = node("p", "Thực đo giữ lại để chấm điểm: xanh đậm · Random Forest: cam · EC cuối cùng trước khi mất dữ liệu: xanh lam nét đứt.", "subtle");
   const evaluationMetrics = node("div", undefined, "mv-evaluation-metrics");
-  evaluation.append(evaluationSummary, evaluationStatus, evaluationChart, evaluationLegend, evaluationMetrics);
+  evaluation.append(evaluationSummary, labelFor('Giai đoạn mất EC giả lập', evaluationExperiment), labelFor('Giả định ngày khả dụng EC', evaluationDelay), evaluationStatus, evaluationChart, evaluationLegend, evaluationMetrics);
   host.append(evaluation);
   const predictionHistory = createPredictionHistory(host, {
     onSaved(data) {
@@ -114,14 +127,14 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     evaluationStatus.textContent = "Đang tải đánh giá của mô hình đa biến…";
     if (!selected) { evaluationStatus.textContent = "Chọn trạm để xem đánh giá."; return; }
     try {
-      const data = await api(`/multivariate/evaluation?${new URLSearchParams({ station: selected })}`, req);
+      const data = await api(`/multivariate/evaluation?${new URLSearchParams({ station: selected, protocol: 'FROZEN_EC_WEATHER_ONLY_V1', experiment: evaluationExperiment.value, ec_delay_days: evaluationDelay.value })}`, req);
       if (!req.isCurrent() || station.value !== selected) return;
-      if (data.station !== selected || data.unit !== "mS/m" || !Array.isArray(data.items)) throw new Error("Đánh giá trả về không khớp trạm hoặc đơn vị EC.");
-      evaluationStatus.textContent = `Đánh giá hồi cứu ${data.period} · phiên bản ${data.model_version}. So sánh trên cùng các tháng có đủ dữ liệu; đây là đánh giá mô hình khí tượng đa biến.`;
+      if (data.station !== selected || data.unit !== "mS/m" || data.protocol_id !== 'FROZEN_EC_WEATHER_ONLY_V1' || !Array.isArray(data.items)) throw new Error("Đánh giá trả về không khớp trạm, đơn vị EC hoặc giao thức khóa EC.");
+      evaluationStatus.textContent = `Kiểm chứng hồi cứu ${data.period}: khóa EC đến ${data.frozen_ec_through?.slice(0, 7)} tại lần phát hành đầu ${data.first_issue_date_local}; mô hình giữ cố định, khí tượng t−2 cập nhật mỗi tháng. EC trong kỳ chỉ dùng để chấm sai số. Đây không phải dự báo toàn bộ giai đoạn từ một lần phát hành.`;
       const series = [
         { key: "actual", label: "EC thực đo", color: "#12675a" },
         { key: "RandomForest", label: "Random Forest đa biến", color: "#c26728" },
-        { key: "Persistence", label: "Persistence", color: "#2676aa", dashed: true },
+        { key: "FrozenPersistence", label: "EC cuối cùng trước khi mất dữ liệu", color: "#2676aa", dashed: true },
       ];
       const rows = data.items.filter(item => /^\d{4}-(0[1-9]|1[0-2])(?:-01)?$/.test(item.target_month || "")).sort((a, b) => a.target_month.localeCompare(b.target_month));
       drawSeries(evaluationChart, series.map(item => ({ ...item, points: rows.map(row => ({ date: `${row.target_month.slice(0, 7)}-01`, value: row[item.key] })) })), { title: "EC thực đo và dự báo đa biến trên tập kiểm định", connected: true });
@@ -129,17 +142,19 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       const table = node("table"), head = node("thead"), header = node("tr"), body = node("tbody");
       for (const label of ["Mô hình", "MAE (mS/m)", "RMSE (mS/m)", "Số tháng (n)"]) header.append(node("th", label));
       head.append(header);
-      for (const [key, label] of [["RandomForest", "Random Forest đa biến"], ["Persistence", "Persistence · EC mới nhất khả dụng (t−2)"], ["SeasonalNaive", "Seasonal Naive · cùng tháng năm trước"], ["MonthlyClimatology", "Trung bình EC theo tháng trong tập huấn luyện"]]) {
+      for (const { key, label } of data.methods || []) {
         const metric = data.metrics?.[key] || {}, row = node("tr");
         for (const value of [label, num(metric.mae_mS_m), num(metric.rmse_mS_m), metric.n ?? "—"]) row.append(node("td", String(value)));
         body.append(row);
       }
       table.append(head, body);
-      evaluationMetrics.append(table, node("p", "Sai số nhỏ hơn là tốt hơn. Đối chiếu Random Forest với các mô hình tham chiếu trước khi diễn giải mức cải thiện; sai số kiểm định không đảm bảo độ chính xác của từng tháng tương lai.", "subtle"));
+      evaluationMetrics.append(table, node('p', `SeasonalNaive dùng EC thực đo t−12 chỉ khả dụng ${data.seasonal_naive?.available_months ?? '—'}/${data.seasonal_naive?.total_months ?? '—'} tháng, nên không xếp hạng toàn kỳ. Đối chứng lặp mùa trong bảng chỉ lặp EC đã có trước mốc khóa, không nhận EC mới.`, 'subtle'), node("p", "Sai số nhỏ hơn là tốt hơn. So sánh với RF chỉ dùng chu kỳ tháng để kiểm tra đóng góp của khí tượng. Các kỳ đã từng được xem xét, đây là kiểm chứng hồi cứu; chưa có EC thực đo 2024–2026 để xác nhận sai số giai đoạn đó.", "subtle"));
     } catch (error) {
       if (req.isCurrent() && station.value === selected) evaluationStatus.textContent = error.message;
     }
   }
+  evaluationExperiment.addEventListener('change', loadEvaluation);
+  evaluationDelay.addEventListener('change', loadEvaluation);
 
   const currentStation = () => stations.find(item => item.station === station.value);
   const textValue = value => value == null ? "Chưa có" : typeof value === "object" ? JSON.stringify(value) : String(value);
@@ -266,8 +281,10 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     }
     table.append(head, body);
     output.append(node("h4", `Đầu vào tháng ${data.input_month || "—"}`), table);
-    const training = data.training || {}, metrics = data.metrics || {};
-    output.append(node("p", `Huấn luyện đến ${textValue(training.through)} · ${textValue(training.samples)} mẫu. Sai số kiểm định: MAE ${num(metrics.mae_mS_m)} mS/m · RMSE ${num(metrics.rmse_mS_m)} mS/m · n = ${textValue(metrics.n)}.`, "mv-validation"));
+    const training = data.training || {}, gap = data.gap_validation;
+    const metrics = gap?.metrics?.RandomForest || data.metrics || {};
+    const metricContext = gap ? `Kiểm chứng thiếu EC liên tục ${gap.period}, mô hình huấn luyện cố định tại mốc lịch sử` : 'Đánh giá lịch sử theo giao thức của phiên bản mô hình';
+    output.append(node("p", `Huấn luyện đến ${textValue(training.through)} · ${textValue(training.samples)} mẫu. ${metricContext}: MAE ${num(metrics.mae_mS_m)} mS/m · RMSE ${num(metrics.rmse_mS_m)} mS/m · n = ${textValue(metrics.n)}.`, "mv-validation"));
     output.append(node("p", "MAE và RMSE mô tả sai số trên tập kiểm định; không phải khoảng tin cậy của dự báo riêng này. Kết quả EC theo tháng phục vụ đánh giá và lập kế hoạch.", "subtle"));
     if (data.feature_importance?.length) {
       output.append(node("h4", "Độ quan trọng của biến trong mô hình"));
@@ -331,6 +348,10 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   jsonButton.addEventListener("click", () => { if (result) save(`${result.station}_${result.target_month}_multivariate.json`, result); });
   mapButton.addEventListener("click", () => {
     if (result) window.dispatchEvent(new CustomEvent("workspace:show-forecast-map", { detail: result }));
+  });
+  restoreButton.addEventListener('click', () => {
+    window.dispatchEvent(new CustomEvent('workspace:restore-timeline'));
+    location.hash = 'observations';
   });
   gateButton.addEventListener("click", () => {
     if (!result) return;

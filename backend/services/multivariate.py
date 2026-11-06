@@ -46,8 +46,11 @@ def catalog():
                 input_note='Mưa, nhiệt độ và gió của tháng t−2, cộng chu kỳ mùa vụ tháng dự báo. Không dùng khí tượng thực tế của tháng mục tiêu.')
 
 
-def evaluation(station: str):
+def evaluation(station: str, protocol='HISTORICAL', experiment=None, ec_delay_days=5):
     try:
+        if protocol == 'FROZEN_EC_WEATHER_ONLY_V1':
+            from backend.domain.ec_gap_evaluation import records
+            return records(station, experiment, ec_delay_days)
         return models.evaluation_records(station)
     except (OSError, ValueError, KeyError, TypeError, ImportError) as exc:
         raise WorkspaceError(503, 'Chưa đọc được kết quả đánh giá của mô hình đa biến này.') from exc
@@ -119,6 +122,7 @@ def predict(payload):
                 issued_at=now.isoformat(), inputs=features, input_provenance=source,
                 training=dict(through=selected['trained_through'], samples=selected['training_samples']),
                 metrics=selected['metrics'], evaluation=selected['evaluation'],
+                gap_validation=selected.get('gap_validation'),
                 feature_importance=selected['feature_importance'],
                 data_kind='MULTIVARIATE_MONTHLY_FORECAST',
                 target_is_before_current_month=target < now.date().replace(day=1),

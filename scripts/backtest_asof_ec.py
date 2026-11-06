@@ -1,11 +1,13 @@
 """Monthly rolling-origin EC backtest with explicit issue-time availability assumptions."""
 
 import csv
+import calendar
 import hashlib
 import json
 import math
 import sys
-from datetime import date
+from datetime import date, timedelta
+from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
@@ -31,10 +33,12 @@ def issue_date_for(target_month):
     return date(previous.year, previous.month, 6)
 
 
+@lru_cache(maxsize=4096)
 def available_date_for(month_start, lag_days):
     """Assumed publication on month end plus lag_days, inclusive at issue date."""
-    first = pd.Timestamp(month_start)
-    return (first + pd.offsets.MonthEnd(0) + pd.Timedelta(days=lag_days)).date()
+    first = pd.Timestamp(month_start).date()
+    month_end = date(first.year, first.month, calendar.monthrange(first.year, first.month)[1])
+    return month_end + timedelta(days=int(lag_days))
 
 
 def split_for(target):
@@ -61,6 +65,8 @@ def write_csv(path, rows):
 
 def run(output_dir=OUTPUT):
     frame, _ = training_frame(TARGET_PATH, WEATHER_MANIFEST)
+    # Preserve this original two-station protocol; My Thuan has a separate audited run.
+    frame = frame[frame.station.isin(['MYTHO', 'TANCHAU'])].copy()
     frame["weather_available_at"] = frame.weather_month.map(lambda month: available_date_for(month, 5))
     predictions = []
     for station, station_rows in frame.groupby("station", sort=True):

@@ -14,7 +14,7 @@ from backend.main import app
 from backend.services import spatial_simulation
 
 
-METHODOLOGY = '1D River-Axis IDW & Empirical EC-Salinity Conversion (0.0064 g/L per mS/m)'
+METHODOLOGY = spatial_simulation.METHODOLOGY
 EXPECTED_ADVISORIES = {
     'OPEN_INTAKE': ('ADVISORY_SAFE_INTAKE', '#10b981',
                     'EC mô phỏng dưới ngưỡng lấy nước của kịch bản'),
@@ -179,9 +179,11 @@ class SpatialSimulationTests(unittest.TestCase):
         for month in ['2016-03', '2024-04', '2022-10']:
             self.assertIn(month, months)
         indexed = {item['year_month']: item for item in result['items']}
+        from backend.repositories.workspace import estimate_rows
+        forecast = {r['station']: float(r['predicted_ec_mS_m']) for r in estimate_rows() if r['year_month'] == '2024-04'}
         for month, upstream, downstream, regime in [
             ('2016-03', 21.8, 385.0, 'OBSERVED_MRC'),
-            ('2024-04', 22.651, 26.68, 'ML_FORECAST_ERA5'),
+            ('2024-04', forecast['TanChau'], forecast['MyTho'], 'ML_FORECAST_ERA5'),
             ('2022-10', 11.5, 13.53, 'OBSERVED_MRC'),
         ]:
             row = indexed[month]
@@ -256,7 +258,7 @@ class SpatialSimulationTests(unittest.TestCase):
         coordinates = next(f for f in corridor if f['properties']['id'] == 'TIEN_MAIN')['geometry']['coordinates']
         axis = spatial_simulation.RiverAxis(coordinates)
         anchors = [(r['chainage_km'], r['ec_mS_m']) for r in frame['boundary_conditions']]
-        self.assertEqual([x for x, _ in anchors], [0, 125, 175])
+        self.assertEqual([x for x, _ in anchors], [0, 85.217605, 125, 175])
         for chainage, ec in anchors:
             with self.subTest(chainage=chainage):
                 self.assertEqual(spatial_simulation._idw(chainage, anchors), ec)
@@ -272,7 +274,7 @@ class SpatialSimulationTests(unittest.TestCase):
         segments = spatial_simulation.interpolate_river_profile('2024-04')
         self.assertEqual(segments, frame['river_segments'])
         self.assertEqual(segments[0]['properties']['start_ec_mS_m'], anchors[0][1])
-        self.assertEqual(segments[24]['properties']['end_ec_mS_m'], anchors[1][1])
+        self.assertEqual(segments[24]['properties']['end_ec_mS_m'], anchors[2][1])
         self.assertEqual(segments[-1]['properties']['end_ec_mS_m'], anchors[-1][1])
 
     def test_isohaline_crossings_and_seasonal_flow_are_consistent(self):

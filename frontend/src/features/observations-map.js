@@ -15,7 +15,7 @@ import { defaults as controls, ScaleLine } from 'ol/control.js';
 import { mapFeatures } from '../research-utils.js';
 import { ecComparison } from '../shared/ec-scenario.js';
 import { formatWater, advisoryColor } from '../shared/simulation-display.js';
-import { smoothRiverSegments, smoothCoordinates } from './river-geometry.js';
+import { smoothRiverSegments, smoothCoordinates, riverRibbon } from './river-geometry.js';
 import { createMapParticles } from './map-particles.js';
 import { inspectWaterPoint, validCoordinate } from './point-inspection.js';
 import { cropAdvisories } from '../shared/water-advisory.js';
@@ -88,7 +88,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const comparison = ecComparison(), ec = f.get('latest_ec_mS_m');
     const exceeds = comparison && Number.isFinite(ec) ? ec >= comparison.threshold : null;
     const stationName = `${f.get('site_code')} ${f.get('site_name')}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/gi, '').toLowerCase();
-    const stationLabel = stationName.includes('tanchau') ? 'Tân Châu' : stationName.includes('mytho') ? 'Mỹ Tho' : f.get('site_name');
+    const stationLabel = stationName.includes('tanchau') ? 'Tân Châu' : stationName.includes('mythuan') ? 'Mỹ Thuận' : stationName.includes('mytho') ? 'Mỹ Tho' : f.get('site_name');
     const compactWater = formatWater(ec);
     const sampleDate = f.get('last_observed_date') || 'chưa có ngày';
     const key = `${f.get('site_code')}:${f.get('site_code') === selected}:${f.get('assumed_crs')}:${exceeds}:${ec}:${sampleDate}`;
@@ -163,7 +163,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const station = map.forEachFeatureAtPixel(event.pixel, feature => feature, { layerFilter: layer => layer === stations, hitTolerance: 14 });
     if (station) {
       const name = `${station.get('site_code')} ${station.get('site_name')}`.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/gi,'').toLowerCase();
-      const value = name.includes('tanchau') ? frame?.inputs?.tan_chau_ec_mS_m : name.includes('mytho') ? frame?.inputs?.my_tho_ec_mS_m : null;
+      const value = name.includes('tanchau') ? frame?.inputs?.tan_chau_ec_mS_m : name.includes('mythuan') ? frame?.inputs?.my_thuan_ec_mS_m : name.includes('mytho') ? frame?.inputs?.my_tho_ec_mS_m : null;
       riverTooltip.hidden = false; riverTooltip.textContent = `${station.get('site_name')} · Mẫu nguồn ${station.get('last_observed_date') || 'chưa rõ ngày'}: ${formatWater(station.get('latest_ec_mS_m'))}${value == null ? '' : ` · Đầu vào mô phỏng ${frame.year_month}: ${formatWater(value,displayUnit)}`}`;
     }
   }
@@ -176,8 +176,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const extent = riverSource.getFeatures().length ? riverSource.getExtent() : boundarySource.getFeatures().length ? boundarySource.getExtent() : source.getExtent();
     const size = map.getSize() || [1000, 900], mobile = size[0] < 700;
     const dockHeight = document.getElementById('simulationTimeline')?.getBoundingClientRect().height || 255;
-    const forecastVisible = !document.getElementById('mapForecastBanner')?.hidden;
-    const desired = [forecastVisible ? (mobile ? 150 : 110) : 50, mobile ? 35 : 60, dockHeight + 35, mobile ? 35 : 60];
+    const desired = [50, mobile ? 35 : 60, dockHeight + 35, mobile ? 35 : 60];
     // Keep a usable viewport even when an embedding panel is shorter than its overlays.
     const scale = Math.min(1, Math.max(0, size[1] - 150) / (desired[0] + desired[2]));
     const padding = [desired[0] * scale, desired[1], desired[2] * scale, desired[3]];
@@ -270,7 +269,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const advisory = add('p', gate.advisory_label_vi || gate.advisory_label || gate.advisory_code || gate.simulated_gate_state, 'simulation-advisory'); advisory.style.color = advisoryColor(gate);
     add('p', 'Đây là EC nội suy theo kịch bản, chưa có số đo tại cống và không phải lệnh vận hành.');
     const actions = add('div', '', 'simulation-card-actions');
-    const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Đưa vào Hồ sơ cống để kiểm tra & quyết định vận hành →';
+    const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Kiểm tra điều kiện tại cống →';
     const displayedFrame = frame;
     apply.addEventListener('click', () => {
       if (frame !== displayedFrame || !frame?.gates.includes(gate)) return;
@@ -301,15 +300,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     frame = value; intakeGate = null; hoveredSegment = null; hoveredGate = null; updateRiverTooltip(); riverSource.clear(); simulationGateSource.clear(); isoSource.clear(); isoStyles.clear();
     const smoothed = smoothRiverSegments(frame?.river_segments || [], riverInterpolation);
     // Subdivide only display geometry: particles retain the original 35 continuous paths.
-    const ribbon = smoothed.segments.flatMap(feature => {
-      const coordinates = feature.geometry.coordinates, count = Math.min(8, coordinates.length - 1), props = feature.properties;
-      const startEC = props.start_ec_mS_m ?? props.ec_mS_m, endEC = props.end_ec_mS_m ?? props.ec_mS_m;
-      return Array.from({length:count}, (_, index) => {
-        const start = Math.floor(index * (coordinates.length - 1) / count), end = Math.floor((index + 1) * (coordinates.length - 1) / count);
-        const fraction = (start + end) / (2 * (coordinates.length - 1)), ec = startEC + (endEC - startEC) * fraction;
-        return {...feature, id:`${feature.id || props.segment_id}_R${index}`, properties:{...props,ec_mS_m:ec,salinity_g_l:ec*.0064}, geometry:{...feature.geometry,coordinates:coordinates.slice(start,end+1)}};
-      });
-    });
+    const ribbon = riverRibbon(smoothed.segments);
     ribbonStyles.clear();
     riverSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features: ribbon }, options));
     particles.setFrame(frame,smoothed.segments);
@@ -336,8 +327,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   document.addEventListener('visibilitychange', resumeVisibleMap);
   const listeners = [
     ['workspace:simulation-corridor', event => setSimulationCorridor(event.detail)],
-    ['workspace:simulation-frame', event => setSimulationFrame(event.detail)],
-    ['workspace:simulation-loading', () => setSimulationFrame(null)],
+    ['workspace:display-simulation-frame', event => setSimulationFrame(event.detail)],
     ['workspace:simulation-unit', event => setDisplayUnit(event.detail?.unit)],
     ['workspace:select-simulation-gate', event => selectSimulationGate(event.detail?.gate_code,event.detail?.focus !== false,event.detail?.interaction)],
     ['workspace:focus-coordinate', event => {

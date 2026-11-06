@@ -32,7 +32,7 @@ export function nearestRiverPoint(point, segments = []) {
       const fraction = lengthSquared ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / lengthSquared)) : 0;
       const coordinate = [a[0] + fraction * (b[0] - a[0]), a[1] + fraction * (b[1] - a[1])];
       const distanceKm = haversineKm(point, coordinate);
-      if (!nearest || distanceKm < nearest.distanceKm) nearest = { segment, coordinate, distanceKm };
+      if (!nearest || distanceKm < nearest.distanceKm) nearest = { segment, coordinate, distanceKm, spanIndex: i - 1, spanFraction: fraction };
     }
   }
   return nearest;

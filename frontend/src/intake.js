@@ -1,6 +1,5 @@
 import { createRequestGate } from "./api.js";
 import { workspaceAPI as requestJSON } from "./shared/workspace-api.js";
-import { safeExternalURL } from "./research-utils.js";
 const cell = (tag, text) => {
   const n = document.createElement(tag);
   n.textContent = text;
@@ -82,26 +81,13 @@ export async function showIntake(host = document.getElementById("intakeHost")) {
         if (!req.isCurrent()) return;
         observationStatus.textContent = `${data.items.length}/${data.total} bản ghi · g/L · UNVERIFIED · chưa dùng huấn luyện hoặc vận hành.`;
         const table2 = document.createElement("table"), head2 = document.createElement("thead"), row = document.createElement("tr");
-        for (const title of ["Ngày ghi trong nguồn", "Giờ / kỳ đo", "Chế độ đo", "Độ mặn (g/L)", "Nguồn và vị trí dòng"]) row.append(cell("th", title));
+        for (const title of ["Ngày ghi trong nguồn", "Giờ / kỳ đo", "Chế độ đo", "Độ mặn (g/L)"]) row.append(cell("th", title));
         head2.append(row);
         table2.append(head2);
         const body2 = document.createElement("tbody");
         for (const r of data.items) {
           const row2 = document.createElement("tr");
           for (const value of [r.observed_date, r.source_time_or_period, r.measurement_regime, r.value]) row2.append(cell("td", value));
-          const source = cell("td", r.source_locator), url = safeExternalURL(r.source_url);
-          if (url) {
-            const link = cell("a", "Mở nguồn được khai báo");
-            link.href = url;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            source.append(document.createElement("br"), link);
-          } else {
-            const reference = cell("small", r.source_url);
-            reference.style.overflowWrap = "anywhere";
-            source.append(document.createElement("br"), reference);
-          }
-          row2.append(source);
           body2.append(row2);
         }
         table2.append(body2);

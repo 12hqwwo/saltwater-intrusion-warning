@@ -13,7 +13,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import mean_absolute_error, mean_squared_error
-from backend.domain.multivariate_ec import FEATURES, UNITS, sha256
+from backend.domain.multivariate_ec import FEATURES, UNITS, STATIONS, sha256
 from backend.repositories.multivariate_inputs import get_monthly_weather
 
 
@@ -38,9 +38,8 @@ def training_frame(target_path, weather_path):
     weather['weather_month'] = pd.to_datetime(weather['input_month'])
     weather = weather[['station', 'weather_month'] + list(UNITS)[:3]]
     weather_hashes = {}
-    for source in provenance['retrievals']:
-        path = weather_path.parent / source['file']
-        weather_hashes[str(path.relative_to(ROOT)).replace('\\', '/')] = source['sha256']
+    for source in weather_rows:
+        weather_hashes[source['source']] = source['sha256']
     targets['weather_month'] = targets['month_start'] - pd.DateOffset(months=2)
     frame = targets.merge(weather, on=['station', 'weather_month'], how='left', validate='many_to_one')
     if frame[list(UNITS)[:3]].isna().any().any():
@@ -103,7 +102,7 @@ def train():
             training_months=len(data), source_sample_count=int(data.sample_count.sum()),
             target_unit='mS/m', target_quality='UNVERIFIED_SOURCE_QA_NOT_PROMOTED',
             source_qa_counts=pd.Series([r['quality_flag'] for r in source_bundle['observations']
-                if r['site_code'] == {'MYTHO': 'MRC_VN_019805', 'TANCHAU': 'MRC_VN_019803'}[station]]).value_counts().to_dict(),
+                if r['site_code'] == STATIONS[station][1]]).value_counts().to_dict(),
             source_observation_bundle_sha256=sha256(ROOT / 'data/research/workspace.json'),
             input_sha256={str(p.relative_to(ROOT)): sha256(p) for p in [target_path, weather_path]},
             weather_source_sha256=weather_hashes,

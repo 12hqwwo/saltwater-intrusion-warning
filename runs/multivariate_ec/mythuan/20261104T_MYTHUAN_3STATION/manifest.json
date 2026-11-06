@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "model_version": "20261104T_MYTHUAN_3STATION",
+  "station": "MYTHUAN",
+  "model": "RandomForestRegressor",
+  "sklearn_version": "1.9.1",
+  "feature_order": [
+    "rainfall_mm",
+    "temperature_degC",
+    "wind_source_units",
+    "month_sin",
+    "month_cos"
+  ],
+  "feature_units": {
+    "rainfall_mm": "mm",
+    "temperature_degC": "degC",
+    "wind_source_units": "m/s",
+    "month_sin": "1",
+    "month_cos": "1"
+  },
+  "weather_lag_months": 2,
+  "training_cutoff": "2023-12-01",
+  "training_months": 451,
+  "source_sample_count": 451,
+  "target_unit": "mS/m",
+  "target_quality": "UNVERIFIED_SOURCE_QA_NOT_PROMOTED",
+  "source_qa_counts": {
+    "UNVERIFIED": 451
+  },
+  "model_sha256": "8ccf590c40f8ef961b91f3fa549d97019518ebccfb666f27197f8f110cfdd120",
+  "predictions_sha256": "82b66b444dc190034f1dd97f1f16d8d88686a2051ca02de6e7589d13a381972a",
+  "input_sha256": {
+    "data/external/tien_multisite_20261029_verified/019804_Conductivity_Water Quality_4c105414.csv": "efc3cd6136024f87708b2834a04dbcd3761f2e156625722a4d2ad71b24120482"
+  },
+  "weather_source_sha256": {
+    "data/external/mythuan_weather_20261104/era5_MyThuan_1985-01-01_1989-12-31.json": "cbd2f413ec94dd38b547c03b97fbe0cafc68a796798b1c21893e64054a355c89",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_1990-01-01_1994-12-31.json": "0fd701cf4d740b6811b861a50c1a35e9a20200a6a10b01da88c7b758a3f0574d",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_1995-01-01_1999-12-31.json": "9d3cf73ecaeeff3746f5656a5204e796ca80b6382dcfbe212913c70ffad3951f",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2000-01-01_2004-12-31.json": "769e76dbf17cd609d4b6832713f7b9e772c4ac177cfade54ecd974fa00526da9",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2005-01-01_2009-12-31.json": "180594368fe69730f578b7f685a4767268851d7ca08bdab41ac7fc935f0c21db",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2010-01-01_2014-12-31.json": "3fe89bd7f5c49ddda151541d289b90b1d9e616d8f0101d2cdce1a71d523a224e",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2015-01-01_2019-12-31.json": "1ac290c43f162ec81f2a1c5bfe437501d4e3ca1901222421da2c57b8e732f600",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2020-01-01_2024-12-31.json": "c9075eeccc9f38ff4ff8f22e3d205e6fcd0eb75cd22e830a1a4794fb93e559cc",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2025-01-01_2026-09-30.json": "ce4821edfc4374c5ffa28aabf1c41bbacec196fa9ee2913bcc13055072385e59"
+  },
+  "evaluation": {
+    "holdout": {
+      "RandomForest": {
+        "n": 24,
+        "mae_mS_m": 3.9174246859358006,
+        "rmse_mS_m": 4.856469334062697
+      },
+      "Persistence": {
+        "n": 24,
+        "mae_mS_m": 4.8062499999999995,
+        "rmse_mS_m": 5.772398764811731
+      },
+      "SeasonalNaive": {
+        "n": 24,
+        "mae_mS_m": 1.8933333333333338,
+        "rmse_mS_m": 2.5388169817193735
+      },
+      "MonthlyClimatology": {
+        "n": 24,
+        "mae_mS_m": 3.9569932343057346,
+        "rmse_mS_m": 4.720397283276758
+      }
+    },
+    "validation": {
+      "RandomForest": {
+        "n": 36,
+        "mae_mS_m": 4.070804065412066,
+        "rmse_mS_m": 4.9755784548182405
+      },
+      "Persistence": {
+        "n": 36,
+        "mae_mS_m": 4.639444444444444,
+        "rmse_mS_m": 5.560760839229746
+      },
+      "SeasonalNaive": {
+        "n": 36,
+        "mae_mS_m": 2.4525000000000006,
+        "rmse_mS_m": 3.044552056086777
+      },
+      "MonthlyClimatology": {
+        "n": 36,
+        "mae_mS_m": 4.348302787592311,
+        "rmse_mS_m": 4.9960713024431005
+      }
+    }
+  },
+  "evaluation_protocol": "Rolling-origin as-of issue day 6 of t-1; EC +5 days, ERA5 t-2 +5 days; retrospective 2022-2023, not a new blind holdout",
+  "feature_importance": {
+    "rainfall_mm": 0.5695410385642563,
+    "temperature_degC": 0.13581553055658768,
+    "wind_source_units": 0.11738001865136045,
+    "month_sin": 0.0928217053182332,
+    "month_cos": 0.08444170690956251
+  },
+  "parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "random_state": 42
+  },
+  "deployment_ready": false,
+  "reference_evaluation": "outputs/mythuan_three_station_20261104/run_manifest.json"
+}

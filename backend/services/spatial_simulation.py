@@ -12,11 +12,13 @@ from pathlib import Path
 from backend.repositories import workspace as store
 from backend.services.spatial_inputs import monthly_inputs
 from backend.services.workspace import WorkspaceError, load_bundle
+from backend.domain.river_interpolation import (MY_THUAN_KM, MY_THUAN_COORDINATE,
+    THREE_STATION_MODE, TWO_STATION_MODE, interpolate_anchors)
 
 ROOT = Path(__file__).resolve().parents[2]
 CORRIDOR_PATH = ROOT / 'data/biengioi/tien_river_corridor.geojson'
 GATE_CATALOG = ROOT / 'data/8file/03_sluice_gates_190_and_27_verified_gis.csv'
-METHODOLOGY = '1D River-Axis IDW & Empirical EC-Salinity Conversion (0.0064 g/L per mS/m)'
+METHODOLOGY = 'Piecewise 3-Station River-Axis Linear Interpolation & Empirical EC-Salinity Conversion (0.0064 g/L per mS/m)'
 # Axis anchors are orthogonal feet on the cached OSM centerline, not bank pins.
 # Keep the station features themselves at their original catalog coordinates.
 TAN_CHAU = [105.23607136, 10.80589425]
@@ -221,16 +223,18 @@ def _anchors(month):
     # downstream gradient in dry months. No simulated boundary is an observation.
     amplification = 6.0 if dry else 1.5
     estuary = downstream * amplification + max(0, downstream - upstream) * 0.4
-    return [(0.0, upstream), (125.0, downstream), (175.0, estuary)], dry, amplification
+    anchors = [(0.0, upstream)]
+    middle = month.get('my_thuan_ec_mS_m')
+    if middle is not None:
+        anchors.append((MY_THUAN_KM, _nonnegative(middle, 'My Thuan EC')))
+    elif month['year_month'] >= '2024-01':
+        raise WorkspaceError(503, 'Forecast months require all three station anchors.')
+    return anchors + [(125.0, downstream), (175.0, estuary)], dry, amplification
 
 
 def _idw(chainage, anchors):
-    for x, value in anchors:
-        if abs(x - chainage) < 1e-9:
-            return value
-    left, right = (anchors[:2] if chainage < 125 else anchors[1:])
-    weights = [1 / abs(chainage - x) ** 2 for x, _ in (left, right)]
-    return sum(weight * row[1] for weight, row in zip(weights, (left, right))) / sum(weights)
+    # Retained private name for existing integrations; the method is now linear.
+    return interpolate_anchors(chainage, anchors)
 
 
 def _segments(month, axis, threshold):
@@ -249,6 +253,9 @@ def _segments(month, axis, threshold):
                                chainage_km=(start + end) / 2, ec_mS_m=round(ec, 6),
                                start_ec_mS_m=round(_idw(start, anchors), 6),
                                end_ec_mS_m=round(_idw(end, anchors), 6),
+                               ec_stops=[dict(fraction=(x-start)/(end-start), ec_mS_m=_idw(x, anchors))
+                                   for x in [start] + [a for a, _ in anchors if start < a < end] + [end]],
+                               interpolation_mode=month.get('interpolation_mode'),
                                salinity_g_l=ec_to_salinity_g_l(ec),
                                flow_direction='UPSTREAM_SALINE_INTRUSION' if intrusion else 'DOWNSTREAM_FRESHWATER',
                                flow_velocity_factor=round(max(0.2, min(1.5, factor)), 3),
@@ -318,19 +325,25 @@ def simulation_frame(year_month, open_below_ec=120.0, close_above_ec=150.0):
         state = gate_state(ec, open_below_ec, close_above_ec)
         advisory_code, advisory_color, advisory_label = GATE_ADVISORIES[state]
         gates.append(dict(gate, **projection, simulated_outside_ec_mS_m=ec,
+                          interpolation_mode=month.get('interpolation_mode'),
                           simulated_outside_salinity_g_l=ec_to_salinity_g_l(ec),
                           simulated_gate_state=state, state_color=colors[state],
                           advisory_code=advisory_code, advisory_color=advisory_color,
                           advisory_label=advisory_label, human_in_the_loop_Required=True, human_in_the_loop_required=True,
                           canal_particle_intake_enabled=False))
-    return dict(year_month=year_month, inputs=month, river_segments=_segments(month, axis, close_above_ec),
+    return dict(year_month=year_month, inputs=month,
+                interpolation_mode=month.get('interpolation_mode'),
+                interpolation_fallback_reason=month.get('interpolation_fallback_reason'),
+                river_segments=_segments(month, axis, close_above_ec),
                 gates=gates, catalog=catalog, isohaline_boundaries=_isohalines(anchors, axis),
                 wind=month['wind'], thresholds=dict(open_below_ec_ms_m=open_below_ec,
                     close_at_or_above_ec_ms_m=close_above_ec),
                 boundary_conditions=[dict(chainage_km=x, coordinate=axis.coordinate(x), ec_mS_m=round(ec, 6),
                     salinity_g_l=ec_to_salinity_g_l(ec),
                     basis='SIMULATED_ESTUARY_BOUNDARY' if x == 175 else 'MONTHLY_STATION_INPUT') for x, ec in anchors],
-                assumptions=dict(idw_power=2, interpolation_neighbors='TWO_BRACKETING_AXIS_ANCHORS',
+                assumptions=dict(idw_power=None, interpolation_neighbors='ADJACENT_STATION_ANCHORS',
+                    interpolation_method='PIECEWISE_LINEAR', my_thuan_chainage_km=MY_THUAN_KM,
+                    station_chainage_anchors_km=[x for x, _ in anchors if x <= 125],
                     chainage_anchors_km=[0, 125, 175], segment_count=35, dry_season=dry,
                     estuary_amplification=amplification,
                     estuary_formula='my_tho_ec * amplification + max(0, my_tho_ec - tan_chau_ec) * 0.4',

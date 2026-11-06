@@ -88,7 +88,7 @@ export function createForecasts() {
       $("modelAssessment").classList.toggle("good", beatsBaseline);
       $("modelAssessment").textContent = `${ex.selected_model} được chọn trên validation. MAE test ${num(selected.mae_mS_m)} mS/m, ${beatsBaseline ? "thấp hơn" : "không thấp hơn"} Persistence (${num(baseline.mae_mS_m)} mS/m). ${beatsBaseline ? "Kết quả chỉ có hiệu lực trong phạm vi thí nghiệm này." : "Chưa có căn cứ dùng mô hình này thay baseline tại trạm."}`;
       activeExperiment = ex;
-      nextForecast.load(id);
+      nextForecast.load(id, ex);
       for (const year of [...new Set(ex.predictions.map(row => row.target_month.slice(0, 4)))].sort()) {
         const option = node("option", year); option.value = year; $("predictionYear").append(option);
       }

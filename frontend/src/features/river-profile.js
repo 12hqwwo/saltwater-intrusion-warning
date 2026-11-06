@@ -1,4 +1,5 @@
 import { advisoryColor, formatWater } from '../shared/simulation-display.js';
+import { MY_THUAN_KM } from '../shared/river-interpolation.js';
 
 const LENGTH_KM = 175;
 const validChainage = value => Number.isFinite(value) && value >= 0 && value <= LENGTH_KM;
@@ -9,6 +10,10 @@ export function riverProfileData(frame, unit = 'ec') {
     const p = feature.properties || {};
     for (const [km, ec] of [[p.chainage_start_km, p.start_ec_mS_m], [p.chainage_km, p.ec_mS_m], [p.chainage_end_km, p.end_ec_mS_m]]) {
       if (validChainage(km) && Number.isFinite(ec) && ec >= 0) samples.set(km, convert(ec));
+    }
+    for (const stop of p.ec_stops || []) {
+      const km = p.chainage_start_km + (p.chainage_end_km - p.chainage_start_km) * stop.fraction;
+      if (validChainage(km) && Number.isFinite(stop.ec_mS_m) && stop.ec_mS_m >= 0) samples.set(km, convert(stop.ec_mS_m));
     }
   }
   const points = [...samples].sort((a, b) => a[0] - b[0]);
@@ -112,7 +117,7 @@ export function createRiverProfile(host) {
       bind(button, gate); matrix.append(button);
     }
     const anchors = doc.createElement('div'); anchors.className = 'river-profile-anchors';
-    for (const [name, km] of [['Tân Châu', 0], ['Mỹ Tho', 125], ['Cửa Tiểu', 175]]) {
+    for (const [name, km] of [['Tân Châu', 0], ['Mỹ Thuận', MY_THUAN_KM], ['Mỹ Tho', 125], ['Cửa Tiểu', 175]]) {
       const label = doc.createElement('span'); label.textContent = `${name} · ${km} km`;
       label.style.left = `${km / LENGTH_KM * 100}%`;
       label.style.transform = km === 0 ? 'none' : km === 175 ? 'translateX(-100%)' : 'translateX(-50%)';

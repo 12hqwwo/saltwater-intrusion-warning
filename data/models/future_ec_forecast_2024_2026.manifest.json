@@ -1,0 +1,66 @@
+{
+  "schema_version": 2,
+  "sha256": "1fd4f80f6f06d39e4f14fa17157f29260bcf4bf95985369def7a03f29b2cb4d7",
+  "stations": [
+    "TanChau",
+    "MyThuan",
+    "MyTho"
+  ],
+  "months": [
+    "2024-01",
+    "2024-02",
+    "2024-03",
+    "2024-04",
+    "2024-05",
+    "2024-06",
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12",
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08"
+  ],
+  "rows": 96,
+  "models": {
+    "TANCHAU": {
+      "model_version": "20261023T041813Z",
+      "model_sha256": "9b01d1232a19b70621594f1fee4baee49bde3b0af6c4899d0aa811e876a00122",
+      "training_cutoff": "2023-12-01"
+    },
+    "MYTHUAN": {
+      "model_version": "20261104T_MYTHUAN_3STATION",
+      "model_sha256": "8ccf590c40f8ef961b91f3fa549d97019518ebccfb666f27197f8f110cfdd120",
+      "training_cutoff": "2023-12-01"
+    },
+    "MYTHO": {
+      "model_version": "20261023T041813Z",
+      "model_sha256": "a51227644805d1a231a50a7b6b82203e3ffe6983898a55b8a4deebee6bd0bd25",
+      "training_cutoff": "2023-12-01"
+    }
+  },
+  "weather_lag_months": 2,
+  "ec_required_at_inference": false,
+  "builder": "scripts/run_future_forecast_2024_2026.py",
+  "builder_sha256": "1ec085c85a65be159bfd2d767e89cc152700d36ba3293f8b481e68d7e0a89d01",
+  "note": "All three stations use their registered five-feature RF with weather t-2; no EC after training is used. Archive weather estimates are retrospective, not historical issue-time forecast records. No observed 2024-2026 EC is available for scoring. January 2024 is an estimate after EC December 2023 becomes available."
+}

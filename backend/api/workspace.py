@@ -90,9 +90,9 @@ async def gate_evaluation(request: Request):
 def export_estimates(station: str | None = None):
     result = forecasts.monthly_estimates(station)
     stream = io.StringIO(newline='')
-    fields = list(result['items'][0]) + [
+    fields = list(dict.fromkeys(list(result['items'][0]) + [
         'data_kind', 'unit', 'live_forecast_available', 'gate_decision_eligible'
-    ]
+    ]))
     writer = csv.DictWriter(stream, fieldnames=fields)
     writer.writeheader()
     for row in result['items']:

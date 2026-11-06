@@ -10,6 +10,7 @@ from backend.api.multivariate import ForecastRequest, Month
 from backend.services import dss_storage
 
 router = APIRouter(tags=['DSS storage'])
+multivariate_history_router = APIRouter(prefix='/multivariate', tags=['DSS storage'])
 GateCode = Annotated[str, Field(min_length=1, max_length=64, pattern=r'^[A-Za-z0-9_-]+$')]
 Limit = Annotated[int, Query(ge=1, le=100)]
 Offset = Annotated[int, Query(ge=0, le=1000000)]
@@ -38,18 +39,18 @@ def presets():
     return dss_storage.presets()
 
 
-@router.get('/multivariate/history')
+@multivariate_history_router.get('/history')
 def history(station: Annotated[str | None, Query(max_length=64)] = None,
             target_month: Month | None = None, limit: Limit = 20, offset: Offset = 0):
     return dss_storage.predictions(station, target_month, limit, offset)
 
 
-@router.get('/multivariate/history/{prediction_id}')
+@multivariate_history_router.get('/history/{prediction_id}')
 def saved_prediction(prediction_id: UUID):
     return dss_storage.prediction(prediction_id)
 
 
-@router.post('/multivariate/history', dependencies=[Depends(same_origin_write)])
+@multivariate_history_router.post('/history', dependencies=[Depends(same_origin_write)])
 def save_prediction(payload: ForecastRequest):
     return dss_storage.save_prediction(payload.model_dump())
 
@@ -74,3 +75,6 @@ async def save_draft(request: Request):
     except (ValueError, TypeError, RecursionError, ValidationError) as exc:
         raise HTTPException(422, 'Expected gate_code, input and policy objects containing finite JSON values.') from exc
     return await run_in_threadpool(dss_storage.save_draft, payload.gate_code, payload.input, payload.policy)
+
+
+router.include_router(multivariate_history_router)

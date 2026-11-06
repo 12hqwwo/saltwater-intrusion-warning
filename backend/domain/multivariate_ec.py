@@ -13,6 +13,7 @@ WEATHER_AGG = {
 FEATURES = list(WEATHER_AGG) + ['month_sin', 'month_cos']
 UNITS = dict(zip(WEATHER_AGG, ['mm', 'degC', 'm/s'])) | {'month_sin': '1', 'month_cos': '1'}
 STATIONS = {'MYTHO': ('MyTho', 'MRC_VN_019805', 'Mỹ Tho'),
+            'MYTHUAN': ('MyThuan', 'MRC_VN_019804', 'Mỹ Thuận'),
             'TANCHAU': ('TanChau', 'MRC_VN_019803', 'Tân Châu')}
 LABELS = {'rainfall_mm': 'Lượng mưa tháng', 'temperature_degC': 'Nhiệt độ trung bình tháng',
           'wind_source_units': 'Tốc độ gió trung bình tháng',
@@ -21,7 +22,7 @@ LABELS = {'rainfall_mm': 'Lượng mưa tháng', 'temperature_degC': 'Nhiệt đ
 
 def normalize_station(station):
     key = station.upper().replace(' ', '').replace('_', '')
-    aliases = {'MRCVN019805': 'MYTHO', 'MRCVN019803': 'TANCHAU'}
+    aliases = {'MRCVN019805': 'MYTHO', 'MRCVN019803': 'TANCHAU', 'MRCVN019804': 'MYTHUAN'}
     key = aliases.get(key, key)
     if key not in STATIONS:
         raise ValueError('Unknown model station.')
@@ -115,6 +116,7 @@ def ensemble_distribution(model, features):
 
 
 def model_catalog(registry_path=None):
+    from backend.domain import ec_gap_evaluation
     registry = json.loads(Path(registry_path or ROOT / 'data/models/multivariate_registry.json').read_text())
     items = []
     for station, entry in registry['models'].items():
@@ -123,11 +125,15 @@ def model_catalog(registry_path=None):
             raise ValueError('Model manifest checksum mismatch.')
         manifest = json.loads(path.read_text())
         name, site_code, site_name = STATIONS[station]
+        gap_validation = None
+        if registry_path is None and ec_gap_evaluation.INDEX.exists():
+            gap_validation = ec_gap_evaluation.summary(station)
         items.append(dict(station=name, site_code=site_code, site_name=site_name,
             model=manifest['model'], model_version=manifest['model_version'],
             trained_through=manifest['training_cutoff'], training_samples=manifest['training_months'],
             metrics=manifest['evaluation']['holdout']['RandomForest'],
-            evaluation=manifest['evaluation'], deployment_ready=False,
+            evaluation=manifest['evaluation'], gap_validation=gap_validation,
+            historical_evaluation_protocol=manifest.get('evaluation_protocol'), deployment_ready=False,
             features=[dict(name=k, label=LABELS[k], unit=UNITS[k]) for k in FEATURES],
             feature_importance=[dict(name=k, label=LABELS[k], importance=v)
                 for k, v in manifest['feature_importance'].items()]))
@@ -161,6 +167,7 @@ def evaluation_records(station, registry_path=None):
     name, site_code, _ = STATIONS[station]
     return dict(items=selected[['target_month'] + columns].to_dict('records'),
         metrics=metrics, station=name, site_code=site_code,
+        protocol_id='HISTORICAL', evaluation_protocol=manifest.get('evaluation_protocol'),
         model_version=manifest['model_version'], unit='mS/m', period='2022-01..2023-12')
 
 

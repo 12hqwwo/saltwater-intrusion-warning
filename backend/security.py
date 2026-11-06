@@ -7,7 +7,8 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 actor = ContextVar('webgis_actor', default='LOCAL_APPLICATION')
-WRITE_PATHS = {'/api/v1/workspace/gate-drafts', '/api/v1/workspace/multivariate/history'}
+WRITE_PATHS = {'/api/v1/workspace/gate-drafts', '/api/v1/workspace/multivariate/history',
+               '/api/v1/multivariate/history'}
 
 
 def enabled():

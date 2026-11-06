@@ -81,7 +81,9 @@ class WorkspaceApiTests(unittest.TestCase):
     def test_export_respects_selected_station_and_carries_scope(self):
         response = self.client.get('/api/v1/workspace/monthly-estimates/export?station=TanChau')
         self.assertEqual(response.status_code, 200)
-        rows = list(csv.DictReader(io.StringIO(response.text)))
+        reader = csv.DictReader(io.StringIO(response.text))
+        self.assertEqual(len(reader.fieldnames), len(set(reader.fieldnames)))
+        rows = list(reader)
         self.assertTrue(rows)
         self.assertEqual({row['station'] for row in rows}, {'TanChau'})
         self.assertEqual({row['data_kind'] for row in rows}, {'RETROSPECTIVE_WEATHER_ESTIMATE'})

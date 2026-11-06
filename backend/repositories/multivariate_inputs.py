@@ -12,8 +12,11 @@ import re
 ROOT = Path(__file__).resolve().parents[2]
 CANONICAL = ROOT / 'data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv'
 EXTERNAL = ROOT / 'data/external/multivariate_weather'
+MYTHUAN_EXTERNAL = ROOT / 'data/external/mythuan_weather_20261104'
 ALIASES = {'MYTHO': 'MyTho', 'TANCHAU': 'TanChau', 'MRC_VN_019805': 'MyTho',
            'MRC_VN_019803': 'TanChau', '019805': 'MyTho', '019803': 'TanChau'}
+ALIASES.update(MYTHUAN='MyThuan', MY_THUAN='MyThuan', MRC_VN_019804='MyThuan')
+ALIASES['019804'] = 'MyThuan'
 
 
 class WeatherInputUnavailable(ValueError):
@@ -56,9 +59,10 @@ def _aggregate(station, month, rows, provenance):
 
 
 def _signature():
-    files = [CANONICAL, EXTERNAL / 'manifest.json']
-    if EXTERNAL.exists():
-        files.extend(sorted(EXTERNAL.glob('era5_*.json')))
+    files = [CANONICAL]
+    for directory in (EXTERNAL, MYTHUAN_EXTERNAL):
+        files.append(directory / 'manifest.json')
+        files.extend(sorted(directory.glob('era5_*.json')))
     return tuple((str(p), p.stat().st_mtime_ns, p.stat().st_size) for p in files if p.exists())
 
 
@@ -76,15 +80,20 @@ def _load(signature):
             key = (station, row['date'][:7])
             group = grouped.setdefault(key, {'rows': [], 'provenance': provenance})
             group['rows'].append((row['date'], row['precipitation_sum'], row['temperature_2m_mean'], row['windspeed_10m_max']))
-    manifest_path = EXTERNAL / 'manifest.json'
-    if manifest_path.exists():
-        manifest = json.loads(manifest_path.read_text('utf-8'))
+    archives = []
+    for directory in (EXTERNAL, MYTHUAN_EXTERNAL):
+        manifest_path = directory / 'manifest.json'
+        if manifest_path.exists():
+            manifest = json.loads(manifest_path.read_text('utf-8'))
+            archives.extend(dict(r, _directory=directory) for r in manifest['retrievals'])
+    if archives:
         # Latest retrieved whole-month version wins deterministically; never splice days.
-        for record in sorted(manifest['retrievals'], key=lambda r: (r['retrieved_at'], r['file'])):
+        for record in sorted(archives, key=lambda r: (r['retrieved_at'], r['file'])):
             filename = record['file']
             if Path(filename).name != filename:
                 raise WeatherInputUnavailable('Invalid weather manifest path')
-            raw = (EXTERNAL / filename).read_bytes()
+            archive_path = record['_directory'] / filename
+            raw = archive_path.read_bytes()
             if hashlib.sha256(raw).hexdigest() != record['sha256']:
                 raise WeatherInputUnavailable(f'Weather source hash mismatch: {filename}')
             payload = json.loads(raw)
@@ -101,7 +110,7 @@ def _load(signature):
             new_groups = {}
             for row in zip(*(daily[k] for k in keys)):
                 new_groups.setdefault((station, row[0][:7]), []).append(row)
-            provenance = dict(source=f'data/external/multivariate_weather/{filename}', sha256=record['sha256'],
+            provenance = dict(source=archive_path.relative_to(ROOT).as_posix(), sha256=record['sha256'],
                               wind_unit='m/s', wind_unit_status='VERIFIED_RESPONSE_UNITS',
                               wind_statistic='monthly mean of daily mean 10m wind speed', source_model='ERA5',
                               retrieved_at=record['retrieved_at'], source_url=record['url'])

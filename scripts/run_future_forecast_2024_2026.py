@@ -1,85 +1,74 @@
-"""Dự báo ngoại suy EC (mS/m) cho các tháng 2024 - 2026 dựa trên mô hình học máy đa biến kết hợp khí tượng Open-Meteo."""
-import sys
+"""Build all three missing-EC station series using registered weather-t-2 models.
+
+No EC labels or model training are needed at inference. Archived weather produces
+retrospective estimates; it does not create observed EC or a scored future test.
+"""
+import hashlib
+import json
 from pathlib import Path
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+OUTPUT_FILE = ROOT / 'data/models/future_ec_forecast_2024_2026.csv'
+BACKUP = ROOT / 'outputs/frozen_ec_gap_20261104/archive_before_sync'
 
-import numpy as np
-import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.impute import SimpleImputer
 
-FEATURE_FILE = ROOT / "data" / "features" / "10_monthly_feature_v2.csv"
-OUTPUT_FILE = ROOT / "data" / "models" / "future_ec_forecast_2024_2026.csv"
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
-def run_future_forecast():
-    print("=" * 65)
-    print("MÔ HÌNH HỌC MÁY ĐA BIẾN: DỰ BÁO XU THẾ EC TỪ 2024 ĐẾN 2026")
-    print("=" * 65)
 
-    df = pd.read_csv(FEATURE_FILE)
-    features_list = ["month", "rainfall", "temperature", "wind"]
-    
-    results = []
+def run_future_forecast(start='2024-01', end='2026-08', output=OUTPUT_FILE):
+    import pandas as pd
+    from backend.domain.multivariate_ec import STATIONS, load_model, predict_month
+    from backend.repositories.multivariate_inputs import get_weather_input
+    output = Path(output)
+    months = pd.period_range(start, end, freq='M').astype(str).tolist()
+    if not months or start < '2024-01' or len(start) != 7 or len(end) != 7:
+        raise ValueError('Expected a nonempty post-training monthly range')
+    records, models = [], {}
+    for station in ('TANCHAU', 'MYTHUAN', 'MYTHO'):
+        _, manifest = load_model(station)
+        if any(month <= manifest['training_cutoff'][:7] for month in months):
+            raise ValueError('Archive target overlaps model training labels')
+        models[station] = dict(model_version=manifest['model_version'],
+            model_sha256=manifest['model_sha256'], training_cutoff=manifest['training_cutoff'])
+        for month in months:
+            weather = get_weather_input(station, month)
+            if weather.get('wind_unit') != 'm/s' or weather.get('complete') is not True:
+                raise ValueError('Archive requires complete verified-unit weather')
+            prediction = predict_month(station, month + '-01', weather)
+            records.append(dict(station=STATIONS[station][0], year_month=month,
+                predicted_ec_mS_m=prediction['predicted_ec_mS_m'],
+                rainfall_mm=weather['rainfall_mm'], temperature_degC=weather['temperature_degC'],
+                wind_m_s=weather['wind_source_units'], model='RandomForest_Multivariate_Weather',
+                input_month=weather['input_month'], weather_lag_months=2,
+                model_version=prediction['model_version'], model_sha256=prediction['model_provenance']['model_sha256'],
+                training_cutoff=manifest['training_cutoff'], weather_source=weather['source'],
+                weather_sha256=weather['sha256'], weather_assumed_available_at=weather['assumed_available_at'],
+                data_kind='RETROSPECTIVE_WEATHER_ESTIMATE',
+                estimation_method='ARCHIVE_WEATHER_T_MINUS_2_MODEL_ESTIMATE'))
+    result = pd.DataFrame(records).sort_values(['year_month', 'station'])
+    # Keep exact previous values and metadata once, including the former mixed-model archive.
+    if output.resolve() == OUTPUT_FILE.resolve() and output.exists():
+        BACKUP.mkdir(parents=True, exist_ok=True)
+        for previous in (output, output.with_suffix('.manifest.json')):
+            saved = BACKUP / previous.name
+            if previous.exists() and not saved.exists():
+                saved.write_bytes(previous.read_bytes())
+    output.parent.mkdir(parents=True, exist_ok=True)
+    result.to_csv(output, index=False, encoding='utf-8-sig')
+    manifest = dict(schema_version=2, sha256=digest(output), stations=[STATIONS[s][0] for s in models],
+        months=months, rows=len(result), models=models, weather_lag_months=2,
+        ec_required_at_inference=False, builder='scripts/run_future_forecast_2024_2026.py',
+        builder_sha256=digest(__file__),
+        note='All three stations use their registered five-feature RF with weather t-2; no EC after training is used. '
+             'Archive weather estimates are retrospective, not historical issue-time forecast records. '
+             'No observed 2024-2026 EC is available for scoring. January 2024 is an estimate after EC December 2023 becomes available.')
+    output.with_suffix('.manifest.json').write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    return result
 
-    for station in ["TanChau", "MyTho"]:
-        sub = df[df["location_id"] == station].sort_values("year_month").copy()
-        
-        # 1. Tập huấn luyện: các tháng có nhãn EC thực đo (1985 - 2023)
-        train_mask = sub["ec_target"].notna()
-        train_data = sub[train_mask]
-        
-        # 2. Tập cần dự báo: các tháng từ 2024-01 đến 2026-08
-        future_mask = sub["year_month"] >= "2024-01"
-        future_data = sub[future_mask].copy()
 
-        # Tiền xử lý
-        imputer = SimpleImputer(strategy="median")
-        X_train = imputer.fit_transform(train_data[features_list])
-        y_train = train_data["ec_target"].values
-        X_future = imputer.transform(future_data[features_list])
-
-        # Huấn luyện Random Forest
-        rf = RandomForestRegressor(
-            n_estimators=300,
-            max_depth=8,
-            min_samples_leaf=3,
-            random_state=42,
-            n_jobs=1
-        )
-        rf.fit(X_train, y_train)
-
-        # Dự báo 32 tháng tương lai
-        future_preds = rf.predict(X_future)
-        future_data["predicted_ec_mS_m"] = np.round(future_preds, 3)
-        
-        for _, row in future_data.iterrows():
-            results.append({
-                "station": station,
-                "year_month": row["year_month"],
-                "predicted_ec_mS_m": row["predicted_ec_mS_m"],
-                "rainfall_mm": row["rainfall"],
-                "temperature_degC": row["temperature"],
-                "wind_m_s": row["wind"],
-                "model": "RandomForest_Multivariate_Weather"
-            })
-
-    res_df = pd.DataFrame(results)
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    res_df.to_csv(OUTPUT_FILE, index=False, encoding="utf-8-sig")
-    print(f"\n[OK] Đã hoàn thành dự báo và lưu kết quả vào:\n     {OUTPUT_FILE.relative_to(ROOT)}")
-    
-    # Mùa khô của đồ án: tháng 12 đến tháng 4 năm sau.
-    print("\n--- MẪU DỰ BÁO CÁC THÁNG MÙA KHÔ TẠI MỸ THO VÀ TÂN CHÂU ---")
-    dry_season = res_df[res_df["year_month"].str.endswith(("-12", "-01", "-02", "-03", "-04"))]
-    print(f"{'Trạm':<10} | {'Tháng':<8} | {'EC Dự Báo (mS/m)':<18} | {'Lượng mưa (mm)':<15} | {'Nhiệt độ (°C)':<12}")
-    print("-" * 75)
-    for _, r in dry_season.head(16).iterrows():
-        print(f"{r['station']:<10} | {r['year_month']:<8} | {r['predicted_ec_mS_m']:>12.2f} mS/m | {r['rainfall_mm']:>10.1f} mm  | {r['temperature_degC']:>8.1f} °C")
-    print("=" * 75)
-
-if __name__ == "__main__":
-    run_future_forecast()
+if __name__ == '__main__':
+    frame = run_future_forecast()
+    print(f'Wrote {len(frame)} estimates: 3 stations, weather t-2, no EC at inference.')

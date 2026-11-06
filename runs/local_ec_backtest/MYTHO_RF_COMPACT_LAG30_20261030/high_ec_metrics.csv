@@ -1,3 +1,4 @@
 model,train_p90_mS_m,eval_samples,mae_mS_m,rmse_mS_m
-Persistence,71.1,1,16.07,24.3
-RF_compact,71.1,1,22.37,37.99
+Persistence,60.6,1,61.15,61.15
+Monthly Climatology,60.6,1,9.554864864864854,9.554864864864854
+RF_compact,60.6,1,39.49900957517467,39.49900957517467

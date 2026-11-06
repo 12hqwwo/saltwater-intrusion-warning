@@ -267,6 +267,15 @@ test('scenario event before timeline load preserves preset and selects nearest a
   assert.equal(queries[0].get('close_above_ec'), '80');
   await scrubber.selectMonth('2024-04', { source: 'forecast' });
   assert.deepEqual(selections.at(-1), { year_month: '2024-03', source: 'forecast' });
+  assert.match(get('simulationStatus').textContent, /2024-04 không có frame dữ liệu; đã chuyển về 2024-03/);
+  assert.equal(get('simulationMonthPicker').children.length, 2);
+  assert.equal(get('simulationMonthPicker').value, '2024-03');
+  assert.match(get('simulationRegime').textContent, /^Chuỗi ước tính khí tượng mở rộng \(chưa phải quan trắc MRC\)/);
+  window.dispatchEvent(new CustomEvent('workspace:active-forecast-context', { detail: { targetMonth: '2024-04' } }));
+  assert.match(get('simulationStatus').textContent, /Đang xem lớp sông dự báo 2024-04/);
+  assert.doesNotMatch(get('simulationStatus').textContent, /0 cống mô phỏng/);
+  window.dispatchEvent(new CustomEvent('workspace:active-forecast-context', { detail: null }));
+  assert.match(get('simulationStatus').textContent, /0 cống mô phỏng/);
   await scrubber.selectMonth('2024-04');
   assert.equal(selections.at(-1).source, 'user', 'user month changes must let the map invalidate a prior forecast overlay');
   scrubber.stop();

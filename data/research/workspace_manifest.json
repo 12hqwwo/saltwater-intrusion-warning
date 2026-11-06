@@ -1,12 +1,15 @@
 {
   "schema_version": 1,
-  "sha256": "ffbaa5fbd82207357b650934e24f276c8f7f325ae9cccbfb708eff6be337dd7e",
+  "sha256": "6adb04e791542f54328015887b3b669a2b7cd855c9c7c2d163000ff77985408f",
   "file": "workspace.json",
-  "builder_sha256": "8e1afea19d0ef8c152001b5309094592c6cf770c5bcb883ea96bbe817b076530",
-  "generated_at": "2026-10-15T11:27:30.466391+00:00",
-  "observations": 977,
-  "stations": 12,
+  "builder_sha256": "8f7e6500083a6a2324630717b956a0bc08b5f341cddd2edb435920bce7b64499",
+  "generated_at": "2026-11-04T05:39:47.063210+00:00",
+  "observations": 1428,
+  "stations": 13,
   "catalog_gates": 4,
   "experiments": 4,
-  "monthly_input_sha256": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc"
+  "monthly_input_sha256": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+  "integration_builder": "scripts/integrate_mythuan.py",
+  "integration_builder_sha256": "98ee7e8f1e95b2409a66bae6cd06a1e9ff9674689918d6dbd988f019e7bbce4d",
+  "mythuan_source_sha256": "efc3cd6136024f87708b2834a04dbcd3761f2e156625722a4d2ad71b24120482"
 }

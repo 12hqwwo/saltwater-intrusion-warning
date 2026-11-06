@@ -56,8 +56,8 @@ class ModelLoadingTests(unittest.TestCase):
 
     def test_warmup_is_best_effort_for_each_station(self):
         with patch.object(models, 'load_model', side_effect=ImportError('optional dependency')) as loader:
-            self.assertEqual(models.warmup_models(), dict(MYTHO='ImportError', TANCHAU='ImportError'))
-            self.assertEqual(loader.call_count, 2)
+            self.assertEqual(models.warmup_models(), dict(MYTHO='ImportError', MYTHUAN='ImportError', TANCHAU='ImportError'))
+            self.assertEqual(loader.call_count, 3)
 
 
 class ReferenceStationTests(unittest.TestCase):

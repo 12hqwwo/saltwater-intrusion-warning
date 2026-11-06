@@ -47,14 +47,67 @@ function prediction(overrides = {}) {
 }
 const catalog = { default_target_month: '2026-11', stations: [{ station: 'MyTho', site_code: 'MRC_VN_019805', trained_through: '2021-12-01' }, { station: 'TanChau', site_code: 'MRC_VN_019803', trained_through: '2021-12-01' }] };
 const input = (station = 'MyTho', target = '2026-11', inputMonth = '2026-09') => ({ station, target_month: target, input_month: inputMonth, wind_unit: 'm/s', complete: true, rainfall_mm: 10, temperature_degC: 25, wind_source_units: 2 });
+function frozenEvaluation(overrides = {}) {
+  return { station: 'MyTho', unit: 'mS/m', protocol_id: 'FROZEN_EC_WEATHER_ONLY_V1',
+    period: '2021-01..2023-12', frozen_ec_through: '2020-11-01', first_issue_date_local: '2020-12-06',
+    items: [{ target_month: '2021-01-01', actual: 10, RandomForest: 12, FrozenPersistence: 9 }],
+    methods: [{ key: 'RandomForest', label: 'RF khí tượng' }, { key: 'FrozenPersistence', label: 'EC khóa trước mất dữ liệu' }],
+    metrics: { RandomForest: { n: 36, mae_mS_m: 2, rmse_mS_m: 3 }, FrozenPersistence: { n: 36, mae_mS_m: 4, rmse_mS_m: 5 } },
+    seasonal_naive: { available_months: 11, total_months: 36 }, ...overrides };
+}
 async function loadMultivariate(env) {
   const feature = createMultivariateForecast();
   const loading = feature.load(); env.pending[0].respond(catalog); await flush();
-  env.pending.find(row => row.url.includes('/evaluation')).respond({ station: 'MyTho', unit: 'mS/m', items: [] });
+  env.pending.find(row => row.url.includes('/evaluation')).respond(frozenEvaluation());
   env.pending.find(row => row.url.includes('/inputs')).respond(input()); await loading;
   const all = descendants(env.get('multivariateForecastHost'));
   return { feature, all, form: all.find(row => row.tagName === 'form'), month: all.find(row => row.name === 'target_month'), mode: all.find(row => row.name === 'input_mode'), station: all.find(row => row.name === 'station'), submit: all.find(row => row.type === 'submit'), output: all.find(row => row.className === 'mv-result'), status: all.find(row => row.className === 'subtle mv-status') };
 }
+
+test('multivariate requests frozen-label evidence and renders baseline availability instead of full-period direct seasonal scores', async () => {
+  const env = environment(), ui = await loadMultivariate(env);
+  const request = new URL(env.pending.find(row => row.url.includes('/evaluation')).url, 'http://localhost');
+  assert.equal(request.searchParams.get('protocol'), 'FROZEN_EC_WEATHER_ONLY_V1');
+  assert.equal(request.searchParams.get('experiment'), 'gap_2021_2023');
+  assert.equal(request.searchParams.get('ec_delay_days'), '5');
+  const text = env.get('multivariateForecastHost').textContent;
+  assert.match(text, /khóa EC đến 2020-11/);
+  assert.match(text, /mô hình giữ cố định/);
+  assert.match(text, /11\/36 tháng/);
+  assert.match(text, /không xếp hạng toàn kỳ/);
+  assert.match(text, /RF khí tượng/);
+  assert.doesNotMatch(text, /Persistence · EC mới nhất khả dụng/);
+  assert.equal(ui.all.filter(row => row.tagName === 'circle').length, 3);
+});
+
+test('changing outage experiment discards stale evaluation responses and rejects historical protocol', async () => {
+  const env = environment(), ui = await loadMultivariate(env);
+  const select = ui.all.find(row => row.name === 'gap_experiment');
+  select.value = 'gap_2022_2023'; const old = select.emit('change'), oldRequest = env.pending.at(-1);
+  select.value = 'gap_2019_2021'; const latest = select.emit('change');
+  env.pending.at(-1).respond(frozenEvaluation({ frozen_ec_through: '2018-11-01' })); await latest;
+  oldRequest.respond(frozenEvaluation({ frozen_ec_through: '2021-11-01' })); await old;
+  assert.match(env.get('multivariateForecastHost').textContent, /khóa EC đến 2018-11/);
+  assert.doesNotMatch(env.get('multivariateForecastHost').textContent, /khóa EC đến 2021-11/);
+  const delay = ui.all.find(row => row.name === 'gap_ec_delay'); delay.value = '35';
+  const reload = delay.emit('change');
+  assert.match(env.pending.at(-1).url, /ec_delay_days=35/);
+  env.pending.at(-1).respond(frozenEvaluation({ protocol_id: 'HISTORICAL' })); await reload;
+  assert.match(env.get('multivariateForecastHost').textContent, /không khớp.*giao thức khóa EC/);
+});
+
+test('prediction presents multi-year frozen validation separately from deployment training and legacy historical metrics', async () => {
+  const env = environment(), ui = await loadMultivariate(env);
+  const submission = ui.form.emit('submit');
+  env.pending.at(-1).respond({ prediction: prediction({ training: { through: '2023-12-01', samples: 464 },
+    metrics: { mae_mS_m: 999, rmse_mS_m: 999, n: 24 },
+    gap_validation: { period: '2021-01..2023-12', metrics: { RandomForest: { mae_mS_m: 2, rmse_mS_m: 3, n: 36 } } } }) });
+  await submission;
+  assert.match(ui.output.textContent, /Huấn luyện đến 2023-12-01/);
+  assert.match(ui.output.textContent, /Kiểm chứng thiếu EC liên tục 2021-01\.\.2023-12/);
+  assert.match(ui.output.textContent, /MAE 2 mS\/m/);
+  assert.doesNotMatch(ui.output.textContent, /999/);
+});
 
 test('multivariate input month/station changes discard late responses and failed catalog reload clears runnable inputs', async () => {
   const env = environment(), ui = await loadMultivariate(env);
@@ -181,6 +234,51 @@ test('calendar input lag crosses year boundaries without Date.UTC years 0–99 c
   assert.equal(inputMonthFor('0099-01'), '0098-11');
   for (const value of ['2026-00', '2026-13', '0000-01', '2026-1', '2026-11-01', null]) assert.equal(validMonth(value), false);
   assert.equal(inputMonthFor('0001-01'), null);
+});
+
+test('direct forecast exposes model subtitle, explicit map application, and Timeline restore actions', async () => {
+  const env = environment(), ui = await loadMultivariate(env);
+  const apply = ui.all.find(row => row.textContent === 'Áp dụng kịch bản dự báo lên bản đồ');
+  const restore = ui.all.find(row => row.textContent === 'Quay về dữ liệu Timeline gốc');
+  assert.match(env.get('multivariateForecastHost').textContent, /Dự báo khi thiếu EC · RF 300 cây, 5 biến khí tượng\/mùa/);
+  assert.doesNotMatch(env.get('multivariateForecastHost').textContent, /MAE holdout Mỹ Tho 18.32/);
+  assert.equal(apply.disabled, true);
+  const submission = ui.form.emit('submit'); env.pending.at(-1).respond({ prediction: prediction() }); await submission;
+  await apply.click();
+  assert.equal(env.events.at(-1).type, 'workspace:show-forecast-map');
+  assert.equal(env.events.at(-1).detail.predicted_ec_mS_m, 0);
+  await restore.click();
+  assert.equal(env.events.at(-1).type, 'workspace:restore-timeline');
+  assert.equal(location.hash, 'observations');
+  ui.month.value = '2026-12'; const changing = ui.month.emit('input');
+  assert.equal(apply.disabled, true);
+  env.pending.at(-1).respond(input('MyTho', '2026-12', '2026-10')); await changing;
+});
+
+test('RF_compact actions pass the selected archive value and experiment-specific P90 for both lags', async () => {
+  const env = environment(), feature = createNextForecast();
+  for (const [lag, predicted, p90] of [[5, 27.903151156478184, 60.42], [35, 22.022199245004803, 60.6]]) {
+    const row = { station: 'MYTHO', model: 'RF_compact', unit: 'mS/m', status: 'SUCCESS', predicted,
+      target_month: '2024-01-01', forecast_origin: '2023-12-06T00:00:00+07:00' };
+    const loading = feature.load(`EX_${lag}`, { high_ec_metrics: [{ model: 'RF_compact', train_p90_mS_m: p90 }] });
+    assert.equal(env.get('nextForecastApplyMap').disabled, true);
+    env.pending.at(-1).respond({ experiment_id: `EX_${lag}`, station: 'MYTHO', unit: 'mS/m',
+      data_kind: 'EXPERIMENTAL_NEXT_AFTER_LAST_OBSERVATION', live_forecast_available: false,
+      deployment_ready: false, gate_decision_eligible: false, selected_model: 'RF_compact',
+      selected_prediction: row, all_predictions: [row], target_month: row.target_month,
+      forecast_origin: row.forecast_origin, availability_lag_days: lag });
+    await loading;
+    assert.equal(env.get('nextForecastApplyMap').disabled, false);
+    assert.match(env.get('nextForecastModelInfo').textContent, /RF_compact 100 cây, 8 biến - MAE hồi cứu Mỹ Tho 11.07/);
+    await env.get('nextForecastApplyMap').click();
+    assert.equal(env.events.at(-1).type, 'workspace:apply-forecast-overlay');
+    assert.deepEqual(env.events.at(-1).detail, { sourceModel: 'RF_compact', targetMonth: '2024-01', mythoEc: predicted,
+      p90Threshold: p90, experimentId: `EX_${lag}`, availabilityLagDays: lag });
+  }
+  feature.reset();
+  assert.equal(env.get('nextForecastApplyMap').disabled, true);
+  await env.get('nextForecastRestoreTimeline').click();
+  assert.equal(env.events.at(-1).type, 'workspace:restore-timeline');
 });
 
 test('backtest experiment switch discards stale responses and rejects another site', async () => {

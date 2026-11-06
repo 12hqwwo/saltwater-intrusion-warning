@@ -1,8 +1,39 @@
 # Tình trạng hiện tại của đồ án
 
-Cập nhật: **24/10/2026, khoảng 13:51 (UTC+7)**.
+Cập nhật tài liệu: **04/11/2026 (UTC+7)**.
 
-Tài liệu ghi nhận trạng thái đã đối chiếu với mã nguồn, artifact và API đang chạy tại `http://127.0.0.1:8000`. Những hướng đang trao đổi được đánh dấu riêng, không tính là chức năng đã hoàn thành. Số lượng bản ghi phản ánh thời điểm kiểm tra và có thể thay đổi khi nhập dữ liệu hoặc lưu dự báo mới.
+## Bổ sung mới nhất — Mỹ Thuận và ba trạm
+
+Đã tích hợp chính thức `MYTHUAN` với 451 mẫu `UNVERIFIED/UNKNOWN`, model riêng, nguồn khí tượng t−2 và 32 tháng ước tính mở rộng đủ ba trạm. Dữ liệu quan trắc có trong snapshot lẫn PostgreSQL. Backend và frontend nội suy Tân Châu → Mỹ Thuận → Mỹ Tho; chỉ 13 tháng lịch sử khuyết Mỹ Thuận dùng hai đầu mút. Banner dự báo hiển thị cả ba EC, engine cống nhận EC chiếu từ phép nội suy mới. Xem [báo cáo Bước 3](tich_hop_mythuan_buoc_3_2026-11-04.md) cho dữ liệu, phương pháp và xác nhận. Các ghi nhận bên dưới thuộc các lần cập nhật trước.
+
+## 0. Trạng thái bổ sung ngày 01/11/2026
+
+Đợt sửa gần nhất đã đồng bộ gói kết quả RF_compact, manifest, workspace và biểu đồ với bằng chứng nguồn. Chi tiết logic và tiến trình ở [bản tổng hợp ngày 01/11/2026](cap_nhat_logic_va_tien_trinh_2026-11-01.md). **Các mục 1–9 phía dưới giữ ghi nhận ngày 24/10/2026**, gồm số lượng database, API và trạng thái tiếp nhận ở ngày đó; không phải kết quả kiểm tra lại ngày 01/11. Khi trạng thái khác nhau, dùng mục bổ sung này cùng tài liệu chuyên đề có ngày mới hơn.
+
+### Đã sửa và xác nhận trong đợt mã nguồn vừa qua
+
+- Hai packer RF_compact dùng chung `scripts/rf_compact_artifacts.py`, đọc kết quả hồi cứu gốc và giữ nguyên giá trị dự báo lịch sử. MAE/RMSE, nhóm EC cao, số mẫu, mốc huấn luyện và ngày có dữ liệu được tính từ bằng chứng, thay các hằng số đóng gói trước đó. Không huấn luyện lại toàn bộ chuỗi hồi cứu khi đóng gói.
+- Manifest ghi hash nguồn và đầu ra; biểu đồ được vẽ lại từ chính bảng dự báo đóng gói, có hash liên kết tới bảng đó. Workspace được tái tạo để đọc bộ artifact đã sửa.
+- Dự báo lưu trữ cho **01/2024**, phát hành giả định **06/12/2023**, được tính bằng thuật toán RF_compact: **27,903151 mS/m** với độ trễ EC +5 ngày và **22,022199 mS/m** với +35 ngày. Đây là tháng tiếp sau nhãn cuối cùng, không phải dự báo cho hôm nay. Tập huấn luyện tương ứng kết thúc 11/2023 (462 mẫu) và 10/2023 (461 mẫu).
+- Ngày phát hành/công bố chỉ có độ phân giải ngày; khi xuất timestamp, dùng đầu ngày địa phương **UTC+7**, không ngụ ý đã biết giờ công bố thực. Ngày công bố lịch sử vẫn là giả định cuối tháng +5/+35 ngày.
+- RF_compact được giữ theo lựa chọn trên validation 2019–2021 của kịch bản chính **+5 ngày**. Kịch bản **+35 ngày** kiểm tra độ nhạy với cùng lựa chọn, không chọn lại ứng viên sau khi xem kết quả.
+- Dải màu sông nội suy theo **khoảng cách tích lũy dọc hình học**, thay cho tỷ lệ chỉ số đỉnh. Thay đổi này sửa cách thể hiện gradient trên các đoạn có mật độ đỉnh khác nhau; không bổ sung mạng thủy lực hoặc dữ liệu mặn cho các nhánh chưa mô phỏng.
+
+### Những giới hạn vẫn còn
+
+Nguồn nhãn EC MRC vẫn kết thúc **12/2023**; timeline mô phỏng không gian hiện tới **08/2026**. Kết nối thủy lực giữa trạm, nhánh sông/kênh và từng cống chưa được xác minh. EC/độ mặn trên bản đồ vẫn là mô phỏng; không được coi là số đo tại cống hoặc lệnh vận hành.
+
+RF_compact là ứng viên nghiên cứu riêng, **100 cây và 8 biến**. Nhánh API suy luận đa biến đang phục vụ vẫn dùng các mô hình **RF 300 cây, 5 biến** cho Mỹ Tho/Tân Châu qua registry riêng. Sửa gói RF_compact không thay các mô hình này và không bổ sung nhãn EC 2024–2026. Giai đoạn 2022–2023 đã được xem trong nghiên cứu, nên kết quả đóng gói không trở thành kiểm định mù mới.
+
+### Bằng chứng kiểm tra và giới hạn của lần cập nhật
+
+Đợt mã nguồn trước lần cập nhật Markdown này đã chạy bộ Python gồm **73 kiểm thử, 1 bỏ qua, kết quả OK**. Sau khi bổ sung kiểm tra artifact, riêng `tests/test_rf_compact_artifacts.py` chạy **6 kiểm thử đạt**; chưa chạy lại toàn bộ bộ Python sau phần bổ sung đó. Frontend có **85 kiểm thử JavaScript đạt**, build thành công với **247 module**; các kiểm tra API nhận HTTP **200** và kiểm tra hash artifact đạt.
+
+Không có kiểm tra PostgreSQL, xác nhận giao diện bằng trình duyệt hoặc triển khai mới trong đợt này. Lần cập nhật Markdown chỉ ghi lại bằng chứng của đợt mã nguồn, không chạy lại những phép kiểm tra trên.
+
+---
+
+**Ghi nhận lịch sử ngày 24/10/2026, khoảng 13:51 (UTC+7):** nội dung sau đã được đối chiếu với mã nguồn, artifact và API tại `http://127.0.0.1:8000` ở thời điểm đó. Số bản ghi có thể thay đổi khi nhập dữ liệu hoặc lưu dự báo mới. Các câu “hiện tại”, “phiên cập nhật này” và “chưa triển khai” trong mục 1–9 được hiểu theo ngày 24/10, không phải kiểm chứng lại ngày 01/11.
 
 ## 1. Phạm vi đồ án ở thời điểm hiện tại
 

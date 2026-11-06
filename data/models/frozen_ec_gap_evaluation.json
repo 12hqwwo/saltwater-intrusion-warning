@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "protocol_id": "FROZEN_EC_WEATHER_ONLY_V1",
+  "run_manifest_path": "outputs/frozen_ec_gap_20261104/run_manifest.json",
+  "run_manifest_sha256": "b9491932729455963ad794c0184809245fb9212669bca98d079c9b741e17dd83",
+  "primary_experiment": "gap_2021_2023",
+  "primary_ec_delay_days": 5,
+  "deployed_model_sha256": {
+    "MYTHO": "a51227644805d1a231a50a7b6b82203e3ffe6983898a55b8a4deebee6bd0bd25",
+    "TANCHAU": "9b01d1232a19b70621594f1fee4baee49bde3b0af6c4899d0aa811e876a00122",
+    "MYTHUAN": "8ccf590c40f8ef961b91f3fa549d97019518ebccfb666f27197f8f110cfdd120"
+  }
+}

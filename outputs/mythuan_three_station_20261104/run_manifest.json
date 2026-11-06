@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-04T05:04:26.630496+00:00",
+  "steps_completed": [
+    1,
+    2
+  ],
+  "ui_modified": false,
+  "deployed_registry_modified": false,
+  "stations": [
+    "TANCHAU",
+    "MYTHUAN",
+    "MYTHO"
+  ],
+  "target_unit": "mS/m",
+  "feature_order": [
+    "rainfall_mm",
+    "temperature_degC",
+    "wind_source_units",
+    "month_sin",
+    "month_cos"
+  ],
+  "feature_units": {
+    "rainfall_mm": "mm",
+    "temperature_degC": "degC",
+    "wind_source_units": "m/s",
+    "month_sin": "1",
+    "month_cos": "1"
+  },
+  "evaluation_protocol": "Rolling-origin; validation 2019-2021; retrospective evaluation 2022-2023; no tuning on evaluation",
+  "issue_rule": "day 6 of t-1 in Asia/Ho_Chi_Minh",
+  "weather_lag_months": 2,
+  "weather_availability_days": 5,
+  "ec_availability_days": [
+    5,
+    35
+  ],
+  "parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "random_state": 42
+  },
+  "sklearn_version": "1.9.1",
+  "numpy_version": "2.5.3",
+  "pandas_version": "2.3.3",
+  "geometry": {
+    "chainage_km": 85.217605,
+    "distance_to_axis_km": 0.863,
+    "projected_coordinate": [
+      105.92338737,
+      10.28252462
+    ],
+    "projection_method": "NEAREST_MAIN_AXIS_SEGMENT",
+    "hydrological_link_validated": false,
+    "coordinate": [
+      105.9263229,
+      10.27532005
+    ],
+    "tan_chau_chainage_km": 0.0,
+    "my_tho_chainage_km": 125.0,
+    "along_river_fraction": 0.68174084,
+    "corridor_sha256": "a7bb6afd391eafcd4585ad75f2471440b21d942d43dbf4526e68ed68c395a6b0",
+    "note": "Chainage uses the existing WebGIS rescaled river axis, not straight-line distance."
+  },
+  "interpolation_primary": "LINEAR_DISTANCE_ALONG_EXISTING_RIVER_AXIS",
+  "interpolation_sensitivity": "IDW_POWER_2",
+  "final_fit_samples": 451,
+  "final_fit_cutoff": "2023-12-01",
+  "limitation": "MRC QA UNVERIFIED, EC temperature basis unknown; same-month samples may have different dates; archive publication vintages unknown; anchor-site performance does not validate the whole river",
+  "input_sha256": {
+    "data/external/mrc_20261014_network/019803_Conductivity_Water_Quality_bc365241.csv": "d0716df1b8b9da4c47ec56e74a18ebea1258ad520c1b6b4e4c6f19bea72ecd32",
+    "data/external/tien_multisite_20261029_verified/019804_Conductivity_Water Quality_4c105414.csv": "efc3cd6136024f87708b2834a04dbcd3761f2e156625722a4d2ad71b24120482",
+    "data/external/mrc_20261014_network/019805_Conductivity_Water_Quality_acce65db.csv": "204a8a48a235becfe792b0a01973e5eac3b948250d62f91f7f6430ee7fa53893",
+    "data/external/tien_multisite_20261029_verified/manifest.json": "166965fd1818eabd3c1425398f0661a5bcfcd34c5a3776cf68180acf8e653dea",
+    "data/research/mrc_ec_monthly_samples.csv": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc",
+    "data/external/multivariate_weather/manifest.json": "da9b80d2c54d52a427705d326160b1bacce17e94874ab6e5a757f3e75fd48443",
+    "data/external/mythuan_weather_20261104/manifest.json": "a403e0c9e51d03375926344eac6b40d9afa43f000f84cd36aa08ac8021f9570a",
+    "scripts/evaluate_mythuan_three_station.py": "d79fe2c1c0753a712635f201212dca6dbfeb25c4441f2211aa26b117b40f48ac",
+    "scripts/backtest_asof_ec.py": "72d28ef83a4c94ed46232e8182c9f3965322da3a1f4156784db07f0c82bdcc66",
+    "scripts/train_multivariate_ec.py": "9430ef0904d67b5d2dedd8c365f6c65387a272eae3e74425106a4c4accf1e821",
+    "data/external/multivariate_weather/era5_MyTho_1985-01-01_1989-12-31.json": "b7a44f1bc437e4e9232d96997f999238ed7811367831a6bfe805aa2859a95e37",
+    "data/external/multivariate_weather/era5_MyTho_1990-01-01_1994-12-31.json": "de14505996122950cbed03ee58394df29a46a9708699494a13140cef8b979088",
+    "data/external/multivariate_weather/era5_MyTho_1995-01-01_1999-12-31.json": "756665880ca14fe873fd24cdf535cd1f035189d94da66b6074fff912d1170ecb",
+    "data/external/multivariate_weather/era5_MyTho_2000-01-01_2004-12-31.json": "07bbcb21705c6acf53945f8858a40317002181b9deaf00a9fe625e347149dd95",
+    "data/external/multivariate_weather/era5_MyTho_2005-01-01_2009-12-31.json": "e371ef1a44f215485b7d5c2bba72c37a355df3b103f1dd9eca36ad1b3c8b4a48",
+    "data/external/multivariate_weather/era5_MyTho_2010-01-01_2014-12-31.json": "5b61bf193585eb3c114a80f12e44269f1b96ca98462417fcf70c8846c60a83dc",
+    "data/external/multivariate_weather/era5_MyTho_2015-01-01_2019-12-31.json": "70954940bece8bdbbf545ce3b35ccf72eed62ee57a2593505fc4bed08876e515",
+    "data/external/multivariate_weather/era5_MyTho_2020-01-01_2024-12-31.json": "44ae7303979eae69a11a4c2dce51391970cb56fe24d8e6266b7f51489bac26b7",
+    "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+    "data/external/multivariate_weather/era5_TanChau_1985-01-01_1989-12-31.json": "b6eaef2bbaa3985db3e2f89f1f5ac682738ab37d0e0c7aedb8ca803219f46657",
+    "data/external/multivariate_weather/era5_TanChau_1990-01-01_1994-12-31.json": "8eefee5b5e63ea116c76da0c267a8043d449958db2abddaa4d3c1548f74a3742",
+    "data/external/multivariate_weather/era5_TanChau_1995-01-01_1999-12-31.json": "1e0927dbb089cc7a47c54af64656d179e07c4952a98500047599e0acb29126aa",
+    "data/external/multivariate_weather/era5_TanChau_2000-01-01_2004-12-31.json": "b10c51d00915f042665383f00a74353d63e85ec279a1e8b97bc327d36911d3c4",
+    "data/external/multivariate_weather/era5_TanChau_2005-01-01_2009-12-31.json": "d513aace4198d682cb9e4ac9b244487938c955fdc7b86017f646e8e7822ad6b4",
+    "data/external/multivariate_weather/era5_TanChau_2010-01-01_2014-12-31.json": "4a26c8c8f644bb978daa5c01a31ef03fd323bd9f79fbb3993b87415092e53a32",
+    "data/external/multivariate_weather/era5_TanChau_2015-01-01_2019-12-31.json": "abc00a9db129ea38e4c720ce8a04eb96d18600a10e6be18174d561b17e11ccaf",
+    "data/external/multivariate_weather/era5_TanChau_2020-01-01_2024-12-31.json": "9058526e3833ed8ea53174c4e2ffa3f3edd2e894a36dea815f82e6e0fc56084f",
+    "data/external/multivariate_weather/era5_TanChau_2025-01-01_2026-09-30.json": "f87718b0b6d4a9acbae1ba4bd4477bacc87549905ff70b7f7fc096ebbc036fa7",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_1985-01-01_1989-12-31.json": "cbd2f413ec94dd38b547c03b97fbe0cafc68a796798b1c21893e64054a355c89",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_1990-01-01_1994-12-31.json": "0fd701cf4d740b6811b861a50c1a35e9a20200a6a10b01da88c7b758a3f0574d",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_1995-01-01_1999-12-31.json": "9d3cf73ecaeeff3746f5656a5204e796ca80b6382dcfbe212913c70ffad3951f",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2000-01-01_2004-12-31.json": "769e76dbf17cd609d4b6832713f7b9e772c4ac177cfade54ecd974fa00526da9",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2005-01-01_2009-12-31.json": "180594368fe69730f578b7f685a4767268851d7ca08bdab41ac7fc935f0c21db",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2010-01-01_2014-12-31.json": "3fe89bd7f5c49ddda151541d289b90b1d9e616d8f0101d2cdce1a71d523a224e",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2015-01-01_2019-12-31.json": "1ac290c43f162ec81f2a1c5bfe437501d4e3ca1901222421da2c57b8e732f600",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2020-01-01_2024-12-31.json": "c9075eeccc9f38ff4ff8f22e3d205e6fcd0eb75cd22e830a1a4794fb93e559cc",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2025-01-01_2026-09-30.json": "ce4821edfc4374c5ffa28aabf1c41bbacec196fa9ee2913bcc13055072385e59"
+  },
+  "output_sha256": {
+    "feature_matrix.csv": "78dfdb44b410ae84353524fc3946f5a829b48e788c87b6d6f6c637aa2dd927db",
+    "improvements.csv": "c5cdf51cb97227956240fa446e4b439f8ec0253e87a7f03cb327ca24cf9dd233",
+    "interpolation_metrics.csv": "876f6d239a49ec91b5483e61d6750c345bfb0c84369f98ac9cfd915fc68b65f0",
+    "interpolation_predictions.csv": "bba8418679f509d075274240b2f26958076542657a7c67a6483e5e2e00944388",
+    "model_metrics.csv": "f95ff8ff191431fcd5ae31b7eb5f89a7ed49419c504357c7856b965686e86bbe",
+    "mythuan_model.joblib": "8ccf590c40f8ef961b91f3fa549d97019518ebccfb666f27197f8f110cfdd120",
+    "predictions.csv": "60ec98372cf62eb7c97d2101c9c827650afb20b61ed2e62f31b9d159146d65cb",
+    "predictions.partial.csv": "60ec98372cf62eb7c97d2101c9c827650afb20b61ed2e62f31b9d159146d65cb",
+    "report.md": "ba1899249e73ee6a8072aba59635c43923c56d987021550dd510c04e2b404ed1",
+    "source_audit.csv": "8d22dea3e299d9a70a39134c2d976ba081073e5dd30c552641ec621326f57db5",
+    "targets.csv": "2aa3fbec04fdc3224017811423139cde563c515ead759611fd9cf7e67e3bd990"
+  }
+}

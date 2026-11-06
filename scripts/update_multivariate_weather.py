@@ -12,7 +12,8 @@ from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'data/external/multivariate_weather'
-SITES = {'MyTho': (10.36, 106.36), 'TanChau': (10.804, 105.234)}
+SITES = {'MyTho': (10.36, 106.36), 'TanChau': (10.804, 105.234),
+         'MyThuan': (10.27532005, 105.9263229)}
 
 
 def verified_context():

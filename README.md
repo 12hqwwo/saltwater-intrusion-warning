@@ -2,6 +2,8 @@
 
 [Bản đồ tài liệu, dữ liệu và kết quả nghiên cứu](docs/README.md) giúp tìm đúng tệp trước khi chỉnh sửa hoặc dọn dẹp.
 
+[Cập nhật logic và tiến trình 01/11/2026](docs/cap_nhat_logic_va_tien_trinh_2026-11-01.md) ghi các file đã sửa, luồng RF_compact, artifact/kiểm thử và nội suy màu sông. [Hiện trạng](docs/current_state.md) phân biệt phần vừa kiểm tra với các bằng chứng DB/trình duyệt cũ.
+
 Ứng dụng tiểu luận kết hợp WebGIS và **dự báo EC tháng bằng mô hình đa biến**. Luồng chính: chọn trạm/tháng → tải lượng mưa, nhiệt độ, gió và chu kỳ mùa vụ → chạy Random Forest đã huấn luyện → xem EC dự báo, đầu vào, sai số lịch sử và vị trí trên bản đồ → xuất JSON/CSV.
 
 ## Chạy trên Windows
@@ -37,7 +39,7 @@ Lưu trữ bổ trợ sử dụng schema `dss_reference`, không sửa bảng qu
 ## Dữ liệu và giới hạn
 
 - Snapshot có 977 mẫu EC: 927 MRC tại Mỹ Tho/Tân Châu, 50 RIA2 tại 10 điểm. Kiểm tra PostgreSQL chỉ đọc ngày 28/10/2026 ghi nhận 977 mẫu tại 12 trạm; số liệu thực tế phụ thuộc DB và phiên bản được chọn. Chuỗi MRC kết thúc năm 2023; cờ chất lượng nguồn được giữ nguyên.
-- Bốn thí nghiệm tháng: hai trạm × giả định độ trễ 0/30 ngày. Giữ train/validation/test theo thời gian, baseline, metrics, predictions và manifest. Kết quả hồi cứu không phải dự báo hiện tại.
+- Bốn thí nghiệm tháng tại hai trạm, có baseline, metrics, predictions và manifest. Hai định danh Mỹ Tho `LAG0`/`LAG30` hiện đóng gói RF_compact với giả định nhãn khả dụng sau cuối tháng **5/35 ngày**; các thí nghiệm Tân Châu giữ cấu hình riêng đã lưu. Kết quả hồi cứu không phải dự báo hiện tại.
 - EC quan trắc và dự báo dùng mS/m; chưa có hiệu chuẩn để chuyển EC dự báo thành độ mặn. Riêng lớp mô phỏng dùng giả định minh họa `g/L = 0,0064 × EC (mS/m)` để vẽ ranh 1/4 g/L. Hệ số này chưa được hiệu chuẩn tại địa phương; không xác nhận nước tưới hoặc sinh hoạt.
 - Bản đồ phân biệt 2 trạm có hình học DB với 10 điểm RIA2 dùng tọa độ tham khảo từ nguồn khi bật lớp tương ứng; tọa độ tham khảo không trở thành tọa độ DB đã xác minh. Các đoạn sông là nội suy một chiều theo trục sơ đồ, không phải bề mặt mặn đo liên tục hoặc mô hình thủy động lực.
 - Hồ sơ nghiên cứu bốn cống và lớp 27 công trình đầu mối phục vụ mô phỏng là các phạm vi khác nhau. Trạng thái trên bản đồ được tính từ EC mô phỏng và ngưỡng đang chọn, không phản ánh lệnh vận hành thật. Ngưỡng mẫu sầu riêng 50/80, cây có múi 100/150 và lúa 120/200 mS/m chưa phải tiêu chuẩn tưới đã xác nhận. Không suy ra cả 27 cống cùng thuận lợi hoặc cùng ngăn mặn nếu khung dữ liệu không cho kết quả đó.
@@ -52,6 +54,8 @@ Lưu trữ bổ trợ sử dụng schema `dss_reference`, không sửa bảng qu
 ```
 
 Lệnh import mặc định chỉ kiểm tra, không ghi DB. Hướng dẫn cấu hình/nhập DB: [docs/run_guide.md](docs/run_guide.md). Kết quả làm sạch, các kiểm tra và khôi phục: [docs/handover.md](docs/handover.md).
+
+Để tái tạo đúng hai run RF_compact đã sửa, dùng các wrapper đóng gói rồi cập nhật workspace theo [hướng dẫn riêng](docs/run_guide.md#tái-tạo-artifact-rf_compact-sau-rà-soát-01112026). Builder tổng quát với `--fit` ở trên chạy lại thí nghiệm và có thể thay registry.
 
 ## Cấu trúc
 

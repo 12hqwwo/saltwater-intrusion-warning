@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "protocol_id": "FROZEN_EC_WEATHER_ONLY_V1",
+  "primary_experiment": "gap_2021_2023",
+  "experiments": {
+    "gap_2019_2021": {
+      "start": "2019-01",
+      "end": "2021-12"
+    },
+    "gap_2021_2023": {
+      "start": "2021-01",
+      "end": "2023-12"
+    },
+    "gap_2022_2023": {
+      "start": "2022-01",
+      "end": "2023-12"
+    }
+  },
+  "ec_delay_days": [
+    5,
+    35
+  ],
+  "primary_ec_delay_days": 5,
+  "unit": "mS/m",
+  "stations": [
+    "TANCHAU",
+    "MYTHUAN",
+    "MYTHO"
+  ],
+  "forecast_rule": "Issue day 6 of t-1; complete ERA5 weather t-2 assumed available month-end +5 days.",
+  "freeze_rule": "Fit each station once with EC and weather available at the first issue; never update from withheld EC.",
+  "calendar_rule": "Target month sin/cos is known in advance. No EC lag feature or spatial target label is used.",
+  "weather_scope": "Weather continues arriving at each monthly issue; this is not a 36-month forecast issued all at once.",
+  "gap_length_note": "gap_month counts calendar months since the last frozen EC label; first target is two months later under +5-day availability. Evaluation windows contain 24 or 36 scored months.",
+  "parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "random_state": 42
+  },
+  "full_period_models": [
+    "RandomForest",
+    "FrozenPersistence",
+    "MonthlyClimatology",
+    "FrozenSeasonalRepeat",
+    "SeasonalityOnlyRF"
+  ],
+  "direct_seasonal_naive": "Available only when target-12 EC belongs to the frozen training set; never included in full-period ranking.",
+  "frozen_seasonal_repeat": "Repeat the latest known EC for each calendar month from the frozen training set; no new EC is used.",
+  "seasonality_ablation": "Same fixed RF with month sin/cos only; isolates the observed benefit or cost of adding weather.",
+  "retrospective_reference": "TWO_OBSERVED_LINEAR uses withheld endpoint observations only as an offline reference, never a deployable gap method.",
+  "spatial_scope": "Scores at My Thuan only; not independent validation of every river segment or gate.",
+  "limitations": [
+    "Historical EC publication dates and vintage ERA5 releases are unknown; +5/+35-day delays are assumptions.",
+    "These historical periods were previously inspected; this is a retrospective deployment simulation, not a fresh blind test.",
+    "Overlapping experiments are reported separately, never pooled as independent evidence.",
+    "No observed EC in 2024-2026 is available to validate the actual gap estimates.",
+    "EC targets retain UNVERIFIED quality and UNKNOWN temperature basis; one sample/month is not a continuous monthly mean."
+  ],
+  "sklearn_version": "1.9.1",
+  "deployed_model_sha256": {
+    "MYTHO": "a51227644805d1a231a50a7b6b82203e3ffe6983898a55b8a4deebee6bd0bd25",
+    "TANCHAU": "9b01d1232a19b70621594f1fee4baee49bde3b0af6c4899d0aa811e876a00122",
+    "MYTHUAN": "8ccf590c40f8ef961b91f3fa549d97019518ebccfb666f27197f8f110cfdd120"
+  },
+  "deployment_archive_sha256": "1fd4f80f6f06d39e4f14fa17157f29260bcf4bf95985369def7a03f29b2cb4d7",
+  "input_sha256": {
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "scripts/evaluate_frozen_ec_gap.py": "85d6c85f33976714dda96541b10256a0549353b295c6a79c11247cf4541022b6",
+    "scripts/train_multivariate_ec.py": "7ade5ce70bf3c5aa4ba4115a81c31c6b22d69d1fea5366f602bdb6de7ba5fe4e",
+    "scripts/backtest_asof_ec.py": "a30e212a9eb52679979ffb2988dc8c75e9bbad0b066130b737d17c13753fc5f7",
+    "backend/domain/multivariate_ec.py": "dea6bc59764cfcf15dbd7b88cf26496f7bcb5e8a882d81628d77553557e627b3",
+    "scripts/evaluate_mythuan_three_station.py": "d79fe2c1c0753a712635f201212dca6dbfeb25c4441f2211aa26b117b40f48ac",
+    "scripts/run_future_forecast_2024_2026.py": "1ec085c85a65be159bfd2d767e89cc152700d36ba3293f8b481e68d7e0a89d01",
+    "backend/repositories/multivariate_inputs.py": "533cfce55fea6c5daf57d4c178eb4c4db3338e773e1c9b6519b7488711112103",
+    "backend/domain/river_interpolation.py": "47930d97656a81c971f6f6714bc21cb42daf20a388bae5a52c44905298955447",
+    "data/external/multivariate_weather/manifest.json": "da9b80d2c54d52a427705d326160b1bacce17e94874ab6e5a757f3e75fd48443",
+    "data/external/mythuan_weather_20261104/manifest.json": "a403e0c9e51d03375926344eac6b40d9afa43f000f84cd36aa08ac8021f9570a"
+  },
+  "weather_source_sha256": {
+    "data/external/multivariate_weather/era5_MyTho_1985-01-01_1989-12-31.json": "b7a44f1bc437e4e9232d96997f999238ed7811367831a6bfe805aa2859a95e37",
+    "data/external/multivariate_weather/era5_MyTho_1990-01-01_1994-12-31.json": "de14505996122950cbed03ee58394df29a46a9708699494a13140cef8b979088",
+    "data/external/multivariate_weather/era5_MyTho_1995-01-01_1999-12-31.json": "756665880ca14fe873fd24cdf535cd1f035189d94da66b6074fff912d1170ecb",
+    "data/external/multivariate_weather/era5_MyTho_2000-01-01_2004-12-31.json": "07bbcb21705c6acf53945f8858a40317002181b9deaf00a9fe625e347149dd95",
+    "data/external/multivariate_weather/era5_MyTho_2005-01-01_2009-12-31.json": "e371ef1a44f215485b7d5c2bba72c37a355df3b103f1dd9eca36ad1b3c8b4a48",
+    "data/external/multivariate_weather/era5_MyTho_2010-01-01_2014-12-31.json": "5b61bf193585eb3c114a80f12e44269f1b96ca98462417fcf70c8846c60a83dc",
+    "data/external/multivariate_weather/era5_MyTho_2015-01-01_2019-12-31.json": "70954940bece8bdbbf545ce3b35ccf72eed62ee57a2593505fc4bed08876e515",
+    "data/external/multivariate_weather/era5_MyTho_2020-01-01_2024-12-31.json": "44ae7303979eae69a11a4c2dce51391970cb56fe24d8e6266b7f51489bac26b7",
+    "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_1985-01-01_1989-12-31.json": "cbd2f413ec94dd38b547c03b97fbe0cafc68a796798b1c21893e64054a355c89",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_1990-01-01_1994-12-31.json": "0fd701cf4d740b6811b861a50c1a35e9a20200a6a10b01da88c7b758a3f0574d",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_1995-01-01_1999-12-31.json": "9d3cf73ecaeeff3746f5656a5204e796ca80b6382dcfbe212913c70ffad3951f",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2000-01-01_2004-12-31.json": "769e76dbf17cd609d4b6832713f7b9e772c4ac177cfade54ecd974fa00526da9",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2005-01-01_2009-12-31.json": "180594368fe69730f578b7f685a4767268851d7ca08bdab41ac7fc935f0c21db",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2010-01-01_2014-12-31.json": "3fe89bd7f5c49ddda151541d289b90b1d9e616d8f0101d2cdce1a71d523a224e",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2015-01-01_2019-12-31.json": "1ac290c43f162ec81f2a1c5bfe437501d4e3ca1901222421da2c57b8e732f600",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2020-01-01_2024-12-31.json": "c9075eeccc9f38ff4ff8f22e3d205e6fcd0eb75cd22e830a1a4794fb93e559cc",
+    "data/external/mythuan_weather_20261104/era5_MyThuan_2025-01-01_2026-09-30.json": "ce4821edfc4374c5ffa28aabf1c41bbacec196fa9ee2913bcc13055072385e59",
+    "data/external/multivariate_weather/era5_TanChau_1985-01-01_1989-12-31.json": "b6eaef2bbaa3985db3e2f89f1f5ac682738ab37d0e0c7aedb8ca803219f46657",
+    "data/external/multivariate_weather/era5_TanChau_1990-01-01_1994-12-31.json": "8eefee5b5e63ea116c76da0c267a8043d449958db2abddaa4d3c1548f74a3742",
+    "data/external/multivariate_weather/era5_TanChau_1995-01-01_1999-12-31.json": "1e0927dbb089cc7a47c54af64656d179e07c4952a98500047599e0acb29126aa",
+    "data/external/multivariate_weather/era5_TanChau_2000-01-01_2004-12-31.json": "b10c51d00915f042665383f00a74353d63e85ec279a1e8b97bc327d36911d3c4",
+    "data/external/multivariate_weather/era5_TanChau_2005-01-01_2009-12-31.json": "d513aace4198d682cb9e4ac9b244487938c955fdc7b86017f646e8e7822ad6b4",
+    "data/external/multivariate_weather/era5_TanChau_2010-01-01_2014-12-31.json": "4a26c8c8f644bb978daa5c01a31ef03fd323bd9f79fbb3993b87415092e53a32",
+    "data/external/multivariate_weather/era5_TanChau_2015-01-01_2019-12-31.json": "abc00a9db129ea38e4c720ce8a04eb96d18600a10e6be18174d561b17e11ccaf",
+    "data/external/multivariate_weather/era5_TanChau_2020-01-01_2024-12-31.json": "9058526e3833ed8ea53174c4e2ffa3f3edd2e894a36dea815f82e6e0fc56084f",
+    "data/external/multivariate_weather/era5_TanChau_2025-01-01_2026-09-30.json": "f87718b0b6d4a9acbae1ba4bd4477bacc87549905ff70b7f7fc096ebbc036fa7"
+  },
+  "output_sha256": {
+    "baseline_availability.csv": "734349a967680806e4c090b8faf9049a859b2e16b5c2ce532e4b2ef0f55793bd",
+    "interpolation_metrics.csv": "4b8e0198d1c12b4bfd15ff732638f665e998e974cdc7a2f06b64606bc05edf6a",
+    "interpolation_predictions.csv": "c15948be2f045dfda0be1659cb74365faf22e71dc00b9683603f83c6447de02a",
+    "metrics.csv": "18c067de93db001891ff032e5fa509506a233f6fb113ae252e7f8a17cd5d4cb1",
+    "predictions.csv": "76f023303103a35e5bab96b48feef8adf48e55138e62c70b37ed0822f5b07b1f"
+  }
+}

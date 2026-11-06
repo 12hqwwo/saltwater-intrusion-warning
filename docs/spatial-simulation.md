@@ -1,5 +1,21 @@
 # Spatial simulation API and advisory map (Phases 1–3)
 
+## Three-station integration — 04/11/2026
+
+Tân Châu → Mỹ Thuận → Mỹ Tho now uses piecewise linear interpolation, with Mỹ Thuận at km85.217605 (`r=0.68174084`). Frames expose `interpolation_mode`; only the 13 historical missing Mỹ Thuận months (1999 and December 2001) fall back to two endpoints. Future frames require all three station predictions. Segment `ec_stops` retain the Mỹ Thuận knot for ribbon colors and the longitudinal chart; gate EC uses the same function. See the [Step 3 report](tich_hop_mythuan_buoc_3_2026-11-04.md) for current data, API, UI and verification.
+
+## Logic update — 01/11/2026
+
+The map now calls `riverRibbon(features, count=8)` from `frontend/src/features/river-geometry.js` after smoothing river geometry in `observations-map.js`. Ribbon cuts and midpoint EC interpolation follow cumulative geographic distance along the displayed path. The previous vertex-index split could move color transitions when vertex spacing was uneven. The helper preserves interior vertices, endpoints and joins, copies input geometry, falls back to segment EC when endpoint EC is absent, and omits zero-length paths.
+
+This change affects rendering. The API's 35 river segments, numerical EC profile, gate projection, scenario thresholds and particle paths retain their existing logic. In particular, nearest-main-axis gate projection still has unvalidated hydraulic connectivity; the distance-based color fix does not validate a canal network or salt transport. The empirical salinity factor remains uncalibrated.
+
+The current bundled timeline still ends in August 2026 (495 months); requesting an October 2026 frame returns 404 for a missing month. Repackaging RF_compact does not extend this timeline or replace its archived weather-based EC estimates.
+
+Two geometry regressions were added for uneven edge lengths, preserved vertices/seams, unchanged inputs, fallback EC and zero-length paths. The code-review round recorded 85 passing JavaScript tests and a successful Vite build (247 modules). Browser and PostgreSQL checks recorded under earlier phases below remain historical evidence; they were not repeated in this round. See the [complete logic and progress update](cap_nhat_logic_va_tien_trinh_2026-11-01.md) for all changed files, artifact flow and remaining work.
+
+## Existing simulation contract and phase evidence
+
 Three read-only endpoints are available under `/api/v1/workspace/simulation`:
 
 | Endpoint | Result |
@@ -18,7 +34,7 @@ configured database; simulation does not silently switch to snapshot mode.
 The simulation is Tier 2. Responses include `simulation_layer: true`,
 `gate_decision_eligible: false`, `actuator_command: null`, and the methodology:
 
-`1D River-Axis IDW & Empirical EC-Salinity Conversion (0.0064 g/L per mS/m)`
+`Piecewise 3-Station River-Axis Linear Interpolation & Empirical EC-Salinity Conversion (0.0064 g/L per mS/m)`
 
 Existing workspace and multivariate routes, metrics, policies and research
 artifacts are retained. Simulation requests do not write observations, gates,
@@ -28,11 +44,11 @@ are not replaced by simulation outputs.
 The bundled inputs provide 495 consecutive months, June 1985–August 2026:
 
 - Through December 2023, arithmetic monthly means use the selected MRC
-  observations for `MRC_VN_019803` and `MRC_VN_019805`. Original quality flags,
+  observations for `MRC_VN_019803`, `MRC_VN_019804` and `MRC_VN_019805`. Original quality flags,
   sample dates and sample counts remain in `boundary_provenance`. Observed
   does not imply independently validated. If a different selected dataset has
-  gaps, simulation-only interpolation is explicitly marked `imputed` with
-  source months; core observations are unchanged.
+  endpoint gaps, simulation-only temporal interpolation is explicitly marked `imputed` with
+  source months; core observations are unchanged. Missing Mỹ Thuận samples remain null and trigger explicit spatial two-station fallback.
 - From January 2024, EC and scalar weather drivers come from
   `data/models/future_ec_forecast_2024_2026.csv`. The requested regime label
   `ML_FORECAST_ERA5` also carries `RETROSPECTIVE_WEATHER_ESTIMATE` provenance;
@@ -40,7 +56,7 @@ The bundled inputs provide 495 consecutive months, June 1985–August 2026:
   Complete new station-month pairs extend the timeline. Missing future wind
   directions remain unavailable, rather than being invented.
 - Historical scalar weather uses hash-checked, unit-verified ERA5 files in
-  `data/external/multivariate_weather`. Regional summaries use Mỹ Tho; both
+  `data/external/multivariate_weather` and `data/external/mythuan_weather_20261104`. Regional summaries use Mỹ Tho; all three
   stations are included in `weather_by_station`.
 - Wind components use recorded daily mean speed and dominant direction in
   `data/external/ec_feature_research_20261019/era5_extra_*.json`:
@@ -71,14 +87,14 @@ Geodesic vertex distances are rescaled separately to the requested nominal
 anchors: Tân Châu 0 km, Mỹ Tho 125 km, estuary 175 km. Thus Mỹ Tho stays at
 exactly 125 km even though the schematic line's measured length differs.
 Thirty-five connected five-kilometre segments preserve intermediate vertices.
-EC uses inverse-square distance weights from the two bracketing axis anchors;
-segment values are evaluated at their midpoints.
+EC uses linear interpolation between adjacent anchors, including Mỹ Thuận at km85.217605;
+segment values are evaluated at their midpoints, with additional endpoint/knot values in `ec_stops`.
 
 The estuary is an **uncalibrated simulation boundary**:
 
 `my_tho_ec * amplification + max(0, my_tho_ec - tan_chau_ec) * 0.4`
 
-Amplification is 6 in February–May and 1.5 otherwise. These explicit scenario
+Amplification is 6 in December–April and 1.5 otherwise. These explicit scenario
 coefficients are not measured tidal forcing or fitted hydrodynamics.
 Dry-season segments at or above the closing threshold animate saline upstream
 flow; remaining segments animate freshwater downstream flow. Velocity factors

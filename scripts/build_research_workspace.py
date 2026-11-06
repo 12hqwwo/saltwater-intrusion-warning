@@ -150,6 +150,11 @@ def compile_data():
     if digest(ROOT / catalog['source']['file']) != catalog['source']['sha256']:
         raise ValueError('Gate catalog source changed.')
     sources[catalog['source']['source_id']] = catalog['source']
+    from scripts.integrate_mythuan import mythuan_records
+    middle, middle_rows, middle_source = mythuan_records()
+    stations.append(middle)
+    observations.extend(middle_rows)
+    sources[middle_source['source_id']] = middle_source
     return stations, observations, list(sources.values()), catalog
 
 
@@ -157,9 +162,10 @@ def monthly_master(observations):
     """Mean of samples inside each calendar month; not a continuous monthly mean."""
     import pandas as pd
     df = pd.DataFrame([r for r in observations if r['site_code'].startswith('MRC_')])
-    df['station'] = df.site_code.map({'MRC_VN_019805': 'MYTHO', 'MRC_VN_019803': 'TANCHAU'})
+    df['station'] = df.site_code.map({'MRC_VN_019805': 'MYTHO', 'MRC_VN_019803': 'TANCHAU', 'MRC_VN_019804': 'MYTHUAN'})
     df['month_start'] = df.observed_date.str.slice(0, 7) + '-01'
-    table = df.groupby(['station', 'month_start'], as_index=False).agg(conductivity_mS_per_m=('ec_mS_m', 'mean'), sample_count=('ec_mS_m', 'count'))
+    table = df.groupby(['station', 'month_start'], as_index=False).agg(conductivity_mS_per_m=('ec_mS_m', 'mean'), sample_count=('ec_mS_m', 'count'),
+        quality_flag=('quality_flag', 'first'), ec_temperature_basis=('ec_temperature_basis', 'first'))
     if not table.sample_count.eq(1).all():
         raise ValueError('Expected one EC sample per month; revise target definition before aggregating multiple samples.')
     OUT.mkdir(parents=True, exist_ok=True)

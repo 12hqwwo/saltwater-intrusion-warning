@@ -1,16 +1,18 @@
 import { $, num, node, saveCSV, sourceAnchor } from "../shared/ui.js";
 import { workspaceAPI as api } from "../shared/workspace-api.js";
 import { createRequestGate } from "../api.js";
-import { labels, dateOnly, recentDateWindow, filterObservations } from "../research-utils.js";
+import { dateOnly, recentDateWindow, filterObservations } from "../research-utils.js";
 import { drawSeries } from "../shared/time-series.js";
 import { createResearchMap } from "./observations-map.js";
 import { ecComparison, setECComparison, comparisonLines } from "../shared/ec-scenario.js";
 import { loadThresholdPresets, populateThresholdPresets, presetReference } from "../shared/threshold-presets.js";
-import { createTimelineScrubber } from "./timeline-scrubber.js";
+import { createTimelineScrubber, renderSpatialSummary } from "./timeline-scrubber.js";
 import { formatWater } from "../shared/simulation-display.js";
 import { createRiverProfile } from './river-profile.js';
 import { createObservationLoader } from '../shared/observation-contract.js';
 import { validPrediction } from '../shared/forecast-contract.js';
+import { createForecastMapBridge, loadMultivariateForecastContext, forecastModelLabel,
+  normalizeForecastContext, FORECAST_SPATIAL_DISCLAIMER } from '../shared/forecast-map-overlay.js';
 
 export function createObservations({ onForecast } = {}) {
   const state = { collection: { features: [] }, summary: { sources: [] }, rows: [], shown: [], rowsStatus: 'idle', filterDirty: false };
@@ -31,6 +33,20 @@ export function createObservations({ onForecast } = {}) {
   const timeline = createTimelineScrubber();
   const profile = createRiverProfile($('simulationRiverProfile'));
   let activeForecast = null, baselineMonth = null;
+  const overlayRequests = createRequestGate();
+  const bridge = createForecastMapBridge({
+    onFrame(frame) {
+      window.dispatchEvent(new CustomEvent('workspace:display-simulation-frame', { detail: frame }));
+      if (frame) { profile.setFrame(frame); polishProfile(); } else profile.clear();
+      renderSpatialSummary(frame?.overlayMetadata ? null : frame);
+    },
+    onContext(context) {
+      activeForecast = context;
+      renderForecastBanner();
+      if (context) $('mapForecastStatus').hidden = true;
+    },
+    onError: showOverlayError,
+  });
   // Keep the shared profile's keyboard-accessible SVG dots, without its legacy chip matrix.
   function polishProfile() {
     const host = $('simulationRiverProfile');
@@ -51,37 +67,74 @@ export function createObservations({ onForecast } = {}) {
   function renderForecastBanner() {
     $('mapForecastBanner').hidden = !activeForecast;
     if (!activeForecast) return;
-    $('mapForecastValue').textContent = `${activeForecast.station_name || activeForecast.station || 'Trạm dự báo'} · EC dự báo ${num(activeForecast.predicted_ec_mS_m)} mS/m`;
-    $('mapForecastContext').textContent = `Dự báo ${activeForecast.target_month} · ${baselineMonth ? `Mô phỏng nền ${baselineMonth}` : 'Mô phỏng nền chưa có khung hợp lệ'} · Dự báo chỉ tại trạm; sông và cống dùng tháng nền riêng`;
+    const ec = value => Number.isFinite(value) ? value.toLocaleString('vi-VN', { maximumFractionDigits: 6 }) : 'khuyết mẫu';
+    $('mapForecastValue').textContent = `${forecastModelLabel(activeForecast.sourceModel)} · Tân Châu ${ec(activeForecast.tanchauEc)} → Mỹ Thuận ${ec(activeForecast.mythuanEc)} → Mỹ Tho ${ec(activeForecast.mythoEc)} mS/m`;
+    const upstreamBasis = activeForecast.interpolationMode === 'TWO_STATION_FALLBACK_MISSING_MYTHUAN'
+      ? 'Nội suy 2 trạm: khuyết mẫu lịch sử Mỹ Thuận' : 'Nội suy 3 trạm, 2 chặng dọc sông';
+    $('mapForecastContext').textContent = `Dự báo ${activeForecast.targetMonth} · nền ${baselineMonth || '—'} · ${upstreamBasis}${Number.isFinite(activeForecast.availabilityLagDays) ? ` · độ trễ +${activeForecast.availabilityLagDays} ngày` : ''} · P90 Mỹ Tho ${num(activeForecast.p90Threshold)} mS/m${activeForecast.isHighVigilance ? ' · Cảnh giác cao' : ''}`;
+    $('mapForecastDisclaimer').textContent = `${FORECAST_SPATIAL_DISCLAIMER}. Quy đổi tham khảo g/L = 0.0064 × EC. Cống và ranh mặn Timeline tạm ẩn khi xem kịch bản.`;
   }
-  window.addEventListener('workspace:show-forecast-map', event => {
-    const prediction = event.detail;
-    if (!validPrediction(prediction) || !state.collection.features.some(feature => feature.properties.site_code === prediction.site_code && feature.geometry)) {
-      clearForecastBanner(); return;
+  function showOverlayError(error) {
+    $('mapForecastStatus').hidden = false;
+    $('mapForecastStatus').textContent = error.message;
+  }
+  async function applyOverlay(context, req, prediction = null) {
+    // Validate before selecting any month; the RF archive supplies one station only.
+    normalizeForecastContext(context);
+    await timeline.selectMonth(context.targetMonth, { source: 'forecast' });
+    if (!req.isCurrent()) return;
+    const frame = bridge.apply(context);
+    if (prediction) map.setForecast(prediction);
+    if (!frame && !bridge.getBaseFrame()) {
+      showOverlayError(new Error('Đang chờ frame Timeline hợp lệ để áp dụng kịch bản dự báo.'));
     }
-    activeForecast = prediction;
-    baselineMonth = null;
-    renderForecastBanner();
-    location.hash = 'observations';
-    timeline.selectMonth(prediction.target_month, { source: 'forecast' });
     requestAnimationFrame(() => { map.refresh(); map.fit(); });
+  }
+  window.addEventListener('workspace:show-forecast-map', async event => {
+    clearForecastBanner();
+    const req = overlayRequests.next();
+    location.hash = 'observations';
+    showOverlayError(new Error('Đang lấy dự báo EC tại ba trạm cho cùng kịch bản…'));
+    try {
+      const prediction = event.detail;
+      if (!validPrediction(prediction)) throw new Error('Dự báo đa biến không hợp lệ.');
+      const context = await loadMultivariateForecastContext(prediction, api, req);
+      if (req.isCurrent()) await applyOverlay(context, req, prediction);
+    } catch (error) { if (req.isCurrent() && error.name !== 'AbortError') showOverlayError(error); }
   });
-  function clearForecastBanner() { activeForecast = null; renderForecastBanner(); }
+  window.addEventListener('workspace:apply-forecast-overlay', async event => {
+    clearForecastBanner();
+    const req = overlayRequests.next();
+    location.hash = 'observations';
+    try {
+      const original = event.detail;
+      // RF_compact supplies My Tho only; obtain the other two station models
+      // for this target month rather than borrowing a clamped timeline month.
+      const missing = await Promise.all(['TanChau', 'MyThuan'].map(station => api('/multivariate/predict', {
+        ...req, method: 'POST', body: { station, target_month: original.targetMonth, input_mode: 'ARCHIVE' }, timeoutMs: 120_000,
+      })));
+      if (missing.some((item, index) => !validPrediction(item, { station: ['TanChau', 'MyThuan'][index],
+        site_code: ['MRC_VN_019803', 'MRC_VN_019804'][index], target_month: original.targetMonth, input_mode: 'ARCHIVE' }))) throw new Error('Dự báo bổ sung không khớp ba trạm.');
+      if (req.isCurrent()) await applyOverlay({ ...original, tanchauEc: missing[0].predicted_ec_mS_m,
+        mythuanEc: missing[1].predicted_ec_mS_m, tanchauBasis: 'MODEL_PREDICTION', mythuanBasis: 'MULTIVARIATE_RF_5' }, req);
+    }
+    catch (error) { if (req.isCurrent() && error.name !== 'AbortError') showOverlayError(error); }
+  });
+  function clearForecastBanner() {
+    overlayRequests.next(); bridge.clear(); map.setForecast(null); $('mapForecastStatus').hidden = true;
+  }
   window.addEventListener('workspace:simulation-selection', event => {
     if (event.detail?.source === 'forecast') return;
     clearForecastBanner(); map.setForecast(null); $('mapForecastStatus').hidden = true;
   });
   window.addEventListener('workspace:multivariate-prediction', clearForecastBanner);
   window.addEventListener('workspace:multivariate-clear', clearForecastBanner);
-  $('mapForecastDismiss').addEventListener('click', () => {
-    clearForecastBanner(); map.setForecast(null); $('mapForecastStatus').hidden = true;
-  });
+  window.addEventListener('workspace:restore-timeline', clearForecastBanner);
+  $('mapForecastDismiss').addEventListener('click', clearForecastBanner);
   let profileHasFitted = false;
   window.addEventListener('workspace:simulation-frame', event => {
-    profile.setFrame(event.detail);
-    polishProfile();
     baselineMonth = event.detail.year_month;
-    renderForecastBanner();
+    bridge.setBaseFrame(event.detail);
     if (!profileHasFitted && !$('observations').hidden) requestAnimationFrame(() => {
       map.refresh();
       map.fit();
@@ -89,7 +142,7 @@ export function createObservations({ onForecast } = {}) {
     });
   });
   window.addEventListener('workspace:simulation-loading', () => {
-    profile.clear(); baselineMonth = null; renderForecastBanner();
+    baselineMonth = null; bridge.setBaseFrame(null);
   });
   window.addEventListener('workspace:simulation-unit', event => { profile.setUnit(event.detail.unit); polishProfile(); });
   const dockSize = new ResizeObserver(() => {
@@ -236,7 +289,7 @@ export function createObservations({ onForecast } = {}) {
     $("siteProvider").textContent = `${site.provider} / ${site.site_code}`;
     $("siteRole").textContent = site.study_role || "Quan trắc EC có nguồn tại điểm đo";
     renderSiteValue();
-    const hasExperiment = state.summary.experiments?.some(ex => ex.site_code === code);
+    const hasExperiment = Boolean(site.model_station) || state.summary.experiments?.some(ex => ex.site_code === code);
     $("openStationForecast").hidden = !hasExperiment;
     $("stationForecastNote").textContent = hasExperiment
       ? "Chạy mô hình đa biến từ khí tượng có nguồn tại cùng trạm; xem dự báo EC tháng và đầu vào."
@@ -280,7 +333,7 @@ export function createObservations({ onForecast } = {}) {
     for (const r of state.shown) {
       const row = node("tr"), source = state.summary.sources.find((s) => s.source_id === r.source_id), cell = node("td");
       cell.append(sourceAnchor(source, r.source_id), node("small", r.source_locator));
-      row.append(node("td", r.time_precision === 'SOURCE_TIMESTAMP' && r.observed_at ? new Date(r.observed_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) + ' (UTC+7)' : dateOnly(r.observed_date)), node("td", num(r.ec_mS_m)), node("td", `${r.observed_or_estimated === 'E' ? 'Ước tính (E) · ' : r.observed_or_estimated === 'O' ? 'Quan trắc (O) · ' : ''}${labels[r.quality_flag] || r.quality_flag}`), cell);
+      row.append(node("td", r.time_precision === 'SOURCE_TIMESTAMP' && r.observed_at ? new Date(r.observed_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) + ' (UTC+7)' : dateOnly(r.observed_date)), node("td", num(r.ec_mS_m)), cell);
       $("observationRows").append(row);
     }
   }

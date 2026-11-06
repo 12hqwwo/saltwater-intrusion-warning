@@ -12,6 +12,12 @@
       "manifest_path": "runs/multivariate_ec/tanchau/20261023T041813Z/manifest.json",
       "model_sha256": "9b01d1232a19b70621594f1fee4baee49bde3b0af6c4899d0aa811e876a00122",
       "manifest_sha256": "6943f6f49afd5b9e104de31add96f0c9aa5b910143d6f99913cd5955ec7c3ad4"
+    },
+    "MYTHUAN": {
+      "model_path": "runs/multivariate_ec/mythuan/20261104T_MYTHUAN_3STATION/model.joblib",
+      "manifest_path": "runs/multivariate_ec/mythuan/20261104T_MYTHUAN_3STATION/manifest.json",
+      "model_sha256": "8ccf590c40f8ef961b91f3fa549d97019518ebccfb666f27197f8f110cfdd120",
+      "manifest_sha256": "c5da4336e3972cafc91cc098d2e425613a02e747eaebc742b20d5ab53b7acd80"
     }
   }
 }

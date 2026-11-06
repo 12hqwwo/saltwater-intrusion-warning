@@ -1,0 +1,54 @@
+{
+  "verified_at": "2026-11-04T05:50:04.118176+00:00",
+  "python": {
+    "total": 91,
+    "passed": 90,
+    "skipped": 1,
+    "skip_reason": "paramiko not installed"
+  },
+  "javascript": {
+    "total": 144,
+    "passed": 144
+  },
+  "build": {
+    "success": true,
+    "modules": 253
+  },
+  "diff_check": "PASS",
+  "runtime_http_status": {
+    "catalog": 200,
+    "history": 200,
+    "stations": 200,
+    "observations": 200,
+    "fallback": 200,
+    "observed": 200,
+    "future": 200
+  },
+  "catalog_stations": [
+    "MyTho",
+    "TanChau",
+    "MyThuan"
+  ],
+  "mythuan_observations": {
+    "count": 451,
+    "quality_flag": "UNVERIFIED",
+    "ec_temperature_basis": "UNKNOWN",
+    "time_precision": "DATE_ONLY"
+  },
+  "frame_modes": {
+    "fallback": "TWO_STATION_FALLBACK_MISSING_MYTHUAN",
+    "observed": "PIECEWISE_3_STATION",
+    "future": "PIECEWISE_3_STATION"
+  },
+  "sha256": {
+    "data/models/multivariate_registry.json": "aa8e2466c574424b172db83b56bf8726fb22973e45abc897da479ecf017a511f",
+    "data/research/workspace.json": "6adb04e791542f54328015887b3b669a2b7cd855c9c7c2d163000ff77985408f",
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "data/models/future_ec_forecast_2024_2026.csv": "30250273566c45093b584c9acc17e7a1a861b56d33b9b6e602b1deeb0c9250c9"
+  },
+  "screenshots": [
+    "three-station-map.png",
+    "historical-fallback.png",
+    "gate-forecast-context.png"
+  ]
+}

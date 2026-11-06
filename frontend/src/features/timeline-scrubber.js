@@ -3,6 +3,8 @@ import { workspaceAPI } from '../shared/workspace-api.js';
 import { $, node, num } from '../shared/ui.js';
 import { formatWater } from '../shared/simulation-display.js';
 import { validMonth, validEc } from '../shared/forecast-contract.js';
+import { resolveValidTimelineMonth } from '../shared/timeline-months.js';
+export { resolveValidTimelineMonth } from '../shared/timeline-months.js';
 
 import { ADVISORY_PRESETS } from '../shared/water-advisory.js';
 export { ADVISORY_PRESETS };
@@ -22,12 +24,19 @@ export function validateThresholds(opening, closing) {
   return { open_below_ec, close_above_ec };
 }
 
-export function createSimulationFrameLoader({ api = workspaceAPI, onFrame, onError, onLoading } = {}) {
+export function createSimulationFrameLoader({ api = workspaceAPI, onFrame, onError, onLoading, onClamp, availableMonths } = {}) {
   const requests = createRequestGate();
   return {
     cancel() { requests.next(); },
+    setAvailableMonths(months) { availableMonths = [...months]; requests.next(); },
     async load(year_month, thresholds) {
       const req = requests.next();
+      if (availableMonths !== undefined) {
+        const resolved = resolveValidTimelineMonth(year_month, availableMonths);
+        if (!resolved.month) { onError?.(new Error('Chưa có tháng Timeline có frame dữ liệu.')); return null; }
+        if (resolved.clamped) onClamp?.({ requestedMonth: year_month, ...resolved });
+        year_month = resolved.month;
+      }
       onLoading?.({ year_month, thresholds });
       try {
         const query = new URLSearchParams({ year_month, ...thresholds });
@@ -92,16 +101,17 @@ export function renderSpatialSummary(frame) {
       fronts.append(node('span', `${label}: ${description}`, 'spatial-pill'));
     }
   }
-  box.append(group, fronts, node('small', `${frame.inputs ? `Đầu vào ${frame.year_month}: ${simulationInputLabel(frame.inputs)}. ` : ''}Ranh mặn quy đổi gần đúng từ EC; bấm bản đồ để tra cứu nguồn nước lân cận.`, 'spatial-click-hint'));
+  box.append(group, fronts, node('small', `${frame.inputs ? `Đầu vào ${frame.year_month}: ${simulationInputLabel(frame.inputs)} · ${frame.interpolation_mode === 'PIECEWISE_3_STATION' ? 'Nội suy 3 trạm, 2 chặng qua Mỹ Thuận' : 'Nội suy 2 trạm · khuyết mẫu Mỹ Thuận'}. ` : ''}Ranh mặn quy đổi gần đúng từ EC; bấm bản đồ để tra cứu nguồn nước lân cận.`, 'spatial-click-hint'));
 }
 
 export function createTimelineScrubber() {
   const host = $('simulationTimeline');
   const state = { items: [], index: 0, unit: 'ec', thresholds: { ...ADVISORY_PRESETS.citrus }, playing: false, speed: 1 };
   const initialRequests = createRequestGate();
-  let playbackTimer, scrubTimer, thresholdTimer, playbackGeneration = 0, pendingMonth = null;
-  host.innerHTML = `<div id="simulationSpatialSummary" class="timeline-spatial-kpis" aria-live="polite" hidden></div><div id="simulationProfilePanel" hidden><div id="simulationRiverProfile" hidden></div></div><div class="timeline-banner"><div class="timeline-month"><small>THÁNG ĐANG XEM</small><strong id="simulationMonth">—</strong><span id="simulationRegime" class="timeline-regime">Đang đọc dữ liệu</span></div><div class="timeline-stations"><div><small>THƯỢNG LƯU · TÂN CHÂU</small><strong id="simulationTanChau">—</strong></div><div><small>HẠ LƯU · MỸ THO</small><strong id="simulationMyTho">—</strong></div></div><p id="simulationWeather" class="timeline-weather"></p></div>
-    <div class="timeline-controls"><button id="simulationPlay" type="button" disabled>▶ Phát chu kỳ</button><label class="timeline-speed">Tốc độ<select id="simulationSpeed"><option value="1">1x</option><option value="2">2x</option><option value="4">4x</option></select></label><input id="simulationSlider" type="range" min="0" max="494" value="494" step="1" disabled aria-label="Tháng mô phỏng" aria-valuetext="Đang tải"><button id="simulationRetry" type="button" hidden>Thử lại</button></div>
+  let playbackTimer, scrubTimer, thresholdTimer, playbackGeneration = 0, pendingMonth = null, clampNotice = '';
+  let forecastContext = null, statusMessage = '', statusError = false;
+  host.innerHTML = `<div id="simulationSpatialSummary" class="timeline-spatial-kpis" aria-live="polite" hidden></div><div id="simulationProfilePanel" hidden><div id="simulationRiverProfile" hidden></div></div><div class="timeline-banner"><div class="timeline-month"><small>THÁNG ĐANG XEM</small><strong id="simulationMonth">—</strong><span id="simulationRegime" class="timeline-regime">Đang đọc dữ liệu</span></div><div class="timeline-stations"><div><small>THƯỢNG LƯU · TÂN CHÂU</small><strong id="simulationTanChau">—</strong></div><div><small>TRUNG LƯU · MỸ THUẬN</small><strong id="simulationMyThuan">—</strong></div><div><small>HẠ LƯU · MỸ THO</small><strong id="simulationMyTho">—</strong></div></div><p id="simulationWeather" class="timeline-weather"></p></div>
+    <div class="timeline-controls"><button id="simulationPlay" type="button" disabled>▶ Phát chu kỳ</button><label class="timeline-speed">Tốc độ<select id="simulationSpeed"><option value="1">1x</option><option value="2">2x</option><option value="4">4x</option></select></label><label class="timeline-month-picker">Chọn tháng<select id="simulationMonthPicker" aria-label="Chọn tháng có frame dữ liệu" disabled></select></label><input id="simulationSlider" type="range" min="0" max="0" value="0" step="1" disabled aria-label="Tháng mô phỏng" aria-valuetext="Đang tải"><button id="simulationRetry" type="button" hidden>Thử lại</button></div>
     <div class="timeline-axis"><span id="simulationStart">1985-06</span><span>QUAN TRẮC MRC <i></i> KHÍ TƯỢNG &amp; ML</span><span id="simulationEnd">2026-08</span></div>
     <div class="timeline-secondary"><div class="profile-dock-heading"><button id="simulationProfileToggle" type="button" aria-expanded="false" aria-controls="simulationProfilePanel">📈 Hiện cắt dọc sông</button><span class="profile-dock-title">Sơ đồ cắt dọc Sông Tiền &amp; Chuỗi 27 cống · km 0 → km 175</span><label class="profile-gate-picker"><span class="visually-hidden">Xem mô phỏng tại cống</span><select id="simulationGatePicker" aria-label="Xem mô phỏng tại cống" disabled><option value="">Đang tải danh mục cống…</option></select></label></div><div id="simulationJumps" class="timeline-jumps" aria-label="Chọn nhanh giai đoạn"></div></div><p id="simulationStatus" class="timeline-status" role="status">Đang tải trục sông và dòng thời gian…</p>`;
   host.dataset.profileExpanded = 'false';
@@ -123,10 +133,18 @@ export function createTimelineScrubber() {
     play.setAttribute('aria-pressed', 'false');
   }
   function status(text, error = false) {
-    $('simulationStatus').textContent = text;
-    $('simulationStatus').title = text;
-    $('simulationStatus').classList.toggle('is-error', error);
+    statusMessage = text; statusError = error;
+    renderStatus();
   }
+  function renderStatus() {
+    const text = forecastContext ? `Đang xem lớp sông dự báo ${forecastContext.targetMonth} · Tân Châu ${num(forecastContext.tanchauEc)} → Mỹ Thuận ${num(forecastContext.mythuanEc)} → Mỹ Tho ${num(forecastContext.mythoEc)} mS/m · nội suy 3 trạm; cống và ranh mặn của Timeline nền tạm ẩn.` : statusMessage;
+    $('simulationStatus').textContent = clampNotice ? `${clampNotice} ${text}` : text;
+    $('simulationStatus').title = $('simulationStatus').textContent;
+    $('simulationStatus').classList.toggle('is-error', statusError);
+  }
+  window.addEventListener('workspace:active-forecast-context', event => {
+    forecastContext = event.detail; renderStatus();
+  });
   function renderBanner() {
     const item = state.items[state.index];
     if (!item) return;
@@ -134,16 +152,20 @@ export function createTimelineScrubber() {
     slider.setAttribute('aria-valuetext', item.year_month);
     slider.style.setProperty('--progress', `${state.index / Math.max(1, state.items.length - 1) * 100}%`);
     $('simulationMonth').textContent = item.year_month;
-    const observed = item.data_regime === 'OBSERVED_MRC';
-    $('simulationRegime').textContent = simulationInputLabel(item);
+    $('simulationMonthPicker').value = item.year_month;
+    const regime = resolveValidTimelineMonth(item.year_month, [item.year_month]);
+    const observed = regime.regimeLabel === 'HISTORICAL_MRC_OBSERVED';
+    $('simulationRegime').textContent = `${regime.regimeDescription} · ${item.interpolation_mode === 'PIECEWISE_3_STATION' ? 'Nội suy 3 trạm, 2 chặng' : 'Nội suy 2 trạm: khuyết mẫu Mỹ Thuận'}`;
     $('simulationRegime').dataset.regime = observed ? 'observed' : 'estimate';
     $('simulationRegime').title = observed ? 'Tổng hợp các mẫu nguồn sẵn có, giữ cờ O/E và chất lượng; không đại diện chuỗi đo liên tục cả tháng. Đoạn sông và cống là mô phỏng.' : 'Ước tính hồi cứu lưu trữ; chưa phải dự báo vận hành được kiểm chứng.';
     $('simulationTanChau').textContent = formatWater(item.tan_chau_ec_mS_m, state.unit, item.tan_chau_salinity_g_l);
     $('simulationMyTho').textContent = formatWater(item.my_tho_ec_mS_m, state.unit, item.my_tho_salinity_g_l);
+    $('simulationMyThuan').textContent = Number.isFinite(item.my_thuan_ec_mS_m) ? formatWater(item.my_thuan_ec_mS_m, state.unit) : 'Khuyết mẫu · nội suy 2 trạm';
     const direction = item.wind?.direction_from_degrees;
     $('simulationWeather').textContent = `ERA5 · Mưa ${num(item.rainfall_mm)} mm · ${num(item.temperature_degC)} °C · Gió ${num(item.wind_speed_ms)} m/s${Number.isFinite(direction) ? ` · từ ${Math.round(direction)}°` : ' · chưa có hướng'}${item.imputed ? ' · EC có nội suy thời gian' : ''}`;
   }
   const loader = createSimulationFrameLoader({
+    availableMonths: [],
     onLoading(detail) {
       renderSpatialSummary(null);
       host.dataset.loading = 'true';
@@ -189,7 +211,7 @@ export function createTimelineScrubber() {
   }
   function chooseIndex(index, debounce = false, source = 'user') {
     if (!state.items.length) return Promise.resolve(null);
-    state.index = Math.max(0, Math.min(state.items.length - 1, index));
+    state.index = Number.isFinite(index) ? Math.max(0, Math.min(state.items.length - 1, Math.trunc(index))) : 0;
     emit('workspace:simulation-selection', { year_month: state.items[state.index].year_month, source });
     renderBanner();
     loader.cancel();
@@ -204,18 +226,16 @@ export function createTimelineScrubber() {
     }
     return requestFrame();
   }
-  function closestMonthIndex(month) {
-    const ordinal = value => Number(value.slice(0, 4)) * 12 + Number(value.slice(5, 7)) - 1;
-    const target = ordinal(month);
-    return state.items.reduce((best, item, index) =>
-      Math.abs(ordinal(item.year_month) - target) < Math.abs(ordinal(state.items[best].year_month) - target) ? index : best, 0);
+  function resolveMonth(month) {
+    const resolved = resolveValidTimelineMonth(month, state.items.map(item => item.year_month));
+    clampNotice = resolved.clamped ? `Tháng ${month || 'được yêu cầu'} không có frame dữ liệu; đã chuyển về ${resolved.month}.` : '';
+    return state.items.findIndex(item => item.year_month === resolved.month);
   }
   function selectMonth(month, { source = 'user' } = {}) {
-    if (!validMonth(month)) return Promise.resolve(null);
     stop(); clearTimeout(scrubTimer); clearTimeout(thresholdTimer);
     if (!state.items.length) { pendingMonth = month; return Promise.resolve(null); }
     pendingMonth = null;
-    return chooseIndex(closestMonthIndex(month), false, source);
+    return chooseIndex(resolveMonth(month), false, source);
   }
   function selectScenario({ month, preset } = {}) {
     const thresholds = ADVISORY_PRESETS[preset];
@@ -237,14 +257,16 @@ export function createTimelineScrubber() {
   }
   play.addEventListener('click', () => {
     if (state.playing) return stop();
+    clampNotice = '';
     state.playing = true;
     play.textContent = '⏸ Tạm dừng';
     play.setAttribute('aria-pressed', 'true');
     tick(++playbackGeneration);
   });
   $('simulationSpeed').addEventListener('change', event => { state.speed = Number(event.target.value); });
-  slider.addEventListener('input', () => { stop(); chooseIndex(Number(slider.value), true); });
-  slider.addEventListener('change', () => { stop(); chooseIndex(Number(slider.value)); });
+  slider.addEventListener('input', () => { stop(); clampNotice = ''; chooseIndex(Number(slider.value), true); });
+  slider.addEventListener('change', () => { stop(); clampNotice = ''; chooseIndex(Number(slider.value)); });
+  $('simulationMonthPicker').addEventListener('change', event => selectMonth(event.target.value));
   $('simulationRetry').addEventListener('click', () => state.items.length ? requestFrame() : load());
   function applyThresholds() {
     clearTimeout(thresholdTimer);
@@ -284,10 +306,13 @@ export function createTimelineScrubber() {
     clearTimeout(scrubTimer); clearTimeout(thresholdTimer); loader.cancel();
     if (!pendingMonth && state.items.length) pendingMonth = state.items[state.index]?.year_month;
     state.items = [];
+    loader.setAvailableMonths([]);
+    $('simulationMonthPicker').replaceChildren();
+    $('simulationMonthPicker').disabled = true;
     renderSpatialSummary(null);
     emit('workspace:simulation-loading', { year_month: pendingMonth, thresholds: null });
     host.dataset.loading = 'true';
-    for (const id of ['simulationMonth', 'simulationTanChau', 'simulationMyTho']) $(id).textContent = '—';
+    for (const id of ['simulationMonth', 'simulationTanChau', 'simulationMyThuan', 'simulationMyTho']) $(id).textContent = '—';
     $('simulationRegime').textContent = 'Đang tải đầu vào mô phỏng';
     $('simulationWeather').textContent = '';
     $('simulationJumps').replaceChildren();
@@ -303,8 +328,14 @@ export function createTimelineScrubber() {
       if (!Array.isArray(timeline.items) || !timeline.items.length || !Array.isArray(corridor.gates) || !corridor.corridor ||
           timeline.items.some((item, index) => !validMonth(item.year_month) || (index && item.year_month <= timeline.items[index - 1].year_month))) throw new Error('Chưa có dữ liệu không gian / thời gian hợp lệ.');
       state.items = timeline.items;
-      state.index = pendingMonth ? closestMonthIndex(pendingMonth) : state.items.length - 1;
+      loader.setAvailableMonths(state.items.map(item => item.year_month));
+      state.index = pendingMonth ? resolveMonth(pendingMonth) : state.items.length - 1;
       pendingMonth = null;
+      for (const item of state.items) {
+        const option = node('option', item.year_month); option.value = item.year_month;
+        $('simulationMonthPicker').append(option);
+      }
+      $('simulationMonthPicker').disabled = false;
       slider.max = state.items.length - 1;
       $('simulationStart').textContent = state.items[0].year_month;
       $('simulationEnd').textContent = state.items.at(-1).year_month;
@@ -316,7 +347,7 @@ export function createTimelineScrubber() {
         const button = node('button', label);
         button.type = 'button';
         button.disabled = index < 0;
-        button.addEventListener('click', () => { stop(); chooseIndex(index); });
+        button.addEventListener('click', () => { stop(); clampNotice = ''; chooseIndex(index); });
         $('simulationJumps').append(button);
       }
       play.disabled = slider.disabled = false;

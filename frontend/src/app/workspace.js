@@ -41,10 +41,6 @@ window.addEventListener("workspace:multivariate-clear", () => {
   observations.map.setForecast(null);
   $("mapForecastStatus").hidden = true;
 });
-window.addEventListener("workspace:show-forecast-map", event => {
-  showMapForecast(event.detail);
-  location.hash = "observations";
-});
 createDatabaseHistory();
 const weather = createWeatherEstimates();
 const gates = createGateDossiers(observations.map);

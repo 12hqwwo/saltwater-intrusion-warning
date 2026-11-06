@@ -99,6 +99,7 @@
             </div>
           </aside>
           <div class="panel map-panel windy-map-panel" data-base-theme="dark">
+            <aside id="mapForecastBanner" class="forecast-map-banner" role="status" hidden><div><strong id="mapForecastValue"></strong><small id="mapForecastContext"></small><small id="mapForecastDisclaimer"></small></div><button id="mapForecastDismiss" type="button">Quay về dữ liệu Timeline gốc</button></aside>
             <div class="map-scene">
             <div class="map-toolbar">
             <aside class="simulation-hud" aria-label="Điều khiển bản đồ mô phỏng">
@@ -132,7 +133,6 @@
             </div>
             <div id="researchMap" aria-label="Bản đồ dòng sông, quan trắc và khuyến nghị vận hành" tabindex="0"></div>
               <div class="map-water-legend"><span>Ngọt</span><i></i><span>Mặn cao</span><small id="simulationConversionNote" hidden>Chỉ lớp mô phỏng: quy đổi minh họa 0.0064 g/L trên 1 mS/m. Mẫu nguồn và dự báo giữ mS/m.</small></div>
-            <aside id="mapForecastBanner" class="forecast-map-banner" role="status" hidden><div><strong id="mapForecastValue"></strong><small id="mapForecastContext"></small></div><button id="mapForecastDismiss" type="button" aria-label="Ẩn dự báo trên bản đồ">✕</button></aside>
             <aside id="simulationGateCard" class="simulation-gate-card" aria-label="Điều kiện mô phỏng tại cống" tabindex="-1" hidden></aside>
             <div id="simulationTimeline" class="simulation-timeline" aria-label="Dòng thời gian mô phỏng"></div>
             <div class="map-legend-control">
@@ -214,7 +214,6 @@
                   <tr>
                     <th>Ngày quan trắc</th>
                     <th>EC (mS/m)</th>
-                    <th>Chất lượng nguồn</th>
                     <th>Minh chứng</th>
                   </tr>
                 </thead>
@@ -254,8 +253,10 @@
           <div class="next-forecast-card">
             <div class="panel-heading"><div><span class="tag">DỰ BÁO SAU MẪU CUỐI CỦA BỘ THÍ NGHIỆM</span><h3>EC tháng <span id="nextForecastTarget">—</span></h3></div><div class="latest-value"><strong id="nextForecastValue">—</strong><span>mS/m · kết quả mô hình</span></div></div>
             <p id="nextForecastStatus" class="subtle" role="status"></p>
+            <p id="nextForecastModelInfo" class="subtle forecast-model-subtitle" hidden></p>
             <div class="table-wrap"><table><thead><tr><th>Mô hình</th><th>EC dự báo (mS/m)</th><th>Tháng EC đầu vào mới nhất</th><th>Tuổi dữ liệu</th></tr></thead><tbody id="nextForecastRows"></tbody></table></div>
             <button id="nextForecastDownload" type="button" class="text-button" disabled>Tải kết quả và mốc đầu vào ↓</button>
+            <div class="mv-actions"><button id="nextForecastApplyMap" type="button" disabled>Áp dụng kịch bản dự báo lên bản đồ</button><button id="nextForecastRestoreTimeline" type="button" class="secondary">Quay về dữ liệu Timeline gốc</button></div>
           </div>
           <div id="modelAssessment" class="model-assessment">
           </div>
@@ -313,6 +314,7 @@
           <div class="forecast-controls">
             <label for="futureStationSelect">Chọn trạm ước tính hồi cứu<select id="futureStationSelect">
                 <option value="TanChau">Trạm Tân Châu (Sông Tiền - Đầu nguồn Đồng Tháp)</option>
+                <option value="MyThuan">Trạm Mỹ Thuận (Trung lưu Sông Tiền)</option>
                 <option value="MyTho">Trạm Mỹ Tho (Hạ lưu Sông Tiền)</option>
               </select>
             </label>
@@ -369,14 +371,13 @@
       <section data-view="gates" id="gates" class="section">
         <div class="section-title">
           <div>
-            <p class="eyebrow">04 / RÀ SOÁT HỒ SƠ CÔNG TRÌNH</p>
-            <h2>Mô phỏng điều kiện và quản lý hồ sơ cống.</h2>
+            <p class="eyebrow">04 / KIỂM TRA ĐIỀU KIỆN TẠI CỐNG</p>
+            <h2>Kiểm tra điều kiện xem xét lấy nước.</h2>
           </div>
           <a class="text-button" href="/api/v1/workspace/gate-source#page=2" target="_blank" rel="noopener">Danh mục gốc · trang 2 ↗</a>
         </div>
-        <div class="gate-layout">
-          <article class="panel">
-            <label for="gateSelect">Cống trong danh mục tài liệu<select id="gateSelect">
+          <article class="panel gate-selector">
+            <label for="gateSelect">Chọn cống trong danh mục tài liệu / GIS<select id="gateSelect">
               </select>
             </label>
             <p id="gateInfo">
@@ -387,83 +388,9 @@
             </p>
             <div id="databaseGateList">
             </div>
-            <hr>
-            <h3>Mô phỏng điều kiện tại cống</h3>
-            <p class="subtle">Nhập số đo và ngưỡng kịch bản, lưu bản nháp trên trình duyệt hoặc PostgreSQL và xuất JSON. Kết quả giúp giải thích quy tắc của đồ án.</p>
-            <div id="gateForecastContext" class="forecast-reference" hidden></div>
-            <form id="fieldForm" class="field-grid">
-              <label>Thời điểm đo (GMT+7)<input name="observed" type="datetime-local">
-              </label>
-              <label>Mục tiêu<select name="mode">
-                  <option value="INTAKE">Lấy nước (INTAKE)</option>
-                  <option value="DRAIN">Thoát nước (DRAIN)</option>
-                </select>
-              </label>
-              <label>Mực nước ngoài (m)<input name="outside_level" type="number" step="any">
-              </label>
-              <label>Mực nước trong (m)<input name="inside_level" type="number" step="any">
-              </label>
-              <label>EC ngoài (mS/m)<input name="outside_quality" type="number" step="any" min="0">
-              </label>
-              <label>EC trong (mS/m)<input name="inside_quality" type="number" step="any" min="0">
-              </label>
-              <label class="wide">Hệ cao độ của hai số đo mực nước<input name="datum" placeholder="Ghi đúng hệ cao độ từ hồ sơ">
-              </label>
-              <label class="wide">Nguồn / mã phiếu quan trắc<input name="reference" placeholder="Không dùng số liệu ước lượng thay số đo">
-              </label>
-              <label class="wide">Phương pháp / thiết bị đo EC<input name="method" placeholder="Theo phiếu đo thực tế">
-              </label>
-              <label class="wide">Mẫu ngưỡng kịch bản (tùy chọn)<select id="gateScenarioPreset">
-                <option value="">— Tự nhập ngưỡng bên dưới —</option>
-              </select></label>
-              <p id="thresholdPresetStatus" role="status" class="subtle wide"></p>
-              <label>Cơ sở EC<select name="ec_basis"><option value="UNKNOWN">Chưa xác định</option><option value="EC25">EC quy về 25°C</option><option value="RAW">EC tại nhiệt độ đo</option></select></label>
-              <label>EC cho phép lấy dưới (mS/m)<input name="open_below" type="number" min="0" step="any"></label>
-              <label>EC ngừng lấy từ (mS/m)<input name="close_at_or_above" type="number" min="0" step="any"></label>
-              <label>Chênh mực nước tối thiểu (m)<input name="min_head_m" type="number" min="0" step="any"></label>
-              <label>Chênh mực nước tối đa (m)<input name="max_abs_head_m" type="number" min="0" step="any"></label>
-              <label>Mực nước trong tối thiểu (m)<input name="inside_min_m" type="number" step="any"></label>
-              <label>Mực nước trong tối đa (m)<input name="inside_max_m" type="number" step="any"></label>
-              <label class="wide"><input name="allow_saline_drain" type="checkbox"> Kịch bản cho phép thoát nước khi EC vượt ngưỡng</label>
-              <div class="wide draft-actions">
-                <button type="submit">Chạy mô phỏng và xuất hồ sơ ↓</button>
-                <button id="saveGateDraft" type="button" class="secondary">Lưu nháp trình duyệt</button>
-                <button id="restoreGateDraft" type="button" class="secondary">Khôi phục nháp trình duyệt</button>
-                <button id="saveGateDatabaseDraft" type="submit" class="secondary">Lưu nháp PostgreSQL</button>
-                <button id="restoreGateDatabaseDraft" type="button" class="secondary">Mở nháp PostgreSQL gần nhất</button>
-              </div>
-            </form>
-            <p id="fieldStatus" role="status" class="subtle">
-            </p>
-            <p id="gateDraftDatabaseStatus" role="status" class="subtle"></p>
           </article>
-          <article class="panel">
-            <span class="tag">KẾT QUẢ RÀ SOÁT KHAI BÁO</span>
-            <h3 id="gateResultTitle">Chưa đủ dữ liệu đánh giá</h3>
-            <p class="subtle">Các trường thông tin trong hồ sơ:</p>
-            <ul id="gateChecklist" class="checklist">
-            </ul>
-            <div class="download-links">
-              <button id="downloadGateInput" class="text-button">Mẫu quan trắc cống ↓</button>
-              <button id="downloadGatePolicy" class="text-button">Mẫu quy trình cống ↓</button>
-              <button id="downloadGateLink" class="text-button">Mẫu liên kết trạm–cống ↓</button>
-            </div>
-            <details>
-              <summary>Nạp hồ sơ JSON tùy chỉnh và chạy kiểm tra</summary>
-              <p>Quy trình chứa ngưỡng mặn, hệ cao độ và căn cứ phê duyệt; đầu vào chứa số đo và nhu cầu nước.</p>
-              <label>Hồ sơ đầu vào (input.json)<input id="gateInputFile" type="file" accept=".json,application/json">
-              </label>
-              <label>Quy trình (policy.json)<input id="gatePolicyFile" type="file" accept=".json,application/json">
-              </label>
-              <button id="evaluateGate">Mô phỏng kịch bản</button>
-              <button id="downloadEvaluation" class="secondary" disabled>Tải kết quả ↓</button>
-              <p id="gateEvaluationStatus" role="status" class="subtle">
-              </p>
-              <pre id="gateResult" class="json-result">
-              </pre>
-            </details>
-          </article>
-        </div>
+        <p id="gateContextStatus" class="subtle" role="status"></p>
+        <div id="gateIntakeScreeningHost"></div>
       </section>
       <section data-view="overview" class="section">
         <details class="panel">

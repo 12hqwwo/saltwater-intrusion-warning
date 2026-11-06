@@ -1,7 +1,7 @@
-stage,model,cohort,mae_mS_m,rmse_mS_m,eval_samples,target_months_with_actual,evaluation_label_cutoff,coverage_fraction,evaluation_months_sha256
-test,Persistence,model_available,15.09458,20.67789,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
-test,Persistence,common,15.09458,20.67789,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
-test,Monthly Climatology,model_available,21.91738,44.46685,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
-test,Monthly Climatology,common,21.91738,44.46685,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
-test,RF_compact,model_available,11.24734,24.73657,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
-test,RF_compact,common,11.24734,24.73657,24,24,,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+stage,model,cohort,eval_samples,mae_mS_m,rmse_mS_m,target_months_with_actual,evaluation_label_cutoff,coverage_fraction,evaluation_months_sha256
+test,Persistence,model_available,24,15.094583333333333,20.677889862523852,24,2024-02-04T00:00:00+07:00,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,Persistence,common,24,15.094583333333333,20.677889862523852,24,2024-02-04T00:00:00+07:00,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,Monthly Climatology,model_available,24,21.917382744586693,44.4668498269688,24,2024-02-04T00:00:00+07:00,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,Monthly Climatology,common,24,21.917382744586693,44.4668498269688,24,2024-02-04T00:00:00+07:00,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,RF_compact,model_available,24,11.247335094625555,24.736572321738723,24,2024-02-04T00:00:00+07:00,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f
+test,RF_compact,common,24,11.247335094625555,24.736572321738723,24,2024-02-04T00:00:00+07:00,1.0,e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f

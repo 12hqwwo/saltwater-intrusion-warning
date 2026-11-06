@@ -2,6 +2,10 @@
   "selected_model": "RF_compact",
   "selected_on": "validation",
   "validation_metric": "mae_mS_m",
-  "validation_mae": 55.3,
-  "persistence_validation_mae": 125.84
+  "validation_mae": 55.298413155092206,
+  "persistence_validation_mae": 125.83833333333331,
+  "selection_protocol": "Frozen choice from primary +5-day validation; +35 days is a sensitivity evaluation",
+  "primary_availability_lag_days": 5,
+  "primary_validation_mae": 50.86595254248248,
+  "evaluation_availability_lag_days": 35
 }

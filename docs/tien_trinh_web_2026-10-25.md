@@ -2,6 +2,8 @@
 
 Cập nhật ngày **25/10/2026 (UTC+7)**.
 
+> Đây là ghi nhận lịch sử ngày 25/10. Thay đổi mã, luồng RF_compact, nội suy màu sông và tiến trình sau rà soát được cập nhật tại [báo cáo 01/11/2026](cap_nhat_logic_va_tien_trinh_2026-11-01.md) và [hiện trạng](current_state.md). Các kết quả server/DB/trình duyệt bên dưới thuộc ngày ghi nhận cũ, không phải lần kiểm chứng mới.
+
 Repository: `saltwater-intrusion-warning`.
 
 Tài liệu tổng hợp công việc đã thực hiện trong phiên phát triển, kết quả kiểm thử đã chạy và kiểm tra chỉ đọc trên server local. Không chạy lại huấn luyện, không thêm dữ liệu thử và không triển khai lên server bên ngoài khi xuất báo cáo này.

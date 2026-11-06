@@ -58,6 +58,24 @@ Workspace PostgreSQL không cần nhập lại schema nghiên cứu. Mục Quan 
 
 `--fit` chạy lại bốn thí nghiệm, tạo thư mục run mới rồi cập nhật registry/snapshot. Giữ bản run cũ để truy vết. Target là mẫu EC của tháng kế tiếp, hiện mỗi tháng có một mẫu; không nội suy thành nhãn ngày/giờ. Mô hình được chọn trên validation; test là hồi cứu, không độc lập với toàn bộ lịch sử phát triển.
 
+## Tái tạo artifact RF_compact sau rà soát 01/11/2026
+
+Khi cần tái tạo đúng hai run Mỹ Tho đang được tham chiếu, chạy tuần tự từ gốc repository:
+
+```powershell
+.venv\Scripts\python.exe -m scripts.pack_rf_compact_run
+.venv\Scripts\python.exe -m scripts.pack_rf_compact_lag30
+.venv\Scripts\python.exe -m scripts.update_workspace_with_rf_compact
+```
+
+Hai bước đầu kiểm tra và giữ dự báo nghiên cứu nguồn 2019–2023, đóng gói 24 tháng hồi cứu, tính lại metrics/P90, vẽ biểu đồ và tạo manifest/hash. Chúng có fit RF_compact cho riêng dự báo lưu sau mẫu cuối, đích 01/2024; không huấn luyện lại chuỗi dự báo lịch sử. Bước cuối kiểm checksum/hợp đồng trước khi cập nhật thí nghiệm trong snapshot và manifest workspace.
+
+`MYTHO_MONTHLY_LAG0` tương ứng nhãn +5 ngày; `MYTHO_MONTHLY_LAG30` tương ứng +35 ngày. Lựa chọn RF_compact từ validation +5 ngày được giữ khi đánh giá độ nhạy +35 ngày. Dự báo lưu 01/2024 được tính lại là 27.903151 và 22.022199 mS/m, không phải dự báo hiện tại. Tên thư mục run giữ mốc 30/10; manifest ghi thời điểm tái tạo thật.
+
+Ba lệnh này ghi artifact và snapshot cục bộ, không ghi PostgreSQL hoặc thay model RF 300 cây/năm biến của form trực tiếp. Không thay bằng `build_research_workspace.py --fit` khi mục tiêu chỉ là đóng gói RF_compact: builder tổng quát có thể tạo run và thay registry theo cấu hình riêng. Chi tiết thay đổi từng file, kiểm tra đã chạy và giới hạn: [bản cập nhật 01/11](cap_nhat_logic_va_tien_trinh_2026-11-01.md).
+
+## Script thu thập và chuẩn hóa nguồn
+
 Các script `fetch_mrc_public.py`, `fetch_public_research_data.py`, `collect_observation_archive.py` giữ nguồn, checksum và hồ sơ tải. Kiểm tra `--help` trước khi tải thêm. `normalize_v3_observations.py`, `audit_supplied_v3.py` và `inspect_observation_archive.py` phục vụ chuẩn hóa/kiểm toán; dữ liệu tiếp nhận chưa được coi là quan trắc đã xác minh.
 
 `etl/etl_csv.py --help` mô tả chuẩn hóa CSV và tạo SQL. Dùng nguồn EC trong `data/raw/ec/mrc/`. Không dùng `master_timeseries.csv` lịch sử nếu chưa đối chiếu đúng header; phiên bản có thêm cột thủy triều không khớp hợp đồng ETL master cũ.
@@ -79,7 +97,7 @@ Kiểm thử hồi quy hiện tại:
 ```powershell
 .venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 .venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py" -v
-node --test tests/frontend_api.test.mjs
+node --test tests/*.test.mjs frontend/src/features/gate-simulation-draft.test.js
 npm.cmd --prefix frontend run build
 ```
 

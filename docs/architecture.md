@@ -1,6 +1,6 @@
 # Kiến trúc WebGIS và dự báo EC theo tháng
 
-Ngày cập nhật: 23/10/2026. Phạm vi được chọn: **WebGIS kết hợp dự báo giá trị mẫu EC tháng kế tiếp tại từng trạm**. Tài liệu mô tả trách nhiệm các thành phần và nguyên tắc tích hợp; kết quả nghiệm thu cần đối chiếu với lần kiểm tra thực tế, không suy ra từ sơ đồ.
+Ngày cập nhật: 01/11/2026. Phạm vi được chọn: **WebGIS kết hợp dự báo giá trị mẫu EC tháng kế tiếp tại từng trạm**. Tài liệu mô tả trách nhiệm các thành phần và nguyên tắc tích hợp; kết quả nghiệm thu cần đối chiếu với lần kiểm tra thực tế, không suy ra từ sơ đồ.
 
 ## 1. Sản phẩm và giới hạn dữ liệu
 
@@ -65,7 +65,7 @@ Trang chính của đợt chuyển đổi là `frontend/workspace.html`. Điều
 | --- | --- |
 | `#overview` | Hiểu phạm vi, dữ liệu đang có và chọn việc cần làm |
 | `#observations` | Chọn trạm, thời gian, xem bản đồ/bảng/biểu đồ và xuất dữ liệu |
-| `#forecasts` | Chọn thí nghiệm tháng, xem thực đo–dự báo, baseline và sai số |
+| `#forecasts` | Chạy form dự báo đa biến; phần tham khảo riêng cho thí nghiệm hồi cứu, baseline và sai số |
 | `#data-quality` | Đọc nguồn, cờ chất lượng, độ phủ và giới hạn dữ liệu |
 | `#gates` | Xem hồ sơ công trình và bằng chứng cần bổ sung |
 
@@ -73,7 +73,7 @@ Trang chính của đợt chuyển đổi là `frontend/workspace.html`. Điều
 
 Từ mục Quan trắc, nút xem kiểm chứng chuyển sang đúng thí nghiệm của trạm MRC đang chọn. Trạm RIA2 chưa có thí nghiệm tháng được thông báo rõ. Lựa chọn trạm và thí nghiệm được nhớ trong phiên trình duyệt; mỗi module hủy yêu cầu cũ khi thay đầu vào để tránh hiển thị kết quả trạm trước.
 
-`frontend/index.html` tiếp tục phục vụ lịch sử PostgreSQL với lựa chọn dataset rõ ràng. `frontend/research.html` chuyển tới trang workspace và hỗ trợ hash cũ; `frontend/src/research.js` giữ import tương thích. Tên hiển thị theo nghiệp vụ; các tên API/adapter cũ không buộc giao diện phải lấy “research” làm trung tâm điều hướng.
+`frontend/index.html` tiếp tục phục vụ lịch sử PostgreSQL với lựa chọn dataset rõ ràng. `frontend/research.html` chuyển tới trang workspace và hỗ trợ hash cũ qua `frontend/src/app/legacy.js`. Tên hiển thị theo nghiệp vụ; các tên API/adapter cũ không buộc giao diện phải lấy “research” làm trung tâm điều hướng.
 
 Lịch sử PostgreSQL cũng đã tích hợp vào mục Quan trắc qua `features/database-history.js`. Bản đồ nằm ở `features/observations-map.js`; biểu đồ ở `shared/time-series.js`; ngưỡng tự nhập ở `shared/ec-scenario.js`; kiểu giao diện ở `app/workspace.css`. `features/next-forecast.js` đọc dự báo sau mẫu cuối đã lưu. `backend/domain/gate_simulation.py` tính kịch bản cống độc lập với trạng thái phê duyệt. Các entry point `research` chỉ giữ tương thích cho phần đã chuyển.
 
@@ -91,6 +91,25 @@ Nghiên cứu mới giữ các nhãn nguồn hữu hạn, không âm; bản feat
 
 ## 6. Nguồn dữ liệu và trạng thái lỗi
 
+### Đóng gói RF_compact và ranh giới với suy luận trực tiếp
+
+`scripts/rf_compact_artifacts.py` là bộ đóng gói dùng chung cho wrapper `pack_rf_compact_run.py` (+5 ngày) và `pack_rf_compact_lag30.py` (+35 ngày). Luồng cụ thể:
+
+1. Đọc các dự báo nguồn trong `outputs/ec_extreme_robust_20261029/`, dựng ma trận đầu vào và kiểm tra cohort, số mẫu huấn luyện, nhãn thực tế, ngày phát hành và hai baseline. Các dự báo hồi cứu RF_compact được bảo toàn, không huấn luyện lại chỉ để đóng gói.
+2. Tái dựng metadata as-of theo ngày phát hành 06 của tháng trước tháng đích; lọc nhãn theo độ trễ +5/+35 và dùng khí tượng/thủy văn `t−2`. Dấu thời gian nửa đêm +07:00 chỉ là quy ước tuần tự hóa ngày. Tuổi nguồn mới nhất và tuổi nhãn EC được lưu riêng; baseline chỉ nhận nguồn EC mà nó sử dụng.
+3. Tính MAE/RMSE từ `predictions.csv` cho cùng cohort. Nhóm EC cao dùng P90 cố định của nhãn có sẵn tại lần phát hành validation đầu tiên, không dùng metric mùa khô thay thế. RF_compact được chọn trên validation 2019–2021 của giả định chính +5; +35 là đánh giá độ nhạy giữ nguyên lựa chọn.
+4. Fit thuật toán RF_compact thật (100 cây, tám biến, `max_features=0.8`) để tính dự báo sau nhãn cuối. Với dữ liệu hiện tại, tháng đích là 01/2024, phát hành giả định 06/12/2023; đầu vào khí tượng/thủy văn là 11/2023 và nhãn huấn luyện được lọc riêng theo từng độ trễ. Không gán giá trị dự báo bằng hằng số.
+5. Vẽ biểu đồ từ dự báo vừa đóng gói; ghi cấu hình, nguồn, giới hạn và checksum trong manifest. Hoàn tất tệp trong thư mục tạm rồi thay các tệp artifact đích. Việc thay từng tệp không phải giao dịch nguyên tử cho toàn thư mục.
+6. `scripts/update_workspace_with_rf_compact.py` đọc registry, nạp artifact qua `experiments()` để kiểm tra checksum, kiểm tra hợp đồng bằng `validate_bundle`, rồi cập nhật workspace và manifest. Bước này không sửa quan trắc gốc hay chuyển các model khác thành RF_compact. Repository/service/API cung cấp kết quả cho UI.
+
+Luồng trên khác form live tại `backend/api/multivariate.py`: form dùng RF **300 cây, năm biến** (hai biến mùa, mưa, nhiệt, gió), suy luận từ artifact đã lưu qua `domain/multivariate_ec.py`. Các metric RF_compact không phải metric của form live. Việc tính next forecast trong script đóng gói là tác vụ ngoài request web, không thay đổi ranh giới API không huấn luyện model.
+
+Các giả định công bố không thay thế lịch sử phiên bản nguồn hoặc thời điểm công bố thật. Workspace tiếp tục đánh dấu chưa sẵn sàng triển khai; kết quả hồi cứu đã xem không thành kiểm định mù vì được đóng gói lại. Xem [quy trình nghiên cứu](diagrams/02_research_workflow.md) và [nhật ký thay đổi, tiến trình](cap_nhat_logic_va_tien_trinh_2026-11-01.md).
+
+### Hình học dải màu trên bản đồ
+
+`frontend/src/features/river-geometry.js` cung cấp `riverRibbon()` cho `observations-map.js`. Hàm tích lũy khoảng cách địa lý giữa các tọa độ, chia mỗi đoạn theo tỷ lệ chiều dài thay vì chỉ số đỉnh và nội suy EC tại trung điểm mỗi phần. Các đỉnh gốc nằm giữa hai điểm cắt được giữ lại để dải màu bám đường sông; đoạn có tổng chiều dài bằng 0 không sinh ribbon. Đây là thay đổi lớp hiển thị, không sửa nhãn quan trắc, thuật toán ML hoặc xác nhận liên kết thủy lực.
+
 - Chế độ snapshot đọc dữ liệu nghiên cứu có manifest/checksum. Tệp thiếu hoặc checksum không khớp phải báo lỗi có hướng xử lý.
 - Chế độ postgres đọc trạm và EC từ schema public, chọn một phiên bản RAW_EC mỗi trạm; thí nghiệm và danh mục tài liệu giữ nguồn tệp riêng. Lỗi DB phải được báo rõ, không tự chuyển sang snapshot.
 - Trang lịch sử DB luôn đọc PostgreSQL; trạng thái ứng dụng chạy không đồng nghĩa DB kết nối được.
@@ -106,4 +125,4 @@ Giữ đường dẫn/API cũ cần thiết trong giai đoạn chuyển đổi, 
 
 Các thư mục chưa được Git theo dõi và script nghiên cứu mới không được coi là tệp rác chỉ vì chưa commit. Khi chủ động di chuyển artifact, cần giữ ánh xạ đường dẫn, checksum và cập nhật các tham chiếu liên quan. Các thao tác xóa do người dùng xác nhận trong đợt này được giữ nguyên. Thư mục kết quả feature 19/10 hiện không còn trong checkout; tài liệu về nghiên cứu đó là hồ sơ lịch sử, không phải artifact đã được ứng dụng nạp.
 
-Tham khảo: [kế hoạch triển khai](implementation-plan.md), [báo cáo kiến trúc 18/10](reports/20261018_kien_truc_du_lieu_va_dinh_huong_webgis.md), [hướng dẫn kết quả 21/10](reports/20261021_huong_dan_file_va_cau_hoi_giang_vien.md), [bàn giao 16/10](handover.md).
+Tham khảo: [kế hoạch triển khai](implementation-plan.md), [bàn giao 16/10](handover.md), [cập nhật logic và tiến trình 01/11](cap_nhat_logic_va_tien_trinh_2026-11-01.md). Hai tài liệu từng được dẫn là `reports/20261018_kien_truc_du_lieu_va_dinh_huong_webgis.md` và `reports/20261021_huong_dan_file_va_cau_hoi_giang_vien.md` không có trong checkout hiện tại; tên được giữ để truy tìm bản lưu, không dùng làm hướng dẫn hiện hành.

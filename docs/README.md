@@ -2,6 +2,19 @@
 
 Đọc từ đây thay vì mở mọi tệp trong `docs/`. Các đường dẫn được giữ ổn định vì mã và tài liệu đã tham chiếu chéo nhiều tệp; không di chuyển dữ liệu hoặc kết quả thí nghiệm chỉ để đổi cách hiển thị thư mục.
 
+## Cập nhật 04/11/2026
+
+- [Tích hợp Mỹ Thuận — Bước 3](tich_hop_mythuan_buoc_3_2026-11-04.md): dữ liệu/API ba trạm, nội suy hai chặng, 13 tháng fallback, chuỗi mở rộng và kiểm thử. Đây là trạng thái mới hơn hai báo cáo dưới.
+- [Kiểm chứng mô hình Mỹ Thuận và nội suy ba trạm — Bước 1 và 2](kiem_chung_mythuan_ba_tram_2026-11-04.md): bảng MAE/RMSE 2022–2023, quy tắc ngày khả dụng, so sánh hai điểm neo với dự báo tại Mỹ Thuận; chưa đổi giao diện/registry.
+- [Dọn giao diện và xác minh dữ liệu EC Mỹ Thuận](cap_nhat_giao_dien_va_kiem_tra_mythuan_2026-11-04.md): bỏ hai cột nguồn được yêu cầu, gỡ biểu mẫu mô phỏng cống cũ, giữ engine giai đoạn 2; xác nhận 451 mẫu Mỹ Thuận đã tải nhưng chưa có trong API quan trắc đang chạy.
+
+## Cập nhật logic và tiến trình 01/11/2026
+
+- [Giai đoạn 2: RuleProfile và engine kiểm tra điều kiện lấy nước tại cống](giai_doan_2_gate_intake_rule_engine.md): số đo hiện trường, bảng từng tiêu chí, dự báo siết thời hạn mẫu 6 → 2 giờ và kiểm thử.
+- [Tổng hợp thay đổi theo file, luồng chạy, kiểm tra và việc còn lại](cap_nhat_logic_va_tien_trinh_2026-11-01.md): sửa đóng gói RF_compact, ngày khả dụng, metrics/P90, dự báo lưu 01/2024, biểu đồ/hash/workspace và nội suy màu sông theo khoảng cách.
+- [Hiện trạng](current_state.md), [nhật ký tiến độ](weekly_progress.md), [luồng hoạt động](user-flow.md), [kiến trúc](architecture.md), [sơ đồ nghiên cứu](diagrams/02_research_workflow.md).
+- [Báo cáo RF_compact đã hiệu đính](mo_hinh_rf_compact_chinh_thuc_2026-10-30.md) và [form dự báo đa biến hiện hữu](multivariate-forecast.md) mô tả hai luồng mô hình riêng. Các báo cáo ghi ngày trước đó giữ bằng chứng thuộc thời điểm lịch sử của chúng.
+
 ## Đang dùng cho sản phẩm và báo cáo
 
 - [README gốc](../README.md): chạy ứng dụng và cấu trúc mã.

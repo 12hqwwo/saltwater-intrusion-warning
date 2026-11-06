@@ -49,6 +49,8 @@ def ec_features(series, target, issue, delay, prefix):
 
 def build_matrix(delay):
     frame, _ = training_frame(TARGET_PATH, WEATHER_MANIFEST)
+    # This frozen two-station experiment has extra ERA5 components only at these sites.
+    frame = frame[frame.station.isin(['MYTHO', 'TANCHAU'])].copy()
     extra_rows = []
     for station, name in [("MYTHO", "MyTho"), ("TANCHAU", "TanChau")]:
         payload = json.loads((EXTRA / f"era5_extra_{name}.json").read_text(encoding="utf-8"))

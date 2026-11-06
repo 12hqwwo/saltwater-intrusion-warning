@@ -1,0 +1,56 @@
+{
+  "verified_at": "2026-11-04T11:14:21.791949+00:00",
+  "protocol_id": "FROZEN_EC_WEATHER_ONLY_V1",
+  "experiments": {
+    "gap_2019_2021": {
+      "start": "2019-01",
+      "end": "2021-12"
+    },
+    "gap_2021_2023": {
+      "start": "2021-01",
+      "end": "2023-12"
+    },
+    "gap_2022_2023": {
+      "start": "2022-01",
+      "end": "2023-12"
+    }
+  },
+  "test_results": {
+    "python": {
+      "total": 105,
+      "passed": 104,
+      "skipped": 1,
+      "failed": 0,
+      "log": "python-tests.log"
+    },
+    "javascript": {
+      "total": 147,
+      "passed": 147,
+      "failed": 0
+    },
+    "frontend_build": "PASSED: 253 modules",
+    "git_diff_check": "PASSED"
+  },
+  "live_postgres_ui": {
+    "weather_only_mythuan_target": "2026-08",
+    "save_run": false,
+    "map_overlay": "PIECEWISE_3_STATION",
+    "anchors_mS_m": {
+      "TANCHAU": 12.461982,
+      "MYTHUAN": 13.698212,
+      "MYTHO": 22.110747
+    },
+    "frozen_evaluation_table_verified": true
+  },
+  "archive": {
+    "rows": 96,
+    "months": 32,
+    "stations": 3,
+    "sha256": "1fd4f80f6f06d39e4f14fa17157f29260bcf4bf95985369def7a03f29b2cb4d7",
+    "all_registered_models_t_minus_2": true
+  },
+  "deployed_model_weights_unchanged": true,
+  "observed_ec_2024_2026_available": false,
+  "run_manifest_sha256": "b9491932729455963ad794c0184809245fb9212669bca98d079c9b741e17dd83",
+  "previous_archive_backup": "archive_before_sync/future_ec_forecast_2024_2026.csv"
+}

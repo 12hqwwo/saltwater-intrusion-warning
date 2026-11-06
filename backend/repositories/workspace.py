@@ -108,6 +108,8 @@ def _postgres_bundle(bundle):
             dates = [date.fromisoformat(row['observed_date']) for row in station_rows]
             gaps = [(right - left).days for left, right in zip(dates, dates[1:])]
             stations.append(dict(site, provider=site['source_code'], unit='mS/m',
+                model_station=fallback.get('model_station'), chainage_km=fallback.get('chainage_km'),
+                axial_ratio=fallback.get('axial_ratio'),
                 # Reference coordinates remain separate from verified DB geometry.
                 source_coordinates=site.get('source_coordinates') or fallback.get('source_coordinates'),
                 admin_label_source=site.get('admin_label_source') or fallback.get('admin_label_source'),

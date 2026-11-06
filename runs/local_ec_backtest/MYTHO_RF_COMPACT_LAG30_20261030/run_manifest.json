@@ -1,18 +1,21 @@
 {
   "status": "COMPLETED",
   "run_id": "MYTHO_RF_COMPACT_LAG30_20261030",
-  "script_version": "3.0.0",
-  "script_sha256": "rf_compact_asof_audit",
-  "created_at_utc": "2026-10-30T02:00:00Z",
+  "script_version": "4.0.0",
+  "script_sha256": "d550e093c8ef0aaf218681a8d4ae6510c254edbe7436224fbd9e93ba3e27cd86",
+  "created_at_utc": "2026-11-01T00:52:50.624511+00:00",
   "config": {
     "station": "MYTHO",
     "validation_months": 36,
     "test_months": 24,
-    "min_train_samples": 36,
+    "min_train_samples": 96,
     "min_eval_months": 6,
-    "trees": 150,
+    "trees": 100,
     "seed": 42,
-    "availability_lag_days": 35
+    "availability_lag_days": 35,
+    "max_depth": 7,
+    "min_samples_leaf": 3,
+    "max_features": 0.8
   },
   "input": {
     "file_name": "mrc_ec_monthly_samples.csv",
@@ -36,12 +39,9 @@
     "scikit_learn": "1.9.1"
   },
   "protocol": {
-    "target": "EC sample in the next calendar month, mS/m",
-    "forecast_origin": "06:00:00 Asia/Ho_Chi_Minh on day 6 of current month",
+    "target": "Single MRC EC sample in the target month, mS/m; no target imputation",
+    "forecast_origin": "Day 6 of preceding month; calendar dates serialized at local midnight (+07:00)",
     "horizon": "One calendar month ahead",
-    "evaluation": "Rolling-origin as-of; refit RF at every origin without lookahead",
-    "validation": "Validation 2019-2021 MAE (36 months drought period)",
-    "test": "Retrospective 2022-2023 MAE (24 months normal period)",
     "features": [
       "month_sin",
       "month_cos",
@@ -51,55 +51,87 @@
       "kratie_q_ratio_t2",
       "tc_stage_t2",
       "tc_stage3_t2"
-    ]
+    ],
+    "evaluation": "Saved rolling-origin as-of predictions; availability dates are assumptions, historical vintages unavailable",
+    "validation": "Candidate frozen on primary +5-day 2019-2021 validation; +35-day sensitivity retains that choice",
+    "test": "Previously inspected retrospective 2022-2023",
+    "high_ec_definition": "Actual >= fixed P90 of labels available at first validation issue",
+    "high_ec_reference_issue": "2018-12-06T00:00:00+07:00"
+  },
+  "historical_prediction_status": "REPACKED_SOURCE_PREDICTIONS_NOT_RETRAINED",
+  "source_sha256": {
+    "outputs/ec_extreme_robust_20261029/predictions_35d.csv": "9c7740beb56bc648e102c4cceb34c5ab2f7f70c5225e1329cd8d6acefc89e59d",
+    "outputs/ec_extreme_robust_20261029/predictions_5d.csv": "bdff77b6ea9119d1d92a22d4463179db6481543d8704747f0dafc22e98d3489d",
+    "outputs/ec_extreme_robust_20261029/protocol_35d.json": "3deb719356051b0f97654791c899f98120c57ee5da4612642e8563c7fc5ce902",
+    "data/research/mrc_ec_monthly_samples.csv": "d6a47816d394f381c8004d097f9da292f315ad1d612d595f18505a74da3617bc",
+    "scripts/experiment_ec_extreme_robust.py": "67c54a38f04d75caf0b0ac841631a20c7353002d6e81bc62e58dac9ba7867bd4",
+    "scripts/experiment_ec_long_hydrology.py": "788f6c1487c2c80c26f456bcd992c327e958e08613a8e8416e498024071b0aa1",
+    "scripts/backtest_asof_ec.py": "72d28ef83a4c94ed46232e8182c9f3965322da3a1f4156784db07f0c82bdcc66",
+    "data/external/multivariate_weather/manifest.json": "da9b80d2c54d52a427705d326160b1bacce17e94874ab6e5a757f3e75fd48443",
+    "data/external/mrc_kratie_discharge_20261029/014901_Discharge_Calculated daily discharge_22a8130e.csv": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+    "data/external/tien_manual_long_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "5d461321271099559d84e07d73c949171945ffc0e8fa32a813e722026cda72f8",
+    "data/external/tien_manual_2024_2026_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "f7ee1fb6fee877373fc341496eee8580502fe56e5e870f501252c0167140aab4"
   },
   "limitations": [
-    "Historical backtest, not an operational warning or gate-control recommendation.",
-    "Monthly aggregated target, not hourly tidal peak.",
-    "Input assumes Kratie discharge and ERA5 weather availability at t-2."
+    "Historical publication timestamps and source vintages are unavailable; release lags are assumed.",
+    "Previously inspected retrospective evaluation, not a new blind holdout.",
+    "No observed EC after 2023 to validate current forecasts; monthly samples do not describe hourly peaks.",
+    "Extreme EC is still underpredicted; upstream predictors do not validate gate connectivity or salt propagation.",
+    "Repackaged source predictions retain their original values; software lists the current packaging/next-forecast environment."
   ],
   "high_ec_metrics": [
     {
       "model": "Persistence",
-      "train_p90_mS_m": 71.1,
+      "train_p90_mS_m": 60.6,
       "eval_samples": 1,
-      "mae_mS_m": 16.07,
-      "rmse_mS_m": 24.3
+      "mae_mS_m": 61.15,
+      "rmse_mS_m": 61.15
+    },
+    {
+      "model": "Monthly Climatology",
+      "train_p90_mS_m": 60.6,
+      "eval_samples": 1,
+      "mae_mS_m": 9.554864864864854,
+      "rmse_mS_m": 9.554864864864854
     },
     {
       "model": "RF_compact",
-      "train_p90_mS_m": 71.1,
+      "train_p90_mS_m": 60.6,
       "eval_samples": 1,
-      "mae_mS_m": 22.37,
-      "rmse_mS_m": 37.99
+      "mae_mS_m": 39.49900957517467,
+      "rmse_mS_m": 39.49900957517467
     }
   ],
   "selection": {
     "selected_model": "RF_compact",
     "selected_on": "validation",
     "validation_metric": "mae_mS_m",
-    "validation_mae": 55.3,
-    "persistence_validation_mae": 125.84
+    "validation_mae": 55.298413155092206,
+    "persistence_validation_mae": 125.83833333333331,
+    "selection_protocol": "Frozen choice from primary +5-day validation; +35 days is a sensitivity evaluation",
+    "primary_availability_lag_days": 5,
+    "primary_validation_mae": 50.86595254248248,
+    "evaluation_availability_lag_days": 35
   },
   "test_assessment": {
     "selected_on_validation": "RF_compact",
-    "selected_test_mae_mS_m": 11.24734,
-    "persistence_test_mae_mS_m": 15.09458,
+    "selected_test_mae_mS_m": 11.247335094625555,
+    "persistence_test_mae_mS_m": 15.094583333333333,
     "selected_beats_persistence_on_test": true,
-    "mae_skill_vs_persistence": 0.25487,
+    "mae_skill_vs_persistence": 0.25487608062767175,
     "deployment_ready": false,
-    "note": "RF_compact đạt MAE 11.25 mS/m trên test 2022-2023 (thấp hơn Persistence 15.09 mS/m) và MAE 55.30 mS/m trên validation hạn mặn 2019-2021 (thấp hơn Persistence 125.84 mS/m)."
+    "note": "Retrospective 2022-2023 period was previously inspected; lower overall MAE is not independent operational validation."
   },
   "test_common_metrics": [
     {
       "stage": "test",
       "model": "Persistence",
       "cohort": "common",
-      "mae_mS_m": 15.09458,
-      "rmse_mS_m": 20.67789,
       "eval_samples": 24,
+      "mae_mS_m": 15.094583333333333,
+      "rmse_mS_m": 20.677889862523852,
       "target_months_with_actual": 24,
-      "evaluation_label_cutoff": null,
+      "evaluation_label_cutoff": "2024-02-04T00:00:00+07:00",
       "coverage_fraction": 1.0,
       "evaluation_months_sha256": "e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f"
     },
@@ -107,11 +139,11 @@
       "stage": "test",
       "model": "Monthly Climatology",
       "cohort": "common",
-      "mae_mS_m": 21.91738,
-      "rmse_mS_m": 44.46685,
       "eval_samples": 24,
+      "mae_mS_m": 21.917382744586693,
+      "rmse_mS_m": 44.4668498269688,
       "target_months_with_actual": 24,
-      "evaluation_label_cutoff": null,
+      "evaluation_label_cutoff": "2024-02-04T00:00:00+07:00",
       "coverage_fraction": 1.0,
       "evaluation_months_sha256": "e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f"
     },
@@ -119,22 +151,23 @@
       "stage": "test",
       "model": "RF_compact",
       "cohort": "common",
-      "mae_mS_m": 11.24734,
-      "rmse_mS_m": 24.73657,
       "eval_samples": 24,
+      "mae_mS_m": 11.247335094625555,
+      "rmse_mS_m": 24.736572321738723,
       "target_months_with_actual": 24,
-      "evaluation_label_cutoff": null,
+      "evaluation_label_cutoff": "2024-02-04T00:00:00+07:00",
       "coverage_fraction": 1.0,
       "evaluation_months_sha256": "e4eb9e288cee4bc81efb9398860e381b50e305ec997228b2f8cf2a53c321ba5f"
     }
   ],
   "output_sha256": {
-    "metrics.csv": "6818ef01ee797ebd4f01515f657b42af5da6cfdc7254126a6bd5d17af822e63d",
-    "high_ec_metrics.csv": "c69fce4789bab601fdc471fbc6c02a71c57d8643b86f84971973c3fc5f691c67",
-    "predictions.csv": "a81849ebd4cfd452befff55960bf051336e29a3cfe009ee6cf3ef8ad0f72bb5f",
-    "split_manifest.csv": "42dc29241570386102b5fb12b37483319591b6fdc19cd693c2a56b1c4e43f92c",
-    "forecast_chart.png": "0ac0b4f2b1931798a3c17be7262340618dc95c8bc2e4cbc8bea089fd1b4631be",
-    "selection.json": "9511f4e1561db0de44cddc9836fba023a85482606bbe5fa4642653b4fbbd5dab",
-    "next_forecast.json": "823f6f6304efa886481536e31b185f47de7f4c65b164faeac3eb8b729e5dd737"
-  }
+    "forecast_chart.png": "592f34e7b5d49a9ab3c40d3f6c4b12916319dcfdb2fb51e95584c12ea21a43c7",
+    "high_ec_metrics.csv": "c3bf8e691aa0cff74c383cd1faf36a646c5a10ba3edbe62fc587f3f3da7f1f6c",
+    "metrics.csv": "6e2da967de9d5ceccd4d6bc4653adec267d49751bc3d5934a36523b304d7ec7a",
+    "next_forecast.json": "3876ab85b16083f06ff5b2311a00611a741985538ed755e3714744200a2068bd",
+    "predictions.csv": "8ea01f5f31a64c7e92b56a308e3dd5a3e6ef8d5787b5b8fc761eaa0691cd5bcf",
+    "selection.json": "96379c3ad38fe4d25416b1244ce2125f6214245ece1639e1a389bacdb1b67779",
+    "split_manifest.csv": "9e58d8578f507ee3402f199c1c1e4c132287ce19454aa753f65f5eb768500bb6"
+  },
+  "chart_source_predictions_sha256": "8ea01f5f31a64c7e92b56a308e3dd5a3e6ef8d5787b5b8fc761eaa0691cd5bcf"
 }

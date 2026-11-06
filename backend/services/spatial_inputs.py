@@ -10,8 +10,9 @@ from statistics import mean
 from backend.repositories.workspace import ROOT, load_bundle, estimate_rows
 from backend.repositories.multivariate_inputs import get_monthly_weather
 from backend.services.workspace import WorkspaceError
+from backend.domain.river_interpolation import THREE_STATION_MODE, TWO_STATION_MODE
 
-STATIONS = {'TanChau': 'MRC_VN_019803', 'MyTho': 'MRC_VN_019805'}
+STATIONS = {'TanChau': 'MRC_VN_019803', 'MyThuan': 'MRC_VN_019804', 'MyTho': 'MRC_VN_019805'}
 SALINITY_FACTOR = 0.0064
 
 
@@ -153,6 +154,9 @@ def _monthly_inputs():
             raise ValueError('Duplicate simulation forecast station/month.')
         forecasts[station, month] = dict(value=_number(row['predicted_ec_mS_m'], True),
             site_code=STATIONS[station], model=row['model'], imputed=False,
+            input_month=row.get('input_month') or month,
+            model_version=row.get('model_version') or None,
+            model_sha256=row.get('model_sha256') or None,
             source='data/models/future_ec_forecast_2024_2026.csv', sha256=forecast_sha, source_months=[month],
             evidence_kind='ML_FORECAST_ERA5', verified_observation=False,
             data_kind='RETROSPECTIVE_WEATHER_ESTIMATE', live_forecast_available=False,
@@ -167,7 +171,12 @@ def _monthly_inputs():
         boundaries, station_weather = {}, {}
         for station in STATIONS:
             if month < '2024-01':
-                boundaries[station] = _observation_or_fill(month, observed[station])
+                if station == 'MyThuan' and month not in observed[station]:
+                    boundaries[station] = dict(value=None, site_code=STATIONS[station], imputed=False,
+                        evidence_kind='MISSING_HISTORICAL_SAMPLE', source_months=[], source_dates=[],
+                        sample_count=0, verified_observation=False, quality_flags=[])
+                else:
+                    boundaries[station] = _observation_or_fill(month, observed[station])
                 boundaries[station]['excluded_invalid_sample_count'] = invalid_samples[STATIONS[station], month]
             else:
                 if (station, month) not in forecasts:
@@ -177,7 +186,7 @@ def _monthly_inputs():
                 record = forecasts[station, month]
                 station_weather[station] = dict(rainfall_mm=record['rainfall_mm'],
                     temperature_degC=record['temperature_degC'], wind_speed_ms=record['wind_speed_ms'],
-                    source=record['source'], sha256=record['sha256'], source_month=month, source_model=record['model'],
+                    source=record['source'], sha256=record['sha256'], source_month=record['input_month'], source_model=record['model'],
                     data_kind='RETROSPECTIVE_WEATHER_ESTIMATE',
                     wind_unit='m/s', wind_unit_status='FORECAST_CSV_DECLARED_UNITS', imputed=False)
             else:
@@ -199,7 +208,11 @@ def _monthly_inputs():
             station_weather[station]['wind'] = wind
         regional = station_weather['MyTho']
         tan_chau, my_tho = boundaries['TanChau']['value'], boundaries['MyTho']['value']
+        my_thuan = boundaries['MyThuan']['value']
         result[month] = dict(year_month=month, tan_chau_ec_mS_m=tan_chau, my_tho_ec_mS_m=my_tho,
+            my_thuan_ec_mS_m=my_thuan,
+            interpolation_mode=THREE_STATION_MODE if my_thuan is not None else TWO_STATION_MODE,
+            interpolation_fallback_reason=None if my_thuan is not None else 'MISSING_HISTORICAL_MYTHUAN_OBSERVATION',
             tan_chau_salinity_g_l=round(tan_chau * SALINITY_FACTOR, 3),
             my_tho_salinity_g_l=round(my_tho * SALINITY_FACTOR, 3),
             data_regime='OBSERVED_MRC' if month < '2024-01' else 'ML_FORECAST_ERA5',

@@ -344,3 +344,30 @@
   .timeline-secondary .timeline-jumps { flex:none; overflow:visible; }
   .windy-map-panel #simulationProfileToggle, .simulation-timeline .timeline-jumps button { font-size:11px; }
 }
+
+/* Keep data provenance and month-clamp notices visible in the compact dock. */
+.simulation-timeline, .simulation-timeline[data-profile-expanded=true] { grid-template-rows:auto auto 34px auto auto auto; }
+.simulation-timeline .timeline-banner, .simulation-timeline[data-profile-expanded=true] .timeline-banner { grid-column:1 / -1; grid-row:2; }
+.simulation-timeline .timeline-month { display:flex; align-items:center; flex-wrap:wrap; gap:6px 12px; }
+.simulation-timeline .timeline-month > small { display:none; }
+.simulation-timeline .timeline-month > strong { min-width:100px; padding:0 8px; }
+.simulation-timeline .timeline-regime { display:block; font-size:11px; line-height:1.5; color:#b9e6e4; }
+.simulation-timeline .timeline-regime[data-regime=estimate] { color:#fde2a8; }
+.simulation-timeline .timeline-controls, .simulation-timeline[data-profile-expanded=true] .timeline-controls { grid-column:1 / -1; grid-row:3; }
+.simulation-timeline .timeline-month-picker { display:flex; flex-direction:row; align-items:center; gap:6px; flex:none; font-size:11px; color:#dbe9ef; }
+.simulation-timeline .timeline-month-picker select { width:105px; height:34px; padding:4px 6px; font-size:12px; }
+.simulation-timeline .timeline-secondary { grid-row:4; }
+.simulation-timeline .timeline-status, .simulation-timeline[data-profile-expanded=true] .timeline-status { position:static; grid-column:1 / -1; grid-row:5; width:auto; height:auto; clip-path:none; white-space:normal; overflow:visible; color:#b7cedb; font-size:11px; line-height:1.5; }
+.simulation-timeline .timeline-status.is-error { padding:8px 12px; color:#ffe0dd; }
+.simulation-timeline #simulationProfilePanel { grid-row:6; }
+.forecast-map-banner { position:relative; inset:auto; box-sizing:border-box; flex-wrap:wrap; width:auto; max-width:none; margin:0; border-radius:0; padding:12px 14px; }
+.forecast-map-banner > div { flex:1 1 430px; }
+.forecast-map-banner button { max-width:100%; font-size:11px; padding:6px 9px; }
+.forecast-map-banner small { font-size:10px; line-height:1.5; }
+@media (max-width:700px) {
+  .simulation-timeline .timeline-regime { font-size:10px; }
+  .simulation-timeline .timeline-month-picker { font-size:0; gap:0; }
+  .simulation-timeline .timeline-month-picker select { width:94px; font-size:11px; }
+  .simulation-timeline .timeline-status { font-size:10px; }
+  .forecast-map-banner > div { flex-basis:100%; }
+}

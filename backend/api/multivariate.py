@@ -29,8 +29,11 @@ def inputs(station: Annotated[str, Query(min_length=1, max_length=64)], target_m
 
 
 @router.get('/evaluation')
-def evaluation(station: Annotated[str, Query(min_length=1, max_length=64)]):
-    return multivariate.evaluation(station)
+def evaluation(station: Annotated[str, Query(min_length=1, max_length=64)],
+               protocol: Literal['HISTORICAL', 'FROZEN_EC_WEATHER_ONLY_V1'] = 'HISTORICAL',
+               experiment: Literal['gap_2019_2021', 'gap_2021_2023', 'gap_2022_2023'] | None = None,
+               ec_delay_days: Literal['5', '35'] = '5'):
+    return multivariate.evaluation(station, protocol, experiment, int(ec_delay_days))
 
 
 @router.post('/predict')

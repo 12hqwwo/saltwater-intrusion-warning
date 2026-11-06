@@ -32,8 +32,8 @@ class SecurityTests(unittest.TestCase):
 
     def test_api_key_is_optional_but_enforced_when_configured(self):
         with patch.dict(os.environ, WEBGIS_WRITE_API_KEY='test-key'):
-            for path in ['gate-drafts', 'multivariate/history']:
-                url = '/api/v1/workspace/' + path
+            for url in ['/api/v1/workspace/gate-drafts', '/api/v1/workspace/multivariate/history',
+                        '/api/v1/multivariate/history']:
                 self.assertEqual(self.client.post(url, json={}).status_code, 401)
                 self.assertEqual(self.client.post(url, json={}, headers={'X-API-Key': 'wrong'}).status_code, 401)
                 self.assertEqual(self.client.post(url, json={}, headers={'X-API-Key': 'test-key'}).status_code, 422)
