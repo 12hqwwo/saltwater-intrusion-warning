@@ -46,7 +46,8 @@ function prediction(overrides = {}) {
   ], ...overrides };
 }
 const catalog = { default_target_month: '2026-11', stations: [{ station: 'MyTho', site_code: 'MRC_VN_019805', trained_through: '2021-12-01' }, { station: 'TanChau', site_code: 'MRC_VN_019803', trained_through: '2021-12-01' }] };
-const input = (station = 'MyTho', target = '2026-11', inputMonth = '2026-09') => ({ station, target_month: target, input_month: inputMonth, wind_unit: 'm/s', complete: true, rainfall_mm: 10, temperature_degC: 25, wind_source_units: 2 });
+const input = (station = 'MyTho', target = '2026-11', inputMonth = '2026-09') => ({ station, target_month: target, input_month: inputMonth, wind_unit: 'm/s', complete: true, rainfall_mm: 10, temperature_degC: 25, wind_source_units: 2,
+  hydrology: station === 'MyTho' ? { input_month: inputMonth, observed_through: `${inputMonth}-30`, assumed_available_at: `${inputMonth}-30`, complete: true, kratie_q_t2: 10000, kratie_q3_t2: 9000, kratie_q_ratio_t2: 1.1, tc_stage_t2: 2, tc_stage3_t2: 1.8 } : null });
 function frozenEvaluation(overrides = {}) {
   return { station: 'MyTho', unit: 'mS/m', protocol_id: 'FROZEN_EC_WEATHER_ONLY_V1',
     experiment: 'gap_2021_2023', ec_delay_days: 5,
@@ -88,6 +89,7 @@ test('outage evidence separates hydrology remedies from the served weather model
   const remedy_research = {
     protocol_id: 'FROZEN_EC_REMEDY_RESEARCH_V1', station: 'MyTho', experiment: 'gap_2021_2023', ec_delay_days: 5,
     deployment_ready: false,
+    hydrology_series: [{ target_month: '2021-01-01', predicted_ec_mS_m: 11 }],
     methods: [{ key: 'WeatherOnly', label: 'Chỉ khí tượng' }, { key: 'WeatherHydrology', label: 'Thêm thủy văn' }],
     metrics: { WeatherOnly: { mae_mS_m: 28, rmse_mS_m: 64, false_alerts_100: 2, missed_high_100: 2 },
       WeatherHydrology: { mae_mS_m: 16, rmse_mS_m: 31, false_alerts_100: 1, missed_high_100: 1 } },
@@ -105,9 +107,10 @@ test('outage evidence separates hydrology remedies from the served weather model
   }));
   env.pending.find(row => row.url.includes('/inputs')).respond(input()); await loading;
   const text = env.get('multivariateForecastHost').textContent;
-  assert.match(text, /Không dùng riêng kết quả này để cảnh báo/);
+  assert.match(text, /mô hình chính thêm thủy văn/);
+  assert.match(text, /RF thủy văn 11, EC nguồn 10 mS\/m/);
   assert.match(text, /Thêm thủy văn/);
-  assert.match(text, /chưa thay mô hình đang phục vụ/);
+  assert.match(text, /Phương án thủy văn hiện là mô hình chính/);
   assert.match(text, /thiếu bản dự báo thời tiết lưu đúng ngày phát hành/);
   assert.match(text, /Thử riêng EC từng trạm và mô hình tuyến tính/);
   assert.match(text, /Thủy văn \+ EC Mỹ Thuận/);
@@ -274,7 +277,7 @@ test('direct forecast exposes model subtitle, explicit map application, and Time
   const env = environment(), ui = await loadMultivariate(env);
   const apply = ui.all.find(row => row.textContent === 'Áp dụng kịch bản dự báo lên bản đồ');
   const restore = ui.all.find(row => row.textContent === 'Quay về dữ liệu Timeline gốc');
-  assert.match(env.get('multivariateForecastHost').textContent, /Dự báo khi thiếu EC · RF 300 cây, 5 biến khí tượng\/mùa/);
+  assert.match(env.get('multivariateForecastHost').textContent, /RF 300 cây với khí tượng, lưu lượng Kratie và mực nước Tân Châu/);
   assert.doesNotMatch(env.get('multivariateForecastHost').textContent, /MAE holdout Mỹ Tho 18.32/);
   assert.equal(apply.disabled, true);
   const submission = ui.form.emit('submit'); env.pending.at(-1).respond({ prediction: prediction() }); await submission;
@@ -287,6 +290,23 @@ test('direct forecast exposes model subtitle, explicit map application, and Time
   ui.month.value = '2026-12'; const changing = ui.month.emit('input');
   assert.equal(apply.disabled, true);
   env.pending.at(-1).respond(input('MyTho', '2026-12', '2026-10')); await changing;
+});
+
+test('My Tho requires hydrology even with manual weather and permits manual weather when only archive weather is missing', async () => {
+  const env = environment(), ui = await loadMultivariate(env);
+  const manual = ui.mode;
+  await manual.emit('change');
+  manual.value = 'MANUAL';
+  const monthChange = ui.month.emit('input');
+  const pending = env.pending.at(-1);
+  pending.respond({ ...input(), complete: false, rainfall_mm: undefined, temperature_degC: undefined, wind_source_units: undefined });
+  await monthChange;
+  assert.equal(ui.submit.disabled, false);
+  const next = ui.month.emit('input');
+  env.pending.at(-1).respond({ ...input(), hydrology: null });
+  await next;
+  assert.equal(ui.submit.disabled, true);
+  assert.match(ui.status.textContent, /Cần cả dữ liệu thủy văn/);
 });
 
 test('RF_compact actions pass the selected archive value and experiment-specific P90 for both lags', async () => {
@@ -303,7 +323,7 @@ test('RF_compact actions pass the selected archive value and experiment-specific
       forecast_origin: row.forecast_origin, availability_lag_days: lag });
     await loading;
     assert.equal(env.get('nextForecastApplyMap').disabled, false);
-    assert.match(env.get('nextForecastModelInfo').textContent, /RF_compact 100 cây, 8 biến - MAE hồi cứu Mỹ Tho 11.07/);
+    assert.match(env.get('nextForecastModelInfo').textContent, /Thí nghiệm RF_compact lưu trữ sau mẫu EC cuối/);
     await env.get('nextForecastApplyMap').click();
     assert.equal(env.events.at(-1).type, 'workspace:apply-forecast-overlay');
     assert.deepEqual(env.events.at(-1).detail, { sourceModel: 'RF_compact', targetMonth: '2024-01', mythoEc: predicted,

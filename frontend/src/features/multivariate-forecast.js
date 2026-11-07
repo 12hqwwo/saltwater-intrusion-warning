@@ -17,7 +17,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const predictionRequests = createRequestGate();
   const evaluationRequests = createRequestGate();
   let evaluationStation = null;
-  let stations = [], archive = null, result = null, busy = false, pendingForecastMonth = null;
+  let stations = [], archive = null, result = null, busy = false, pendingForecastMonth = null, hydrologyReady = false;
   const fields = [
     { name: "rainfall_mm", label: "Lượng mưa", unit: "mm", min: "0" },
     { name: "temperature_degC", label: "Nhiệt độ", unit: "°C" },
@@ -157,16 +157,26 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       const data = await api(`/multivariate/evaluation?${new URLSearchParams({ station: selected, protocol: 'FROZEN_EC_WEATHER_ONLY_V1', experiment: evaluationExperiment.value, ec_delay_days: evaluationDelay.value })}`, req);
       if (!req.isCurrent() || station.value !== selected) return;
       if (data.station !== selected || data.unit !== "mS/m" || data.protocol_id !== 'FROZEN_EC_WEATHER_ONLY_V1' || !Array.isArray(data.items)) throw new Error("Đánh giá trả về không khớp trạm, đơn vị EC hoặc giao thức khóa EC.");
-      evaluationStatus.textContent = `Kiểm chứng hồi cứu ${data.period}: khóa EC đến ${data.frozen_ec_through?.slice(0, 7)} tại lần phát hành đầu ${data.first_issue_date_local}; mô hình giữ cố định, khí tượng t−2 cập nhật mỗi tháng. EC trong kỳ chỉ dùng để chấm sai số. Đây không phải dự báo toàn bộ giai đoạn từ một lần phát hành.`;
+      evaluationStatus.textContent = `Kiểm chứng hồi cứu ${data.period}: khóa EC đến ${data.frozen_ec_through?.slice(0, 7)} tại lần phát hành đầu ${data.first_issue_date_local}; mô hình giữ cố định, đầu vào t−2 cập nhật mỗi tháng. EC trong kỳ chỉ dùng để chấm sai số. Đây không phải dự báo toàn bộ giai đoạn từ một lần phát hành.`;
+      const rows = data.items.filter(item => /^\d{4}-(0[1-9]|1[0-2])(?:-01)?$/.test(item.target_month || "")).sort((a, b) => a.target_month.localeCompare(b.target_month));
+      const remedy = data.remedy_research;
+      const remedyMatches = remedy?.protocol_id === 'FROZEN_EC_REMEDY_RESEARCH_V1' && remedy.station === selected && remedy.experiment === data.experiment && Number(remedy.ec_delay_days) === Number(data.ec_delay_days) && remedy.deployment_ready === false;
+      const hydroRows = remedyMatches && Array.isArray(remedy.hydrology_series) ? remedy.hydrology_series : [];
+      const hydroByMonth = new Map(hydroRows.map(item => [item.target_month?.slice(0, 7), item.predicted_ec_mS_m]));
+      const hasHydrology = selected === 'MyTho' && rows.length > 0 && hydroRows.length === rows.length && hydroByMonth.size === rows.length && rows.every(row => Number.isFinite(hydroByMonth.get(row.target_month.slice(0, 7))));
       const series = [
         { key: "actual", label: "EC thực đo", color: "#12675a" },
-        { key: "RandomForest", label: "RF khí tượng t−2 và tháng", color: "#c26728" },
+        ...(hasHydrology ? [{ key: "WeatherHydrology", label: "RF + thủy văn (mô hình chính)", color: "#0b787e" }] : []),
+        { key: "RandomForest", label: "RF chỉ khí tượng (đối chứng)", color: "#c26728" },
         { key: "FrozenPersistence", label: "EC cuối cùng trước khi mất dữ liệu", color: "#2676aa", dashed: true },
       ];
-      const rows = data.items.filter(item => /^\d{4}-(0[1-9]|1[0-2])(?:-01)?$/.test(item.target_month || "")).sort((a, b) => a.target_month.localeCompare(b.target_month));
-      const worst = rows.filter(row => Number.isFinite(row.actual) && Number.isFinite(row.RandomForest))
-        .reduce((current, row) => !current || Math.abs(row.RandomForest - row.actual) > Math.abs(current.RandomForest - current.actual) ? row : current, null);
-      drawSeries(evaluationChart, series.map(item => ({ ...item, points: rows.map(row => ({ date: `${row.target_month.slice(0, 7)}-01`, value: row[item.key] })) })), { title: "EC thực đo và dự báo khí tượng trong kỳ thiếu EC", connected: true, monthTicks: true, highlightDate: worst?.target_month });
+      const comparedValue = row => hasHydrology ? hydroByMonth.get(row.target_month.slice(0, 7)) : row.RandomForest;
+      const worst = rows.filter(row => Number.isFinite(row.actual) && Number.isFinite(comparedValue(row)))
+        .reduce((current, row) => !current || Math.abs(comparedValue(row) - row.actual) > Math.abs(comparedValue(current) - current.actual) ? row : current, null);
+      drawSeries(evaluationChart, series.map(item => ({ ...item, points: rows.map(row => ({ date: `${row.target_month.slice(0, 7)}-01`, value: item.key === 'WeatherHydrology' ? hydroByMonth.get(row.target_month.slice(0, 7)) : row[item.key] })) })), { title: hasHydrology ? "EC thực đo và mô hình thủy văn chính trong kỳ thiếu EC" : "EC thực đo và dự báo khí tượng trong kỳ thiếu EC", connected: true, monthTicks: true, highlightDate: worst?.target_month });
+      evaluationLegend.textContent = hasHydrology
+        ? "Xanh đậm: EC thực đo · Xanh ngọc: mô hình chính thêm thủy văn · Cam: mô hình khí tượng cũ · Xanh lam nét đứt: giữ EC cuối cùng."
+        : "Xanh đậm: EC thực đo · Cam: RF chỉ dùng khí tượng · Xanh lam nét đứt: giữ EC cuối cùng.";
       evaluationLegend.hidden = false;
       const table = node("table"), head = node("thead"), header = node("tr"), body = node("tbody");
       for (const label of ["Mô hình", "MAE (mS/m)", "RMSE (mS/m)", "Số tháng (n)"]) header.append(node("th", label));
@@ -179,15 +189,16 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       table.append(head, body);
       evaluationMetrics.append(table, node('p', `SeasonalNaive dùng EC thực đo t−12 chỉ khả dụng ${data.seasonal_naive?.available_months ?? '—'}/${data.seasonal_naive?.total_months ?? '—'} tháng, nên không xếp hạng toàn kỳ. Đối chứng lặp mùa trong bảng chỉ lặp EC đã có trước mốc khóa, không nhận EC mới.`, 'subtle'), node("p", "Sai số nhỏ hơn là tốt hơn. So sánh với RF chỉ dùng chu kỳ tháng để kiểm tra đóng góp của khí tượng. Các kỳ đã từng được xem xét, đây là kiểm chứng hồi cứu; chưa có EC thực đo 2024–2026 để xác nhận sai số giai đoạn đó.", "subtle"));
       const rf = data.metrics?.RandomForest, frozen = data.metrics?.FrozenPersistence;
-      if (rf && frozen) evaluationGuidance.textContent = rf.rmse_mS_m > frozen.rmse_mS_m
+      const hydrologyMetric = hasHydrology ? remedy.metrics?.WeatherHydrology : null;
+      if (hydrologyMetric && rf && frozen) evaluationGuidance.textContent = `RMSE hồi cứu: mô hình chính thêm thủy văn ${num(hydrologyMetric.rmse_mS_m)}, mô hình khí tượng cũ ${num(rf.rmse_mS_m)}, giữ EC cuối cùng ${num(frozen.rmse_mS_m)} mS/m. ${hydrologyMetric.rmse_mS_m > frozen.rmse_mS_m ? 'Trong kỳ này, cách giữ EC cuối cùng có sai số thấp hơn. ' : ''}Các điểm số này chưa xác nhận độ tin cậy cho tháng tương lai.`;
+      else if (rf && frozen) evaluationGuidance.textContent = rf.rmse_mS_m > frozen.rmse_mS_m
         ? `Trong kỳ này, mô hình chỉ dùng khí tượng có RMSE ${num(rf.rmse_mS_m)} mS/m, cao hơn cách giữ EC cuối cùng (${num(frozen.rmse_mS_m)} mS/m). Không dùng riêng kết quả này để cảnh báo khi trạm mất EC lâu ngày.`
         : `Trong kỳ này, mô hình chỉ dùng khí tượng có RMSE ${num(rf.rmse_mS_m)} mS/m. Vẫn cần kiểm tra riêng các đỉnh EC và đối chiếu trạm lân cận trước khi dùng để cảnh báo.`;
-      if (worst) evaluationGuidance.textContent += ` Lệch nhiều nhất tại ${worst.target_month.slice(0, 7)}: RF ${num(worst.RandomForest)}, EC nguồn ${num(worst.actual)} mS/m.`;
-      const remedy = data.remedy_research;
-      if (remedy?.protocol_id === 'FROZEN_EC_REMEDY_RESEARCH_V1' && remedy.station === selected && remedy.experiment === data.experiment && Number(remedy.ec_delay_days) === Number(data.ec_delay_days) && remedy.deployment_ready === false) {
+      if (worst) evaluationGuidance.textContent += ` Lệch nhiều nhất tại ${worst.target_month.slice(0, 7)}: ${hasHydrology ? 'RF thủy văn' : 'RF khí tượng'} ${num(comparedValue(worst))}, EC nguồn ${num(worst.actual)} mS/m.`;
+      if (remedyMatches) {
         evaluationRemedies.hidden = false;
         evaluationRemedies.append(node('summary', 'Thử thêm dữ liệu thủy văn và EC trạm lân cận'));
-        evaluationRemedies.append(node('p', 'Cùng kỳ mất EC giả lập tại Mỹ Tho. Mô hình được huấn luyện một lần trước kỳ mất tín hiệu; chỉ dùng dữ liệu trạm khác đã giả định khả dụng vào ngày phát hành. Đây là thử nghiệm nghiên cứu, chưa thay mô hình đang phục vụ.', 'subtle'));
+        evaluationRemedies.append(node('p', 'Cùng kỳ mất EC giả lập tại Mỹ Tho. Mô hình được huấn luyện một lần trước kỳ mất tín hiệu; chỉ dùng dữ liệu trạm khác đã giả định khả dụng vào ngày phát hành. Phương án thủy văn hiện là mô hình chính của Mỹ Tho, nhưng các điểm số ở đây vẫn là kiểm chứng hồi cứu.', 'subtle'));
         const comparison = node('table'), comparisonHead = node('thead'), comparisonHeader = node('tr'), comparisonBody = node('tbody');
         for (const label of ['Đầu vào mô hình', 'MAE', 'RMSE', 'Báo EC cao giả ≥100', 'Bỏ sót EC ≥100']) comparisonHeader.append(node('th', label));
         comparisonHead.append(comparisonHeader);
@@ -221,7 +232,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
         table.append(head, body);
         const wrap = node('div', undefined, 'table-wrap');
         wrap.append(table);
-        evaluationFollowup.append(wrap, node('p', 'Các kỳ lịch sử đã được xem trước. Kết quả chưa chứng minh nguyên nhân vật lý, chưa đủ để loại vĩnh viễn EC trạm lân cận hoặc đổi mô hình đang phục vụ. Chưa có chuỗi EC trực tiếp đủ tháng 2019–2023 ở Vàm Kênh, Hòa Định hoặc Bình Đại để thử cùng giao thức. Mốc 100 mS/m chỉ dùng phân tích lỗi.', 'subtle'));
+        evaluationFollowup.append(wrap, node('p', 'Các kỳ lịch sử đã được xem trước. Kết quả chưa chứng minh nguyên nhân vật lý, chưa đủ để loại vĩnh viễn EC trạm lân cận hoặc thay mô hình thủy văn chính. Chưa có chuỗi EC trực tiếp đủ tháng 2019–2023 ở Vàm Kênh, Hòa Định hoặc Bình Đại để thử cùng giao thức. Mốc 100 mS/m chỉ dùng phân tích lỗi.', 'subtle'));
       }
     } catch (error) {
       if (req.isCurrent() && station.value === selected) evaluationStatus.textContent = error.message;
@@ -233,7 +244,8 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const currentStation = () => stations.find(item => item.station === station.value);
   const textValue = value => value == null ? "Chưa có" : typeof value === "object" ? JSON.stringify(value) : String(value);
   function refreshButton() {
-    submit.disabled = busy || !currentStation() || !validMonth(month.value) || !inputMonthFor(month.value) || (mode.value === "ARCHIVE" && archive?.complete !== true);
+    submit.disabled = busy || !currentStation() || !validMonth(month.value) || !inputMonthFor(month.value) ||
+      (station.value === 'MyTho' && !hydrologyReady) || (mode.value === "ARCHIVE" && archive?.complete !== true);
   }
   function clearResult(message = "Đầu vào đã thay đổi. Chạy lại mô hình để xem dự báo mới.") {
     predictionRequests.next();
@@ -255,7 +267,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       const index = year * 12 + number;
       month.min = `${String(Math.floor(index / 12)).padStart(4, '0')}-${String(index % 12 + 1).padStart(2, '0')}`;
     } else month.removeAttribute("min");
-    modelInfo.textContent = `Mô hình: ${textValue(selected.model)} · huấn luyện đến ${textValue(selected.trained_through)} · trạm ${selected.site_name || selected.station}.`;
+    modelInfo.textContent = `Mô hình chính: ${selected.station === 'MyTho' ? 'RF khí tượng + thủy văn thượng nguồn' : 'RF khí tượng'} · huấn luyện đến ${textValue(selected.trained_through)} · trạm ${selected.site_name || selected.station}.`;
     for (const field of fields) {
       const feature = selected.features?.find(item => item.name === field.name);
       fieldLabels.get(field.name).textContent = `${feature?.label || field.label} (${feature?.unit || field.unit})`;
@@ -265,9 +277,9 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     const manual = mode.value === "MANUAL";
     for (const control of controls.values()) control.readOnly = !manual;
     if (manual) {
-      source.textContent = "Đầu vào do người dùng cung cấp. Nếu chỉnh sửa dữ liệu đã nạp, kết quả sẽ ghi nguồn MANUAL; đây là dự báo của mô hình từ các điều kiện bạn nhập.";
+      source.textContent = `Khí tượng do người dùng cung cấp.${station.value === 'MyTho' ? ' Thủy văn Kratie và Tân Châu vẫn lấy từ nguồn lưu trữ cùng tháng t−2.' : ''} Nếu chỉnh sửa dữ liệu đã nạp, kết quả sẽ ghi nguồn MANUAL.`;
     } else if (archive) {
-      source.textContent = `Nguồn: ${textValue(archive.source)} · quan trắc đến ${textValue(archive.observed_through)} · thời điểm sẵn có giả định: ${textValue(archive.assumed_available_at)}.`;
+      source.textContent = `Khí tượng: ${textValue(archive.source)} · đến ${textValue(archive.observed_through)}.${archive.hydrology ? ` Thủy văn: lưu lượng Kratie và mực nước Tân Châu đến ${archive.hydrology.observed_through}; ngày khả dụng ${archive.hydrology.assumed_available_at} là giả định.` : ''}`;
       for (const field of fields) controls.get(field.name).value = Number.isFinite(archive[field.name]) ? archive[field.name] : "";
     } else source.textContent = "Chưa có đầu vào lưu trữ cho kỳ đã chọn. Có thể chọn dữ liệu do người dùng cung cấp.";
     refreshButton();
@@ -275,6 +287,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   async function loadInputs() {
     const req = inputRequests.next();
     archive = null;
+    hydrologyReady = false;
     clearResult("Đang đọc dữ liệu đầu vào…");
     for (const control of controls.values()) control.value = "";
     describeModel();
@@ -292,8 +305,11 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       const data = await api(`/multivariate/inputs?${new URLSearchParams({ station: station.value, target_month: target })}`, req);
       if (!req.isCurrent()) return;
       if (data.station !== station.value || data.target_month !== target || data.input_month !== previous || data.wind_unit !== 'm/s' ||
+          (station.value === 'MyTho' && (data.hydrology?.input_month !== previous || data.hydrology?.complete !== true ||
+            ['kratie_q_t2', 'kratie_q3_t2', 'kratie_q_ratio_t2', 'tc_stage_t2', 'tc_stage3_t2'].some(name => !Number.isFinite(data.hydrology[name])))) ||
           (data.complete === true && fields.some(field => !Number.isFinite(data[field.name]) || (field.min === '0' && data[field.name] < 0)))) throw new Error("Đầu vào trả về không khớp trạm, kỳ khí tượng hoặc đơn vị hợp lệ.");
       archive = data;
+      hydrologyReady = station.value !== 'MyTho' || data.hydrology?.complete === true;
       inputMonth.textContent = `Dự báo EC tháng ${target} · kỳ khí tượng đầu vào: ${data.input_month || previous}.`;
       if (data.wind_unit) fieldLabels.get("wind_source_units").textContent = `Gió (${data.wind_unit})`;
       // An explicit manual choice can start from the visible archived values.
@@ -302,7 +318,8 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       status.textContent = data.complete ? "Đã nạp đầu vào. Có thể chạy dự báo đa biến." : "Kỳ lưu trữ thiếu dữ liệu. Chọn dữ liệu do người dùng cung cấp và điền đủ ba biến để dự báo.";
     } catch (error) {
       if (!req.isCurrent()) return;
-      status.textContent = `Chưa có đầu vào khí tượng đầy đủ cho tháng ${previous} của trạm này. ${error.message} Có thể nhập ba biến khí tượng có nguồn để dự báo tháng ${target}.`;
+      hydrologyReady = false;
+      status.textContent = `Chưa có đủ đầu vào cho tháng ${previous} của trạm này. ${error.message}${station.value === 'MyTho' ? ' Cần cả dữ liệu thủy văn; nhập khí tượng thủ công không thay được phần thủy văn thiếu.' : ` Có thể nhập ba biến khí tượng có nguồn để dự báo tháng ${target}.`}`;
       applyMode();
     }
   }
@@ -311,6 +328,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     output.append(node("span", "DỰ BÁO EC THÁNG · MÔ HÌNH ĐA BIẾN", "tag"));
     output.append(node("h3", `${num(data.predicted_ec_mS_m)} mS/m`, "mv-predicted-ec"));
     output.append(node("p", `${currentStation()?.site_name || data.station} · tháng ${data.target_month} · nguồn đầu vào ${data.input_mode === "MANUAL" ? "người dùng cung cấp" : "lưu trữ"}`));
+    if (data.station === 'MyTho' && data.hydrology_provenance) output.append(node('p', `Mô hình chính dùng lưu lượng Kratie và mực nước Tân Châu tháng ${data.hydrology_provenance.input_month}. Thời điểm nguồn thủy văn sẵn có được giả định là ${data.hydrology_provenance.assumed_available_at}; chưa xác nhận lịch công bố thực tế.`, 'subtle'));
     const distribution = data.ensemble_distribution;
     if (distribution?.unit === 'mS/m' && [distribution.p10, distribution.p90].every(Number.isFinite) && distribution.p10 <= distribution.p90) {
       const spread = node('section', undefined, 'mv-tree-spread');
@@ -357,7 +375,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     output.append(node("h4", `Đầu vào tháng ${data.input_month || "—"}`), table);
     const training = data.training || {}, gap = data.gap_validation;
     const metrics = gap?.metrics?.RandomForest || data.metrics || {};
-    const metricContext = gap ? `Kiểm chứng thiếu EC liên tục ${gap.period}, mô hình huấn luyện cố định tại mốc lịch sử` : 'Đánh giá lịch sử theo giao thức của phiên bản mô hình';
+    const metricContext = gap ? `Kiểm chứng thiếu EC liên tục ${gap.period} của phương án đầu vào này, mô hình huấn luyện cố định tại mốc lịch sử` : 'Đánh giá lịch sử theo giao thức của phiên bản mô hình';
     output.append(node("p", `Huấn luyện đến ${textValue(training.through)} · ${textValue(training.samples)} mẫu. ${metricContext}: MAE ${num(metrics.mae_mS_m)} mS/m · RMSE ${num(metrics.rmse_mS_m)} mS/m · n = ${textValue(metrics.n)}.`, "mv-validation"));
     output.append(node("p", "MAE và RMSE mô tả sai số trên tập kiểm định; không phải khoảng tin cậy của dự báo riêng này. Kết quả EC theo tháng phục vụ đánh giá và lập kế hoạch.", "subtle"));
     if (data.feature_importance?.length) {

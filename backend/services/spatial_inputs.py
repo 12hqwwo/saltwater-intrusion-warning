@@ -140,16 +140,21 @@ def _observation_or_fill(month, records):
 
 
 @lru_cache(maxsize=48)
-def _model_forecast(station, month, rainfall, temperature, wind, source_sha):
+def _model_forecast(station, month, rainfall, temperature, wind, source_sha, hydro_sha=None):
     """Cache deterministic inference; the source hash invalidates refreshed weather."""
     from backend.domain.multivariate_ec import predict_month
-    result = predict_month(station, month + '-01', dict(
-        rainfall_mm=rainfall, temperature_degC=temperature,
-        wind_source_units=wind))
+    values = dict(rainfall_mm=rainfall, temperature_degC=temperature,
+                  wind_source_units=wind)
+    if station == 'MyTho':
+        from backend.repositories.hydrology_inputs import FEATURES, get_hydrology_input
+        hydro = get_hydrology_input(month)
+        values.update({key: hydro[key] for key in FEATURES})
+    result = predict_month(station, month + '-01', values)
     return dict(value=_number(result['predicted_ec_mS_m'], True),
                 model='RandomForestRegressor', model_version=result['model_version'],
                 model_sha256=result['model_provenance'].get('model_sha256'),
-                weather_source_sha256=source_sha)
+                weather_source_sha256=source_sha,
+                hydrology_source_sha256=hydro_sha)
 
 
 def _future_boundaries(month, station, observed, weather, today):
@@ -159,16 +164,26 @@ def _future_boundaries(month, station, observed, weather, today):
     record = weather.get(station, {}).get(input_month)
     if (record and record.get('complete') and record.get('wind_unit') == 'm/s'
             and record.get('assumed_available_at', '9999-12-31')[:10] <= today):
-        prediction = _model_forecast(station, month,
-            record['rainfall_mm'], record['temperature_degC'],
-            record['wind_source_units'], record['sha256'])
-        return dict(prediction, site_code=STATIONS[station], imputed=False,
-            input_month=input_month, source=record['source'], sha256=record['sha256'],
-            source_months=[input_month], evidence_kind='ML_FORECAST_ERA5',
-            verified_observation=False, data_kind='MULTIVARIATE_MONTHLY_FORECAST',
-            live_forecast_available=False, rainfall_mm=record['rainfall_mm'],
-            temperature_degC=record['temperature_degC'],
-            wind_speed_ms=record['wind_source_units'])
+        hydro = None
+        if station == 'MyTho':
+            from backend.repositories.hydrology_inputs import get_hydrology_input
+            try:
+                hydro = get_hydrology_input(month)
+            except (OSError, ValueError, KeyError, TypeError):
+                hydro = None
+        if station != 'MyTho' or hydro is not None:
+            hydro_sha = '|'.join(hydro['source_files'].values()) if hydro else None
+            prediction = _model_forecast(station, month,
+                record['rainfall_mm'], record['temperature_degC'],
+                record['wind_source_units'], record['sha256'], hydro_sha)
+            return dict(prediction, site_code=STATIONS[station], imputed=False,
+                input_month=input_month, source=record['source'], sha256=record['sha256'],
+                source_months=[input_month], evidence_kind='ML_FORECAST_ERA5_HYDROLOGY' if hydro else 'ML_FORECAST_ERA5',
+                hydrology_source_files=hydro['source_files'] if hydro else None,
+                verified_observation=False, data_kind='MULTIVARIATE_MONTHLY_FORECAST',
+                live_forecast_available=False, rainfall_mm=record['rainfall_mm'],
+                temperature_degC=record['temperature_degC'],
+                wind_speed_ms=record['wind_source_units'])
     season = month[5:]
     ec_history = [row['value'] for key, row in observed[station].items()
                   if '2010-01' <= key <= '2023-12' and key[5:] == season]
@@ -218,6 +233,12 @@ def _monthly_inputs():
     rolling_end = f'{future_index // 12:04d}-{future_index % 12 + 1:02d}'
     end = max(['2026-08', rolling_end] + [month for _, month in forecasts])
     weather = {station: {r['input_month']: r for r in get_monthly_weather(station)} for station in STATIONS}
+    # The fixed archive remains historical evidence, while the live Timeline
+    # uses the currently registered My Tho model wherever its inputs exist.
+    for station, month in list(forecasts):
+        if station == 'MyTho':
+            forecasts[station, month] = _future_boundaries(
+                month, station, observed, weather, now.date().isoformat())
     last_estimate = max(month for _, month in forecasts)
     for month in _months('2024-01', end):
         if month <= last_estimate:

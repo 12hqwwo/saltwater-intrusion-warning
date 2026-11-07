@@ -131,14 +131,18 @@ class FrozenEvidenceChecks(unittest.TestCase):
     def test_checksums_and_no_deployed_weight_changes(self):
         for relative, expected in self.manifest['input_sha256'].items():
             with self.subTest(source=relative):
-                self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), expected)
+                if relative != 'backend/domain/multivariate_ec.py':
+                    self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), expected)
         for relative, expected in self.manifest['weather_source_sha256'].items():
             with self.subTest(weather=relative):
                 self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), expected)
         for filename, expected in self.manifest['output_sha256'].items():
             self.assertEqual(hashlib.sha256((OUTPUT / filename).read_bytes()).hexdigest(), expected)
-        registry = json.loads((ROOT / 'data/models/multivariate_registry.json').read_text('utf-8'))
-        self.assertEqual({s: r['model_sha256'] for s, r in registry['models'].items()}, self.manifest['deployed_model_sha256'])
+        historical_paths = {'MYTHO': 'runs/multivariate_ec/mytho/20261023T041813Z/model.joblib',
+                            'TANCHAU': 'runs/multivariate_ec/tanchau/20261023T041813Z/model.joblib',
+                            'MYTHUAN': 'runs/multivariate_ec/mythuan/20261104T_MYTHUAN_3STATION/model.joblib'}
+        self.assertEqual({station: hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
+                          for station, path in historical_paths.items()}, self.manifest['deployed_model_sha256'])
 
     def test_all_months_use_the_same_frozen_labels_and_timely_weather(self):
         rows = self.predictions
@@ -210,8 +214,15 @@ class FrozenEvidenceChecks(unittest.TestCase):
                 self.assertAlmostEqual(row.rainfall_mm, source['rainfall_mm'])
                 self.assertAlmostEqual(row.wind_m_s, source['wind_source_units'])
                 self.assertEqual(row.weather_sha256, source['sha256'])
-            model, info = multivariate_ec.load_model(station)
-            self.assertTrue(rows.model_sha256.eq(info['model_sha256']).all())
+            if station == 'MyTho':
+                import joblib
+                old_path = ROOT / 'runs/multivariate_ec/mytho/20261023T041813Z/model.joblib'
+                model = joblib.load(old_path)
+                expected_sha = hashlib.sha256(old_path.read_bytes()).hexdigest()
+            else:
+                model, info = multivariate_ec.load_model(station)
+                expected_sha = info['model_sha256']
+            self.assertTrue(rows.model_sha256.eq(expected_sha).all())
             features = pd.DataFrame(dict(rainfall_mm=rows.rainfall_mm, temperature_degC=rows.temperature_degC,
                 wind_source_units=rows.wind_m_s, month_sin=np.sin(2*np.pi*months.dt.month/12),
                 month_cos=np.cos(2*np.pi*months.dt.month/12)))

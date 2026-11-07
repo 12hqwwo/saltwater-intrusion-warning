@@ -29,12 +29,10 @@ def evidence():
     index = json.loads(INDEX.read_text('utf-8'))
     manifest_path = ROOT / index['run_manifest_path']
     manifest = json.loads(_verified(manifest_path, index['run_manifest_sha256']))
-    registry = json.loads((ROOT / 'data/models/multivariate_registry.json').read_text('utf-8'))
     if index['protocol_id'] != PROTOCOL or manifest['protocol_id'] != PROTOCOL:
         raise ValueError('Unexpected EC gap protocol')
-    if any(entry['model_sha256'] != manifest['deployed_model_sha256'].get(station)
-           for station, entry in registry['models'].items()):
-        raise ValueError('Frozen EC evaluation refers to different deployed model artifacts')
+    # This is immutable historical evidence. Its model hashes identify the
+    # artifacts at the time of the run, even after a station model is updated.
     return manifest, manifest_path.parent
 
 

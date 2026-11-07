@@ -7,9 +7,30 @@ from backend.domain.gates import evaluate
 from backend.domain.gate_simulation import simulate
 from backend.services import dss_storage, forecasts, multivariate, spatial_inputs
 from backend.services.workspace import WorkspaceError
+from backend.repositories import workspace as workspace_store
 
 
 class BackendAuditTests(unittest.TestCase):
+    def test_postgres_keeps_ria2_reference_points_from_verified_snapshot(self):
+        path = workspace_store.ROOT / 'data/research/workspace.json'
+        manifest = path.with_name('workspace_manifest.json')
+        bundle = workspace_store._file_bundle(str(path), path.stat().st_mtime_ns,
+                                              manifest.stat().st_mtime_ns)
+        stations, observations, sources = workspace_store._snapshot_reference_points(
+            bundle, {'MRC_VN_019803', 'MRC_VN_019804', 'MRC_VN_019805'}, set())
+        self.assertEqual(len(stations), 10)
+        self.assertEqual(len(observations), 50)
+        self.assertTrue(all(station['reference_only'] and station['geometry'] is None
+                            and station['observation_source'] == 'RESEARCH_SNAPSHOT_RIA2'
+                            for station in stations))
+        self.assertEqual({row['source_id'] for row in observations},
+                         {source['source_id'] for source in sources})
+        imported = stations[0]['site_code']
+        remaining, rows, _ = workspace_store._snapshot_reference_points(
+            bundle, {imported}, set())
+        self.assertEqual(len(remaining), 9)
+        self.assertFalse(any(row['site_code'] == imported for row in rows))
+
     def draft(self):
         policy = dict(schema_version=1, is_demo=False, gate_code='G1')
         data = dict(policy, issue_time='2026-10-28T12:00:00+07:00', observations={})

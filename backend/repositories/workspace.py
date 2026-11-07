@@ -56,6 +56,25 @@ def load_bundle():
         ) from exc
 
 
+def _snapshot_reference_points(bundle, database_site_codes, database_source_codes):
+    """Keep RIA2 bulletin points visible without presenting them as DB measurements."""
+    stations = [dict(station, observation_source='RESEARCH_SNAPSHOT_RIA2',
+                     reference_only=True)
+                for station in bundle['stations']
+                if station['site_code'].startswith('RIA2_')
+                and station['site_code'] not in database_site_codes]
+    codes = {station['site_code'] for station in stations}
+    observations = [dict(row, observation_source='RESEARCH_SNAPSHOT_RIA2')
+                    for row in bundle['observations'] if row['site_code'] in codes]
+    source_ids = {row['source_id'] for row in observations}
+    sources = [source for source in bundle['sources']
+               if source['source_id'] in source_ids
+               and source['source_id'] not in database_source_codes]
+    if source_ids - database_source_codes - {source['source_id'] for source in sources}:
+        raise ValueError('RIA2 reference point source is missing from the snapshot.')
+    return stations, observations, sources
+
+
 def _postgres_bundle(bundle):
     stations, observations, datasets = [], [], []
     bundle_stations = {station['site_code']: station for station in bundle.get('stations', [])}
@@ -108,6 +127,7 @@ def _postgres_bundle(bundle):
             dates = [date.fromisoformat(row['observed_date']) for row in station_rows]
             gaps = [(right - left).days for left, right in zip(dates, dates[1:])]
             stations.append(dict(site, provider=site['source_code'], unit='mS/m',
+                observation_source='POSTGRESQL_PUBLIC_RAW_EC', reference_only=False,
                 model_station=fallback.get('model_station'), chainage_km=fallback.get('chainage_km'),
                 axial_ratio=fallback.get('axial_ratio'),
                 # Reference coordinates remain separate from verified DB geometry.
@@ -125,12 +145,23 @@ def _postgres_bundle(bundle):
                 available_dataset_codes=[d['dataset_code'] for d in available],
                 model_status='HISTORICAL_DATA_ONLY', hourly_validation_eligible=False,
                 gate_decision_eligible=False, time_precision='DATE_ONLY' if date_only else 'SOURCE_TIMESTAMP'))
+    reference_stations, reference_observations, reference_sources = _snapshot_reference_points(
+        bundle, {station['site_code'] for station in stations},
+        {source['source_id'] for source in sources})
+    stations.extend(reference_stations)
+    observations.extend(reference_observations)
+    sources.extend(reference_sources)
     return dict(bundle, stations=stations, observations=observations,
         sources=sources, artifact_sources=bundle['sources'], datasets=datasets,
-        storage_mode='postgres', observation_source='POSTGRESQL_PUBLIC_RAW_EC',
+        storage_mode='postgres', observation_source=(
+            'POSTGRESQL_RAW_EC_AND_RIA2_SNAPSHOT_REFERENCES' if reference_stations
+            else 'POSTGRESQL_PUBLIC_RAW_EC'),
         artifact_source='RESEARCH_SNAPSHOT',
         dataset_selection='EXPLICIT_PER_SITE_OR_LATEST_IMPORTED_RAW_EC',
-        notes=list(bundle['notes']) + ['PostgreSQL public RAW_EC observations; latest import per site unless WEBGIS_WORKSPACE_DATASETS pins a dataset. Historical EC is not operational gate evidence.'])
+        notes=list(bundle['notes']) + [
+            'PostgreSQL public RAW_EC observations; latest import per site unless WEBGIS_WORKSPACE_DATASETS pins a dataset. Historical EC is not operational gate evidence.',
+            'RIA2 points not imported into PostgreSQL are shown from the hash-verified project snapshot as reference points; their coordinates have unconfirmed CRS.'
+        ])
 
 
 def read_json(relative_path):

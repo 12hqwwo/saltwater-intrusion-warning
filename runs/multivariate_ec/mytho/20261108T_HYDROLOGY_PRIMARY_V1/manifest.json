@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "model_version": "20261108T_HYDROLOGY_PRIMARY_V1",
+  "station": "MYTHO",
+  "model": "RandomForestRegressor",
+  "sklearn_version": "1.9.1",
+  "feature_order": [
+    "rainfall_mm",
+    "temperature_degC",
+    "wind_source_units",
+    "month_sin",
+    "month_cos",
+    "kratie_q_t2",
+    "kratie_q3_t2",
+    "kratie_q_ratio_t2",
+    "tc_stage_t2",
+    "tc_stage3_t2"
+  ],
+  "feature_units": {
+    "rainfall_mm": "mm",
+    "temperature_degC": "degC",
+    "wind_source_units": "m/s",
+    "month_sin": "1",
+    "month_cos": "1",
+    "kratie_q_t2": "m³/s",
+    "kratie_q3_t2": "m³/s",
+    "kratie_q_ratio_t2": "1",
+    "tc_stage_t2": "m",
+    "tc_stage3_t2": "m"
+  },
+  "weather_lag_months": 2,
+  "hydrology_lag_months": 2,
+  "training_cutoff": "2023-12-01",
+  "training_months": 463,
+  "source_sample_count": 463,
+  "target_unit": "mS/m",
+  "target_quality": "UNVERIFIED_SOURCE_QA_NOT_PROMOTED",
+  "input_sha256": {
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "data/external/multivariate_weather/manifest.json": "97898949f67329bc768f20214806d8f46d0062be11d3336dc334c68ad48110d8",
+    "data/external/mrc_kratie_discharge_20261029/014901_Discharge_Calculated daily discharge_22a8130e.csv": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+    "data/external/tien_manual_long_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "5d461321271099559d84e07d73c949171945ffc0e8fa32a813e722026cda72f8",
+    "data/external/tien_manual_2024_2026_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "f7ee1fb6fee877373fc341496eee8580502fe56e5e870f501252c0167140aab4",
+    "outputs/frozen_ec_remedies_20261108/run_manifest.json": "0a822b780d9fd99e054617e677f6bbe76a73d8575e12571d102335a87b19c6af",
+    "outputs/frozen_ec_remedies_20261108/predictions.csv": "2009c3cd1329907dc213e47f88da8b83d39facaa29ddee44121a5cac3a4a972d",
+    "outputs/frozen_ec_gap_20261104/run_manifest.json": "c2221eb0a9a951655083e2e0d469a3966aa06099c3320d3409efdb2514ecbd72",
+    "outputs/frozen_ec_gap_20261104/predictions.csv": "a8ef4796fcf126f6deaf0df7012d147dc6d6bc1ece90ad8c370c25df09c9792c"
+  },
+  "weather_source_sha256": {
+    "data/external/multivariate_weather/era5_MyTho_1985-01-01_1989-12-31.json": "b7a44f1bc437e4e9232d96997f999238ed7811367831a6bfe805aa2859a95e37",
+    "data/external/multivariate_weather/era5_MyTho_1990-01-01_1994-12-31.json": "de14505996122950cbed03ee58394df29a46a9708699494a13140cef8b979088",
+    "data/external/multivariate_weather/era5_MyTho_1995-01-01_1999-12-31.json": "756665880ca14fe873fd24cdf535cd1f035189d94da66b6074fff912d1170ecb",
+    "data/external/multivariate_weather/era5_MyTho_2000-01-01_2004-12-31.json": "07bbcb21705c6acf53945f8858a40317002181b9deaf00a9fe625e347149dd95",
+    "data/external/multivariate_weather/era5_MyTho_2005-01-01_2009-12-31.json": "e371ef1a44f215485b7d5c2bba72c37a355df3b103f1dd9eca36ad1b3c8b4a48",
+    "data/external/multivariate_weather/era5_MyTho_2010-01-01_2014-12-31.json": "5b61bf193585eb3c114a80f12e44269f1b96ca98462417fcf70c8846c60a83dc",
+    "data/external/multivariate_weather/era5_MyTho_2015-01-01_2019-12-31.json": "70954940bece8bdbbf545ce3b35ccf72eed62ee57a2593505fc4bed08876e515",
+    "data/external/multivariate_weather/era5_MyTho_2020-01-01_2024-12-31.json": "44ae7303979eae69a11a4c2dce51391970cb56fe24d8e6266b7f51489bac26b7",
+    "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+    "data/external/multivariate_weather/era5_MyTho_2026-10-01_2026-10-31.json": "3af8bea9f0d8139cd8736f88621b253362872bd96246edec9ee0a4422ea4d269"
+  },
+  "parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "random_state": 42
+  },
+  "selection": "Selected by user after inspected retrospective windows; no blind model selection claim.",
+  "evaluation": {
+    "validation": {
+      "RandomForest": {
+        "n": 36,
+        "mae_mS_m": 57.80784469592608,
+        "rmse_mS_m": 133.81504939428643
+      },
+      "FrozenPersistence": {
+        "n": 36,
+        "mae_mS_m": 80.19555555555556,
+        "rmse_mS_m": 191.2292684188276
+      },
+      "MonthlyClimatology": {
+        "n": 36,
+        "mae_mS_m": 70.22193429391959,
+        "rmse_mS_m": 167.37940148097277
+      },
+      "FrozenSeasonalRepeat": {
+        "n": 36,
+        "mae_mS_m": 75.21166666666667,
+        "rmse_mS_m": 185.47428462068686
+      }
+    },
+    "holdout": {
+      "RandomForest": {
+        "n": 24,
+        "mae_mS_m": 12.190081858588472,
+        "rmse_mS_m": 25.430736783277872
+      },
+      "FrozenPersistence": {
+        "n": 24,
+        "mae_mS_m": 10.756666666666666,
+        "rmse_mS_m": 16.45674355191006
+      },
+      "MonthlyClimatology": {
+        "n": 24,
+        "mae_mS_m": 22.189284909909915,
+        "rmse_mS_m": 45.03342947350825
+      },
+      "FrozenSeasonalRepeat": {
+        "n": 24,
+        "mae_mS_m": 28.590833333333332,
+        "rmse_mS_m": 60.6414534373971
+      }
+    }
+  },
+  "evaluation_protocol_id": "FROZEN_EC_HYDROLOGY_PRIMARY_V1",
+  "evaluation_protocol": "Fit once before a 24/36-month My Tho EC outage; weather and hydrology t-2 assumed available month end +5d. Withheld EC used only for scoring.",
+  "gap_validation": {
+    "protocol_id": "FROZEN_EC_HYDROLOGY_PRIMARY_V1",
+    "experiment": "gap_2021_2023",
+    "period": "2021-01..2023-12",
+    "ec_delay_days": 5,
+    "metrics": {
+      "RandomForest": {
+        "n": 36,
+        "mae_mS_m": 16.56924005562273,
+        "rmse_mS_m": 31.209851767529553
+      },
+      "FrozenPersistence": {
+        "n": 36,
+        "mae_mS_m": 19.133055555555558,
+        "rmse_mS_m": 42.574441504785995
+      },
+      "MonthlyClimatology": {
+        "n": 36,
+        "mae_mS_m": 21.532042107583777,
+        "rmse_mS_m": 42.574867448210995
+      },
+      "FrozenSeasonalRepeat": {
+        "n": 36,
+        "mae_mS_m": 172.45805555555552,
+        "rmse_mS_m": 292.08318552064736
+      }
+    },
+    "freeze_rule": "My Tho EC labels locked at first issue; model fitted once before outage.",
+    "data_kind": "RETROSPECTIVE_RESEARCH",
+    "deployment_ready": false
+  },
+  "feature_importance": {
+    "rainfall_mm": 0.3405445123316163,
+    "temperature_degC": 0.03812810796122052,
+    "wind_source_units": 0.04099783957738407,
+    "month_sin": 0.0127340505441458,
+    "month_cos": 0.00957453448249287,
+    "kratie_q_t2": 0.1597958644050703,
+    "kratie_q3_t2": 0.0917537064761312,
+    "kratie_q_ratio_t2": 0.23143954754788942,
+    "tc_stage_t2": 0.03466396345895918,
+    "tc_stage3_t2": 0.04036787321509037
+  },
+  "missing_training_features": {
+    "rainfall_mm": 0,
+    "temperature_degC": 0,
+    "wind_source_units": 0,
+    "month_sin": 0,
+    "month_cos": 0,
+    "kratie_q_t2": 0,
+    "kratie_q3_t2": 0,
+    "kratie_q_ratio_t2": 57,
+    "tc_stage_t2": 12,
+    "tc_stage3_t2": 12
+  },
+  "primary_for_forecast": true,
+  "deployment_ready": false,
+  "availability_note": "Historical weather/hydrology publication times are assumed, not verified; require complete current t-2 source months.",
+  "model_sha256": "f3bc750b33db5b1de841fce5c2882cf79ce3aba2ea2a81e34a07ef880b1ced0e",
+  "predictions_sha256": "5f7f2b15955a8248ed4723605fc5d41dea612da3496c6d94284a4fe7fad20789"
+}

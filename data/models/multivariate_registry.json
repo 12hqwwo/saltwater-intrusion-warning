@@ -2,10 +2,10 @@
   "schema_version": 1,
   "models": {
     "MYTHO": {
-      "model_path": "runs/multivariate_ec/mytho/20261023T041813Z/model.joblib",
-      "manifest_path": "runs/multivariate_ec/mytho/20261023T041813Z/manifest.json",
-      "model_sha256": "a51227644805d1a231a50a7b6b82203e3ffe6983898a55b8a4deebee6bd0bd25",
-      "manifest_sha256": "0f8cd87d1f9c90d173241cd68789943dcbee3f4a52d6fd884aa0a1332e0b7f05"
+      "model_path": "runs/multivariate_ec/mytho/20261108T_HYDROLOGY_PRIMARY_V1/model.joblib",
+      "manifest_path": "runs/multivariate_ec/mytho/20261108T_HYDROLOGY_PRIMARY_V1/manifest.json",
+      "model_sha256": "f3bc750b33db5b1de841fce5c2882cf79ce3aba2ea2a81e34a07ef880b1ced0e",
+      "manifest_sha256": "9be8b8786bd379c8f30dac67ef78d42ac4ea5211d085f8f8f589e34463c1a7b2"
     },
     "TANCHAU": {
       "model_path": "runs/multivariate_ec/tanchau/20261023T041813Z/model.joblib",

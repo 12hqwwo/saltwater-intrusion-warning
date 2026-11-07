@@ -6,6 +6,7 @@ from uuid import uuid4
 
 from backend.domain import multivariate_ec as models
 from backend.repositories import multivariate_inputs as weather
+from backend.repositories import hydrology_inputs as hydrology
 from backend.schemas import LOCAL_TZ
 from backend.services.workspace import WorkspaceError
 
@@ -43,7 +44,7 @@ def catalog():
                 model_version=', '.join(sorted({item['model_version'] for item in items})),
                 default_target_month=next_month.strftime('%Y-%m'), unit='mS/m',
                 weather_lag_months=2,
-                input_note='Mưa, nhiệt độ và gió của tháng t−2, cộng chu kỳ mùa vụ tháng dự báo. Không dùng khí tượng thực tế của tháng mục tiêu.')
+                input_note='Mưa, nhiệt độ và gió của tháng t−2, cộng chu kỳ tháng. Mỹ Tho dùng thêm lưu lượng Kratie và mực nước Tân Châu tháng t−2; các trạm khác giữ mô hình riêng.')
 
 
 def evaluation(station: str, protocol='HISTORICAL', experiment=None, ec_delay_days=5):
@@ -61,9 +62,20 @@ def inputs(station: str, target_month: str):
     selected = _station(station)
     if selected is None:
         raise WorkspaceError(404, 'Chưa đăng ký mô hình cho trạm này.')
+    hydro = None
+    if models.normalize_station(selected['station']) == 'MYTHO':
+        try:
+            hydro = hydrology.get_hydrology_input(target_month)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            raise WorkspaceError(422, 'Chưa đủ lưu lượng Kratie hoặc mực nước Tân Châu tháng t−2 để dự báo Mỹ Tho. Cần cập nhật nguồn thủy văn đầy đủ.') from exc
     try:
         result = weather.get_weather_input(selected['station'], target_month)
     except (OSError, ValueError, KeyError, TypeError) as exc:
+        if hydro is not None:
+            return dict(station=selected['station'], target_month=target_month,
+                input_month=_input_month(target), complete=False, wind_unit='m/s',
+                source='WEATHER_UNAVAILABLE', hydrology=hydro,
+                availability_note='Chưa có đủ khí tượng lưu trữ; có thể nhập khí tượng thủ công.')
         raise WorkspaceError(422, 'Chưa có đủ khí tượng đúng đơn vị cho tháng đầu vào. Cập nhật bằng scripts/update_multivariate_weather.py hoặc chọn đầu vào do người dùng cung cấp.') from exc
     if result.get('wind_unit') != 'm/s' or result.get('complete') is not True:
         raise WorkspaceError(422, 'Khí tượng chưa đủ ngày hoặc chưa xác nhận đơn vị gió m/s để chạy mô hình này.')
@@ -84,7 +96,7 @@ def inputs(station: str, target_month: str):
     except (KeyError, ValueError, TypeError) as exc:
         raise WorkspaceError(422, 'Kỳ khí tượng này chưa đủ điều kiện sẵn có tại thời điểm phát hành.') from exc
     return dict(result, station=selected['station'], target_month=target_month,
-                assumed_available_at=available.isoformat())
+                assumed_available_at=available.isoformat(), hydrology=hydro)
 
 
 def predict(payload):
@@ -98,13 +110,24 @@ def predict(payload):
     mode = payload['input_mode']
     if mode == 'ARCHIVE':
         source = inputs(selected['station'], target_month)
+        if source.get('complete') is not True:
+            raise WorkspaceError(422, 'Chưa đủ khí tượng lưu trữ; chọn đầu vào khí tượng do người dùng cung cấp.')
         values = {key: source[key] for key in models.WEATHER_AGG}
+        hydro = source.get('hydrology')
     else:
         values = {key: payload.get(key) for key in models.WEATHER_AGG}
         if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in values.values()):
             raise WorkspaceError(422, 'Cần điền đủ ba đầu vào khí tượng hữu hạn.')
         source = dict(source='USER_PROVIDED', input_month=_input_month(target), wind_unit='m/s',
                       observed_through=None, assumed_available_at=None, sha256=None, complete=True)
+        hydro = None
+        if models.normalize_station(selected['station']) == 'MYTHO':
+            try:
+                hydro = hydrology.get_hydrology_input(target_month)
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                raise WorkspaceError(422, 'Mỹ Tho cần đủ lưu lượng Kratie và mực nước Tân Châu tháng t−2 kể cả khi nhập khí tượng thủ công.') from exc
+    if hydro:
+        values.update({key: hydro[key] for key in models.HYDRO_FEATURES})
     try:
         prediction = models.predict_month(selected['station'], target.isoformat(), values)
     except (OSError, ValueError, KeyError, TypeError, ImportError) as exc:
@@ -115,11 +138,13 @@ def predict(payload):
     now = datetime.now(LOCAL_TZ)
     raw_features = prediction['feature_values']
     features = [dict(name=key, label=models.LABELS[key], value=value, unit=models.UNITS[key],
-                     source='CALENDAR' if key.startswith('month_') else source['source'])
+                     source='CALENDAR' if key.startswith('month_') else
+                            hydro['source'] if key in models.HYDRO_FEATURES and hydro else source['source'])
                 for key, value in raw_features.items()]
     return dict(prediction, prediction_id=str(uuid4()), site_code=selected['site_code'],
                 target_month=target_month, input_month=source['input_month'], input_mode=mode,
                 issued_at=now.isoformat(), inputs=features, input_provenance=source,
+                hydrology_provenance=hydro,
                 training=dict(through=selected['trained_through'], samples=selected['training_samples']),
                 metrics=selected['metrics'], evaluation=selected['evaluation'],
                 gap_validation=selected.get('gap_validation'),

@@ -81,6 +81,8 @@ class RemedyChecks(unittest.TestCase):
         self.assertAlmostEqual(study["metrics"]["WeatherOnly"]["mae_mS_m"], 18.385278, places=5)
         self.assertLess(study["metrics"]["WeatherHydrology"]["rmse_mS_m"],
                         study["metrics"]["WeatherOnly"]["rmse_mS_m"])
+        self.assertEqual(len(study["hydrology_series"]), 24)
+        self.assertEqual(study["hydrology_series"][0]["target_month"], "2022-01-01")
         self.assertEqual(ec_gap_evaluation.records("MYTHO", "gap_2022_2023", 5)["remedy_research"], study)
         self.assertIsNone(ec_gap_evaluation.records("TANCHAU", "gap_2022_2023", 5)["remedy_research"])
         with self.assertRaises(ValueError):

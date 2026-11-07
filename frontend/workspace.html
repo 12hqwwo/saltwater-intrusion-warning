@@ -226,8 +226,8 @@
         <details class="panel compact-details"><summary>Tra cứu lịch sử quan trắc PostgreSQL</summary><div id="databaseHistoryHost" class="panel database-history"></div></details>
       </section>
       <section data-view="forecasts" id="multivariate-forecast" class="section">
-        <div class="section-title"><div><h2>Dự báo EC từ khí tượng và mùa vụ.</h2></div><span class="badge">Random Forest · mS/m</span></div>
-        <article class="panel"><p class="subtle">Mô hình sử dụng lượng mưa, nhiệt độ, gió của tháng t−2 và chu kỳ tháng cần dự báo. Khí tượng đủ tháng đã có trước kỳ mục tiêu; mỗi trạm có mô hình riêng.</p><div id="multivariateForecastHost"></div></article>
+        <div class="section-title"><div><h2>Dự báo EC theo trạm.</h2></div><span class="badge">Random Forest · mS/m</span></div>
+        <article class="panel"><p class="subtle">Mỹ Tho dùng khí tượng, lưu lượng Kratie và mực nước Tân Châu của tháng t−2 cùng chu kỳ tháng. Mỹ Thuận và Tân Châu dùng mô hình khí tượng riêng. Mỗi dự báo chỉ chạy khi có đủ đầu vào phù hợp.</p><div id="multivariateForecastHost"></div></article>
       </section>
       <section data-view="forecasts" id="forecast" class="section">
         <details class="historical-forecast"><summary>Đánh giá lịch sử: mô hình EC trễ và Persistence</summary>

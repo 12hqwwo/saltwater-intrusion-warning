@@ -5,12 +5,12 @@ export const DEFAULT_P90_MYTHO_MS_M = 60.42;
 export const EC_TO_SALINITY_GL_FACTOR = 0.0064;
 export const DIRECT_FORECAST_MODEL = 'MULTIVARIATE_RF_5';
 export const COMPACT_FORECAST_MODEL = 'RF_compact';
-export const DIRECT_FORECAST_SUBTITLE = 'Dự báo khi thiếu EC · RF 300 cây, 5 biến khí tượng/mùa · Khí tượng t−2 cập nhật mỗi tháng; mô hình giữ cố định sau huấn luyện.';
-export const COMPACT_FORECAST_SUBTITLE = 'Dự báo chuẩn kết hợp thủy văn thượng nguồn t-2 (RF_compact 100 cây, 8 biến - MAE hồi cứu Mỹ Tho 11.07 mS/m)';
+export const DIRECT_FORECAST_SUBTITLE = 'Mỹ Tho: RF 300 cây với khí tượng, lưu lượng Kratie và mực nước Tân Châu tháng t−2. Mỹ Thuận và Tân Châu: mô hình khí tượng riêng.';
+export const COMPACT_FORECAST_SUBTITLE = 'Thí nghiệm RF_compact lưu trữ sau mẫu EC cuối; không phải mô hình chính hiện tại.';
 export const FORECAST_SPATIAL_DISCLAIMER = 'Lớp nội suy hình học dọc trục sông phục vụ sàng lọc không gian';
 
 export function forecastModelLabel(sourceModel) {
-  return sourceModel === DIRECT_FORECAST_MODEL ? 'Form Đa biến 5 biến' : 'RF_compact 8 biến';
+  return sourceModel === DIRECT_FORECAST_MODEL ? 'Dự báo đa biến theo trạm' : 'RF_compact 8 biến';
 }
 
 export function normalizeForecastContext(context) {

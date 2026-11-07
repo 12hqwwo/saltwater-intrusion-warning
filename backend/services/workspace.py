@@ -95,9 +95,10 @@ def observations(
         and (not date_from or r['observed_date'] >= str(date_from))
         and (not date_to or r['observed_date'] <= str(date_to))
     ]
+    station = next(s for s in data['stations'] if s['site_code'] == site_code)
     return dict(
         site_code=site_code,
-        source=data['observation_source'],
+        source=station.get('observation_source', data['observation_source']),
         storage_mode=data['storage_mode'],
         datasets=[d for d in data.get('datasets', []) if d['site_code'] == site_code],
         unit='mS/m',
