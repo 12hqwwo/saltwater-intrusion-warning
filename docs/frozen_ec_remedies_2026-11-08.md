@@ -30,3 +30,5 @@ Giao diện hiển thị phép so sánh này dưới phần “Kiểm chứng d�
 Đề xuất giảm độ trễ khí tượng xuống `t−1` hoặc `t` chỉ có thể kiểm chứng công bằng khi có bản dự báo thời tiết được lưu đúng ngày phát hành; dùng ERA5 hoàn chỉnh sau sự kiện sẽ làm lộ thông tin tương lai. Chưa thêm triều thiên văn vì chưa có chuỗi đầu vào phù hợp với vị trí trạm và ngày phát hành. Nhận định về El Niño/La Niña, vận hành cống hay nguyên nhân trễ pha vẫn là **giả thuyết**, chưa được xác nhận từ phép thử này.
 
 Trước khi xem xét thay mô hình đang phục vụ cần: lịch sử công bố nguồn thủy văn và EC lân cận, thử nghiệm trạm lân cận mất tín hiệu đồng thời, đánh giá độc lập trên nhãn EC mới sau 2023, và kiểm riêng báo động giả/bỏ sót đỉnh EC tại cả ba trạm.
+
+Đã kiểm tra tiếp từng trạm EC riêng và phương án Ridge/RF tại [báo cáo kiểm chứng tiếp](frozen_ec_followup_2026-11-08.md).

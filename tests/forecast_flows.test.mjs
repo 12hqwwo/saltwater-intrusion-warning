@@ -92,9 +92,16 @@ test('outage evidence separates hydrology remedies from the served weather model
     metrics: { WeatherOnly: { mae_mS_m: 28, rmse_mS_m: 64, false_alerts_100: 2, missed_high_100: 2 },
       WeatherHydrology: { mae_mS_m: 16, rmse_mS_m: 31, false_alerts_100: 1, missed_high_100: 1 } },
   };
+  const followup_research = {
+    protocol_id: 'FROZEN_EC_FOLLOWUP_RESEARCH_V1', station: 'MyTho', experiment: 'gap_2021_2023', ec_delay_days: 5,
+    deployment_ready: false,
+    methods: [{ key: 'WeatherHydrology', label: 'Thủy văn đối chứng' }, { key: 'HydroMyThuanEC', label: 'Thủy văn + EC Mỹ Thuận' }],
+    metrics: { WeatherHydrology: { mae_mS_m: 16, rmse_mS_m: 31, false_alerts_100: 1, missed_high_100: 1 },
+      HydroMyThuanEC: { mae_mS_m: 15, rmse_mS_m: 29, false_alerts_100: 1, missed_high_100: 1 } },
+  };
   env.pending.find(row => row.url.includes('/evaluation')).respond(frozenEvaluation({
     metrics: { RandomForest: { n: 36, mae_mS_m: 28, rmse_mS_m: 64 }, FrozenPersistence: { n: 36, mae_mS_m: 19, rmse_mS_m: 42 } },
-    remedy_research,
+    remedy_research, followup_research,
   }));
   env.pending.find(row => row.url.includes('/inputs')).respond(input()); await loading;
   const text = env.get('multivariateForecastHost').textContent;
@@ -102,6 +109,9 @@ test('outage evidence separates hydrology remedies from the served weather model
   assert.match(text, /Thêm thủy văn/);
   assert.match(text, /chưa thay mô hình đang phục vụ/);
   assert.match(text, /thiếu bản dự báo thời tiết lưu đúng ngày phát hành/);
+  assert.match(text, /Thử riêng EC từng trạm và mô hình tuyến tính/);
+  assert.match(text, /Thủy văn \+ EC Mỹ Thuận/);
+  assert.match(text, /chưa đủ để loại vĩnh viễn EC trạm lân cận/);
 });
 
 test('changing outage experiment discards stale evaluation responses and rejects historical protocol', async () => {

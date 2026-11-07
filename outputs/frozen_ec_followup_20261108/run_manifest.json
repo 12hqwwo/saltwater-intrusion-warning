@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "protocol_id": "FROZEN_EC_FOLLOWUP_RESEARCH_V1",
+  "station": "MYTHO",
+  "experiments": {
+    "gap_2019_2021": [
+      "2019-01-01",
+      "2021-12-01"
+    ],
+    "gap_2021_2023": [
+      "2021-01-01",
+      "2023-12-01"
+    ],
+    "gap_2022_2023": [
+      "2022-01-01",
+      "2023-12-01"
+    ]
+  },
+  "ec_delay_days": [
+    5,
+    35
+  ],
+  "unit": "mS/m",
+  "candidates": {
+    "HydroMyThuanEC": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2",
+      "mythuan_ec_asof"
+    ],
+    "HydroTanChauEC": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2",
+      "tanchau_ec_asof"
+    ],
+    "HydroRidge": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2"
+    ],
+    "HydroRidgeResidualRF": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2"
+    ]
+  },
+  "controls": [
+    "WeatherOnly",
+    "WeatherHydrology",
+    "WeatherNeighborEC",
+    "WeatherHydrologyNeighborEC"
+  ],
+  "ridge_alpha": 10.0,
+  "residual_rf_parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "random_state": 42
+  },
+  "ridge_rule": "Median-impute and standardize features; fit Ridge on pre-gap EC. Hybrid RF fits in-sample Ridge residuals before the gap. Clip predictions at zero.",
+  "asof_rule": "Same day-6 issue, weather/hydrology t-2 and separate-station EC +5/+35 day assumptions as FROZEN_EC_REMEDY_RESEARCH_V1.",
+  "limitations": [
+    "All test windows were already inspected; no blind validation or automatic model selection.",
+    "Historical input publication dates remain assumptions, not verified vintages.",
+    "Downstream EC stations have no complete matching 2019–2023 monthly series in this dataset.",
+    "No candidate changes the deployed model or establishes a gate decision."
+  ],
+  "sklearn_version": "1.9.1",
+  "hash_rule": "Python source CRLF is normalized to LF before SHA-256; data and output files use raw bytes.",
+  "source_sha256": {
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "data/external/multivariate_weather/manifest.json": "97898949f67329bc768f20214806d8f46d0062be11d3336dc334c68ad48110d8",
+    "data/external/mrc_kratie_discharge_20261029/014901_Discharge_Calculated daily discharge_22a8130e.csv": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+    "data/external/tien_manual_long_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "5d461321271099559d84e07d73c949171945ffc0e8fa32a813e722026cda72f8",
+    "data/external/tien_manual_2024_2026_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "f7ee1fb6fee877373fc341496eee8580502fe56e5e870f501252c0167140aab4",
+    "outputs/frozen_ec_remedies_20261108/run_manifest.json": "0a822b780d9fd99e054617e677f6bbe76a73d8575e12571d102335a87b19c6af",
+    "outputs/frozen_ec_remedies_20261108/predictions.csv": "2009c3cd1329907dc213e47f88da8b83d39facaa29ddee44121a5cac3a4a972d",
+    "scripts/evaluate_frozen_ec_gap_remedies.py": "dbadaddb5f8ee6cd9cad9abd44fb8cf6f148683e3df7f9178f9fb355ec1851fa",
+    "scripts/evaluate_frozen_ec_gap.py": "85d6c85f33976714dda96541b10256a0549353b295c6a79c11247cf4541022b6",
+    "scripts/experiment_ec_long_hydrology.py": "0e7ce71187d2e9e4d88a7ff8573536e8d55a219027a85eb4fbc89aaedefaf567",
+    "scripts/backtest_asof_ec.py": "7175b30f5af475dd78f67981c133165044e8d38331ba12992adc74090356d5ad",
+    "scripts/train_multivariate_ec.py": "7ade5ce70bf3c5aa4ba4115a81c31c6b22d69d1fea5366f602bdb6de7ba5fe4e",
+    "scripts/evaluate_frozen_ec_followup.py": "bf267c94a3d81b820e14f2230c351692e57adc3a4f2b4a01d6d399a5f718b617"
+  },
+  "output_sha256": {
+    "predictions.csv": "bc2db069e0f2f065fd1c75d1336c42303da8e6824b52e37cb5bb804468d10a71",
+    "metrics.csv": "929a6772914aeaa0689b4618769b0b847a2803440a8d560f923d8ad5aa12a968"
+  }
+}

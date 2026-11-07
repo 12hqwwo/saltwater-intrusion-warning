@@ -126,7 +126,8 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const evaluationMetrics = node("div", undefined, "mv-evaluation-metrics");
   const evaluationGuidance = node("p", "", "mv-evaluation-guidance");
   const evaluationRemedies = node("details", undefined, "mv-remedy-research");
-  evaluation.append(evaluationSummary, labelFor('Giai đoạn mất EC giả lập', evaluationExperiment), labelFor('Giả định ngày khả dụng EC', evaluationDelay), evaluationStatus, evaluationGuidance, evaluationChart, evaluationLegend, evaluationMetrics, evaluationRemedies);
+  const evaluationFollowup = node("details", undefined, "mv-remedy-research");
+  evaluation.append(evaluationSummary, labelFor('Giai đoạn mất EC giả lập', evaluationExperiment), labelFor('Giả định ngày khả dụng EC', evaluationDelay), evaluationStatus, evaluationGuidance, evaluationChart, evaluationLegend, evaluationMetrics, evaluationRemedies, evaluationFollowup);
   host.append(evaluation);
   const predictionHistory = createPredictionHistory(host, {
     onSaved(data) {
@@ -147,6 +148,8 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     evaluationGuidance.textContent = "";
     evaluationRemedies.replaceChildren();
     evaluationRemedies.hidden = true;
+    evaluationFollowup.replaceChildren();
+    evaluationFollowup.hidden = true;
     evaluationLegend.hidden = true;
     evaluationStatus.textContent = "Đang tải đánh giá của mô hình đa biến…";
     if (!selected) { evaluationStatus.textContent = "Chọn trạm để xem đánh giá."; return; }
@@ -199,6 +202,26 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
         const comparisonWrap = node('div', undefined, 'table-wrap');
         comparisonWrap.append(comparison);
         evaluationRemedies.append(comparisonWrap, node('p', '100 mS/m chỉ là mốc phân tích lỗi, không phải chuẩn tưới hay lệnh cống. Khí tượng t−1 hoặc tháng hiện tại chưa được chấm vì thiếu bản dự báo thời tiết lưu đúng ngày phát hành. Các kỳ lịch sử này đã được xem trước nên chưa chứng minh độ tin cậy vận hành.', 'subtle'));
+      }
+      const followup = data.followup_research;
+      if (followup?.protocol_id === 'FROZEN_EC_FOLLOWUP_RESEARCH_V1' && followup.station === selected && followup.experiment === data.experiment && Number(followup.ec_delay_days) === Number(data.ec_delay_days) && followup.deployment_ready === false) {
+        evaluationFollowup.hidden = false;
+        evaluationFollowup.append(node('summary', 'Thử riêng EC từng trạm và mô hình tuyến tính'));
+        evaluationFollowup.append(node('p', 'So sánh trên cùng kỳ mất EC. Ridge là hồi quy tuyến tính có điều chuẩn; phương án lai dùng RF học phần sai số còn lại. Các mô hình chỉ học EC Mỹ Tho trước khi mất tín hiệu.', 'subtle'));
+        const table = node('table'), head = node('thead'), header = node('tr'), body = node('tbody');
+        for (const label of ['Đầu vào và mô hình', 'MAE', 'RMSE', 'Báo EC cao giả ≥100', 'Bỏ sót EC ≥100']) header.append(node('th', label));
+        head.append(header);
+        for (const method of followup.methods || []) {
+          const metric = followup.metrics?.[method.key];
+          if (!metric) continue;
+          const row = node('tr');
+          for (const value of [method.label, `${num(metric.mae_mS_m)} mS/m`, `${num(metric.rmse_mS_m)} mS/m`, metric.false_alerts_100, metric.missed_high_100]) row.append(node('td', String(value)));
+          body.append(row);
+        }
+        table.append(head, body);
+        const wrap = node('div', undefined, 'table-wrap');
+        wrap.append(table);
+        evaluationFollowup.append(wrap, node('p', 'Các kỳ lịch sử đã được xem trước. Kết quả chưa chứng minh nguyên nhân vật lý, chưa đủ để loại vĩnh viễn EC trạm lân cận hoặc đổi mô hình đang phục vụ. Chưa có chuỗi EC trực tiếp đủ tháng 2019–2023 ở Vàm Kênh, Hòa Định hoặc Bình Đại để thử cùng giao thức. Mốc 100 mS/m chỉ dùng phân tích lỗi.', 'subtle'));
       }
     } catch (error) {
       if (req.isCurrent() && station.value === selected) evaluationStatus.textContent = error.message;
