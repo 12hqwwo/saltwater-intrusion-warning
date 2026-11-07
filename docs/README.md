@@ -2,6 +2,22 @@
 
 Đọc từ đây thay vì mở mọi tệp trong `docs/`. Các đường dẫn được giữ ổn định vì mã và tài liệu đã tham chiếu chéo nhiều tệp; không di chuyển dữ liệu hoặc kết quả thí nghiệm chỉ để đổi cách hiển thị thư mục.
 
+## Đọc phần đang dùng trước
+
+1. [Hướng dẫn luồng WebGIS và hồ sơ giảm sai số](HUONG_DAN_LUONG_WEBGIS_VA_THU_NGHIEM_GIAM_SAI_SO.md): cách dùng từng tab, cách đọc bản đồ/biểu đồ và các phép thử sau khi chọn mô hình chính.
+2. [Mô hình chính Mỹ Tho: khí tượng + lưu lượng Kratie + mực nước Tân Châu](mytho_hydrology_primary_2026-11-08.md): cấu hình hiện hành, các kỳ khóa EC, kết quả và giới hạn. Mỹ Thuận và Tân Châu dùng mô hình riêng.
+3. [Hướng dẫn chạy](run_guide.md), [kiến trúc](architecture.md), [luồng người dùng](user-flow.md): vận hành và cấu trúc dự án.
+
+Các tên `RF_compact`, mô hình EC trễ và chuỗi ước tính khí tượng cũ là **bằng chứng nghiên cứu**, không phải mô hình chính Mỹ Tho hiện đang phục vụ. Giao diện đặt thí nghiệm EC trễ trong phần phụ lục thu gọn. Kết quả không được chọn vẫn được giữ để người hướng dẫn kiểm tra vì sao chọn mô hình hiện tại.
+
+### Hồ sơ kiểm chứng liên quan trực tiếp
+
+- [Thử thêm thủy văn và EC trạm lân cận](frozen_ec_remedies_2026-11-08.md), [thử EC từng trạm và Ridge](frozen_ec_followup_2026-11-08.md): cùng giao thức giả định mất EC liên tục.
+- [Thử giảm sai số theo rolling origin](ec_error_reduction_2026-11-08.md), [cửa sổ triều và phân vị cây](ec_tide_window_audit_2026-11-08.md), [chuyển mạch, log, dữ liệu ngày và khoảng trên](ec_math_physics_experiments_2026-11-08.md): các ứng viên chưa thay mô hình chính; báo cáo ghi rõ giao thức và kết quả âm tính.
+
+<details>
+<summary>Hồ sơ phát triển và thử nghiệm cũ — mở khi cần truy nguồn</summary>
+
 ## Cập nhật 04/11/2026
 
 - [Tích hợp Mỹ Thuận — Bước 3](tich_hop_mythuan_buoc_3_2026-11-04.md): dữ liệu/API ba trạm, nội suy hai chặng, 13 tháng fallback, chuỗi mở rộng và kiểm thử. Đây là trạng thái mới hơn hai báo cáo dưới.
@@ -30,6 +46,8 @@
 - [Quét độ trễ công bố EC 0–70 ngày](ec_publication_lag_sensitivity_2026-10-30.md): kiểm tra +5/+35 chỉ là giả định và các ngày cho cùng tập nhãn.
 - [Nguồn dữ liệu bổ sung](new_data_search_2026-10-29.md), [biên FES](fes_tide_boundary_validation_2026-10-29.md), [GRIT và cống](grit_gate_feasibility_2026-10-29.md).
 - Các báo cáo `ec_*`, `tien_*` và `model_data_audit_*` còn lại là nhật ký giả thuyết, nguồn và kết quả âm tính. Chúng không phải bản mô hình đang chạy; giữ để tránh lặp thử nghiệm hoặc mất bằng chứng khi viết báo cáo.
+
+</details>
 
 ## Thư mục dữ liệu và kết quả
 

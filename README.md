@@ -1,10 +1,8 @@
 # WebGIS và dự báo EC theo tháng
 
-[Bản đồ tài liệu, dữ liệu và kết quả nghiên cứu](docs/README.md) giúp tìm đúng tệp trước khi chỉnh sửa hoặc dọn dẹp.
+[Hướng dẫn WebGIS và hồ sơ giảm sai số](docs/HUONG_DAN_LUONG_WEBGIS_VA_THU_NGHIEM_GIAM_SAI_SO.md) là tài liệu đọc đầu tiên cho giao diện hiện tại. [Bản đồ tài liệu](docs/README.md) tách mô hình chính đang dùng khỏi các thử nghiệm cũ được giữ để truy nguồn.
 
-[Cập nhật logic và tiến trình 01/11/2026](docs/cap_nhat_logic_va_tien_trinh_2026-11-01.md) ghi các file đã sửa, luồng RF_compact, artifact/kiểm thử và nội suy màu sông. [Hiện trạng](docs/current_state.md) phân biệt phần vừa kiểm tra với các bằng chứng DB/trình duyệt cũ.
-
-Ứng dụng tiểu luận kết hợp WebGIS và **dự báo EC tháng bằng mô hình đa biến**. Luồng chính: chọn trạm/tháng → tải lượng mưa, nhiệt độ, gió và chu kỳ mùa vụ → chạy Random Forest đã huấn luyện → xem EC dự báo, đầu vào, sai số lịch sử và vị trí trên bản đồ → xuất JSON/CSV.
+Ứng dụng tiểu luận kết hợp WebGIS và **dự báo EC tháng bằng mô hình đa biến**. Luồng chính: chọn trạm/tháng → tải khí tượng và, với Mỹ Tho, thủy văn Kratie/Tân Châu của tháng `t−2` → chạy Random Forest đã huấn luyện → xem EC dự báo, đầu vào, sai số lịch sử và vị trí trên bản đồ → xuất JSON/CSV. Mô hình chính Mỹ Tho là [RF khí tượng + thủy văn](docs/mytho_hydrology_primary_2026-11-08.md); các thí nghiệm RF_compact cũ không phải mô hình chính.
 
 ## Chạy trên Windows
 
@@ -20,7 +18,7 @@ npm.cmd --prefix frontend ci
 
 Mở http://127.0.0.1:8000/ để vào trang Tổng quan mới; `/workspace.html` mở cùng không gian làm việc. `start.ps1` build giao diện rồi chạy một máy chủ phục vụ cả API và web; Ctrl+C để dừng. Mặc định dùng PostgreSQL; dùng `-Mode snapshot` để xem bộ tệp, `-Port 8016` để đổi cổng hoặc `-SkipBuild` khi đã có bản build mới nhất.
 
-Để chạy đúng bản `TinBranch` có trạm Mỹ Thuận với thiết lập PostgreSQL hiện có, chạy `start-tinbranch.ps1 -SettingsRoot 'D:\Study\TLCN' -Port 8000` từ worktree giao diện này. Lệnh dựng giao diện mới, dùng backend và snapshot của `TinBranch`, đọc cấu hình PostgreSQL của checkout chính; dừng máy chủ cũ trên cổng 8000 trước khi chạy. Dùng `-SkipBuild` khi đã dựng giao diện.
+Trong checkout chính `D:\Study\TLCN`, dùng `start.ps1` để chạy bản `TinBranch` hiện tại. `start-tinbranch.ps1` chỉ dành cho trường hợp chạy một worktree khác với cấu hình của checkout chính; không cần nó khi đang ở chính `D:\Study\TLCN`.
 
 `snapshot` đọc tệp có nguồn và kiểm tra checksum. `postgres` đọc trạm và EC trực tiếp từ các bảng `public` hiện có, mỗi trạm chọn một phiên bản RAW_EC; lỗi DB được báo rõ. Lịch sử PostgreSQL đã nằm ngay trong mục Quan trắc; `/index.html` chuyển tới trang Tổng quan. Thí nghiệm, danh mục cống, hồ sơ tiếp nhận và ước tính khí tượng đọc từ bộ tệp riêng; phần Tổng quan ghi rõ nguồn. Trang `/research.html` chuyển tới workspace.
 
@@ -32,7 +30,7 @@ Mục **Dự báo EC đa biến** chạy suy luận thật từ model đã lưu;
 2. **Quan trắc:** chọn trạm → lọc ngày → xem bản đồ, biểu đồ, nguồn → xuất CSV. Nhập ngưỡng EC hoặc chọn ví dụ từ danh mục PostgreSQL để đổi màu điểm và vẽ đường đối chiếu. Các ví dụ chưa được xác nhận là ngưỡng cây trồng/cấp nước. Tra cứu PostgreSQL có chọn nguồn, trạm, phiên bản, QA và phân trang ngay trong cùng mục.
 3. **Dự báo EC đa biến:** chọn trạm và tháng → nạp khí tượng hoặc cung cấp đầu vào đúng đơn vị → chạy dự báo → xem EC, độ quan trọng biến, kỳ huấn luyện và sai số → xem trên bản đồ / tải JSON hoặc CSV. Có bảng so sánh các lượt chạy trong phiên và chức năng chạy lại, lưu, lọc lịch sử trong PostgreSQL. Các mô hình EC trễ và kết quả hồi cứu cũ nằm trong phần tham khảo riêng.
 4. **Chất lượng dữ liệu:** xem nguồn, độ phủ và hồ sơ tiếp nhận chưa xác minh.
-5. **Hồ sơ cống:** chọn công trình → nhập EC, mực nước và ngưỡng → mô phỏng INTAKE/DRAIN → xem điều kiện đạt/chặn/thiếu → lưu và khôi phục nháp trên trình duyệt hoặc PostgreSQL, nhập/xuất JSON. Có thể đính kèm dự báo tháng để tham khảo riêng; dự báo không thay số đo hai phía cống. Chưa có phê duyệt trực tuyến.
+5. **Hồ sơ cống:** chọn công trình → xem ngữ cảnh dự báo ở Phần A → nhập EC và mực nước đo thực tế hai phía cống, thời điểm, nguồn đo, tình trạng cơ khí ở Phần B → kiểm tra từng điều kiện và tải JSON. Dự báo không thay số đo tại cống; kết quả chỉ để người vận hành xem xét, không phát lệnh đóng/mở.
 
 Bản đồ có lớp mô phỏng trục Sông Tiền, thống kê trạng thái cống theo cặp ngưỡng EC đang chọn và 10 tuyến kênh có hình học đi qua cống. Đoạn từ sông tới cống dùng mức cảnh báo theo EC mô phỏng ngoài cống; đoạn sau cống là nét đứt xám vì chưa có EC nội kênh. Chọn nhánh hoặc cống để xem chi tiết; bấm vùng trống để tra cứu đoạn sông, cống và trạm gần nhất. Thông tin nước thuộc đoạn sông lân cận, không phải phép đo tại điểm chọn.
 

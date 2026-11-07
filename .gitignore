@@ -1,5 +1,6 @@
 # Local secrets and environments
 .env
+.claude/
 .security/
 .env.*
 !.env.example
@@ -21,7 +22,7 @@ tmp/
 Thumbs.db
 .DS_Store
 *.tmp
-.vscode/settings.json
+.vscode/
 .idea/
 *.suo
 *.user
