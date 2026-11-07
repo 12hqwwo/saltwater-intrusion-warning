@@ -1,0 +1,42 @@
+{
+  "protocol": "FROZEN_MYTHO_MATH_PHYSICS_RESEARCH_V1",
+  "issue": "day 6 of month before target",
+  "daily_assumed_publication_lag_days": 5,
+  "recent_window": "7 complete daily values ending issue minus 6 days, plus previous 7 days; one-day intraday buffer beyond assumed 5-day source delay",
+  "recent_missing_rule": "If either 7-day window lacks complete Kratie or Tan Chau data, use published baseline for that target month",
+  "cohort": "My Tho EC frozen before each 24/36-month outage; weather/hydrology t-2 otherwise unchanged",
+  "candidates": [
+    "baseline",
+    "regime_weighted",
+    "regime_weighted_085",
+    "regime_gb_weighted",
+    "rf_log",
+    "rf_log_smear",
+    "ridge_inverse_q_residual_rf",
+    "rf_recent_daily"
+  ],
+  "regime_rule": "Jan-May and Kratie t-2 ratio <0.75 or <0.85: RF weight5; normal: RF or GB Huber",
+  "log_smear": "chronological last 20 percent of known labels estimate exp(log1p residual) factor; RF refit on all known",
+  "conformal": "last up-to-120 known months as chronological calibration, dry-season positive residual 90th percentile; empirical only",
+  "limitations": [
+    "Source publication vintages are unknown; day +5 is an assumption.",
+    "All three historical windows were already inspected; no blind model selection.",
+    "Time-series exchangeability is unverified; conformal upper is not a formal future-coverage guarantee.",
+    "Research only; no deployed model, forecast UI, or gate rule changes."
+  ],
+  "sklearn_version": "1.9.1",
+  "source_sha256": {
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "data/external/multivariate_weather/manifest.json": "97898949f67329bc768f20214806d8f46d0062be11d3336dc334c68ad48110d8",
+    "outputs/frozen_ec_remedies_20261108/predictions.csv": "2009c3cd1329907dc213e47f88da8b83d39facaa29ddee44121a5cac3a4a972d",
+    "data/external/mrc_kratie_discharge_20261029/014901_Discharge_Calculated daily discharge_22a8130e.csv": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+    "data/external/tien_manual_long_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "5d461321271099559d84e07d73c949171945ffc0e8fa32a813e722026cda72f8"
+  },
+  "output_sha256": {
+    "predictions.csv": "ab5a05fbfb7518237c130c9a840003535b5ac85f0163849e4f644d4ed6267036",
+    "metrics.csv": "bf7c30c68c7a6bc4d165da5aac5fb64f0ceb1a0a12fa32c98c30e7e8b075776d",
+    "calibration.csv": "1a3073082b51b1589a1876e598a40a34d8a2ae5c6b1a1501ec36749af534af5a",
+    "interval_audit.csv": "f3f1a64ae5927d5cc3ebb1cb015543ac18dd8f03ac4c86245f97e74a7a034bbc",
+    "recent_daily_features.csv": "0b722bee5431f490f2860fbb8b5025a1e8db88e9f09dab532522bd2988d19313"
+  }
+}
