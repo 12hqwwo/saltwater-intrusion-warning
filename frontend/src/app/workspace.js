@@ -1,5 +1,6 @@
 import "./workspace.css";
 import "../styles/simulation.css";
+import "./refresh.css";
 import { $ } from "../shared/ui.js";
 import { workspaceAPI as api } from "../shared/workspace-api.js";
 import { createRequestGate } from "../api.js";

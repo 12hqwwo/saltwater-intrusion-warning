@@ -1,5 +1,9 @@
 export const validMonth = value => typeof value === 'string' && /^(?!0000)\d{4}-(0[1-9]|1[0-2])$/.test(value);
 export const validEc = value => typeof value === 'number' && Number.isFinite(value) && value >= 0;
+export function forecastMonthFromToday(offset = 0, today = new Date()) {
+  const date = new Date(today.getFullYear(), today.getMonth() + offset, 1);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+}
 export function inputMonthFor(target) {
   if (!validMonth(target)) return null;
   const [year, month] = target.split('-').map(Number), index = year * 12 + month - 1 - 2;

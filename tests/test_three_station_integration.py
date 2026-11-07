@@ -3,6 +3,8 @@ import json
 import os
 import unittest
 from unittest.mock import patch
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 from fastapi.testclient import TestClient
@@ -50,6 +52,20 @@ class ThreeStationIntegration(unittest.TestCase):
             if month >= '2024-01':
                 self.assertIsNotNone(item['my_thuan_ec_mS_m'])
                 self.assertEqual(item['interpolation_mode'], 'PIECEWISE_3_STATION')
+
+    def test_future_map_has_rolling_year_with_explicit_input_kind(self):
+        timeline = spatial_inputs.monthly_inputs()
+        now = datetime.now(ZoneInfo('Asia/Ho_Chi_Minh'))
+        index = now.year * 12 + now.month - 1 + 12
+        expected_end = f'{index // 12:04d}-{index % 12 + 1:02d}'
+        self.assertGreaterEqual(max(timeline), expected_end)
+        item = timeline[expected_end]
+        self.assertEqual(item['interpolation_mode'], 'PIECEWISE_3_STATION')
+        self.assertIn(item['data_regime'], {'ML_FORECAST_ERA5', 'SEASONAL_SCENARIO'})
+        for station in ('TanChau', 'MyThuan', 'MyTho'):
+            provenance = item['boundary_provenance'][station]
+            self.assertIn(provenance['evidence_kind'], {'ML_FORECAST_ERA5', 'SEASONAL_MEDIAN_SCENARIO'})
+            self.assertFalse(provenance['verified_observation'])
 
     def test_frame_ribbon_knot_and_gate_projection_share_piecewise_values(self):
         frame = spatial_simulation.simulation_frame('2022-03')

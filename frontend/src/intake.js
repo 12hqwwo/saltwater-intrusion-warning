@@ -1,103 +1,136 @@
 import { createRequestGate } from "./api.js";
 import { workspaceAPI as requestJSON } from "./shared/workspace-api.js";
-const cell = (tag, text) => {
-  const n = document.createElement(tag);
-  n.textContent = text;
-  return n;
+
+const cell = (tag, value) => {
+  const element = document.createElement(tag);
+  element.textContent = value;
+  return element;
 };
+
+function detail(summary, ...contents) {
+  const wrapper = document.createElement("details");
+  wrapper.className = "intake-detail";
+  wrapper.append(cell("summary", summary), ...contents);
+  return wrapper;
+}
+
+function table(headers, rows) {
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap";
+  const element = document.createElement("table");
+  const head = document.createElement("thead");
+  const heading = document.createElement("tr");
+  headers.forEach(label => heading.append(cell("th", label)));
+  head.append(heading);
+  const body = document.createElement("tbody");
+  for (const values of rows) {
+    const row = document.createElement("tr");
+    values.forEach(value => row.append(cell("td", value ?? "—")));
+    body.append(row);
+  }
+  element.append(head, body);
+  wrap.append(element);
+  return wrap;
+}
+
 export async function showIntake(host = document.getElementById("intakeHost")) {
   const section = document.createElement("section");
   section.id = "intake";
-  section.className = "section panel";
-  section.append(cell("h2", "Tiếp nhận và kiểm toán dữ liệu"));
-  const status = cell("p", "Đang đọc hồ sơ tiếp nhận…");
+  section.className = "section panel intake-panel";
+  const status = cell("p", "Đang đọc hồ sơ dữ liệu…");
   status.setAttribute("role", "status");
   section.append(status);
   host.replaceChildren(section);
   try {
-    const [audit, coverage] = await Promise.all([
+    const [audit, coverage, catalogue] = await Promise.all([
       requestJSON("/intake"),
-      requestJSON("/intake/coverage")
+      requestJSON("/intake/coverage"),
+      requestJSON("/intake/measurement-points")
     ]);
-    status.className = "notice";
-    status.textContent = "Chưa xác minh · Đọc hồ sơ từ tệp · Chưa nhập vào bộ quan trắc hoặc huấn luyện. " + audit.note;
+    status.className = "intake-status";
+    status.textContent = "Hồ sơ đang rà soát · Chưa xác minh chất lượng";
+    section.append(cell("p", "Các số đo mới được giữ riêng để kiểm tra nguồn và vị trí đo. Chúng chưa được đưa vào chuỗi quan trắc EC hoặc dữ liệu huấn luyện."));
+
     const counts = audit.counts;
-    section.append(cell("p", `${counts.csv_rows} dòng tại ${counts.station_count} trạm; ${counts.next1d_label_count} dòng có nhãn ngày kế tiếp; ${counts.full_hydromet_next1d} dòng có đủ các ô nhãn, triều, mực nước kênh và mưa.`));
-    const issues = document.createElement("ul");
-    issues.append(cell("li", `${audit.issues.CALENDAR_MISMATCH_feat_salinity_lag1_g_l || 0} lag1 không khớp mẫu đúng ngày trước.`));
-    issues.append(cell("li", `${audit.issues.TARGET_REQUIRES_MEASUREMENT_LOCATION_DISAMBIGUATION || 0} dòng cần tách rõ điểm sông và nội đồng trước khi xác định mục tiêu.`));
-    issues.append(cell("li", "Số đo 7h, cực đại con triều và cực đại ngày cần chuỗi riêng. Nhãn cùng ngày không phải dự báo ngày mai."));
-    section.append(issues);
-    const details = document.createElement("details");
-    details.append(cell("summary", "Độ phủ theo trạm — tính lại từ tệp v3"));
-    const wrap = document.createElement("div");
-    wrap.className = "table-wrap";
-    const table = document.createElement("table"), head = document.createElement("thead"), heading = document.createElement("tr");
-    for (const label2 of ["Mã trạm", "Từ", "Đến", "Ngày có mẫu", "Liên tục dài nhất", "Nhãn ngày kế tiếp"]) heading.append(cell("th", label2));
-    head.append(heading);
-    table.append(head);
-    const body = document.createElement("tbody");
-    for (const row of coverage.items) {
-      const tr = document.createElement("tr");
-      for (const key of ["station", "first", "last", "unique_dates", "longest_daily_run", "next1d_labels"]) tr.append(cell("td", row[key]));
-      body.append(tr);
+    const summary = document.createElement("div");
+    summary.className = "intake-summary";
+    for (const [value, label] of [
+      [counts.csv_rows, "dòng trong tệp nguồn"],
+      [counts.station_count, "trạm có dữ liệu"],
+      [catalogue.counts.records, "giá trị giữ để rà soát"]
+    ]) {
+      const item = document.createElement("div");
+      item.append(cell("strong", new Intl.NumberFormat("vi-VN").format(value ?? 0)), cell("span", label));
+      summary.append(item);
     }
-    table.append(body);
-    wrap.append(table);
-    details.append(wrap);
-    section.append(details);
-    const files = document.createElement("details");
-    files.append(cell("summary", "Tệp tiếp nhận và dấu kiểm tra SHA-256"));
-    for (const f of audit.files) {
-      const p = cell("p", `${f.file} · ${f.status}`), hash = cell("small", f.sha256);
-      hash.style.overflowWrap = "anywhere";
-      p.append(document.createElement("br"), hash);
-      files.append(p);
-    }
-    section.append(files);
-    const catalogue = await requestJSON("/intake/measurement-points");
-    section.append(cell("h3", "Rà soát số đo theo vị trí"));
-    section.append(cell("p", `${catalogue.counts.records} giá trị được giữ nguyên trong bảng rà soát; ${catalogue.counts.rejected} ô không đủ điều kiện chuẩn hóa được giữ trong nhật ký loại. Không gán ô trống thành 0.`));
-    const label = cell("label", "Điểm đo trong bộ v3"), select = document.createElement("select");
-    const positionLabels = { RIVER_REPORTED: "Sông", INTERIOR_0M: "Nội đồng · tại cống/cầu", INTERIOR_200M: "Nội đồng · cách 200 m" };
-    for (const p of catalogue.items) {
-      const option = cell("option", `${p.name} · ${positionLabels[p.position]} · ${p.records} bản ghi`);
-      option.value = p.key;
+    section.append(summary);
+
+    const explanation = document.createElement("div");
+    explanation.className = "intake-explanation";
+    explanation.append(cell("h3", "Cần kiểm tra gì?"));
+    const points = document.createElement("ul");
+    points.append(
+      cell("li", "Xác nhận điểm đo thuộc sông hay nội đồng trước khi đối chiếu."),
+      cell("li", "Kiểm tra ngày và kỳ đo; số đo cùng ngày không phải dự báo ngày hôm sau."),
+      cell("li", "Chỉ dùng số đo đã qua kiểm tra chất lượng cho kết luận tại nơi sử dụng.")
+    );
+    explanation.append(points);
+    section.append(explanation);
+
+    const coverageRows = coverage.items.map(row => [row.station, row.first, row.last, row.unique_dates, row.longest_daily_run, row.next1d_labels]);
+    section.append(detail("Xem khoảng thời gian và số ngày có dữ liệu", table(
+      ["Trạm", "Từ", "Đến", "Ngày có mẫu", "Chuỗi liên tục dài nhất", "Mẫu ngày tiếp theo"], coverageRows
+    )));
+
+    const review = document.createElement("div");
+    review.className = "intake-review";
+    review.append(cell("p", `${catalogue.counts.records} giá trị được giữ nguyên; ${catalogue.counts.rejected} ô không đủ điều kiện chuẩn hóa được ghi lại để rà soát. Ô trống không được tính là 0.`));
+    const label = cell("label", "Điểm đo");
+    const select = document.createElement("select");
+    const positionLabels = { RIVER_REPORTED: "Trên sông", INTERIOR_0M: "Nội đồng · tại cống/cầu", INTERIOR_200M: "Nội đồng · cách 200 m" };
+    for (const point of catalogue.items) {
+      const option = cell("option", `${point.name} · ${positionLabels[point.position] || point.position} · ${point.records} mẫu`);
+      option.value = point.key;
       select.append(option);
     }
     label.append(select);
-    section.append(label);
-    const observationStatus = cell("p", ""), observationWrap = document.createElement("div");
+    const observationStatus = cell("p", "");
     observationStatus.setAttribute("role", "status");
-    observationWrap.className = "table-wrap";
-    section.append(observationStatus, observationWrap);
+    const observationWrap = document.createElement("div");
+    review.append(label, observationStatus, observationWrap);
+    const measurementDetail = detail("Tra cứu số đo độ mặn chưa xác minh", review);
+    section.append(measurementDetail);
+
     const requests = createRequestGate();
     async function loadPoint() {
       const req = requests.next();
       observationWrap.replaceChildren();
-      observationStatus.textContent = "Đang đọc bản ghi chưa xác minh…";
+      observationStatus.textContent = "Đang đọc số đo…";
       try {
         const data = await requestJSON("/intake/observations?point=" + encodeURIComponent(select.value), req);
         if (!req.isCurrent()) return;
-        observationStatus.textContent = `${data.items.length}/${data.total} bản ghi · g/L · UNVERIFIED · chưa dùng huấn luyện hoặc vận hành.`;
-        const table2 = document.createElement("table"), head2 = document.createElement("thead"), row = document.createElement("tr");
-        for (const title of ["Ngày ghi trong nguồn", "Giờ / kỳ đo", "Chế độ đo", "Độ mặn (g/L)"]) row.append(cell("th", title));
-        head2.append(row);
-        table2.append(head2);
-        const body2 = document.createElement("tbody");
-        for (const r of data.items) {
-          const row2 = document.createElement("tr");
-          for (const value of [r.observed_date, r.source_time_or_period, r.measurement_regime, r.value]) row2.append(cell("td", value));
-          body2.append(row2);
-        }
-        table2.append(body2);
-        observationWrap.append(table2);
+        observationStatus.textContent = `${data.items.length}/${data.total} mẫu · đơn vị g/L · chưa xác minh chất lượng.`;
+        observationWrap.append(table(
+          ["Ngày trong nguồn", "Giờ / kỳ đo", "Cách đo", "Độ mặn (g/L)"],
+          data.items.map(row => [row.observed_date, row.source_time_or_period, row.measurement_regime, row.value])
+        ));
       } catch (error) {
         if (req.isCurrent()) observationStatus.textContent = error.message;
       }
     }
+    measurementDetail.addEventListener("toggle", () => {
+      if (measurementDetail.open && !observationWrap.childElementCount) loadPoint();
+    });
     select.addEventListener("change", loadPoint);
-    await loadPoint();
+
+    const auditDetails = document.createElement("div");
+    auditDetails.className = "intake-audit";
+    auditDetails.append(
+      cell("p", audit.note),
+      cell("p", `${audit.issues.CALENDAR_MISMATCH_feat_salinity_lag1_g_l || 0} dòng có giá trị ngày trước chưa khớp; ${audit.issues.TARGET_REQUIRES_MEASUREMENT_LOCATION_DISAMBIGUATION || 0} dòng cần xác định rõ vị trí đo.`),
+      cell("p", `${counts.next1d_label_count} dòng có nhãn ngày tiếp theo; ${counts.full_hydromet_next1d} dòng có đủ nhãn, triều, mực nước kênh và mưa.`)
+    );
+    section.append(detail("Chi tiết kiểm tra nguồn", auditDetails));
   } catch (error) {
     status.className = "notice error";
     status.textContent = error.message;

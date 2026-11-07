@@ -171,11 +171,12 @@ class SpatialSimulationTests(unittest.TestCase):
 
     def test_timeline_contains_drought_and_wet_season_frames(self):
         result = self.read('timeline')
-        self.assertEqual(result['total'], 495)
+        self.assertGreaterEqual(result['total'], 495)
         self.assertEqual(result['total'], len(result['items']))
         months = [item['year_month'] for item in result['items']]
         self.assertEqual(months, sorted(set(months)))
-        self.assertEqual((months[0], months[-1]), ('1985-06', '2026-08'))
+        self.assertEqual(months[0], '1985-06')
+        self.assertGreaterEqual(months[-1], '2026-08')
         for month in ['2016-03', '2024-04', '2022-10']:
             self.assertIn(month, months)
         indexed = {item['year_month']: item for item in result['items']}

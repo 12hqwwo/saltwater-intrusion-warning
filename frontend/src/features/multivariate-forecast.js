@@ -4,8 +4,10 @@ import { createRequestGate } from "../api.js";
 import { drawSeries } from "../shared/time-series.js";
 import { createPredictionHistory } from "./prediction-history.js";
 import { cropAdvisories } from "../shared/water-advisory.js";
-import { validMonth, inputMonthFor, validPrediction } from '../shared/forecast-contract.js';
+import { validMonth, inputMonthFor, validPrediction, forecastMonthFromToday } from '../shared/forecast-contract.js';
 import { DIRECT_FORECAST_SUBTITLE } from '../shared/forecast-map-overlay.js';
+
+export { forecastMonthFromToday } from '../shared/forecast-contract.js';
 
 export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const host = document.getElementById("multivariateForecastHost");
@@ -15,7 +17,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const predictionRequests = createRequestGate();
   const evaluationRequests = createRequestGate();
   let evaluationStation = null;
-  let stations = [], archive = null, result = null, busy = false;
+  let stations = [], archive = null, result = null, busy = false, pendingForecastMonth = null;
   const fields = [
     { name: "rainfall_mm", label: "Lượng mưa", unit: "mm", min: "0" },
     { name: "temperature_degC", label: "Nhiệt độ", unit: "°C" },
@@ -40,6 +42,23 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     return label;
   }
   form.append(labelFor("Trạm dự báo", station), labelFor("Tháng cần dự báo EC", month), labelFor("Nguồn đầu vào", mode));
+  const monthChoices = node('div', undefined, 'wide mv-month-choices');
+  const currentMonth = node('button', '', 'secondary');
+  const nextMonth = node('button', '', 'secondary');
+  for (const button of [currentMonth, nextMonth]) button.type = 'button';
+  function refreshMonthChoices() {
+    currentMonth.textContent = `Tháng này · ${forecastMonthFromToday(0)}`;
+    nextMonth.textContent = `Tháng sau · ${forecastMonthFromToday(1)}`;
+  }
+  refreshMonthChoices();
+  for (const [button, offset] of [[currentMonth, 0], [nextMonth, 1]]) button.addEventListener('click', () => {
+    refreshMonthChoices();
+    month.value = forecastMonthFromToday(offset);
+    loadInputs();
+  });
+  window.addEventListener('focus', refreshMonthChoices);
+  monthChoices.append(node('span', 'Chọn nhanh kỳ dự báo:'), currentMonth, nextMonth);
+  form.append(monthChoices);
   const inputMonth = node("p", "Chọn trạm và tháng để đọc kỳ dữ liệu đầu vào.", "subtle wide");
   form.append(inputMonth);
   const controls = new Map(), fieldLabels = new Map();
@@ -228,7 +247,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       status.textContent = data.complete ? "Đã nạp đầu vào. Có thể chạy dự báo đa biến." : "Kỳ lưu trữ thiếu dữ liệu. Chọn dữ liệu do người dùng cung cấp và điền đủ ba biến để dự báo.";
     } catch (error) {
       if (!req.isCurrent()) return;
-      status.textContent = error.message;
+      status.textContent = `Chưa có đầu vào khí tượng đầy đủ cho tháng ${previous} của trạm này. ${error.message} Có thể nhập ba biến khí tượng có nguồn để dự báo tháng ${target}.`;
       applyMode();
     }
   }
@@ -335,6 +354,12 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   });
   station.addEventListener("change", () => { onStation?.(currentStation()?.site_code); loadInputs(); });
   month.addEventListener("input", loadInputs);
+  window.addEventListener('workspace:select-forecast-month', event => {
+    const requested = event.detail?.month;
+    if (!validMonth(requested)) return;
+    pendingForecastMonth = requested;
+    if (stations.length) { month.value = requested; loadInputs(); }
+  });
   mode.addEventListener("change", () => {
     inputRequests.next();
     clearResult();
@@ -392,7 +417,8 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
         option.value = item.station;
         station.append(option);
       }
-      month.value = validMonth(data.default_target_month) ? data.default_target_month : '';
+      refreshMonthChoices();
+      month.value = pendingForecastMonth || (validMonth(data.default_target_month) ? data.default_target_month : forecastMonthFromToday(1));
       if (!stations.length) { status.textContent = "Chưa có mô hình đa biến sẵn sàng."; refreshButton(); return; }
       await loadInputs();
     } catch (error) {

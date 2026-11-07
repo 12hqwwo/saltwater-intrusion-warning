@@ -20,30 +20,25 @@ import { createMapParticles } from './map-particles.js';
 import { inspectWaterPoint, validCoordinate } from './point-inspection.js';
 import { cropAdvisories } from '../shared/water-advisory.js';
 import { validPrediction } from '../shared/forecast-contract.js';
+import { ecWarningLevel, splitGatedWaterways } from './gated-waterways.js';
 
 // Zero tangents keep every sampled point on its supplied vertex-to-vertex span.
 // The ribbon, canal display and particles must follow the same constrained path.
 const riverInterpolation = { tension: 0, samplesPerSpan: 12 };
 
-function riverColor(ec, alpha = 1) {
-  const stops = [[0,[0,229,255]],[1,[16,185,129]],[2,[250,204,21]],[4,[249,115,22]],[6,[244,63,94]],[8,[168,85,247]]];
-  const value = Math.max(0, Number(ec) * .0064), index = stops.findIndex(([limit]) => value <= limit);
-  const high = index < 0 ? stops.length - 1 : Math.max(1,index), [lowValue,low] = stops[high-1], [highValue,upper] = stops[high];
-  const t = Math.min(1, Math.max(0,(value-lowValue)/(highValue-lowValue)));
-  return `rgba(${low.map((channel,i)=>Math.round(channel+(upper[i]-channel)*t)).join(',')},${alpha})`;
-}
-
 // A single cached SVG label supplies rounded glass, a white keyline and a soft shadow.
 function glassLabel(text, zIndex = 25) {
   const escaped = String(text).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[char]));
   const context = document.createElement('canvas').getContext('2d');
-  context.font = '600 12px Segoe UI, sans-serif';
+  context.font = '600 12px Be Vietnam Pro, sans-serif';
   const width = Math.ceil(context.measureText(String(text)).width) + 24;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width + 24}" height="52"><defs><filter id="shadow" x="-30%" y="-60%" width="160%" height="220%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity=".25"/></filter></defs><rect x="12" y="7" width="${width}" height="28" rx="14" fill="#0f172a" fill-opacity=".88" stroke="#fff" stroke-opacity=".22" filter="url(#shadow)"/><text x="${12 + width / 2}" y="25" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#f8fafc">${escaped}</text></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width + 24}" height="52"><defs><filter id="shadow" x="-30%" y="-60%" width="160%" height="220%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity=".25"/></filter></defs><rect x="12" y="7" width="${width}" height="28" rx="14" fill="#0f172a" fill-opacity=".88" stroke="#fff" stroke-opacity=".22" filter="url(#shadow)"/><text x="${12 + width / 2}" y="25" text-anchor="middle" font-family="Be Vietnam Pro, sans-serif" font-size="12" font-weight="600" fill="#f8fafc">${escaped}</text></svg>`;
   return new Style({ image: new Icon({ src: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`, anchor: [.5, 35 / 52], displacement: [0, 18] }), zIndex });
 }
 
 export function createResearchMap(target, { onSelect, onTileError }) {
+  const token = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const warningColors = { safe: token('--ec-safe'), caution: token('--ec-caution'), risk: token('--ec-risk'), unknown: token('--ec-unknown') };
   const source = new VectorSource(), boundarySource = new VectorSource(), gateSource = new VectorSource(), candidateSource = new VectorSource(), forecastSource = new VectorSource(), inspectSource = new VectorSource();
   const tileSource = theme => theme === 'satellite' ? new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', crossOrigin: 'anonymous', attributions: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community' }) : new OSM();
   const base = new TileLayer({ source: tileSource(), className: 'simulation-base-tiles' });
@@ -56,7 +51,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const zoom = Math.log2(156543.03392804097 / resolution);
     const scale = Math.min(1.4, Math.max(.85, 2 ** ((zoom - 10) * .08)));
     const widths = [(10 + 2 * Math.max(0, Math.min(1, zoom - 9))) * scale, 4.5 * scale];
-    if (!ribbonStyles.has(key)) ribbonStyles.set(key, widths.map(width => new Style({ stroke: new Stroke({ color: riverColor(ec), width, lineCap: 'round', lineJoin: 'round' }) })));
+    if (!ribbonStyles.has(key)) ribbonStyles.set(key, widths.map(width => new Style({ stroke: new Stroke({ color: warningColors[ecWarningLevel(ec, frame?.thresholds)], width, lineCap: 'round', lineJoin: 'round' }) })));
     const style = ribbonStyles.get(key)[band];
     style.getStroke().setWidth(widths[band]);
     return style;
@@ -65,7 +60,13 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   // No black casing, and the main river never goes into the dashed canal layer.
   const riverDiffusion = new VectorLayer({ source: riverSource, className: 'river-water-diffusion', opacity: .25, updateWhileAnimating: true, updateWhileInteracting: true, style: (f, resolution) => ribbonStyle(f, resolution, 0) });
   const riverLayer = new VectorLayer({ source: riverSource, className: 'river-water-core', opacity: .78, updateWhileAnimating: true, updateWhileInteracting: true, style: (f, resolution) => ribbonStyle(f, resolution, 1) });
-  const canalLayer = new VectorLayer({ source: canalSource, style: new Style({ stroke: new Stroke({ color: 'rgba(148,163,184,.55)', width: 2, lineDash: [5, 7] }) }) });
+  const canalLayer = new VectorLayer({ source: canalSource, style: feature => {
+    const inland = feature.get('branch_side') === 'beyond_gate';
+    const gate = frame?.gates?.find(item => item.gate_code === feature.get('gate_code'));
+    const active = selectedGate === feature.get('gate_code');
+    const color = inland ? warningColors.unknown : warningColors[ecWarningLevel(gate?.simulated_outside_ec_mS_m, frame?.thresholds)];
+    return new Style({ stroke: new Stroke({ color, width: inland ? active ? 4 : 2.5 : active ? 7 : 4.5, lineDash: inland ? [7, 6] : undefined, lineCap: 'round', lineJoin: 'round' }) });
+  } });
   const simulationGates = new VectorLayer({ source: simulationGateSource, style: f => {
     const color = advisoryColor(f.get('gate'));
     const active = [selectedGate, hoveredGate].includes(f.get('gate').gate_code);
@@ -89,9 +90,11 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const exceeds = comparison && Number.isFinite(ec) ? ec >= comparison.threshold : null;
     const stationName = `${f.get('site_code')} ${f.get('site_name')}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/gi, '').toLowerCase();
     const stationLabel = stationName.includes('tanchau') ? 'Tân Châu' : stationName.includes('mythuan') ? 'Mỹ Thuận' : stationName.includes('mytho') ? 'Mỹ Tho' : f.get('site_name');
-    const compactWater = formatWater(ec);
+    const compactWater = displayUnit === 'salinity' && Number.isFinite(ec)
+      ? `${(ec * 0.0064).toLocaleString('vi-VN', { maximumFractionDigits: 3 })} g/L ước tính`
+      : formatWater(ec);
     const sampleDate = f.get('last_observed_date') || 'chưa có ngày';
-    const key = `${f.get('site_code')}:${f.get('site_code') === selected}:${f.get('assumed_crs')}:${exceeds}:${ec}:${sampleDate}`;
+    const key = `${f.get('site_code')}:${f.get('site_code') === selected}:${f.get('assumed_crs')}:${exceeds}:${ec}:${sampleDate}:${displayUnit}`;
     if (!cache.has(key)) {
       const active = f.get('site_code') === selected;
       const color = exceeds === true ? '#c44d39' : exceeds === false ? '#087f78' : f.get('assumed_crs') ? '#b77a23' : '#097c78';
@@ -108,7 +111,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     stroke: new Stroke({ color: '#e0f2fe', width: 2, lineDash: [6, 5] }), zIndex: 30,
   }) });
   const forecastLayer = new VectorLayer({ source: forecastSource, style(f) {
-    return new Style({ image: new Circle({ radius: 13, fill: new Fill({ color: 'rgba(54,105,191,.16)' }), stroke: new Stroke({ color: '#3669bf', width: 3 }) }), text: new Text({ text: `Dự báo ${f.get('target_month')}: ${formatWater(f.get('predicted_ec_mS_m'))}`, offsetY: 27, font: '600 13px Segoe UI', fill: new Fill({ color: '#234d90' }), backgroundFill: new Fill({ color: '#fff' }), padding: [4, 6, 4, 6], stroke: new Stroke({ color: '#fff', width: 3 }) }), zIndex: 15 });
+    return new Style({ image: new Circle({ radius: 13, fill: new Fill({ color: 'rgba(54,105,191,.16)' }), stroke: new Stroke({ color: '#3669bf', width: 3 }) }), text: new Text({ text: `Dự báo ${f.get('target_month')}: ${formatWater(f.get('predicted_ec_mS_m'), displayUnit)}`, offsetY: 27, font: '600 13px Be Vietnam Pro', fill: new Fill({ color: '#234d90' }), backgroundFill: new Fill({ color: '#fff' }), padding: [4, 6, 4, 6], stroke: new Stroke({ color: '#fff', width: 3 }) }), zIndex: 15 });
   } });
   function hasRenderableSize() { return !disposed && target.clientWidth > 0 && target.clientHeight > 0 && !target.closest('[hidden]'); }
   const map = new Map({ layers: [base, boundaries, canalLayer, riverDiffusion, riverLayer, candidates, gates, simulationGates, stations, forecastLayer, isoLayer, inspection], controls: controls({ rotate: false, attributionOptions: { collapsible: false } }).extend([new ScaleLine()]),
@@ -134,8 +137,11 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   particles.start();
   map.on('movestart', () => particles.setMoving(true)); map.on('moveend', () => particles.setMoving(false));
   map.on('singleclick', event => {
+    const waterwayPicker = document.getElementById('simulationWaterwayPicker'); if (waterwayPicker) waterwayPicker.value = '';
     const found = map.forEachFeatureAtPixel(event.pixel, f => f, { layerFilter: l => l === simulationGates, hitTolerance: 10 });
     if (found) { selectSimulationGate(found.get('gate').gate_code, false); return; }
+    const branch = map.forEachFeatureAtPixel(event.pixel, f => f, { layerFilter: l => l === canalLayer, hitTolerance: 8 });
+    if (branch?.get('gate_code')) { selectSimulationGate(branch.get('gate_code'), false); return; }
     const station = map.forEachFeatureAtPixel(event.pixel, f => f, { layerFilter: l => l === stations, hitTolerance: 7 });
     if (station) { selectSimulationGate(null, false); onSelect(station.get('site_code')); return; }
     selectSimulationGate(null, false);
@@ -160,11 +166,18 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const nextHoveredGate = gate?.get('gate').gate_code || null;
     if (hoveredGate !== nextHoveredGate) { hoveredGate = nextHoveredGate; simulationGates.changed(); }
     hoveredSegment = map.forEachFeatureAtPixel(event.pixel, feature => feature, { layerFilter: layer => layer === riverLayer, hitTolerance: 8 }) || null; updateRiverTooltip();
+    const branch = map.forEachFeatureAtPixel(event.pixel, feature => feature, { layerFilter: layer => layer === canalLayer, hitTolerance: 8 });
+    if (branch) {
+      const gate = frame?.gates?.find(item => item.gate_code === branch.get('gate_code'));
+      const inland = branch.get('branch_side') === 'beyond_gate';
+      riverTooltip.hidden = false;
+      riverTooltip.textContent = `${branch.get('name') || 'Kênh có cống'} · ${inland ? 'Sau cống: chưa có EC trong kênh' : gate ? `Từ sông tới cống: ${formatWater(gate.simulated_outside_ec_mS_m, displayUnit)} · ${gate.advisory_label_vi || gate.advisory_label || 'Mức cảnh báo theo ngưỡng EC'}` : 'Chưa có EC mô phỏng cho tháng này'}`;
+    }
     const station = map.forEachFeatureAtPixel(event.pixel, feature => feature, { layerFilter: layer => layer === stations, hitTolerance: 14 });
     if (station) {
       const name = `${station.get('site_code')} ${station.get('site_name')}`.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/gi,'').toLowerCase();
       const value = name.includes('tanchau') ? frame?.inputs?.tan_chau_ec_mS_m : name.includes('mythuan') ? frame?.inputs?.my_thuan_ec_mS_m : name.includes('mytho') ? frame?.inputs?.my_tho_ec_mS_m : null;
-      riverTooltip.hidden = false; riverTooltip.textContent = `${station.get('site_name')} · Mẫu nguồn ${station.get('last_observed_date') || 'chưa rõ ngày'}: ${formatWater(station.get('latest_ec_mS_m'))}${value == null ? '' : ` · Đầu vào mô phỏng ${frame.year_month}: ${formatWater(value,displayUnit)}`}`;
+      riverTooltip.hidden = false; riverTooltip.textContent = `${station.get('site_name')} · Mẫu nguồn ${station.get('last_observed_date') || 'chưa rõ ngày'}: ${formatWater(station.get('latest_ec_mS_m'), displayUnit)}${value == null ? '' : ` · Đầu vào mô phỏng ${frame.year_month}: ${formatWater(value,displayUnit)}`}`;
     }
   }
   map.on('pointermove', inspectRiver); map.on('singleclick', inspectRiver);
@@ -206,10 +219,6 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const label = document.createElement('small'); label.textContent = `MÔ PHỎNG ĐOẠN SÔNG LÂN CẬN · ${context.yearMonth}`;
     const value = document.createElement('strong'); value.textContent = `EC ${formatWater(properties.ec_mS_m)}`;
     water.append(label, value);
-    if (Number.isFinite(properties.salinity_g_l)) {
-      const salinity = document.createElement('span'); salinity.textContent = `Độ mặn quy đổi kịch bản: ~${properties.salinity_g_l.toLocaleString('vi-VN', { maximumFractionDigits: 3 })} g/L`;
-      water.append(salinity);
-    }
     add('p', `Cách trục Sông Tiền ${river.distanceKm.toFixed(2)} km · Đoạn km ${properties.chainage_start_km ?? '—'}–${properties.chainage_end_km ?? '—'}`);
     if (gate) add('p', `Cống gần nhất: ${gate.item.gate_name || gate.item.name || gate.item.gate_code} · ${gate.distanceKm.toFixed(2)} km`);
     else add('p', 'Chưa có tọa độ cống để đối chiếu.');
@@ -219,7 +228,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
       add('p', `Quan trắc trạm ${site.last_observed_date || 'chưa rõ ngày'}: ${formatWater(site.latest_ec_mS_m)}. Đây là kỳ đo riêng của trạm.`, 'inspect-context-note');
     } else add('p', 'Chưa có trạm có tọa độ trong lớp đang hiển thị.');
     add('p', 'Giá trị thuộc đoạn sông lân cận, chưa phải số đo tại điểm chọn. Khoảng cách là đường chim bay; chưa xác lập kết nối thủy lực trạm–cống–ruộng.', 'inspect-context-note');
-    add('p', 'Quy đổi độ mặn dùng giả định của lớp mô phỏng, chưa hiệu chuẩn theo nhiệt độ và thành phần nước.', 'inspect-context-note');
+    add('p', 'EC ở đây được nội suy trên trục sông; kênh sau cống cần số đo riêng.', 'inspect-context-note');
     if (river.distanceKm > 12) add('p', 'Điểm chọn cách trục sông trên 12 km. Nước nội đồng còn phụ thuộc kênh nhánh và vận hành cống; cần đo trực tiếp tại vị trí sử dụng.', 'inspect-distance-warning');
     add('h4', 'Đối chiếu ngưỡng EC theo cây trồng');
     const crops = add('div', '', 'inspect-crop-list');
@@ -241,66 +250,75 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     if (inspectedCoordinate) { renderPointCard(); return; }
     const card = document.getElementById('simulationGateCard');
     if (!card) return;
-    card.setAttribute('aria-label', 'Khuyến nghị mô phỏng tại cống');
+    card.setAttribute('aria-label', 'Thông tin nhánh có cống');
     card.replaceChildren();
     const gate = frame?.gates?.find(item => item.gate_code === selectedGate);
     card.hidden = !gate;
     if (card.hidden) return;
     const add = (tag, text, className) => { const node = document.createElement(tag); node.textContent = text; if (className) node.className = className; card.append(node); return node; };
-    const label = add('label', 'Chọn cống mô phỏng');
-    const chooser = document.createElement('select'); chooser.setAttribute('aria-label', 'Chọn một trong các cống mô phỏng');
-    const placeholder = document.createElement('option'); placeholder.value = ''; placeholder.textContent = 'Chọn cống để xem điều kiện ngoài sông'; chooser.append(placeholder);
-    for (const item of frame.gates) { const option = document.createElement('option'); option.value = item.gate_code; option.textContent = `${item.gate_name || item.name || item.gate_code} · ${item.gate_code}`; chooser.append(option); }
-    chooser.value = gate?.gate_code || ''; chooser.addEventListener('change', () => selectSimulationGate(chooser.value, true)); label.append(chooser);
     if (!gate) return;
-    const close = add('button', '✕', 'simulation-gate-close'); close.type = 'button'; close.setAttribute('aria-label', 'Đóng thông tin cống mô phỏng'); close.addEventListener('click', () => {
+    const close = add('button', '✕', 'simulation-gate-close'); close.type = 'button'; close.setAttribute('aria-label', 'Đóng thông tin nhánh'); close.addEventListener('click', () => {
       const code = selectedGate; selectSimulationGate(null, false);
       const picker = document.getElementById('simulationGatePicker');
       const profileButton = [...document.querySelectorAll('button[data-gate-code]')].find(item => item.dataset.gateCode === code && item.getClientRects().length);
-      const returnTarget = picker?.getClientRects().length ? picker : profileButton || document.getElementById('simulationGatesToggle');
+      const returnTarget = picker?.getClientRects().length ? picker : profileButton || document.getElementById('simulationWaterwayPicker') || target;
       returnTarget?.focus();
     });
     add('h3', gate.gate_name || gate.name || gate.gate_code, 'simulation-gate-heading');
     const linkedWaterways = (corridor?.corridor?.features || []).filter(feature => gate.canal_ids?.includes(feature.properties?.id)).map(feature => feature.properties.name).filter(Boolean);
     add('p', `${gate.gate_code} · ${gate.waterway_name || gate.waterway || gate.river_name || linkedWaterways.join(', ') || 'Chưa xác minh tên thủy vực'}`);
     add('p', `Lý trình ${Number(gate.chainage_km).toFixed(1)} km · Cách trục sông ${Number(gate.distance_to_axis_km).toFixed(2)} km`);
-    add('p', `Ngoài sông (mô phỏng ${frame.year_month}): ${formatWater(gate.simulated_outside_ec_mS_m, displayUnit, gate.simulated_outside_salinity_g_l)}`);
-    if (displayUnit === 'ec') add('p', `Độ mặn ${formatWater(gate.simulated_outside_ec_mS_m, 'salinity', gate.simulated_outside_salinity_g_l)}`);
+    add('p', `Từ sông tới cống · tháng ${frame.year_month}: ${formatWater(gate.simulated_outside_ec_mS_m, displayUnit)}`);
+    if (gate.canal_ids?.length) add('p', 'Tuyến màu từ sông tới cống dùng EC ngoài cống. Đoạn sau cống là nét đứt vì chưa có EC nội kênh.');
     const advisory = add('p', gate.advisory_label_vi || gate.advisory_label || gate.advisory_code || gate.simulated_gate_state, 'simulation-advisory'); advisory.style.color = advisoryColor(gate);
-    add('p', 'Đây là EC nội suy theo kịch bản, chưa có số đo tại cống và không phải lệnh vận hành.');
-    const actions = add('div', '', 'simulation-card-actions');
-    const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Kiểm tra điều kiện tại cống →';
-    const displayedFrame = frame;
-    apply.addEventListener('click', () => {
-      if (frame !== displayedFrame || !frame?.gates.includes(gate)) return;
-      const detail = { kind: 'SPATIAL_SIMULATION', gate, frame: displayedFrame, year_month: displayedFrame.year_month, thresholds: displayedFrame.thresholds, simulation_layer: true };
-      window.dispatchEvent(new CustomEvent('workspace:apply-simulation-gate', { detail }));
-      window.dispatchEvent(new CustomEvent('workspace:apply-forecast-to-gate', { detail }));
-    }); actions.append(apply);
-    const test = document.createElement('button'); test.type = 'button'; test.textContent = intakeGate === gate.gate_code ? 'Dừng kịch bản thử lấy nước (mô phỏng)' : 'Thử kịch bản lấy nước (chỉ mô phỏng)'; test.setAttribute('aria-pressed', String(intakeGate === gate.gate_code));
-    test.disabled = !(gate.canal_ids?.length); test.addEventListener('click', () => { intakeGate = intakeGate === gate.gate_code ? null : gate.gate_code; particles.setIntakeGate(intakeGate); renderGateCard(); }); actions.append(test);
-    if (intakeGate) add('p', 'Hạt chuyển động trong kênh là kịch bản thử do người dùng chọn; không xác nhận cống đang mở.');
+    add('p', 'Giá trị EC được nội suy theo kịch bản ngoài cống; chưa có số đo trong kênh sau cống. Mức cảnh báo dựa trên EC, không suy ra trạng thái đóng hoặc mở thực tế.');
   }
   function selectSimulationGate(code, focus = true, interaction) {
+    const waterwayPicker = document.getElementById('simulationWaterwayPicker'); if (waterwayPicker) waterwayPicker.value = '';
     inspectedCoordinate = null; inspectSource.clear();
     const gate = frame?.gates?.find(item => item.gate_code === code);
     if (selectedGate !== code) { intakeGate = null; particles.setIntakeGate(null); }
-    selectedGate = gate?.gate_code || null; simulationGates.changed(); renderGateCard();
+    selectedGate = gate?.gate_code || null; simulationGates.changed(); canalLayer.changed(); renderGateCard();
     const picker = document.getElementById('simulationGatePicker'); if (picker) picker.value = selectedGate || '';
     window.dispatchEvent(new CustomEvent('workspace:simulation-gate-selected',{detail:{gate_code:selectedGate}}));
     if (gate && focus && ensureMapMounted()) { map.getView().animate({center:fromLonLat(gate.coordinates || gate.geometry.coordinates), zoom:Math.max(10,map.getView().getZoom()), duration:450}); if (interaction !== 'hover') document.getElementById('simulationGateCard')?.focus(); }
   }
   function setSimulationCorridor(value) {
     corridor = value; canalSource.clear();
-    const features = (value?.corridor?.features || value?.features || []).filter(feature => feature.properties?.type !== 'MAIN_RIVER').map(feature => feature.geometry?.type === 'LineString' ? {...feature,geometry:{...feature.geometry,coordinates:smoothCoordinates(feature.geometry.coordinates, riverInterpolation)}} : feature);
-    canalSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features }, options));
-    particles.setCanals(features.filter(feature => feature.properties?.type !== 'MAIN_RIVER'));
+    const branches = (value?.corridor?.features || value?.features || []).filter(feature => feature.properties?.type !== 'MAIN_RIVER');
+    const smooth = feature => ({ ...feature, geometry: { ...feature.geometry, coordinates: smoothCoordinates(feature.geometry.coordinates, riverInterpolation) } });
+    const features = branches.filter(feature => feature.geometry?.type === 'LineString').map(smooth);
+    const displayed = splitGatedWaterways(branches).map(smooth);
+    canalSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features: displayed }, options));
+    particles.setCanals(features);
+    const picker = document.getElementById('simulationWaterwayPicker');
+    if (picker) {
+      picker.replaceChildren();
+      const prompt = document.createElement('option'); prompt.value = ''; prompt.textContent = 'Chọn kênh / nhánh'; picker.append(prompt);
+      const selectable = features.filter(feature => feature.properties?.gate_code &&
+        Number.isInteger(feature.properties.gate_path_index) &&
+        feature.properties.gate_path_index > 0 &&
+        feature.properties.gate_path_index < feature.geometry.coordinates.length - 1);
+      selectable.forEach((feature, index) => {
+        const option = document.createElement('option'); option.value = String(index); option.textContent = feature.properties?.name || feature.properties?.id || `Kênh ${index + 1}`; picker.append(option);
+      });
+      picker.disabled = picker.options.length < 2;
+      picker.onchange = () => {
+        const selectedIndex = picker.value, selected = selectable[Number(selectedIndex)];
+        if (!picker.value || !selected?.geometry?.coordinates?.length) return;
+        selectSimulationGate(selected.properties?.gate_code, false);
+        picker.value = selectedIndex;
+        const coordinate = selected.geometry.coordinates[Math.floor(selected.geometry.coordinates.length / 2)].slice(0, 2);
+        if (ensureMapMounted()) map.getView().animate({ center: fromLonLat(coordinate), zoom: Math.max(10, map.getView().getZoom()), duration: 450 });
+        document.getElementById('simulationGateCard')?.focus({ preventScroll: true });
+      };
+    }
   }
   function setSimulationFrame(value) {
-    frame = value; intakeGate = null; hoveredSegment = null; hoveredGate = null; updateRiverTooltip(); riverSource.clear(); simulationGateSource.clear(); isoSource.clear(); isoStyles.clear();
+    frame = value; intakeGate = null; hoveredSegment = null; hoveredGate = null; updateRiverTooltip(); riverSource.clear(); simulationGateSource.clear(); isoSource.clear(); isoStyles.clear(); canalLayer.changed();
     const smoothed = smoothRiverSegments(frame?.river_segments || [], riverInterpolation);
     // Subdivide only display geometry: particles retain the original 35 continuous paths.
-    const ribbon = riverRibbon(smoothed.segments);
+    const ribbon = riverRibbon(smoothed.segments, 8, [frame?.thresholds?.open_below_ec_ms_m, frame?.thresholds?.close_at_or_above_ec_ms_m]);
     ribbonStyles.clear();
     riverSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features: ribbon }, options));
     particles.setFrame(frame,smoothed.segments);
@@ -308,9 +326,8 @@ export function createResearchMap(target, { onSelect, onTileError }) {
       const coordinates = gate.coordinates || gate.geometry?.coordinates;
       if (coordinates) simulationGateSource.addFeature(new Feature({ geometry: new Point(fromLonLat(coordinates)), gate }));
     }
-    for (const boundary of frame?.isohaline_boundaries || []) {
-      if (boundary.status === 'WITHIN_CORRIDOR' && boundary.coordinate) isoSource.addFeature(new Feature({ ...boundary, geometry: new Point(fromLonLat(boundary.coordinate)) }));
-    }
+    // The EC warning palette is driven by the selected thresholds. The former
+    // 1/4 g/L isohaline markers are intentionally absent from this EC map.
     const picker = document.getElementById('simulationGatePicker');
     if (picker) {
       picker.disabled = !frame;
@@ -320,6 +337,8 @@ export function createResearchMap(target, { onSelect, onTileError }) {
       picker.onchange = () => selectSimulationGate(picker.value,true);
     }
     renderGateCard(); stations.changed();
+    const waterwayPicker = document.getElementById('simulationWaterwayPicker');
+    if (waterwayPicker) waterwayPicker.disabled = !frame?.gates?.length;
     if (frame && !initialSimulationFit && ensureMapMounted()) { fitMap(); initialSimulationFit = true; }
   }
   function setDisplayUnit(value) { displayUnit = value === 'salinity' ? 'salinity' : 'ec'; cache.clear(); stations.changed(); isoLayer.changed(); forecastLayer.changed(); renderGateCard(); updateRiverTooltip(); }
@@ -384,7 +403,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     select(code) { selected = code; stations.changed(); },
     fit: fitMap,
     setBase(value) { base.setVisible(value); },
-    destroy() { disposed = true; particles.destroy(); canvases.forEach(canvas => canvas.remove()); target.removeEventListener('pointerleave', clearGateHover); document.removeEventListener('visibilitychange', resumeVisibleMap); riverTooltip.remove(); const picker = document.getElementById('simulationGatePicker'); if (picker) picker.onchange = null; listeners.forEach(([name, handler]) => window.removeEventListener(name, handler)); observer.disconnect(); map.setTarget(undefined); },
+    destroy() { disposed = true; particles.destroy(); canvases.forEach(canvas => canvas.remove()); target.removeEventListener('pointerleave', clearGateHover); document.removeEventListener('visibilitychange', resumeVisibleMap); riverTooltip.remove(); for (const id of ['simulationGatePicker', 'simulationWaterwayPicker']) { const picker = document.getElementById(id); if (picker) picker.onchange = null; } listeners.forEach(([name, handler]) => window.removeEventListener(name, handler)); observer.disconnect(); map.setTarget(undefined); },
   };
 }
 

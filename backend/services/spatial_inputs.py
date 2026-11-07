@@ -1,11 +1,13 @@
 """Read-only monthly evidence adapted for the isolated spatial simulation."""
 import calendar
 from collections import Counter, defaultdict
+from datetime import datetime
 from functools import lru_cache
 import hashlib
 import json
 import math
-from statistics import mean
+from statistics import mean, median
+from zoneinfo import ZoneInfo
 
 from backend.repositories.workspace import ROOT, load_bundle, estimate_rows
 from backend.repositories.multivariate_inputs import get_monthly_weather
@@ -137,6 +139,54 @@ def _observation_or_fill(month, records):
         observed_or_estimated_counts=dict(sum((Counter(records[m].get('observed_or_estimated_counts', {})) for m in sources), Counter())))
 
 
+@lru_cache(maxsize=48)
+def _model_forecast(station, month, rainfall, temperature, wind, source_sha):
+    """Cache deterministic inference; the source hash invalidates refreshed weather."""
+    from backend.domain.multivariate_ec import predict_month
+    result = predict_month(station, month + '-01', dict(
+        rainfall_mm=rainfall, temperature_degC=temperature,
+        wind_source_units=wind))
+    return dict(value=_number(result['predicted_ec_mS_m'], True),
+                model='RandomForestRegressor', model_version=result['model_version'],
+                model_sha256=result['model_provenance'].get('model_sha256'),
+                weather_source_sha256=source_sha)
+
+
+def _future_boundaries(month, station, observed, weather, today):
+    """Use released t-2 weather where possible; otherwise an explicit seasonal scenario."""
+    index = _index(month) - 2
+    input_month = f'{index // 12:04d}-{index % 12 + 1:02d}'
+    record = weather.get(station, {}).get(input_month)
+    if (record and record.get('complete') and record.get('wind_unit') == 'm/s'
+            and record.get('assumed_available_at', '9999-12-31')[:10] <= today):
+        prediction = _model_forecast(station, month,
+            record['rainfall_mm'], record['temperature_degC'],
+            record['wind_source_units'], record['sha256'])
+        return dict(prediction, site_code=STATIONS[station], imputed=False,
+            input_month=input_month, source=record['source'], sha256=record['sha256'],
+            source_months=[input_month], evidence_kind='ML_FORECAST_ERA5',
+            verified_observation=False, data_kind='MULTIVARIATE_MONTHLY_FORECAST',
+            live_forecast_available=False, rainfall_mm=record['rainfall_mm'],
+            temperature_degC=record['temperature_degC'],
+            wind_speed_ms=record['wind_source_units'])
+    season = month[5:]
+    ec_history = [row['value'] for key, row in observed[station].items()
+                  if '2010-01' <= key <= '2023-12' and key[5:] == season]
+    weather_history = [row for key, row in weather.get(station, {}).items()
+                       if '2010-01' <= key <= '2023-12' and key[5:] == season]
+    if len(ec_history) < 10 or len(weather_history) < 10:
+        raise ValueError(f'Insufficient seasonal scenario evidence: {station} {month}')
+    return dict(value=median(ec_history), site_code=STATIONS[station],
+        model='SEASONAL_MONTH_MEDIAN', imputed=True, input_month=input_month,
+        source='MRC historical EC and ERA5 2010–2023',
+        source_months=[key for key in observed[station] if '2010-01' <= key <= '2023-12' and key[5:] == season],
+        evidence_kind='SEASONAL_MEDIAN_SCENARIO', verified_observation=False,
+        data_kind='SEASONAL_SCENARIO', live_forecast_available=False,
+        rainfall_mm=median(row['rainfall_mm'] for row in weather_history),
+        temperature_degC=median(row['temperature_degC'] for row in weather_history),
+        wind_speed_ms=median(row['wind_source_units'] for row in weather_history))
+
+
 def _monthly_inputs():
     """Return 1985-06 onward; imputation never modifies Tier 1 source records."""
     bundle = load_bundle()
@@ -163,8 +213,17 @@ def _monthly_inputs():
             rainfall_mm=_number(row['rainfall_mm'], True),
             temperature_degC=_number(row['temperature_degC']),
             wind_speed_ms=_number(row['wind_m_s'], True))
-    end = max(['2026-08'] + [month for _, month in forecasts])
+    now = datetime.now(ZoneInfo('Asia/Ho_Chi_Minh'))
+    future_index = now.year * 12 + now.month - 1 + 12
+    rolling_end = f'{future_index // 12:04d}-{future_index % 12 + 1:02d}'
+    end = max(['2026-08', rolling_end] + [month for _, month in forecasts])
     weather = {station: {r['input_month']: r for r in get_monthly_weather(station)} for station in STATIONS}
+    last_estimate = max(month for _, month in forecasts)
+    for month in _months('2024-01', end):
+        if month <= last_estimate:
+            continue
+        for station in STATIONS:
+            forecasts[station, month] = _future_boundaries(month, station, observed, weather, now.date().isoformat())
     winds = {station: _winds(station) for station in STATIONS}
     result = {}
     for month in _months('1985-06', end):
@@ -186,9 +245,9 @@ def _monthly_inputs():
                 record = forecasts[station, month]
                 station_weather[station] = dict(rainfall_mm=record['rainfall_mm'],
                     temperature_degC=record['temperature_degC'], wind_speed_ms=record['wind_speed_ms'],
-                    source=record['source'], sha256=record['sha256'], source_month=record['input_month'], source_model=record['model'],
-                    data_kind='RETROSPECTIVE_WEATHER_ESTIMATE',
-                    wind_unit='m/s', wind_unit_status='FORECAST_CSV_DECLARED_UNITS', imputed=False)
+                    source=record['source'], sha256=record.get('sha256'), source_month=record['input_month'], source_model=record['model'],
+                    data_kind=record['data_kind'],
+                    wind_unit='m/s', wind_unit_status='SEASONAL_MEDIAN_SCENARIO' if record['data_kind'] == 'SEASONAL_SCENARIO' else 'VERIFIED_RESPONSE_UNITS', imputed=record['imputed'])
             else:
                 if month not in weather[station]:
                     raise ValueError(f'Missing verified-unit ERA5 weather: {station} {month}')
@@ -215,7 +274,7 @@ def _monthly_inputs():
             interpolation_fallback_reason=None if my_thuan is not None else 'MISSING_HISTORICAL_MYTHUAN_OBSERVATION',
             tan_chau_salinity_g_l=round(tan_chau * SALINITY_FACTOR, 3),
             my_tho_salinity_g_l=round(my_tho * SALINITY_FACTOR, 3),
-            data_regime='OBSERVED_MRC' if month < '2024-01' else 'ML_FORECAST_ERA5',
+            data_regime='OBSERVED_MRC' if month < '2024-01' else ('SEASONAL_SCENARIO' if any(r['data_kind'] == 'SEASONAL_SCENARIO' for r in boundaries.values()) else 'ML_FORECAST_ERA5'),
             imputed=any(r['imputed'] for r in boundaries.values()),
             rainfall_mm=regional['rainfall_mm'], temperature_degC=regional['temperature_degC'],
             wind_speed_ms=regional['wind_speed_ms'], wind=dict(regional['wind']),
@@ -224,7 +283,7 @@ def _monthly_inputs():
             observation_source=bundle.get('observation_source'), salinity_conversion_factor=SALINITY_FACTOR,
             simulation_only=True, gate_decision_eligible=False,
             live_forecast_available=False, deployment_ready=False,
-            data_kind='MRC_HISTORICAL_SIMULATION_INPUT' if month < '2024-01' else 'RETROSPECTIVE_WEATHER_ESTIMATE')
+            data_kind='MRC_HISTORICAL_SIMULATION_INPUT' if month < '2024-01' else ('SEASONAL_SCENARIO' if any(r['data_kind'] == 'SEASONAL_SCENARIO' for r in boundaries.values()) else 'MULTIVARIATE_MONTHLY_FORECAST' if month > last_estimate else 'RETROSPECTIVE_WEATHER_ESTIMATE'))
     return result
 
 

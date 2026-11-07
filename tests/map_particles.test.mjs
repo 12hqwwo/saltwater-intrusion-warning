@@ -44,11 +44,11 @@ test('meteorological wind FROM bearings and real u10/v10 fields map to canvas tr
   assert.equal(windVector({ speed_ms: -1, direction_from_deg: 0 }), null);
 });
 
-test('river direction, color and bounded speed preserve illustrative seasonal flow', () => {
+test('river particles show flow without assigning a salinity color', () => {
   const fresh = riverMotion({ flow_direction: 'DOWNSTREAM_FRESHWATER', flow_velocity_factor: 1, salinity_g_l: 0.2 });
   const saline = riverMotion({ flow_direction: 'UPSTREAM_SALINE_INTRUSION', flow_velocity_factor: 0.5, salinity_g_l: 5 });
-  assert.equal(fresh.direction, 1); assert.equal(fresh.color, '#00e5ff');
-  assert.equal(saline.direction, -1); assert.equal(saline.color, '#f43f5e');
+  assert.equal(fresh.direction, 1); assert.equal(fresh.color, '#ffffff');
+  assert.equal(saline.direction, -1); assert.equal(saline.color, '#ffffff');
   assert.equal(saline.speed, fresh.speed / 2);
   assert.equal(riverMotion({ flow_velocity_factor: 999 }).speed, 33);
   assert.ok(RIVER_PARTICLE_COUNT >= 45 && RIVER_PARTICLE_COUNT <= 60);

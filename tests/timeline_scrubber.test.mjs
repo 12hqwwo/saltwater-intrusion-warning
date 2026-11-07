@@ -251,9 +251,9 @@ test('scenario event before timeline load preserves preset and selects nearest a
   t.mock.method(globalThis, 'fetch', async path => {
     const url = new URL(path, 'https://test.invalid');
     let body;
-    if (url.pathname.endsWith('/timeline')) body = { items: [{ year_month: '2022-10' }, { year_month: '2024-03' }] };
+    if (url.pathname.endsWith('/timeline')) body = { items: [{ year_month: '2022-10', data_regime: 'OBSERVED_MRC' }, { year_month: '2024-03', data_regime: 'ML_FORECAST_ERA5' }] };
     else if (url.pathname.endsWith('/corridor')) body = { gates: [], corridor: {} };
-    else { queries.push(url.searchParams); body = frame(url.searchParams.get('year_month'), ADVISORY_PRESETS.durian); }
+    else { queries.push(url.searchParams); body = { ...frame(url.searchParams.get('year_month'), ADVISORY_PRESETS.durian), inputs: { year_month: url.searchParams.get('year_month'), data_regime: 'ML_FORECAST_ERA5' } }; }
     return { ok: true, json: async () => body };
   });
   const scrubber = createTimelineScrubber();
@@ -270,37 +270,37 @@ test('scenario event before timeline load preserves preset and selects nearest a
   assert.match(get('simulationStatus').textContent, /2024-04 không có frame dữ liệu; đã chuyển về 2024-03/);
   assert.equal(get('simulationMonthPicker').children.length, 2);
   assert.equal(get('simulationMonthPicker').value, '2024-03');
-  assert.match(get('simulationRegime').textContent, /^Chuỗi ước tính khí tượng mở rộng \(chưa phải quan trắc MRC\)/);
+  assert.match(get('simulationRegime').textContent, /^Ước tính hồi cứu · khí tượng ERA5/);
   window.dispatchEvent(new CustomEvent('workspace:active-forecast-context', { detail: { targetMonth: '2024-04' } }));
   assert.match(get('simulationStatus').textContent, /Đang xem lớp sông dự báo 2024-04/);
   assert.doesNotMatch(get('simulationStatus').textContent, /0 cống mô phỏng/);
   window.dispatchEvent(new CustomEvent('workspace:active-forecast-context', { detail: null }));
-  assert.match(get('simulationStatus').textContent, /0 cống mô phỏng/);
+  assert.match(get('simulationStatus').textContent, /các nhánh có cống/);
   await scrubber.selectMonth('2024-04');
   assert.equal(selections.at(-1).source, 'user', 'user month changes must let the map invalidate a prior forecast overlay');
   scrubber.stop();
 });
 
-test('spatial summary counts simulated states and only focuses valid requested boundaries', t => {
-  const get = installDOM(t), focused = [];
-  window.addEventListener('workspace:focus-coordinate', event => focused.push(event.detail));
+test('spatial summary counts simulated states and uses selected EC warning thresholds', t => {
+  const get = installDOM(t);
   renderSpatialSummary({ gates: [
     { simulated_gate_state: 'OPEN_INTAKE' }, { simulated_gate_state: 'CAUTION_TRANSITION' },
     { simulated_gate_state: 'CLOSED_SALINITY_BARRIER' }, { simulated_gate_state: 'UNKNOWN' },
-  ], isohaline_boundaries: [
+  ], thresholds: { open_below_ec_ms_m: 100, close_at_or_above_ec_ms_m: 150 }, isohaline_boundaries: [
     { salinity_g_l: 1, status: 'WITHIN_CORRIDOR', intrusion_distance_km: 12, coordinate: [106, 10] },
     { salinity_g_l: 4, status: 'NOT_REACHED_AT_ESTUARY' },
     { salinity_g_l: 2, status: 'WITHIN_CORRIDOR', intrusion_distance_km: 10, coordinate: [106, 10] },
   ] });
-  const box = get('simulationSpatialSummary'), [counts, fronts] = box.children;
+  const box = get('simulationSpatialSummary'), [counts, levels] = box.children;
   assert.equal(box.hidden, false);
   assert.deepEqual(counts.children.map(item => item.textContent), [
     'Mô phỏng · 4 cống', '1 thuận lợi theo ngưỡng', '1 cần đo kiểm', '1 ngăn mặn', '1 chưa xác định',
   ]);
-  assert.equal(fronts.children.length, 2);
-  fronts.children[0].dispatchEvent(new Event('click'));
-  assert.deepEqual(focused, [{ coordinate: [106, 10], zoom: 10.8 }]);
-  assert.match(fronts.children[1].textContent, /chưa đạt ngưỡng/);
+  assert.deepEqual(levels.children.map(item => item.textContent), [
+    'EC dưới 100 mS/m: dưới ngưỡng lấy',
+    'EC 100–<150 mS/m: chuyển tiếp',
+    'EC từ 150 mS/m: đạt ngưỡng ngừng lấy',
+  ]);
   renderSpatialSummary(null);
   assert.equal(box.hidden, true);
   assert.deepEqual(box.children, []);

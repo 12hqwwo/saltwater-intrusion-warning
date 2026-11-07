@@ -7,6 +7,11 @@ import { comparisonLines } from "../shared/ec-scenario.js";
 import { createNextForecast } from "./next-forecast.js";
 import { validMonth, validEc } from '../shared/forecast-contract.js';
 
+export function largestForecastError(rows) {
+  return rows.filter(row => Number.isFinite(row.actual) && Number.isFinite(row.predicted))
+    .reduce((worst, row) => !worst || Math.abs(row.predicted - row.actual) > Math.abs(worst.predicted - worst.actual) ? row : worst, null);
+}
+
 export function createForecasts() {
   const nextForecast = createNextForecast();
   const experimentRequests = createRequestGate();
@@ -22,6 +27,7 @@ export function createForecasts() {
     $("artifactLinks").replaceChildren();
     $("modelAssessment").textContent = "";
     $("modelAssessment").classList.remove("good");
+    $("forecastInsight").textContent = "";
     $("predictionRows").replaceChildren();
     $("predictionStatus").textContent = "";
     $("downloadPredictions").disabled = true;
@@ -46,19 +52,25 @@ export function createForecasts() {
     const value = v => Number.isFinite(v) ? num(v) : "—";
     $("predictionRows").replaceChildren();
     $("predictionModelHeading").textContent = ex.selected_model;
+    const worst = largestForecastError(displayedRows);
     for (const row of displayedRows) {
-      const tr = node("tr");
+      const tr = node("tr", undefined, row === worst ? 'forecast-outlier-row' : undefined);
       for (const cell of [row.target_month.slice(0, 7), value(row.actual), value(row.predicted), value(row.persistence), value(row.absolute_error)]) tr.append(node("td", cell));
       $("predictionRows").append(tr);
     }
     $("predictionStatus").textContent = `${displayedRows.length} tháng đang xem · EC và sai số: mS/m. Bảng MAE/RMSE bên dưới luôn dùng toàn bộ tập đánh giá chung của thí nghiệm.`;
+    if (worst) {
+      const error = Math.abs(worst.predicted - worst.actual);
+      const baselineError = Number.isFinite(worst.persistence) ? Math.abs(worst.persistence - worst.actual) : null;
+      $("forecastInsight").textContent = `Cần rà soát tháng ${worst.target_month.slice(0, 7)}: mô hình ${num(worst.predicted)} mS/m, quan trắc ${num(worst.actual)} mS/m, lệch ${num(error)} mS/m${baselineError === null ? '' : `; mô hình đối chứng lệch ${num(baselineError)} mS/m`}. Đây là sai số trong kết quả hồi kiểm; các mốc trục tung chỉ biểu thị thang đo.`;
+    }
     $("downloadPredictions").disabled = !displayedRows.length;
     const series = (key) => displayedRows.filter(row => Number.isFinite(row[key])).map(row => ({ date: row.target_month, value: row[key] }));
     drawSeries($("forecastChart"), [
       { label: "Quan trắc", color: "#173b45", points: series("actual") },
       { label: ex.selected_model, color: "#087f78", points: series("predicted") },
       { label: "Persistence", color: "#c18b33", dashed: true, points: series("persistence") }
-    ], { title: `Đối chiếu EC tại ${ex.station}, horizon một tháng`, connected: true, referenceLines: comparisonLines() });
+    ], { title: `Đối chiếu EC tại ${ex.station}, dự báo trước một tháng`, connected: true, referenceLines: comparisonLines(), monthTicks: true, highlightDate: worst?.target_month });
   }
 
   function showError(message) {
@@ -86,7 +98,8 @@ export function createForecasts() {
       const { selected, baseline, beatsBaseline } = experimentAssessment(ex);
       $("forecastStatus").textContent = `Trạm ${ex.station} · EC khả dụng theo giả định: cuối tháng + ${ex.availability_lag_days} ngày · ${selected.eval_samples} tháng test chung.`;
       $("modelAssessment").classList.toggle("good", beatsBaseline);
-      $("modelAssessment").textContent = `${ex.selected_model} được chọn trên validation. MAE test ${num(selected.mae_mS_m)} mS/m, ${beatsBaseline ? "thấp hơn" : "không thấp hơn"} Persistence (${num(baseline.mae_mS_m)} mS/m). ${beatsBaseline ? "Kết quả chỉ có hiệu lực trong phạm vi thí nghiệm này." : "Chưa có căn cứ dùng mô hình này thay baseline tại trạm."}`;
+      const rmseHigher = selected.rmse_mS_m > baseline.rmse_mS_m;
+      $("modelAssessment").textContent = `${ex.selected_model} được chọn trên tập validation. MAE trên tập đánh giá ${num(selected.mae_mS_m)} mS/m, ${beatsBaseline ? "thấp hơn" : "không thấp hơn"} mô hình đối chứng (${num(baseline.mae_mS_m)} mS/m). RMSE (nhạy với sai số lớn) ${num(selected.rmse_mS_m)} so với ${num(baseline.rmse_mS_m)} mS/m${rmseHigher ? "; mô hình có sai số cực trị cần rà soát" : ""}. ${beatsBaseline ? "Kết quả chỉ có hiệu lực trong phạm vi thí nghiệm này." : "Chưa có căn cứ dùng mô hình này thay đối chứng tại trạm."}`;
       activeExperiment = ex;
       nextForecast.load(id, ex);
       for (const year of [...new Set(ex.predictions.map(row => row.target_month.slice(0, 4)))].sort()) {

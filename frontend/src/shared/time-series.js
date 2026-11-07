@@ -6,7 +6,7 @@ function svgNode(tag, attrs = {}, text) {
   return el;
 }
 const fmt = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 2 });
-export function drawSeries(container, series, { title, connected = false, referenceLines = [] } = {}) {
+export function drawSeries(container, series, { title, connected = false, referenceLines = [], monthTicks = false, highlightDate = null } = {}) {
   container.replaceChildren();
   const points = series.flatMap(s => s.points.filter(p => Number.isFinite(p.value)));
   if (!points.length) { container.textContent = 'Không có số đo trong khoảng đã chọn.'; return; }
@@ -15,8 +15,10 @@ export function drawSeries(container, series, { title, connected = false, refere
   let tmin = Math.min(...times), tmax = Math.max(...times);
   if (tmin === tmax) { tmin -= 86400000; tmax += 86400000; }
   const lines = referenceLines.filter(line => Number.isFinite(line.value) && line.value >= 0);
-  const max = Math.max(1, ...points.map(p => p.value), ...lines.map(line => line.value)) * 1.12;
-  const x = d => left + (Date.parse(d.slice(0, 10) + 'T00:00:00Z') - tmin) / (tmax - tmin) * (width - left - right);
+  const rawMax = Math.max(1, ...points.map(p => p.value), ...lines.map(line => line.value)) * 1.05;
+  const stepScale = 10 ** Math.floor(Math.log10(rawMax / 4));
+  const max = Math.ceil(rawMax / 4 / stepScale) * stepScale * 4;
+  const x = d => left + (Date.parse((/^\d{4}-\d{2}$/.test(d) ? `${d}-01` : d.slice(0, 10)) + 'T00:00:00Z') - tmin) / (tmax - tmin) * (width - left - right);
   const y = v => top + (height - top - bottom) * (1 - v / max);
   const svg = svgNode('svg', { viewBox: `0 0 ${width} ${height}`, role: 'img', 'aria-label': title });
   svg.append(svgNode('title', {}, title));
@@ -31,9 +33,10 @@ export function drawSeries(container, series, { title, connected = false, refere
     svg.append(svgNode('line', { x1: left, x2: width - right, y1: y(line.value), y2: y(line.value), stroke: color, 'stroke-width': 1.5, 'stroke-dasharray': '7 4' }));
     svg.append(svgNode('text', { x: width - right, y: y(line.value) - 7, 'text-anchor': 'end', fill: color, 'font-size': 12, stroke: '#fff', 'stroke-width': 3, 'paint-order': 'stroke' }, line.label || fmt.format(line.value)));
   }
-  for (let i = 0; i <= 4; i++) {
-    const stamp = tmin + (tmax - tmin) * i / 4, d = new Date(stamp).toISOString().slice(0, 10);
-    svg.append(svgNode('text', { x: left + (width - left - right) * i / 4, y: height - 8, 'text-anchor': i === 0 ? 'start' : i === 4 ? 'end' : 'middle', fill: '#596d74', 'font-size': 12 }, d));
+  const ticks = monthTicks ? [...new Set(points.map(p => p.date.slice(0, 7)))].sort().filter((_, index, all) => index === 0 || index === all.length - 1 || index % 6 === 0) : Array.from({length:5}, (_, i) => new Date(tmin + (tmax - tmin) * i / 4).toISOString().slice(0, 10));
+  for (const [i, d] of ticks.entries()) {
+    const label = monthTicks ? `${d.slice(5)}/${d.slice(0, 4)}` : d;
+    svg.append(svgNode('text', { x: x(d), y: height - 8, 'text-anchor': i === 0 ? 'start' : i === ticks.length - 1 ? 'end' : 'middle', fill: '#596d74', 'font-size': 12 }, label));
   }
   for (const s of series) {
     const values = s.points.filter(p => Number.isFinite(p.value));
@@ -47,7 +50,8 @@ export function drawSeries(container, series, { title, connected = false, refere
       svg.append(svgNode('path', { d: path, fill: 'none', stroke: s.color, 'stroke-width': 2, 'stroke-dasharray': s.dashed ? '5 4' : 'none' }));
     }
     for (const p of values) {
-      const circle = svgNode('circle', { cx: x(p.date), cy: y(p.value), r: values.length > 80 ? 2.2 : 4, fill: s.color, tabindex: 0 });
+      const focus = highlightDate && p.date.slice(0, 7) === highlightDate.slice(0, 7) && s === series[1];
+      const circle = svgNode('circle', { cx: x(p.date), cy: y(p.value), r: focus ? 6 : values.length > 80 ? 2.2 : 4, fill: s.color, stroke: focus ? '#b43c32' : 'none', 'stroke-width': focus ? 2 : 0, tabindex: 0 });
       circle.append(svgNode('title', {}, `${s.label} · ${p.date.slice(0, 10)} · ${fmt.format(p.value)} mS/m`));
       svg.append(circle);
     }

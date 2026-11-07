@@ -12,10 +12,10 @@ export function mountQuickScenarios() {
   panel.dataset.view = "overview";
   panel.hidden = Boolean(location.hash && !['#overview', '#main'].includes(location.hash));
   panel.append(node("span", "KHÁM PHÁ NGUỒN NƯỚC", "tag"), node("h3", "Chọn kịch bản để xem trên bản đồ"),
-    node("p", "Đoạn sông, ranh mặn và trạng thái cống là mô phỏng tham khảo; cần đo nước tại chỗ trước khi quyết định lấy nước.", "subtle"));
+    node("p", "Mức cảnh báo EC trên sông và cống là mô phỏng tham khảo; cần đo nước tại chỗ trước khi quyết định lấy nước.", "subtle"));
   const grid = node("div", undefined, "quick-scenarios-grid");
   const scenarios = [
-    { title: "Mùa khô · 04/2024", description: "So sánh ranh mặn và trạng thái cống trong khung mô phỏng mùa khô.", action: "Xem mùa khô →", detail: { month: "2024-04" } },
+    { title: "Mùa khô · 04/2024", description: "So sánh mức cảnh báo EC dọc sông và tại cống trong khung mô phỏng mùa khô.", action: "Xem mùa khô →", detail: { month: "2024-04" } },
     { title: "Mùa mưa · 10/2022", description: "Khám phá sự thay đổi nguồn nước trên cùng tuyến sông trong mùa mưa.", action: "Xem mùa mưa →", detail: { month: "2022-10" } },
     { title: "Kịch bản sầu riêng", description: "Thử cặp ngưỡng EC minh họa 50/80 mS/m; đây không phải tiêu chuẩn tưới cho mọi vườn.", action: "Áp dụng ngưỡng mẫu →", detail: { preset: "durian" } },
     { title: "Dự báo theo khí tượng", description: "Chọn trạm, xem EC dự báo, phân tán giữa các cây và sai số kiểm định trước khi đưa lên bản đồ.", action: "Mở công cụ dự báo →", view: "forecasts" },
@@ -42,16 +42,6 @@ export function renderOverview(summary) {
   $("statSites").textContent = summary.stations;
   $("statLatest").textContent = summary.latest_observed_date ? dateOnly(summary.latest_observed_date) : "Chưa có";
   $("observationCoverage").textContent = `${summary.observations} số đo trong nguồn đang chọn`;
-  $("overviewForecastStatus").textContent = summary.live_forecast_available
-    ? "Có dự báo đang được cung cấp; xem tháng phát hành và độ tin cậy trong mục Dự báo EC."
-    : "Chưa có dự báo EC vận hành đã kiểm định. Kết quả mô hình trong mục Dự báo EC là nghiên cứu; không dùng làm lệnh cống.";
-  $("workspaceSourceStatus").textContent = summary.storage_mode === "postgres"
-    ? "Quan trắc đọc trực tiếp PostgreSQL/PostGIS. Mỗi trạm dùng một phiên bản dữ liệu được chọn rõ; thí nghiệm và danh mục cống đọc từ bộ tài liệu nghiên cứu."
-    : "Quan trắc đọc từ bộ dữ liệu đóng gói có nguồn. Có thể tra cứu phiên bản PostgreSQL trong mục Quan trắc.";
-  $("datasetSummary").replaceChildren();
-  for (const dataset of (summary.datasets || []).filter(item => item.selected)) {
-    $("datasetSummary").append(node("p", `${dataset.site_code} · ${dataset.dataset_code} · ${dataset.observation_count} số đo`, "subtle"));
-  }
   $("sourceList").replaceChildren();
   for (const source of summary.sources || []) {
     const card = node("div", undefined, "source-card");

@@ -53,7 +53,7 @@ function geographicDistance(a, b) {
   return 2 * Math.asin(Math.sqrt(Math.min(1, h)));
 }
 
-export function riverRibbon(features, count = 8) {
+export function riverRibbon(features, count = 8, thresholds = []) {
   if (!Number.isInteger(count) || count < 1) throw new Error('Invalid ribbon count.');
   return features.flatMap(feature => {
     const coordinates = feature.geometry.coordinates, props = feature.properties;
@@ -70,8 +70,17 @@ export function riverRibbon(features, count = 8) {
       const fraction = (distance - distances[start]) / (distances[end] - distances[start]);
       return coordinates[start].map((value, axis) => value + (coordinates[end][axis] - value) * fraction);
     };
+    const stops = props.ec_stops || [];
+    const warningCrossings = [];
+    for (const [left, right] of stops.slice(0, -1).map((stop, index) => [stop, stops[index + 1]])) {
+      for (const threshold of thresholds) {
+        if (!Number.isFinite(threshold) || left.ec_mS_m === right.ec_mS_m) continue;
+        const ratio = (threshold - left.ec_mS_m) / (right.ec_mS_m - left.ec_mS_m);
+        if (ratio > 0 && ratio < 1) warningCrossings.push(left.fraction + (right.fraction - left.fraction) * ratio);
+      }
+    }
     const cuts = [...new Set([...Array.from({ length: count + 1 }, (_, i) => i / count),
-      ...(props.ec_stops || []).map(stop => stop.fraction).filter(f => f > 0 && f < 1)])].sort((a, b) => a - b);
+      ...stops.map(stop => stop.fraction).filter(f => f > 0 && f < 1), ...warningCrossings])].sort((a, b) => a - b);
     // Source vertices are unevenly spaced; both cuts and EC follow traveled distance.
     return cuts.slice(0, -1).map((fraction, index) => {
       const start = total * fraction, end = total * cuts[index + 1];

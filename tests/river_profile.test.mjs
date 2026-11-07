@@ -19,16 +19,19 @@ test('profile uses segment endpoints and midpoints over the complete 175 km axis
   assert.deepEqual(data.points.at(-1), [175, 350]);
   assert.equal(data.points.length, 71);
   assert.deepEqual(data.thresholds, [120, 150]);
-  assert.equal(data.fronts.length, 1);
+  assert.deepEqual(data.fronts.map(front => [front.chainage_km, front.threshold, front.level]), [
+    [60, 120, 'caution'], [75, 150, 'risk'],
+  ]);
   assert.ok(data.max > 350);
 });
-test('salinity conversion changes values and thresholds together without moving gates or fronts', () => {
+test('unit conversion changes values and thresholds together without moving gates or warning crossings', () => {
   const ec = riverProfileData(frame), salinity = riverProfileData(frame, 'salinity');
   assert.equal(salinity.points.at(-1)[1], 350 * 0.0064);
   assert.deepEqual(salinity.thresholds, [120 * 0.0064, 150 * 0.0064]);
   assert.equal(salinity.unit, 'g/L');
   assert.deepEqual(salinity.gates, ec.gates);
-  assert.deepEqual(salinity.fronts, ec.fronts);
+  assert.deepEqual(salinity.fronts.map(front => front.chainage_km), ec.fronts.map(front => front.chainage_km));
+  assert.deepEqual(salinity.fronts.map(front => front.threshold), salinity.thresholds);
 });
 test('all 27 gates remain individually represented, coincident chainages get distinct lanes without x jitter', () => {
   const data = riverProfileData(frame);

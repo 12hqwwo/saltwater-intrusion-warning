@@ -87,3 +87,14 @@ test('ribbon retains bends, segment seams and constant-EC fallback without inven
   assert.deepEqual(riverRibbon([feature([[1, 1], [1, 1]], 'empty')]), []);
   assert.deepEqual(riverRibbon([]), []);
 });
+
+test('warning ribbon cuts at the exact EC thresholds instead of only equal-distance samples', () => {
+  const source = feature([[0, 0], [.08, 0]], 'warning');
+  source.properties = { ...source.properties, start_ec_mS_m: 0, end_ec_mS_m: 200, ec_mS_m: 100,
+    ec_stops: [{ fraction: 0, ec_mS_m: 0 }, { fraction: 1, ec_mS_m: 200 }] };
+  const ribbon = riverRibbon([source], 8, [100, 150]);
+  assert.ok(ribbon.some(part => Math.abs(part.properties.end_ec_mS_m - 100) < 1e-9));
+  assert.ok(ribbon.some(part => Math.abs(part.properties.end_ec_mS_m - 150) < 1e-9));
+  assert.deepEqual(ribbon[0].geometry.coordinates[0], source.geometry.coordinates[0]);
+  assert.deepEqual(ribbon.at(-1).geometry.coordinates.at(-1), source.geometry.coordinates.at(-1));
+});

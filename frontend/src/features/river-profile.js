@@ -28,7 +28,21 @@ export function riverProfileData(frame, unit = 'ec') {
       laneEnds[lane] = gate.chainage_km;
       return { gate, x: gate.chainage_km / LENGTH_KM, lane };
     });
-  const fronts = (frame?.isohaline_boundaries || []).filter(front => validChainage(front.chainage_km));
+  const fronts = [];
+  thresholds.forEach((threshold, index) => {
+    const seen = new Set();
+    for (let i = 1; i < points.length; i += 1) {
+      const [startKm, startValue] = points[i - 1], [endKm, endValue] = points[i];
+      if (startValue === endValue) continue;
+      const ratio = (threshold - startValue) / (endValue - startValue);
+      if (ratio < 0 || ratio > 1) continue;
+      const chainage_km = startKm + ratio * (endKm - startKm);
+      const key = chainage_km.toFixed(6);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      fronts.push({ chainage_km, threshold, level: index === 0 ? 'caution' : 'risk' });
+    }
+  });
   return { points, thresholds, gates, fronts, lanes: laneEnds.length,
     max: Math.max(1e-6, ...points.map(point => point[1]), ...thresholds) * 1.08,
     unit: unit === 'salinity' ? 'g/L' : 'mS/m', extent: [0, LENGTH_KM] };
@@ -86,16 +100,16 @@ export function createRiverProfile(host) {
     const x = km => 8 + km / LENGTH_KM * 984;
     const y = value => 40 - value / data.max * 36;
     data.thresholds.forEach((value, index) => {
-      const line = svgNode('line', { x1: 8, x2: 992, y1: y(value), y2: y(value), stroke: index ? '#ef4444' : '#10b981', 'stroke-dasharray': '5 4', class: 'river-profile-threshold' });
+      const line = svgNode('line', { x1: 8, x2: 992, y1: y(value), y2: y(value), stroke: index ? 'var(--ec-risk)' : 'var(--ec-caution)', 'stroke-dasharray': '5 4', class: 'river-profile-threshold' });
       const title = svgNode('title');
       title.textContent = `${index ? 'Ngưỡng ngăn mặn' : 'Ngưỡng lấy nước'}: ${value.toFixed(2)} ${data.unit}`;
       line.append(title); svg.append(line);
     });
     svg.append(svgNode('polyline', { points: data.points.map(([km, value]) => `${x(km)},${y(value)}`).join(' '), fill: 'none', stroke: '#0891b2', 'stroke-width': 2, class: 'river-profile-line' }));
     for (const front of data.fronts) {
-      svg.append(svgNode('line', { x1: x(front.chainage_km), x2: x(front.chainage_km), y1: 1, y2: 42, stroke: front.salinity_g_l === 4 ? '#ef4444' : '#f59e0b', 'stroke-dasharray': '2 2', class: 'river-profile-front' }));
-      const label = svgNode('text', { x: x(front.chainage_km), y: front.salinity_g_l === 4 ? 18 : 8, 'text-anchor': front.chainage_km > 160 ? 'end' : 'start', 'font-size': 8, fill: '#475569' });
-      label.textContent = `${front.salinity_g_l} g/L`; svg.append(label);
+      svg.append(svgNode('line', { x1: x(front.chainage_km), x2: x(front.chainage_km), y1: 1, y2: 42, stroke: front.level === 'risk' ? 'var(--ec-risk)' : 'var(--ec-caution)', 'stroke-dasharray': '2 2', class: 'river-profile-front' }));
+      const label = svgNode('text', { x: x(front.chainage_km), y: front.level === 'risk' ? 18 : 8, 'text-anchor': front.chainage_km > 160 ? 'end' : 'start', 'font-size': 8, fill: '#475569' });
+      label.textContent = `${Number(front.threshold).toLocaleString('vi-VN', { maximumFractionDigits: 2 })} ${data.unit}`; svg.append(label);
     }
     const matrix = doc.createElement('div');
     matrix.className = 'river-profile-gates';

@@ -25,7 +25,7 @@ export function riverMotion(properties = {}) {
   const factor = Number(properties.flow_velocity_factor);
   return { direction: upstream ? -1 : 1,
     speed: 22 * (Number.isFinite(factor) ? Math.max(0.2, Math.min(1.5, factor)) : 1),
-    color: upstream ? (properties.salinity_g_l >= 4 ? '#f43f5e' : '#f59e0b') : (properties.salinity_g_l >= 0.5 ? '#10b981' : '#00e5ff') };
+    color: '#ffffff' };
 }
 
 export function windVector(wind) {

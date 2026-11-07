@@ -18,9 +18,11 @@ npm.cmd --prefix frontend ci
 .\start.ps1
 ```
 
-Mở http://127.0.0.1:8000/workspace.html. `start.ps1` build giao diện rồi chạy một máy chủ phục vụ cả API và web; Ctrl+C để dừng. Mặc định dùng PostgreSQL; dùng `-Mode snapshot` để xem bộ tệp, `-Port 8016` để đổi cổng hoặc `-SkipBuild` khi đã có bản build mới nhất.
+Mở http://127.0.0.1:8000/ để vào trang Tổng quan mới; `/workspace.html` mở cùng không gian làm việc. `start.ps1` build giao diện rồi chạy một máy chủ phục vụ cả API và web; Ctrl+C để dừng. Mặc định dùng PostgreSQL; dùng `-Mode snapshot` để xem bộ tệp, `-Port 8016` để đổi cổng hoặc `-SkipBuild` khi đã có bản build mới nhất.
 
-`snapshot` đọc tệp có nguồn và kiểm tra checksum. `postgres` đọc trạm và EC trực tiếp từ các bảng `public` hiện có, mỗi trạm chọn một phiên bản RAW_EC; lỗi DB được báo rõ. Lịch sử PostgreSQL đã nằm ngay trong mục Quan trắc; `/index.html` giữ cho liên kết cũ. Thí nghiệm, danh mục cống, hồ sơ tiếp nhận và ước tính khí tượng đọc từ bộ tệp riêng; phần Tổng quan ghi rõ nguồn. Trang `/research.html` chuyển tới workspace.
+Để chạy đúng bản `TinBranch` có trạm Mỹ Thuận với thiết lập PostgreSQL hiện có, chạy `start-tinbranch.ps1 -SettingsRoot 'D:\Study\TLCN' -Port 8000` từ worktree giao diện này. Lệnh dựng giao diện mới, dùng backend và snapshot của `TinBranch`, đọc cấu hình PostgreSQL của checkout chính; dừng máy chủ cũ trên cổng 8000 trước khi chạy. Dùng `-SkipBuild` khi đã dựng giao diện.
+
+`snapshot` đọc tệp có nguồn và kiểm tra checksum. `postgres` đọc trạm và EC trực tiếp từ các bảng `public` hiện có, mỗi trạm chọn một phiên bản RAW_EC; lỗi DB được báo rõ. Lịch sử PostgreSQL đã nằm ngay trong mục Quan trắc; `/index.html` chuyển tới trang Tổng quan. Thí nghiệm, danh mục cống, hồ sơ tiếp nhận và ước tính khí tượng đọc từ bộ tệp riêng; phần Tổng quan ghi rõ nguồn. Trang `/research.html` chuyển tới workspace.
 
 ## Luồng sử dụng
 
@@ -32,17 +34,17 @@ Mục **Dự báo EC đa biến** chạy suy luận thật từ model đã lưu;
 4. **Chất lượng dữ liệu:** xem nguồn, độ phủ và hồ sơ tiếp nhận chưa xác minh.
 5. **Hồ sơ cống:** chọn công trình → nhập EC, mực nước và ngưỡng → mô phỏng INTAKE/DRAIN → xem điều kiện đạt/chặn/thiếu → lưu và khôi phục nháp trên trình duyệt hoặc PostgreSQL, nhập/xuất JSON. Có thể đính kèm dự báo tháng để tham khảo riêng; dự báo không thay số đo hai phía cống. Chưa có phê duyệt trực tuyến.
 
-Bản đồ có lớp mô phỏng trục Sông Tiền, thống kê trạng thái cống theo cặp ngưỡng đang chọn và ranh mô phỏng 1/4 g/L có nút phóng tới vị trí. Bấm vùng trống để tra cứu đoạn sông, cống và trạm gần nhất; thông tin nước thuộc đoạn sông lân cận, không phải phép đo tại điểm chọn.
+Bản đồ có lớp mô phỏng trục Sông Tiền, thống kê trạng thái cống theo cặp ngưỡng EC đang chọn và 10 tuyến kênh có hình học đi qua cống. Đoạn từ sông tới cống dùng mức cảnh báo theo EC mô phỏng ngoài cống; đoạn sau cống là nét đứt xám vì chưa có EC nội kênh. Chọn nhánh hoặc cống để xem chi tiết; bấm vùng trống để tra cứu đoạn sông, cống và trạm gần nhất. Thông tin nước thuộc đoạn sông lân cận, không phải phép đo tại điểm chọn.
 
 Lưu trữ bổ trợ sử dụng schema `dss_reference`, không sửa bảng quan trắc `public`. Xem [cấu hình và migration DSS](docs/dss-storage.md). Nếu chưa cấu hình kho DSS, dự báo, tải JSON/CSV và bản nháp trình duyệt vẫn hoạt động.
 
 ## Dữ liệu và giới hạn
 
-- Snapshot có 977 mẫu EC: 927 MRC tại Mỹ Tho/Tân Châu, 50 RIA2 tại 10 điểm. Kiểm tra PostgreSQL chỉ đọc ngày 28/10/2026 ghi nhận 977 mẫu tại 12 trạm; số liệu thực tế phụ thuộc DB và phiên bản được chọn. Chuỗi MRC kết thúc năm 2023; cờ chất lượng nguồn được giữ nguyên.
+- Snapshot `TinBranch` có 1.428 mẫu EC: 1.378 mẫu MRC tại Tân Châu, Mỹ Thuận, Mỹ Tho và 50 mẫu RIA2 tại 10 điểm. PostgreSQL đang phục vụ 1.378 mẫu tại ba trạm MRC; Mỹ Thuận có 451 mẫu đã đồng bộ. Chuỗi MRC kết thúc năm 2023; cờ chất lượng nguồn được giữ nguyên.
 - Bốn thí nghiệm tháng tại hai trạm, có baseline, metrics, predictions và manifest. Hai định danh Mỹ Tho `LAG0`/`LAG30` hiện đóng gói RF_compact với giả định nhãn khả dụng sau cuối tháng **5/35 ngày**; các thí nghiệm Tân Châu giữ cấu hình riêng đã lưu. Kết quả hồi cứu không phải dự báo hiện tại.
-- EC quan trắc và dự báo dùng mS/m; chưa có hiệu chuẩn để chuyển EC dự báo thành độ mặn. Riêng lớp mô phỏng dùng giả định minh họa `g/L = 0,0064 × EC (mS/m)` để vẽ ranh 1/4 g/L. Hệ số này chưa được hiệu chuẩn tại địa phương; không xác nhận nước tưới hoặc sinh hoạt.
-- Bản đồ phân biệt 2 trạm có hình học DB với 10 điểm RIA2 dùng tọa độ tham khảo từ nguồn khi bật lớp tương ứng; tọa độ tham khảo không trở thành tọa độ DB đã xác minh. Các đoạn sông là nội suy một chiều theo trục sơ đồ, không phải bề mặt mặn đo liên tục hoặc mô hình thủy động lực.
-- Hồ sơ nghiên cứu bốn cống và lớp 27 công trình đầu mối phục vụ mô phỏng là các phạm vi khác nhau. Trạng thái trên bản đồ được tính từ EC mô phỏng và ngưỡng đang chọn, không phản ánh lệnh vận hành thật. Ngưỡng mẫu sầu riêng 50/80, cây có múi 100/150 và lúa 120/200 mS/m chưa phải tiêu chuẩn tưới đã xác nhận. Không suy ra cả 27 cống cùng thuận lợi hoặc cùng ngăn mặn nếu khung dữ liệu không cho kết quả đó.
+- EC quan trắc, dự báo và các mức cảnh báo trên bản đồ dùng mS/m. Giao diện không dùng mốc độ mặn g/L để tô màu; các ngưỡng EC mẫu chưa được hiệu chuẩn tại địa phương và không xác nhận nước tưới hoặc sinh hoạt.
+- Bản đồ phân biệt ba trạm MRC có vị trí trong PostgreSQL với 10 điểm RIA2 dùng tọa độ tham khảo từ nguồn khi bật lớp tương ứng; tọa độ tham khảo không trở thành tọa độ DB đã xác minh. Các đoạn sông là nội suy một chiều qua Tân Châu, Mỹ Thuận, Mỹ Tho, không phải bề mặt mặn đo liên tục hoặc mô hình thủy động lực.
+- Hồ sơ nghiên cứu bốn cống và lớp công trình đầu mối phục vụ mô phỏng là các phạm vi khác nhau; số cống hiển thị lấy từ khung API đang xem. Trạng thái trên bản đồ được tính từ EC mô phỏng và ngưỡng đang chọn, không phản ánh lệnh vận hành thật. Ngưỡng mẫu sầu riêng 50/80, cây có múi 100/150 và lúa 120/200 mS/m chưa phải tiêu chuẩn tưới đã xác nhận. Không suy ra mọi cống cùng thuận lợi hoặc cùng ngăn mặn nếu khung dữ liệu không cho kết quả đó.
 
 ## Tái lập và kiểm toán
 

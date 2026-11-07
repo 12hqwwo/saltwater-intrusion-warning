@@ -30,6 +30,7 @@ export function createObservations({ onForecast } = {}) {
   const map = createResearchMap($("researchMap"), { onSelect: selectStation, onTileError: () => {
     $("tileError").hidden = false;
   } });
+  map.setGateVisible(false);
   const timeline = createTimelineScrubber();
   const profile = createRiverProfile($('simulationRiverProfile'));
   let activeForecast = null, baselineMonth = null;
@@ -72,7 +73,7 @@ export function createObservations({ onForecast } = {}) {
     const upstreamBasis = activeForecast.interpolationMode === 'TWO_STATION_FALLBACK_MISSING_MYTHUAN'
       ? 'Nội suy 2 trạm: khuyết mẫu lịch sử Mỹ Thuận' : 'Nội suy 3 trạm, 2 chặng dọc sông';
     $('mapForecastContext').textContent = `Dự báo ${activeForecast.targetMonth} · nền ${baselineMonth || '—'} · ${upstreamBasis}${Number.isFinite(activeForecast.availabilityLagDays) ? ` · độ trễ +${activeForecast.availabilityLagDays} ngày` : ''} · P90 Mỹ Tho ${num(activeForecast.p90Threshold)} mS/m${activeForecast.isHighVigilance ? ' · Cảnh giác cao' : ''}`;
-    $('mapForecastDisclaimer').textContent = `${FORECAST_SPATIAL_DISCLAIMER}. Quy đổi tham khảo g/L = 0.0064 × EC. Cống và ranh mặn Timeline tạm ẩn khi xem kịch bản.`;
+    $('mapForecastDisclaimer').textContent = `${FORECAST_SPATIAL_DISCLAIMER}. Bản đồ biểu thị mức cảnh báo theo EC; cống của Timeline tạm ẩn khi xem kịch bản dự báo.`;
   }
   function showOverlayError(error) {
     $('mapForecastStatus').hidden = false;
@@ -171,6 +172,11 @@ export function createObservations({ onForecast } = {}) {
     $('mapLegendPopover').hidden = !show;
     $('mapLegendToggle').setAttribute('aria-expanded', String(show));
   }
+  function showWarningKey(show) {
+    $('mapWarningContent').hidden = !show;
+    $('mapWarningToggle').setAttribute('aria-expanded', String(show));
+  }
+  $('mapWarningToggle').addEventListener('click', () => showWarningKey($('mapWarningContent').hidden));
   $('mapLegendToggle').addEventListener('click', () => showLegend($('mapLegendPopover').hidden));
   $('simulationThresholdToggle').addEventListener('click', () => showThresholds($('simulationThresholdPopover').hidden));
   $('simulationThresholdPreset').addEventListener('change', event => {
@@ -184,6 +190,9 @@ export function createObservations({ onForecast } = {}) {
     if (event.key === 'Escape' && !$('mapLegendPopover').hidden) {
       showLegend(false); $('mapLegendToggle').focus();
     }
+    if (event.key === 'Escape' && !$('mapWarningContent').hidden) {
+      showWarningKey(false); $('mapWarningToggle').focus();
+    }
   });
   document.addEventListener('click', event => {
     if (!event.target.closest('.simulation-hud')) showThresholds(false);
@@ -192,7 +201,6 @@ export function createObservations({ onForecast } = {}) {
   for (const [id, apply] of [
     ['simulationRiverToggle', value => map.setRiverParticles(value)],
     ['simulationWindToggle', value => map.setWindVisible(value)],
-    ['simulationGatesToggle', value => { $('showGates').checked = value; map.setGateVisible(value); }],
   ]) $(id).addEventListener('click', () => {
     const enabled = $(id).getAttribute('aria-pressed') !== 'true';
     $(id).setAttribute('aria-pressed', String(enabled));
@@ -253,7 +261,7 @@ export function createObservations({ onForecast } = {}) {
     $("siteWarning").textContent = "";
     $("openStationForecast").hidden = true;
     $("stationForecastNote").textContent = "";
-    $("mapCount").textContent = "0 điểm hiển thị";
+    $("mapCount").textContent = "0 trạm";
     $("retryObservations").disabled = true;
     $("dateFrom").value = "";
     $("dateTo").value = "";
@@ -369,14 +377,10 @@ export function createObservations({ onForecast } = {}) {
   });
   $("showUnconfirmed").addEventListener("change", () => {
     const count = map.setUnconfirmed($("showUnconfirmed").checked);
-    $("mapCount").textContent = `${count}/${state.collection.features.length} điểm hiển thị`;
+    $("mapCount").textContent = `${count}/${state.collection.features.length} trạm`;
     $("coordinateNotice").textContent = $("showUnconfirmed").checked ? "Điểm viền đứt: giả định WGS84 để xem tham khảo, CRS nguồn chưa xác nhận. Không dùng lớp này xác lập quan hệ thủy lực trạm–cống." : "Ranh giới từ tệp dự án, chưa xác minh phiên bản. Điểm có tọa độ chưa xác nhận đang ẩn.";
   });
   $("showBoundaries").addEventListener("change", () => map.setBoundaryVisible($("showBoundaries").checked));
-  $("showGates").addEventListener("change", () => {
-    $('simulationGatesToggle').setAttribute('aria-pressed', String($('showGates').checked));
-    map.setGateVisible($("showGates").checked);
-  });
   function renderStationComparison() {
     const scenario = ecComparison(), value = state.site?.latest_ec_mS_m;
     $("stationComparisonStatus").textContent = scenario && Number.isFinite(value)
@@ -442,7 +446,7 @@ export function createObservations({ onForecast } = {}) {
       return;
     }
     map.setUnconfirmed($("showUnconfirmed").checked);
-    $("mapCount").textContent = `${map.setStations(collection)}/${collection.features.length} điểm hiển thị`;
+    $("mapCount").textContent = `${map.setStations(collection)}/${collection.features.length} trạm`;
     refreshMap();
     const saved = sessionStorage.getItem("workspace.station");
     const preferred = collection.features.find(f => f.properties.site_code === "MRC_VN_019805")
