@@ -49,6 +49,7 @@ const catalog = { default_target_month: '2026-11', stations: [{ station: 'MyTho'
 const input = (station = 'MyTho', target = '2026-11', inputMonth = '2026-09') => ({ station, target_month: target, input_month: inputMonth, wind_unit: 'm/s', complete: true, rainfall_mm: 10, temperature_degC: 25, wind_source_units: 2 });
 function frozenEvaluation(overrides = {}) {
   return { station: 'MyTho', unit: 'mS/m', protocol_id: 'FROZEN_EC_WEATHER_ONLY_V1',
+    experiment: 'gap_2021_2023', ec_delay_days: 5,
     period: '2021-01..2023-12', frozen_ec_through: '2020-11-01', first_issue_date_local: '2020-12-06',
     items: [{ target_month: '2021-01-01', actual: 10, RandomForest: 12, FrozenPersistence: 9 }],
     methods: [{ key: 'RandomForest', label: 'RF khí tượng' }, { key: 'FrozenPersistence', label: 'EC khóa trước mất dữ liệu' }],
@@ -78,6 +79,29 @@ test('multivariate requests frozen-label evidence and renders baseline availabil
   assert.match(text, /RF khí tượng/);
   assert.doesNotMatch(text, /Persistence · EC mới nhất khả dụng/);
   assert.equal(ui.all.filter(row => row.tagName === 'circle').length, 3);
+});
+
+test('outage evidence separates hydrology remedies from the served weather model', async () => {
+  const env = environment();
+  const feature = createMultivariateForecast();
+  const loading = feature.load(); env.pending[0].respond(catalog); await flush();
+  const remedy_research = {
+    protocol_id: 'FROZEN_EC_REMEDY_RESEARCH_V1', station: 'MyTho', experiment: 'gap_2021_2023', ec_delay_days: 5,
+    deployment_ready: false,
+    methods: [{ key: 'WeatherOnly', label: 'Chỉ khí tượng' }, { key: 'WeatherHydrology', label: 'Thêm thủy văn' }],
+    metrics: { WeatherOnly: { mae_mS_m: 28, rmse_mS_m: 64, false_alerts_100: 2, missed_high_100: 2 },
+      WeatherHydrology: { mae_mS_m: 16, rmse_mS_m: 31, false_alerts_100: 1, missed_high_100: 1 } },
+  };
+  env.pending.find(row => row.url.includes('/evaluation')).respond(frozenEvaluation({
+    metrics: { RandomForest: { n: 36, mae_mS_m: 28, rmse_mS_m: 64 }, FrozenPersistence: { n: 36, mae_mS_m: 19, rmse_mS_m: 42 } },
+    remedy_research,
+  }));
+  env.pending.find(row => row.url.includes('/inputs')).respond(input()); await loading;
+  const text = env.get('multivariateForecastHost').textContent;
+  assert.match(text, /Không dùng riêng kết quả này để cảnh báo/);
+  assert.match(text, /Thêm thủy văn/);
+  assert.match(text, /chưa thay mô hình đang phục vụ/);
+  assert.match(text, /thiếu bản dự báo thời tiết lưu đúng ngày phát hành/);
 });
 
 test('changing outage experiment discards stale evaluation responses and rejects historical protocol', async () => {

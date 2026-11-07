@@ -77,6 +77,10 @@ def records(station, experiment=None, ec_delay_days=5):
     if any(int(n) != len(rows) for n in scores.n):
         raise ValueError('Frozen EC scores do not match prediction cohort')
     period = manifest['experiments'][experiment]
+    remedy_research = None
+    if key == 'MYTHO':
+        from backend.domain import ec_gap_remedies
+        remedy_research = ec_gap_remedies.summary(experiment, ec_delay_days)
     return dict(station=STATIONS[key][0], site_code=STATIONS[key][1], protocol_id=PROTOCOL,
         model_version='RF_FIXED_300_DEPTH8_LEAF3_SEED42_FROZEN', unit='mS/m',
         experiment=experiment, experiments=manifest['experiments'], ec_delay_days=ec_delay_days,
@@ -89,4 +93,5 @@ def records(station, experiment=None, ec_delay_days=5):
                  for r in scores.itertuples()},
         seasonal_naive=dict(available_months=int(rows.seasonal_naive_available.sum()), total_months=len(rows),
             note='SeasonalNaive trực tiếp chỉ khả dụng khi EC t−12 có trong tập EC đã khóa; không xếp hạng trên toàn kỳ.'),
-        freeze_rule=manifest['freeze_rule'], weather_scope=manifest['weather_scope'], limitations=manifest['limitations'])
+        freeze_rule=manifest['freeze_rule'], weather_scope=manifest['weather_scope'],
+        limitations=manifest['limitations'], remedy_research=remedy_research)

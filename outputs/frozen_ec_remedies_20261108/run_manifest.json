@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "protocol_id": "FROZEN_EC_REMEDY_RESEARCH_V1",
+  "station": "MYTHO",
+  "experiments": {
+    "gap_2019_2021": [
+      "2019-01-01",
+      "2021-12-01"
+    ],
+    "gap_2021_2023": [
+      "2021-01-01",
+      "2023-12-01"
+    ],
+    "gap_2022_2023": [
+      "2022-01-01",
+      "2023-12-01"
+    ]
+  },
+  "ec_delay_days": [
+    5,
+    35
+  ],
+  "unit": "mS/m",
+  "candidates": {
+    "WeatherOnly": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos"
+    ],
+    "WeatherHydrology": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2"
+    ],
+    "WeatherNeighborEC": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "mythuan_ec_asof",
+      "tanchau_ec_asof"
+    ],
+    "WeatherHydrologyNeighborEC": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2",
+      "mythuan_ec_asof",
+      "tanchau_ec_asof"
+    ]
+  },
+  "model_parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "random_state": 42
+  },
+  "target_rule": "My Tho EC withheld after the first issue; used only for scoring.",
+  "neighbor_rule": "My Thuan and Tan Chau are assumed to keep reporting; use only the latest EC available at each issue under the +5/+35 day delay.",
+  "hydro_rule": "Kratie discharge and Tan Chau manual stage use target t-2. Source publication vintage is unknown; complete months are assumed available after 5 days.",
+  "weather_rule": "Complete ERA5 target t-2 is assumed available after 5 days. No archived t-1 or t weather forecast vintage exists.",
+  "threshold_note": "100 mS/m is a diagnostic EC threshold, not an irrigation or gate standard.",
+  "limitations": [
+    "All three historical windows have been inspected; no blind test is claimed.",
+    "A neighbor EC outage would make the neighbor candidates unavailable.",
+    "Historical publication timestamps are assumed, not verified.",
+    "This analysis does not change deployed model weights or establish operational reliability."
+  ],
+  "sklearn_version": "1.9.1",
+  "source_sha256": {
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "data/external/multivariate_weather/manifest.json": "97898949f67329bc768f20214806d8f46d0062be11d3336dc334c68ad48110d8",
+    "data/external/mrc_kratie_discharge_20261029/014901_Discharge_Calculated daily discharge_22a8130e.csv": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+    "data/external/tien_manual_long_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "5d461321271099559d84e07d73c949171945ffc0e8fa32a813e722026cda72f8",
+    "data/external/tien_manual_2024_2026_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "f7ee1fb6fee877373fc341496eee8580502fe56e5e870f501252c0167140aab4",
+    "scripts/evaluate_frozen_ec_gap_remedies.py": "dbadaddb5f8ee6cd9cad9abd44fb8cf6f148683e3df7f9178f9fb355ec1851fa"
+  },
+  "output_sha256": {
+    "predictions.csv": "2009c3cd1329907dc213e47f88da8b83d39facaa29ddee44121a5cac3a4a972d",
+    "metrics.csv": "3129ad7188dc186d6fb0b508351053c56b3730f97fba502f8b0aaa0d9efccc30"
+  }
+}

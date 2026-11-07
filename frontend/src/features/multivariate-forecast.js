@@ -122,9 +122,11 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const evaluationStatus = node("p", "", "subtle");
   evaluationStatus.setAttribute("role", "status");
   const evaluationChart = node("div", undefined, "mv-evaluation-chart");
-  const evaluationLegend = node("p", "Thực đo giữ lại để chấm điểm: xanh đậm · Random Forest: cam · EC cuối cùng trước khi mất dữ liệu: xanh lam nét đứt.", "subtle");
+  const evaluationLegend = node("p", "Thực đo giữ lại để chấm điểm: xanh đậm · RF chỉ dùng khí tượng t−2 và tháng: cam · EC cuối cùng trước khi mất dữ liệu: xanh lam nét đứt.", "subtle");
   const evaluationMetrics = node("div", undefined, "mv-evaluation-metrics");
-  evaluation.append(evaluationSummary, labelFor('Giai đoạn mất EC giả lập', evaluationExperiment), labelFor('Giả định ngày khả dụng EC', evaluationDelay), evaluationStatus, evaluationChart, evaluationLegend, evaluationMetrics);
+  const evaluationGuidance = node("p", "", "mv-evaluation-guidance");
+  const evaluationRemedies = node("details", undefined, "mv-remedy-research");
+  evaluation.append(evaluationSummary, labelFor('Giai đoạn mất EC giả lập', evaluationExperiment), labelFor('Giả định ngày khả dụng EC', evaluationDelay), evaluationStatus, evaluationGuidance, evaluationChart, evaluationLegend, evaluationMetrics, evaluationRemedies);
   host.append(evaluation);
   const predictionHistory = createPredictionHistory(host, {
     onSaved(data) {
@@ -142,6 +144,9 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     evaluationStation = selected;
     evaluationChart.replaceChildren();
     evaluationMetrics.replaceChildren();
+    evaluationGuidance.textContent = "";
+    evaluationRemedies.replaceChildren();
+    evaluationRemedies.hidden = true;
     evaluationLegend.hidden = true;
     evaluationStatus.textContent = "Đang tải đánh giá của mô hình đa biến…";
     if (!selected) { evaluationStatus.textContent = "Chọn trạm để xem đánh giá."; return; }
@@ -152,11 +157,13 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       evaluationStatus.textContent = `Kiểm chứng hồi cứu ${data.period}: khóa EC đến ${data.frozen_ec_through?.slice(0, 7)} tại lần phát hành đầu ${data.first_issue_date_local}; mô hình giữ cố định, khí tượng t−2 cập nhật mỗi tháng. EC trong kỳ chỉ dùng để chấm sai số. Đây không phải dự báo toàn bộ giai đoạn từ một lần phát hành.`;
       const series = [
         { key: "actual", label: "EC thực đo", color: "#12675a" },
-        { key: "RandomForest", label: "Random Forest đa biến", color: "#c26728" },
+        { key: "RandomForest", label: "RF khí tượng t−2 và tháng", color: "#c26728" },
         { key: "FrozenPersistence", label: "EC cuối cùng trước khi mất dữ liệu", color: "#2676aa", dashed: true },
       ];
       const rows = data.items.filter(item => /^\d{4}-(0[1-9]|1[0-2])(?:-01)?$/.test(item.target_month || "")).sort((a, b) => a.target_month.localeCompare(b.target_month));
-      drawSeries(evaluationChart, series.map(item => ({ ...item, points: rows.map(row => ({ date: `${row.target_month.slice(0, 7)}-01`, value: row[item.key] })) })), { title: "EC thực đo và dự báo đa biến trên tập kiểm định", connected: true });
+      const worst = rows.filter(row => Number.isFinite(row.actual) && Number.isFinite(row.RandomForest))
+        .reduce((current, row) => !current || Math.abs(row.RandomForest - row.actual) > Math.abs(current.RandomForest - current.actual) ? row : current, null);
+      drawSeries(evaluationChart, series.map(item => ({ ...item, points: rows.map(row => ({ date: `${row.target_month.slice(0, 7)}-01`, value: row[item.key] })) })), { title: "EC thực đo và dự báo khí tượng trong kỳ thiếu EC", connected: true, monthTicks: true, highlightDate: worst?.target_month });
       evaluationLegend.hidden = false;
       const table = node("table"), head = node("thead"), header = node("tr"), body = node("tbody");
       for (const label of ["Mô hình", "MAE (mS/m)", "RMSE (mS/m)", "Số tháng (n)"]) header.append(node("th", label));
@@ -168,6 +175,31 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       }
       table.append(head, body);
       evaluationMetrics.append(table, node('p', `SeasonalNaive dùng EC thực đo t−12 chỉ khả dụng ${data.seasonal_naive?.available_months ?? '—'}/${data.seasonal_naive?.total_months ?? '—'} tháng, nên không xếp hạng toàn kỳ. Đối chứng lặp mùa trong bảng chỉ lặp EC đã có trước mốc khóa, không nhận EC mới.`, 'subtle'), node("p", "Sai số nhỏ hơn là tốt hơn. So sánh với RF chỉ dùng chu kỳ tháng để kiểm tra đóng góp của khí tượng. Các kỳ đã từng được xem xét, đây là kiểm chứng hồi cứu; chưa có EC thực đo 2024–2026 để xác nhận sai số giai đoạn đó.", "subtle"));
+      const rf = data.metrics?.RandomForest, frozen = data.metrics?.FrozenPersistence;
+      if (rf && frozen) evaluationGuidance.textContent = rf.rmse_mS_m > frozen.rmse_mS_m
+        ? `Trong kỳ này, mô hình chỉ dùng khí tượng có RMSE ${num(rf.rmse_mS_m)} mS/m, cao hơn cách giữ EC cuối cùng (${num(frozen.rmse_mS_m)} mS/m). Không dùng riêng kết quả này để cảnh báo khi trạm mất EC lâu ngày.`
+        : `Trong kỳ này, mô hình chỉ dùng khí tượng có RMSE ${num(rf.rmse_mS_m)} mS/m. Vẫn cần kiểm tra riêng các đỉnh EC và đối chiếu trạm lân cận trước khi dùng để cảnh báo.`;
+      if (worst) evaluationGuidance.textContent += ` Lệch nhiều nhất tại ${worst.target_month.slice(0, 7)}: RF ${num(worst.RandomForest)}, EC nguồn ${num(worst.actual)} mS/m.`;
+      const remedy = data.remedy_research;
+      if (remedy?.protocol_id === 'FROZEN_EC_REMEDY_RESEARCH_V1' && remedy.station === selected && remedy.experiment === data.experiment && Number(remedy.ec_delay_days) === Number(data.ec_delay_days) && remedy.deployment_ready === false) {
+        evaluationRemedies.hidden = false;
+        evaluationRemedies.append(node('summary', 'Thử thêm dữ liệu thủy văn và EC trạm lân cận'));
+        evaluationRemedies.append(node('p', 'Cùng kỳ mất EC giả lập tại Mỹ Tho. Mô hình được huấn luyện một lần trước kỳ mất tín hiệu; chỉ dùng dữ liệu trạm khác đã giả định khả dụng vào ngày phát hành. Đây là thử nghiệm nghiên cứu, chưa thay mô hình đang phục vụ.', 'subtle'));
+        const comparison = node('table'), comparisonHead = node('thead'), comparisonHeader = node('tr'), comparisonBody = node('tbody');
+        for (const label of ['Đầu vào mô hình', 'MAE', 'RMSE', 'Báo EC cao giả ≥100', 'Bỏ sót EC ≥100']) comparisonHeader.append(node('th', label));
+        comparisonHead.append(comparisonHeader);
+        for (const method of remedy.methods || []) {
+          const metric = remedy.metrics?.[method.key];
+          if (!metric) continue;
+          const row = node('tr');
+          for (const value of [method.label, `${num(metric.mae_mS_m)} mS/m`, `${num(metric.rmse_mS_m)} mS/m`, metric.false_alerts_100, metric.missed_high_100]) row.append(node('td', String(value)));
+          comparisonBody.append(row);
+        }
+        comparison.append(comparisonHead, comparisonBody);
+        const comparisonWrap = node('div', undefined, 'table-wrap');
+        comparisonWrap.append(comparison);
+        evaluationRemedies.append(comparisonWrap, node('p', '100 mS/m chỉ là mốc phân tích lỗi, không phải chuẩn tưới hay lệnh cống. Khí tượng t−1 hoặc tháng hiện tại chưa được chấm vì thiếu bản dự báo thời tiết lưu đúng ngày phát hành. Các kỳ lịch sử này đã được xem trước nên chưa chứng minh độ tin cậy vận hành.', 'subtle'));
+      }
     } catch (error) {
       if (req.isCurrent() && station.value === selected) evaluationStatus.textContent = error.message;
     }

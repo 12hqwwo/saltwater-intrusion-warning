@@ -2,7 +2,7 @@
   "schema_version": 1,
   "protocol_id": "FROZEN_EC_WEATHER_ONLY_V1",
   "run_manifest_path": "outputs/frozen_ec_gap_20261104/run_manifest.json",
-  "run_manifest_sha256": "b9491932729455963ad794c0184809245fb9212669bca98d079c9b741e17dd83",
+  "run_manifest_sha256": "c2221eb0a9a951655083e2e0d469a3966aa06099c3320d3409efdb2514ecbd72",
   "primary_experiment": "gap_2021_2023",
   "primary_ec_delay_days": 5,
   "deployed_model_sha256": {

@@ -66,15 +66,15 @@
   "deployment_archive_sha256": "1fd4f80f6f06d39e4f14fa17157f29260bcf4bf95985369def7a03f29b2cb4d7",
   "input_sha256": {
     "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
-    "scripts/evaluate_frozen_ec_gap.py": "85d6c85f33976714dda96541b10256a0549353b295c6a79c11247cf4541022b6",
-    "scripts/train_multivariate_ec.py": "7ade5ce70bf3c5aa4ba4115a81c31c6b22d69d1fea5366f602bdb6de7ba5fe4e",
+    "scripts/evaluate_frozen_ec_gap.py": "d37bdfc85910bda1f29a73c64dbabc7e8c25d9381e91b7a6c583cab4811cedfa",
+    "scripts/train_multivariate_ec.py": "a2c85da74923c56e46a9b9290743f2e038fa633b6c0feeedf2e73d6bc4609255",
     "scripts/backtest_asof_ec.py": "a30e212a9eb52679979ffb2988dc8c75e9bbad0b066130b737d17c13753fc5f7",
     "backend/domain/multivariate_ec.py": "dea6bc59764cfcf15dbd7b88cf26496f7bcb5e8a882d81628d77553557e627b3",
-    "scripts/evaluate_mythuan_three_station.py": "d79fe2c1c0753a712635f201212dca6dbfeb25c4441f2211aa26b117b40f48ac",
-    "scripts/run_future_forecast_2024_2026.py": "1ec085c85a65be159bfd2d767e89cc152700d36ba3293f8b481e68d7e0a89d01",
-    "backend/repositories/multivariate_inputs.py": "533cfce55fea6c5daf57d4c178eb4c4db3338e773e1c9b6519b7488711112103",
-    "backend/domain/river_interpolation.py": "47930d97656a81c971f6f6714bc21cb42daf20a388bae5a52c44905298955447",
-    "data/external/multivariate_weather/manifest.json": "da9b80d2c54d52a427705d326160b1bacce17e94874ab6e5a757f3e75fd48443",
+    "scripts/evaluate_mythuan_three_station.py": "3828e7ebd2ede041223ddce810ce31390528239369cad7fd66dc872d817f7303",
+    "scripts/run_future_forecast_2024_2026.py": "82874626bfdd922179002c9077f4207f2e41c68066531fd525cde7a8cbc679d1",
+    "backend/repositories/multivariate_inputs.py": "0b9108a2f455d2e2e031151d18151abd4ae9ec9ee98330504a15af4c21dda8f4",
+    "backend/domain/river_interpolation.py": "c5f78437493b86f4b92cbe65899e6f29ae16fddee2703bcc330c3c359020ff3d",
+    "data/external/multivariate_weather/manifest.json": "97898949f67329bc768f20214806d8f46d0062be11d3336dc334c68ad48110d8",
     "data/external/mythuan_weather_20261104/manifest.json": "a403e0c9e51d03375926344eac6b40d9afa43f000f84cd36aa08ac8021f9570a"
   },
   "weather_source_sha256": {
@@ -87,6 +87,7 @@
     "data/external/multivariate_weather/era5_MyTho_2015-01-01_2019-12-31.json": "70954940bece8bdbbf545ce3b35ccf72eed62ee57a2593505fc4bed08876e515",
     "data/external/multivariate_weather/era5_MyTho_2020-01-01_2024-12-31.json": "44ae7303979eae69a11a4c2dce51391970cb56fe24d8e6266b7f51489bac26b7",
     "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+    "data/external/multivariate_weather/era5_MyTho_2026-10-01_2026-10-31.json": "3af8bea9f0d8139cd8736f88621b253362872bd96246edec9ee0a4422ea4d269",
     "data/external/mythuan_weather_20261104/era5_MyThuan_1985-01-01_1989-12-31.json": "cbd2f413ec94dd38b547c03b97fbe0cafc68a796798b1c21893e64054a355c89",
     "data/external/mythuan_weather_20261104/era5_MyThuan_1990-01-01_1994-12-31.json": "0fd701cf4d740b6811b861a50c1a35e9a20200a6a10b01da88c7b758a3f0574d",
     "data/external/mythuan_weather_20261104/era5_MyThuan_1995-01-01_1999-12-31.json": "9d3cf73ecaeeff3746f5656a5204e796ca80b6382dcfbe212913c70ffad3951f",
@@ -96,6 +97,7 @@
     "data/external/mythuan_weather_20261104/era5_MyThuan_2015-01-01_2019-12-31.json": "1ac290c43f162ec81f2a1c5bfe437501d4e3ca1901222421da2c57b8e732f600",
     "data/external/mythuan_weather_20261104/era5_MyThuan_2020-01-01_2024-12-31.json": "c9075eeccc9f38ff4ff8f22e3d205e6fcd0eb75cd22e830a1a4794fb93e559cc",
     "data/external/mythuan_weather_20261104/era5_MyThuan_2025-01-01_2026-09-30.json": "ce4821edfc4374c5ffa28aabf1c41bbacec196fa9ee2913bcc13055072385e59",
+    "data/external/multivariate_weather/era5_MyThuan_2026-10-01_2026-10-31.json": "182082351ebc3c15fcdd082adede077e54e4c23cfd5963531e000b059198c684",
     "data/external/multivariate_weather/era5_TanChau_1985-01-01_1989-12-31.json": "b6eaef2bbaa3985db3e2f89f1f5ac682738ab37d0e0c7aedb8ca803219f46657",
     "data/external/multivariate_weather/era5_TanChau_1990-01-01_1994-12-31.json": "8eefee5b5e63ea116c76da0c267a8043d449958db2abddaa4d3c1548f74a3742",
     "data/external/multivariate_weather/era5_TanChau_1995-01-01_1999-12-31.json": "1e0927dbb089cc7a47c54af64656d179e07c4952a98500047599e0acb29126aa",
@@ -104,13 +106,14 @@
     "data/external/multivariate_weather/era5_TanChau_2010-01-01_2014-12-31.json": "4a26c8c8f644bb978daa5c01a31ef03fd323bd9f79fbb3993b87415092e53a32",
     "data/external/multivariate_weather/era5_TanChau_2015-01-01_2019-12-31.json": "abc00a9db129ea38e4c720ce8a04eb96d18600a10e6be18174d561b17e11ccaf",
     "data/external/multivariate_weather/era5_TanChau_2020-01-01_2024-12-31.json": "9058526e3833ed8ea53174c4e2ffa3f3edd2e894a36dea815f82e6e0fc56084f",
-    "data/external/multivariate_weather/era5_TanChau_2025-01-01_2026-09-30.json": "f87718b0b6d4a9acbae1ba4bd4477bacc87549905ff70b7f7fc096ebbc036fa7"
+    "data/external/multivariate_weather/era5_TanChau_2025-01-01_2026-09-30.json": "f87718b0b6d4a9acbae1ba4bd4477bacc87549905ff70b7f7fc096ebbc036fa7",
+    "data/external/multivariate_weather/era5_TanChau_2026-10-01_2026-10-31.json": "9e634f7328e1e06ebb806e7eb39af8708a601d40a13dec0d140cf91eb14c608e"
   },
   "output_sha256": {
     "baseline_availability.csv": "734349a967680806e4c090b8faf9049a859b2e16b5c2ce532e4b2ef0f55793bd",
-    "interpolation_metrics.csv": "4b8e0198d1c12b4bfd15ff732638f665e998e974cdc7a2f06b64606bc05edf6a",
-    "interpolation_predictions.csv": "c15948be2f045dfda0be1659cb74365faf22e71dc00b9683603f83c6447de02a",
-    "metrics.csv": "18c067de93db001891ff032e5fa509506a233f6fb113ae252e7f8a17cd5d4cb1",
-    "predictions.csv": "76f023303103a35e5bab96b48feef8adf48e55138e62c70b37ed0822f5b07b1f"
+    "interpolation_metrics.csv": "f41dee57cc9ffb98481a17b22573688664a9048f87464cf0472f754748f99831",
+    "interpolation_predictions.csv": "da98ca7ffec669b08e199da49b5c4df7f6921210e6641d2133cc637bbd9420d4",
+    "metrics.csv": "66345b56e93dd1b71bb334485a74282ebda82e3d44e33eff4dc0d21b9e140441",
+    "predictions.csv": "a8ef4796fcf126f6deaf0df7012d147dc6d6bc1ece90ad8c370c25df09c9792c"
   }
 }
