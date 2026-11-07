@@ -1,0 +1,36 @@
+{
+  "sample_days": {
+    "total": 463,
+    "in_13_17": 459,
+    "on_15": 428,
+    "outside_13_17": 4,
+    "all_midnight": true
+  },
+  "march_2020": {
+    "experiment": "gap_2019_2021",
+    "ec_delay_days": 5,
+    "target_month": "2020-03-01",
+    "actual_mS_m": 692.0,
+    "reference_ec_mS_m": 213.66521245643253,
+    "tree_p90_mS_m": 360.97,
+    "tree_p95_mS_m": 425.92200000000014,
+    "tree_max_mS_m": 691.5,
+    "baseline_mS_m": 213.66521245643253,
+    "fes_daytime_max_13_17_cm_mS_m": 213.00426531653537,
+    "fes_daytime_mean_13_17_cm_mS_m": 229.85890366053115,
+    "fes_first_half_max_cm_mS_m": 212.80381721648723,
+    "fes_early_range_05_12_cm_mS_m": 211.25732614348618
+  },
+  "source_root": "D:\\Study\\TLCN",
+  "note": "FES2022b is retrospective astronomical offshore tide; tree percentiles are not calibrated prediction intervals.",
+  "source_sha256": {
+    "data/raw/ec/mrc/Conductivity.Water Quality@VN_019805_[My Tho].csv": "2cee9c9c1cb8e29e67ea5379391fca507419385cd4fac990edf5119634b65997",
+    "data/raw/tide/fes2022b/collection_status.json": "bad9272dd438f2b1c771d09828dc9f94bf9267392fd6dcf4c92b6019fa7241b8",
+    "config/fes2022b_full.yaml": "992372230027f2e53b34f840b67d6587fbe29963628d6105a19b07e2c6823479",
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "outputs/ec_fes_day15_fixed_20261030/fes_south_feature_days13_17_1985_2023.csv": "1cdec13c917f0a03f1d2c5160cb156fef5f24bac4a38a32d929ae8508c5f74b5",
+    "outputs/frozen_ec_remedies_20261108/predictions.csv": "2009c3cd1329907dc213e47f88da8b83d39facaa29ddee44121a5cac3a4a972d",
+    "scripts/evaluate_frozen_ec_gap_remedies.py": "ac5a2e54708e26382ce5a210f48b6c064456c205731058d05643a7c723410c60",
+    "scripts/train_multivariate_ec.py": "a2c85da74923c56e46a9b9290743f2e038fa633b6c0feeedf2e73d6bc4609255"
+  }
+}
