@@ -92,7 +92,7 @@ test('outage evidence separates hydrology remedies from the served weather model
     hydrology_series: [{ target_month: '2021-01-01', predicted_ec_mS_m: 11 }],
     methods: [{ key: 'WeatherOnly', label: 'Chỉ khí tượng' }, { key: 'WeatherHydrology', label: 'Thêm thủy văn' }],
     metrics: { WeatherOnly: { mae_mS_m: 28, rmse_mS_m: 64, false_alerts_100: 2, missed_high_100: 2 },
-      WeatherHydrology: { mae_mS_m: 16, rmse_mS_m: 31, false_alerts_100: 1, missed_high_100: 1 } },
+      WeatherHydrology: { n: 1, mae_mS_m: 16, rmse_mS_m: 31, false_alerts_100: 1, missed_high_100: 1 } },
   };
   const followup_research = {
     protocol_id: 'FROZEN_EC_FOLLOWUP_RESEARCH_V1', station: 'MyTho', experiment: 'gap_2021_2023', ec_delay_days: 5,
@@ -108,6 +108,8 @@ test('outage evidence separates hydrology remedies from the served weather model
   env.pending.find(row => row.url.includes('/inputs')).respond(input()); await loading;
   const text = env.get('multivariateForecastHost').textContent;
   assert.match(text, /mô hình chính thêm thủy văn/);
+  const ranking = descendants(env.get('multivariateForecastHost')).find(row => row.className === 'mv-evaluation-metrics');
+  assert.match(ranking.children[0].children[1].children[0].textContent, /RF khí tượng \+ thủy văn \(mô hình chính\)/);
   assert.match(text, /RF thủy văn 11, EC nguồn 10 mS\/m/);
   assert.match(text, /Thêm thủy văn/);
   assert.match(text, /Phương án thủy văn hiện là mô hình chính/);

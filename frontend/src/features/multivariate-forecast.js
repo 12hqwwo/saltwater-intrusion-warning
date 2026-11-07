@@ -181,6 +181,13 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       const table = node("table"), head = node("thead"), header = node("tr"), body = node("tbody");
       for (const label of ["Mô hình", "MAE (mS/m)", "RMSE (mS/m)", "Số tháng (n)"]) header.append(node("th", label));
       head.append(header);
+      const hydrologyMetric = hasHydrology ? remedy.metrics?.WeatherHydrology : null;
+      if (hydrologyMetric && Number(hydrologyMetric.n) === rows.length &&
+          Number.isFinite(hydrologyMetric.mae_mS_m) && Number.isFinite(hydrologyMetric.rmse_mS_m)) {
+        const row = node("tr");
+        for (const value of ["RF khí tượng + thủy văn (mô hình chính)", num(hydrologyMetric.mae_mS_m), num(hydrologyMetric.rmse_mS_m), hydrologyMetric.n]) row.append(node("td", String(value)));
+        body.append(row);
+      }
       for (const { key, label } of data.methods || []) {
         const metric = data.metrics?.[key] || {}, row = node("tr");
         for (const value of [label, num(metric.mae_mS_m), num(metric.rmse_mS_m), metric.n ?? "—"]) row.append(node("td", String(value)));
@@ -189,7 +196,6 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       table.append(head, body);
       evaluationMetrics.append(table, node('p', `SeasonalNaive dùng EC thực đo t−12 chỉ khả dụng ${data.seasonal_naive?.available_months ?? '—'}/${data.seasonal_naive?.total_months ?? '—'} tháng, nên không xếp hạng toàn kỳ. Đối chứng lặp mùa trong bảng chỉ lặp EC đã có trước mốc khóa, không nhận EC mới.`, 'subtle'), node("p", "Sai số nhỏ hơn là tốt hơn. So sánh với RF chỉ dùng chu kỳ tháng để kiểm tra đóng góp của khí tượng. Các kỳ đã từng được xem xét, đây là kiểm chứng hồi cứu; chưa có EC thực đo 2024–2026 để xác nhận sai số giai đoạn đó.", "subtle"));
       const rf = data.metrics?.RandomForest, frozen = data.metrics?.FrozenPersistence;
-      const hydrologyMetric = hasHydrology ? remedy.metrics?.WeatherHydrology : null;
       if (hydrologyMetric && rf && frozen) evaluationGuidance.textContent = `RMSE hồi cứu: mô hình chính thêm thủy văn ${num(hydrologyMetric.rmse_mS_m)}, mô hình khí tượng cũ ${num(rf.rmse_mS_m)}, giữ EC cuối cùng ${num(frozen.rmse_mS_m)} mS/m. ${hydrologyMetric.rmse_mS_m > frozen.rmse_mS_m ? 'Trong kỳ này, cách giữ EC cuối cùng có sai số thấp hơn. ' : ''}Các điểm số này chưa xác nhận độ tin cậy cho tháng tương lai.`;
       else if (rf && frozen) evaluationGuidance.textContent = rf.rmse_mS_m > frozen.rmse_mS_m
         ? `Trong kỳ này, mô hình chỉ dùng khí tượng có RMSE ${num(rf.rmse_mS_m)} mS/m, cao hơn cách giữ EC cuối cùng (${num(frozen.rmse_mS_m)} mS/m). Không dùng riêng kết quả này để cảnh báo khi trạm mất EC lâu ngày.`
