@@ -25,6 +25,11 @@ import { ecWarningLevel, splitGatedWaterways } from './gated-waterways.js';
 // Zero tangents keep every sampled point on its supplied vertex-to-vertex span.
 // The ribbon, canal display and particles must follow the same constrained path.
 const riverInterpolation = { tension: 0, samplesPerSpan: 12 };
+const primaryStationLabels = new globalThis.Map([
+  ['MRC_VN_019803', 'Tân Châu'],
+  ['MRC_VN_019804', 'Mỹ Thuận'],
+  ['MRC_VN_019805', 'Mỹ Tho'],
+]);
 
 // A single cached SVG label supplies rounded glass, a white keyline and a soft shadow.
 function glassLabel(text, zIndex = 25) {
@@ -39,6 +44,7 @@ function glassLabel(text, zIndex = 25) {
 export function createResearchMap(target, { onSelect, onTileError }) {
   const token = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const warningColors = { safe: token('--ec-safe'), caution: token('--ec-caution'), risk: token('--ec-risk'), unknown: token('--ec-unknown') };
+  const gateWarningColor = gate => warningColors[ecWarningLevel(gate?.simulated_outside_ec_mS_m, frame?.thresholds)];
   const source = new VectorSource(), boundarySource = new VectorSource(), gateSource = new VectorSource(), candidateSource = new VectorSource(), forecastSource = new VectorSource(), inspectSource = new VectorSource();
   const tileSource = theme => theme === 'satellite' ? new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', crossOrigin: 'anonymous', attributions: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community' }) : new OSM();
   const base = new TileLayer({ source: tileSource(), className: 'simulation-base-tiles' });
@@ -62,18 +68,17 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   const riverLayer = new VectorLayer({ source: riverSource, className: 'river-water-core', opacity: .78, updateWhileAnimating: true, updateWhileInteracting: true, style: (f, resolution) => ribbonStyle(f, resolution, 1) });
   const canalLayer = new VectorLayer({ source: canalSource, style: feature => {
     const inland = feature.get('branch_side') === 'beyond_gate';
+    if (inland) return null;
     const gate = frame?.gates?.find(item => item.gate_code === feature.get('gate_code'));
     const active = selectedGate === feature.get('gate_code');
-    const color = inland ? warningColors.unknown : warningColors[ecWarningLevel(gate?.simulated_outside_ec_mS_m, frame?.thresholds)];
-    return new Style({ stroke: new Stroke({ color, width: inland ? active ? 4 : 2.5 : active ? 7 : 4.5, lineDash: inland ? [7, 6] : undefined, lineCap: 'round', lineJoin: 'round' }) });
+    const color = gateWarningColor(gate);
+    return new Style({ stroke: new Stroke({ color, width: active ? 5 : 2.5, lineCap: 'round', lineJoin: 'round' }) });
   } });
   const simulationGates = new VectorLayer({ source: simulationGateSource, style: f => {
-    const color = advisoryColor(f.get('gate'));
-    const active = [selectedGate, hoveredGate].includes(f.get('gate').gate_code);
-    const radius = active ? 9 : 5.5;
-    return [new Style({ image: new Circle({ radius: radius + 4, fill: new Fill({ color: 'rgba(15,23,42,.08)' }) }), zIndex: active ? 22 : 18 }),
-      new Style({ image: new Circle({ radius: radius + 2, fill: new Fill({ color: 'rgba(15,23,42,.17)' }) }), zIndex: active ? 23 : 19 }),
-      new Style({ image: new Circle({ radius, fill: new Fill({ color }), stroke: new Stroke({ color: '#ffffff', width: 2 }) }), zIndex: active ? 24 : 20 })];
+    const gate = f.get('gate');
+    const active = [selectedGate, hoveredGate].includes(gate.gate_code);
+    const radius = active ? 7 : 4.5;
+    return new Style({ image: new Circle({ radius, fill: new Fill({ color: gateWarningColor(gate) }), stroke: new Stroke({ color: '#ffffff', width: active ? 2 : 1.5 }) }), zIndex: active ? 24 : 20 });
   } });
   const isoStyles = new globalThis.Map();
   const isoLayer = new VectorLayer({ source: isoSource, declutter: true, style: feature => {
@@ -88,8 +93,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   const stations = new VectorLayer({ source, declutter: true, style(f) {
     const comparison = ecComparison(), ec = f.get('latest_ec_mS_m');
     const exceeds = comparison && Number.isFinite(ec) ? ec >= comparison.threshold : null;
-    const stationName = `${f.get('site_code')} ${f.get('site_name')}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/gi, '').toLowerCase();
-    const stationLabel = stationName.includes('tanchau') ? 'Tân Châu' : stationName.includes('mythuan') ? 'Mỹ Thuận' : stationName.includes('mytho') ? 'Mỹ Tho' : f.get('site_name');
+    const stationLabel = primaryStationLabels.get(f.get('site_code')) || f.get('site_name');
     const compactWater = displayUnit === 'salinity' && Number.isFinite(ec)
       ? `${(ec * 0.0064).toLocaleString('vi-VN', { maximumFractionDigits: 3 })} g/L ước tính`
       : formatWater(ec);
@@ -97,14 +101,14 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const key = `${f.get('site_code')}:${f.get('site_code') === selected}:${f.get('assumed_crs')}:${exceeds}:${ec}:${sampleDate}:${displayUnit}`;
     if (!cache.has(key)) {
       const active = f.get('site_code') === selected;
-      const color = exceeds === true ? '#c44d39' : exceeds === false ? '#087f78' : f.get('assumed_crs') ? '#b77a23' : '#097c78';
+      const color = exceeds === true ? '#c44d39' : exceeds === false ? '#087f78' : f.get('assumed_crs') ? '#647985' : '#097c78';
       cache.set(key, [new Style({
-        image: new Circle({ radius: active ? 9 : 6, fill: new Fill({ color }), stroke: new Stroke({ color: '#fff', width: 2, lineDash: f.get('assumed_crs') ? [3, 2] : undefined }) }), zIndex: active ? 24 : 21,
-      }), glassLabel(`${stationLabel} · Mẫu ${sampleDate}: ${compactWater}`, active ? 28 : 26)]);
+        image: new Circle({ radius: active ? 9 : primaryStationLabels.has(f.get('site_code')) ? 6 : 5, fill: new Fill({ color }), stroke: new Stroke({ color: '#fff', width: active ? 2 : 1.5, lineDash: f.get('assumed_crs') ? [3, 2] : undefined }) }), zIndex: active ? 24 : 21,
+      }), ...(primaryStationLabels.has(f.get('site_code')) ? [glassLabel(`${stationLabel} · Mẫu ${sampleDate}: ${compactWater}`, active ? 28 : 26)] : [])]);
     }
     return cache.get(key);
   } });
-  const gates = new VectorLayer({ source: gateSource, style: new Style({ image: new Circle({ radius: 5.5, fill: new Fill({ color: '#7560a7' }), stroke: new Stroke({ color: '#fff', width: 2 }) }) }) });
+  const gates = new VectorLayer({ source: gateSource, visible: false, style: new Style({ image: new Circle({ radius: 4.5, fill: new Fill({ color: warningColors.unknown }), stroke: new Stroke({ color: '#fff', width: 1.5 }) }) }) });
   const candidates = new VectorLayer({ source: candidateSource, style: new Style({ stroke: new Stroke({ color: '#7560a7', width: 2, lineDash: [6, 5] }) }) });
   const inspection = new VectorLayer({ source: inspectSource, style: new Style({
     image: new Circle({ radius: 7, fill: new Fill({ color: '#0e7490' }), stroke: new Stroke({ color: '#fff', width: 2 }) }),
@@ -172,6 +176,11 @@ export function createResearchMap(target, { onSelect, onTileError }) {
       const inland = branch.get('branch_side') === 'beyond_gate';
       riverTooltip.hidden = false;
       riverTooltip.textContent = `${branch.get('name') || 'Kênh có cống'} · ${inland ? 'Sau cống: chưa có EC trong kênh' : gate ? `Từ sông tới cống: ${formatWater(gate.simulated_outside_ec_mS_m, displayUnit)} · ${gate.advisory_label_vi || gate.advisory_label || 'Mức cảnh báo theo ngưỡng EC'}` : 'Chưa có EC mô phỏng cho tháng này'}`;
+    }
+    if (gate) {
+      const item = gate.get('gate');
+      riverTooltip.hidden = false;
+      riverTooltip.textContent = `${item.gate_name || item.gate_code} · EC mô phỏng ngoài cống ${frame?.year_month || ''}: ${formatWater(item.simulated_outside_ec_mS_m, displayUnit)} · ${item.advisory_label_vi || item.advisory_label || 'Mức cảnh báo EC chưa xác định'}`;
     }
     const station = map.forEachFeatureAtPixel(event.pixel, feature => feature, { layerFilter: layer => layer === stations, hitTolerance: 14 });
     if (station) {
@@ -269,7 +278,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     add('p', `${gate.gate_code} · ${gate.waterway_name || gate.waterway || gate.river_name || linkedWaterways.join(', ') || 'Chưa xác minh tên thủy vực'}`);
     add('p', `Lý trình ${Number(gate.chainage_km).toFixed(1)} km · Cách trục sông ${Number(gate.distance_to_axis_km).toFixed(2)} km`);
     add('p', `Từ sông tới cống · tháng ${frame.year_month}: ${formatWater(gate.simulated_outside_ec_mS_m, displayUnit)}`);
-    if (gate.canal_ids?.length) add('p', 'Tuyến màu từ sông tới cống dùng EC ngoài cống. Đoạn sau cống là nét đứt vì chưa có EC nội kênh.');
+    if (gate.canal_ids?.length) add('p', 'Tuyến màu chỉ kéo từ sông tới cống và dùng EC mô phỏng ngoài cống. Đoạn sau cống không tô màu vì chưa có EC nội kênh.');
     const advisory = add('p', gate.advisory_label_vi || gate.advisory_label || gate.advisory_code || gate.simulated_gate_state, 'simulation-advisory'); advisory.style.color = advisoryColor(gate);
     add('p', 'Giá trị EC được nội suy theo kịch bản ngoài cống; chưa có số đo trong kênh sau cống. Mức cảnh báo dựa trên EC, không suy ra trạng thái đóng hoặc mở thực tế.');
   }
@@ -323,6 +332,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     riverSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features: ribbon }, options));
     particles.setFrame(frame,smoothed.segments);
     for (const gate of frame?.gates || []) {
+      if (!gate.canal_ids?.length) continue;
       const coordinates = gate.coordinates || gate.geometry?.coordinates;
       if (coordinates) simulationGateSource.addFeature(new Feature({ geometry: new Point(fromLonLat(coordinates)), gate }));
     }
@@ -364,7 +374,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const context = getVectorContext(event), time = event.frameState.time / 1000;
     const activeGates = simulationGates.getVisible() ? simulationGateSource.getFeatures().filter(feature => [selectedGate, hoveredGate].includes(feature.get('gate').gate_code)) : [];
     for (const feature of [...activeGates, ...isoSource.getFeatures()]) {
-      const color = feature.get('gate') ? advisoryColor(feature.get('gate')) : '#fbbf24';
+      const color = feature.get('gate') ? gateWarningColor(feature.get('gate')) : '#fbbf24';
       context.setStyle(new Style({ image: new Circle({ radius: 10 + (time % 1.8) * 4, stroke: new Stroke({ color: `${color}${Math.round((1 - (time % 1.8) / 1.8) * 160).toString(16).padStart(2, '0')}`, width: 1.5 }) }) })); context.drawGeometry(feature.getGeometry());
     }
   });
@@ -390,6 +400,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     setBoundaries(value) { boundarySource.clear(); boundarySource.addFeatures(formatter.readFeatures(value, options)); },
     setBoundaryVisible(value) { boundaries.setVisible(value); },
     setGateVisible(value) { gates.setVisible(value); candidates.setVisible(value); simulationGates.setVisible(value); if (!value) { clearGateHover(); selectSimulationGate(null,false); } },
+    setMappedGateVisible(value) { simulationGates.setVisible(value); if (!value) { clearGateHover(); selectSimulationGate(null, false); } },
     refreshComparison() { cache.clear(); stations.changed(); },
     setForecast(value) { forecastResult = validPrediction(value) ? value : null; return updateForecast(); },
     setCandidates(gate, items = []) {

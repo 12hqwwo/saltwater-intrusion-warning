@@ -31,6 +31,7 @@ export function createObservations({ onForecast } = {}) {
     $("tileError").hidden = false;
   } });
   map.setGateVisible(false);
+  map.setMappedGateVisible(true);
   const timeline = createTimelineScrubber();
   const profile = createRiverProfile($('simulationRiverProfile'));
   let activeForecast = null, baselineMonth = null;
@@ -393,7 +394,7 @@ export function createObservations({ onForecast } = {}) {
     $("ecComparisonPurpose").value = value?.purpose ?? "";
     $("ecComparisonReference").value = value?.reference ?? "";
     $("ecComparisonStatus").textContent = value ? `${value.purpose} · ${num(value.threshold)} mS/m · ${value.reference}. Đây là đối chiếu kịch bản; chưa xác lập mức an toàn cho cây trồng hay cấp nước.` : "Chưa áp dụng ngưỡng. Điền giá trị và nguồn để đối chiếu.";
-    $("mapComparisonLegend").textContent = value ? `Đỏ: mẫu mới nhất đạt / vượt ${num(value.threshold)} mS/m · Xanh: thấp hơn ngưỡng · Viền đứt: tọa độ tham khảo.` : "Màu điểm thể hiện nguồn tọa độ. Mở đối chiếu nâng cao để so sánh EC.";
+    $("mapComparisonLegend").textContent = value ? `Điểm trạm đỏ: mẫu mới nhất đạt / vượt ${num(value.threshold)} mS/m · Xanh: thấp hơn ngưỡng · Viền đứt: tọa độ tham khảo. Màu chấm cống theo ngưỡng EC mô phỏng riêng.` : "Màu điểm trạm thể hiện nguồn tọa độ. Mở đối chiếu nâng cao để so sánh EC; màu chấm cống theo mức cảnh báo EC mô phỏng.";
     map.refreshComparison();
     renderStationComparison();
     if (state.site && !state.filterDirty) renderObservations();

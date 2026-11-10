@@ -1,0 +1,294 @@
+% !TEX program = xelatex
+\documentclass[12pt,a4paper,oneside]{report}
+\usepackage{fontspec}
+\IfFontExistsTF{Noto Serif}{\setmainfont{Noto Serif}}{\setmainfont{Times New Roman}}
+\usepackage{hyperref}
+\usepackage{polyglossia}
+\setdefaultlanguage{vietnamese}
+\usepackage[a4paper,margin=2.35cm,headheight=16pt]{geometry}
+\usepackage{xcolor}
+\definecolor{mainteal}{HTML}{0B7F78}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.18}
+\pagestyle{plain}
+\newcommand{\ms}{\ensuremath{\,\mathrm{mS/m}}}
+\newcommand{\qcode}[1]{\texttt{\detokenize{#1}}}
+% Chương và mục có cỡ chữ gần với văn bản để đọc liền mạch.
+\makeatletter
+\renewcommand{\@makechapterhead}[1]{%
+  \vspace*{16pt}{\parindent\z@\raggedright\normalfont
+  \Large\bfseries\color{mainteal}\thechapter.\enspace #1\par\nobreak\vskip 14pt}}
+\renewcommand{\@makeschapterhead}[1]{%
+  \vspace*{16pt}{\parindent\z@\raggedright\normalfont
+  \Large\bfseries\color{mainteal}#1\par\nobreak\vskip 14pt}}
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-2.0ex \@plus -0.8ex \@minus -.2ex}{0.8ex \@plus .2ex}%
+  {\normalfont\large\bfseries\color{mainteal}}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-1.6ex \@plus -.6ex \@minus -.2ex}{0.6ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+\makeatother
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{2.5cm}
+{\Large\bfseries\color{mainteal} BÁO CÁO TIẾN ĐỘ\par}
+\vspace{1.1cm}
+{\large\bfseries XÂY DỰNG WEBGIS HỖ TRỢ DỰ BÁO\\
+XÂM NHẬP MẶN VÀ VẬN HÀNH CỐNG\\
+TẠI ĐỒNG THÁP\par}
+\vspace{0.8cm}
+\vfill
+\begin{tabular}{@{}rl@{}}
+\textbf{Nhóm thực hiện:} & Nhóm 4 \\
+\textbf{Sinh viên:} & Hà Như Quỳnh -- 23110298 \\
+ & Võ Hữu Tín -- 23110343 \\
+\textbf{Ngày đối chiếu:} & 08/11/2026 \\
+\textbf{Mã nguồn:} & \href{https://github.com/12hqwwo/saltwater-intrusion-warning}{saltwater-intrusion-warning} (temp)
+\end{tabular}
+\vfill
+{TP. Hồ Chí Minh, tháng 11 năm 2026\par}
+\vspace*{0.8cm}
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+\chapter{Tổng quan WebGIS}
+
+
+Trên WebGIS cần phân biệt bốn loại số:
+\begin{itemize}
+  \item \textbf{Số đo tại trạm:} mẫu được ghi nhận tại một vị trí và ngày cụ thể; đây là cơ sở đối chiếu các dự báo lịch sử.
+  \item \textbf{Giá trị nội suy trên bản đồ:} các mốc EC theo tháng được nối dọc trục Sông Tiền rồi gán màu cho đoạn sông và nhánh trước cống. Giá trị này giúp xem xu thế không gian, không phải số đo tại mọi điểm trên sông.
+  \item \textbf{Dự báo EC:} kết quả mô hình cho tháng mục tiêu và trạm đã chọn, phụ thuộc vào đầu vào được ghi trong lượt chạy.
+  \item \textbf{Độ mặn g/L ước tính:} cách hiển thị tham khảo theo công thức $\mathrm{g/L}\approx0{,}0064\times\mathrm{EC}\,(\mathrm{mS/m})$. Hệ số phụ thuộc nước và nhiệt độ; màu cảnh báo của bản đồ vẫn tính từ EC.
+\end{itemize}
+
+\chapter{Sử dụng WebGIS}
+
+Mở trang \qcode{127.0.0.1:8000/}\qcode{workspace.html}. Thanh điều hướng gồm năm mục: \textbf{Tổng quan, Quan trắc, Dự báo EC đa biến, Chất lượng dữ liệu} và \textbf{Hồ sơ cống}.
+
+Khi tra cứu, hãy xem nguồn số đo trước, chọn tháng trên bản đồ, rồi chạy dự báo nếu cần một tháng mục tiêu. Hồ sơ cống là bước kiểm tra điều kiện tại chỗ.
+
+\section{Tổng quan}
+
+Trang đầu dẫn tới bản đồ, công cụ dự báo và phần truy nguồn. Cần đọc ba điểm sau:
+\begin{itemize}
+  \item \textbf{EC gần nhất theo trạm} ghi ngày lấy mẫu, không phải ngày nước hiện tại. Bấm \textbf{Mở trạm} để xem cả chuỗi. Hai hàng khác ngày không phải hai phép đo đồng thời.
+  \item \textbf{Sơ đồ Sông Tiền} cho thấy mạng tuyến nghiên cứu; nó không hiển thị EC của một tháng.
+  \item Huy hiệu \textbf{PostgreSQL} hoặc \textbf{Snapshot có nguồn} cho biết chế độ dữ liệu. Nút kiểm tra PostgreSQL chỉ kiểm tra kết nối, không tự đổi nguồn của trang.
+\end{itemize}
+
+\section{Quan trắc: bản đồ và trạm}
+
+\subsection*{Chọn tháng và đọc màu bản đồ}
+
+Ở thanh thời gian dưới bản đồ, chọn tháng trực tiếp, kéo thanh, hoặc dùng \textbf{Tháng này} và \textbf{Tháng sau}. Hai nút này theo ngày hiện tại, không gắn với một tháng cố định.
+
+Thanh thời gian có thể kéo tới tương lai. Một tháng xuất hiện trên thanh chưa có nghĩa hệ thống đã có đủ đầu vào để dự báo tháng đó.
+
+Trước khi xem màu, đọc \textbf{nhãn nguồn cạnh tháng}. Nhãn cho biết giá trị đến từ đâu:
+\begin{itemize}
+  \item Mẫu MRC hoặc giá trị được nội suy theo thời gian khi tháng đó thiếu mẫu.
+  \item Ước tính hồi cứu hoặc dự báo theo mô hình.
+  \item Trung vị mùa lịch sử khi chưa đủ đầu vào. Đây là tham chiếu theo mùa, không phải dự báo dựa trên thời tiết tương lai.
+\end{itemize}
+Nếu thiếu mẫu Mỹ Thuận, giao diện ghi rõ bản đồ chỉ còn hai mốc để nội suy.
+
+Giá trị trên trục Sông Tiền được nội suy giữa Tân Châu, Mỹ Thuận và Mỹ Tho. Nhánh kênh được tô màu \textbf{từ sông đến cống}; đoạn sau cống chưa có EC nội kênh.
+
+Chấm cống đổi màu theo mốc EC đã chọn, không cho biết cống đang đóng hay mở. Một nhánh hiện màu cao không chứng minh nước có EC ấy đã đi qua cống vào đồng.
+
+Các thao tác cần dùng nhất:
+\begin{enumerate}
+  \item Chọn \textbf{Kênh có cống} để đưa bản đồ tới đúng nhánh và xem phiếu vị trí, lý trình, nguồn giá trị. Bấm chấm cống hoặc nhánh trên bản đồ cũng mở thông tin tương ứng.
+  \item Dùng \textbf{Hiện danh sách trạm} để tìm trạm, rồi chọn trạm để mở biểu đồ ở dưới. \textbf{Toàn cảnh} đưa bản đồ về toàn trục.
+  \item Chọn \textbf{Mục đích dùng nước} và mở \textbf{Mốc cảnh báo} để xem hoặc chỉnh hai mốc EC. Bộ mặc định cho cây có múi là 100/150\ms; sầu riêng 50/80\ms; lúa và nước ngọt 120/200\ms. Đây là mốc tham khảo trên giao diện. Đổi mốc sẽ đổi màu phân loại, không đổi số đo hay mô hình.
+  \item Mở \textbf{Mức cảnh báo EC} để đọc ba khoảng màu, hoặc thu gọn để có thêm diện tích bản đồ. Nút \textbf{EC mS/m / Độ mặn g/L} chỉ đổi cách ghi giá trị; nếu chọn g/L, hãy đọc ghi chú quy đổi.
+  \item Mở \textbf{Chú giải và nguồn} khi cần phân biệt ba trạm chính, điểm RIA2 tham khảo và chấm cống. Có thể đổi nền bản đồ mà không ảnh hưởng dữ liệu.
+\end{enumerate}
+
+\textbf{Cách đọc một hình bản đồ:} đi theo thứ tự tháng $\rightarrow$ nhãn nguồn $\rightarrow$ đơn vị $\rightarrow$ hai mốc EC $\rightarrow$ màu sông $\rightarrow$ nhánh tới cống $\rightarrow$ phiếu chi tiết. Với bộ mốc 100/150\ms, một đoạn hiển thị 120\ms nằm trong khoảng giữa hai mốc. Con số đó không phải EC đã đo phía trong cống.
+
+\subsection*{Xem lịch sử của một trạm}
+
+Chọn điểm trạm, đặt \textbf{Từ ngày / Đến ngày}, rồi bấm \textbf{Áp dụng}. \textbf{Toàn bộ} mở cả chuỗi; \textbf{Tải CSV đang xem} lấy đúng phần đã lọc.
+
+Biểu đồ gồm các điểm mẫu rời rạc. Khoảng trống giữa hai ngày không cho biết EC ở các ngày chưa đo. Mở \textbf{Bảng số đo và nguồn từng dòng} để xem ngày, giá trị, cờ chất lượng và dấu vết tệp.
+
+Loại \textbf{O} là quan trắc, \textbf{E} là ước tính; không nên gộp hai loại thành cùng một chuỗi đo thực. Mẫu Mỹ Tho \textbf{692\ms{} ngày 15/03/2020 là giá trị đúng đã được chủ dự án xác nhận}; đây vẫn chỉ là một mẫu ngày.
+
+Nếu cần một mốc đối chiếu trên biểu đồ trạm, mở \textbf{Đối chiếu ngưỡng EC}, nhập mốc và bấm \textbf{Áp dụng ngưỡng}. Mốc này khác với \emph{hai mốc tô màu sông}. Trạm có mô hình đăng ký sẽ có nút \textbf{Dự báo EC cho trạm này}. Khu tra cứu PostgreSQL chỉ dùng được khi đã kết nối cơ sở dữ liệu; bản Snapshot vẫn có thể hiển thị trạm dù khu này chưa có dữ liệu.
+
+\section{Dự báo EC đa biến}
+
+\begin{enumerate}
+  \item Chọn \textbf{trạm} và \textbf{tháng cần dự báo}. Trang không cho chạy lại một tháng đã nằm trong tập huấn luyện của mô hình.
+  \item Chọn \textbf{nguồn đầu vào}. Có thể nạp khí tượng lưu trữ hoặc nhập mưa, nhiệt độ và gió. Với tháng mục tiêu $t$, mô hình dùng đầu vào tháng $t-2$; chẳng hạn dự báo 11/2026 dùng dữ liệu 09/2026.
+  \item Nếu chọn \textbf{Mỹ Tho}, máy chủ còn lấy lưu lượng Kratie và mực nước Tân Châu. Nhập khí tượng thủ công không thay thế được thủy văn bị thiếu. Mỹ Thuận và Tân Châu dùng mô hình riêng của từng trạm.
+  \item Bấm \textbf{Chạy dự báo đa biến}. Đọc EC của tháng mục tiêu cùng phiên bản mô hình, ngày phát hành, nguồn và bảng đầu vào. Có thể tải JSON/CSV. Nếu chọn lưu PostgreSQL và kết nối thành công, lượt chạy vào lịch sử dự báo.
+  \item Muốn xem kết quả trên sông, dùng \textbf{Áp dụng kịch bản dự báo lên bản đồ} hoặc nút xem trên bản đồ trong khung kết quả. Hệ thống tính đủ ba trạm của cùng tháng rồi nội suy dọc sông. \textbf{Quay về Timeline} để trở lại tháng nền.
+\end{enumerate}
+
+Kết quả tại Mỹ Tho hiện dùng phiên bản \qcode{20261108T_HYDROLOGY_PRIMARY_V1}. Phần \textbf{P10--P90} trên giao diện chỉ mô tả độ phân tán giữa 300 cây của Random Forest; đó chưa phải khoảng tin cậy đã kiểm định. Bảng đối chiếu cây trồng dùng ngưỡng tham khảo, không thay số đo hiện trường.
+
+Mở \textbf{Kiểm chứng dự báo khi EC ngừng cập nhật} để xem ba giai đoạn đánh giá ở Chương~\ref{chap:model}. Đường quan trắc là mẫu thật dùng để chấm sau, các đường còn lại là phương án dự báo hoặc đối chứng. Khung \textbf{Phụ lục nghiên cứu cũ: mô hình EC trễ và Persistence} là một cách đánh giá khác; đường ``Mô hình chọn trên validation'' ở đó không phải mô hình Mỹ Tho đang dùng. Đỉnh đường dự báo trong biểu đồ cũ cần đọc theo đúng phiên bản và tập đánh giá của khung đó.
+
+\section{Chất lượng dữ liệu và hồ sơ cống}
+
+Trong \textbf{Chất lượng dữ liệu}, trước tiên xem số dòng, số trạm, khoảng ngày và tình trạng xác minh của nguồn bổ sung. Các số độ mặn g/L trong khu rà soát chưa tự trở thành nhãn EC cho mô hình; ô trống cũng không mang giá trị 0. Phần EC lịch sử 2024--2026 từ khí tượng lưu trữ là bản nghiên cứu cũ, đặc biệt không đại diện cho mô hình Mỹ Tho có thủy văn hiện nay.
+
+Trong \textbf{Hồ sơ cống}, chọn cống theo danh mục tài liệu/GIS. Phần A có thể nhận dự báo ba trạm làm bối cảnh xu thế. Phần B cần \textbf{EC đo ngoài sông sát cống, EC phía trong đồng, mực nước hai phía, thời điểm và người đo, tình trạng cơ khí}. Hai mực nước phải cùng hệ cao độ. Sau khi nhập, bấm \textbf{Kiểm tra điều kiện xem xét lấy nước} và đọc từng tiêu chí đạt, chưa đạt hoặc còn thiếu. Nếu thiếu dữ liệu hoặc mẫu quá cũ, cần đo lại. Kết quả hỗ trợ rà soát; không tự phát lệnh đóng hoặc mở cống.
+
+\chapter{Mô hình chính và cách đánh giá}\label{chap:model}
+
+\section{Vì sao thêm thủy văn thượng nguồn?}
+
+Mô hình ban đầu dùng mưa, nhiệt độ, gió và chu kỳ tháng để dự báo EC Mỹ Tho. Các biến này mô tả thời tiết địa phương, nhưng chưa trực tiếp cho biết lượng nước ngọt từ thượng nguồn đang về. Vì vậy nghiên cứu thêm lưu lượng Kratie và mực nước Tân Châu.
+
+Với một tháng mục tiêu, hệ thống dùng đầu vào tháng $t-2$, trung bình hoặc trung vị ba tháng gần đó và tỷ lệ lưu lượng so với cùng mùa. Dữ liệu đến từ nguồn MRC lưu trong dự án; mỗi tháng thủy văn phải có ít nhất 20 ngày dữ liệu.
+
+Quy tắc coi tháng nguồn sẵn có sau cuối tháng 5 ngày là giả định kỹ thuật. Lịch công bố thực tế của từng nguồn chưa được xác nhận.
+
+Mô hình chính là \textbf{Random Forest 300 cây}, độ sâu tối đa 8, tối thiểu 3 mẫu ở lá, học trên \textbf{463 mẫu EC Mỹ Tho đến 12/2023}. Nó dùng 5 đặc trưng khí tượng/chu kỳ và 5 đặc trưng thủy văn. Không dùng EC Mỹ Tho sau 2023 để huấn luyện. Các trạm Mỹ Thuận và Tân Châu vẫn có mô hình riêng; kết quả của chúng không mặc nhiên có cùng sai số với Mỹ Tho.
+
+\section{Cách chấm để không dùng trước câu trả lời}
+
+Ở mỗi giai đoạn đánh giá, EC Mỹ Tho bị ``khóa'' từ đầu kỳ. Mô hình chỉ học từ những mẫu được giả định đã biết trước kỳ, rồi dự báo liên tiếp 24 hoặc 36 tháng. Mẫu trong kỳ chỉ được mở ra để chấm sau.
+
+Cách này trả lời câu hỏi: nếu Mỹ Tho nhiều tháng không có EC mới, dự báo sẽ lệch bao nhiêu? Nó khác cách mỗi tháng lại học thêm một số EC mới.
+
+\textbf{MAE} là sai lệch tuyệt đối trung bình. \textbf{RMSE} cũng đo sai lệch nhưng phạt mạnh hơn khi có một vài lỗi lớn. Cả hai đều tính bằng mS/m; nhỏ hơn là tốt hơn \emph{trên cùng giai đoạn và cùng cách chấm}. Một phương án có MAE thấp vẫn có thể bỏ sót tháng EC rất cao.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Kết quả đối chiếu sai số MAE / RMSE tại Mỹ Tho khi khóa EC liên tục (mS/m).}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|p{3.3cm}|p{3.0cm}|p{3.4cm}|p{2.9cm}|}
+\hline
+\textbf{Giai đoạn} & \textbf{RF khí tượng} & \textbf{RF + thủy văn} & \textbf{EC cuối} \\
+\hline
+2019--2021 (36 tháng) & 69,55 / 147,73 & \textbf{57,81 / 133,82} & 80,20 / 191,23 \\
+\hline
+2021--2023 (36 tháng) & 28,31 / 64,23 & \textbf{16,57 / 31,21} & 19,13 / 42,57 \\
+\hline
+2022--2023 (24 tháng) & 18,39 / 49,35 & 12,19 / 25,43 & \textbf{10,76 / 16,46} \\
+\hline
+\end{tabular}
+\par\smallskip
+\raggedright\footnotesize RF: Random Forest. ``EC cuối'' giữ nguyên mẫu EC cuối trước kỳ đánh giá. Mỗi ô ghi MAE / RMSE; số nhỏ hơn là tốt hơn trên cùng một kỳ.
+\end{table}
+
+Thêm thủy văn giảm cả MAE lẫn RMSE so với mô hình \emph{chỉ khí tượng} trong cả ba kỳ. Đây là lý do giữ nó làm phương án chính trong phạm vi nghiên cứu hiện tại. Tuy nhiên, đối chứng \emph{giữ EC cuối} tốt hơn trong kỳ 2022--2023; không thể nói mô hình chính thắng mọi cách dự báo ở mọi thời kỳ.
+
+Sai số lớn vẫn còn. Mẫu \textbf{692\ms{} ngày 15/03/2020 là đúng}; mô hình được khóa trước kỳ 2019--2021 chỉ dự báo \textbf{213,67\ms} cho tháng đó. Ngược lại, tháng 04/2022 đo \textbf{25,7\ms} nhưng mô hình dự báo \textbf{100,04\ms}. Một bên là bỏ hụt đỉnh lớn, bên kia là báo cao quá mức. Ba kỳ lịch sử này đã được xem trong quá trình chọn mô hình, nên số điểm là \textbf{đánh giá hồi cứu}, chưa phải kiểm định độc lập trên EC mới sau 2023.
+
+\chapter{Các cách giảm sai số đã đánh giá}
+
+Mỗi mục dưới đây nêu \textbf{cách làm, kết quả và quyết định} đối với WebGIS. Hồ sơ dùng hai cách chấm:
+\begin{itemize}
+  \item \textbf{Khóa EC liên tục:} cố định mô hình trước một giai đoạn rồi dự báo liên tiếp, như bảng ở Chương~\ref{chap:model}.
+  \item \textbf{Cập nhật điểm xuất phát theo từng tháng (rolling origin):} tập học thay đổi theo thông tin giả định đã có ở mỗi lần phát hành.
+\end{itemize}
+Không trừ trực tiếp điểm của hai cách chấm để xếp hạng. Mọi kết quả dưới đây đều dựa trên các kỳ lịch sử đã biết, chưa bảo đảm sai số cho một tháng tương lai.
+
+\section{Điều chỉnh Random Forest}
+
+\textbf{Cách làm.} Giữ dữ liệu khí tượng, đổi cấu hình Random Forest: chia cây mịn hơn, thêm biến biểu diễn thiếu nước, hoặc tăng trọng số cho tháng EC cao. Một phương án khác dùng Gradient Boosting với hàm Huber. Kết quả được chấm theo từng tháng phát hành, với giả định EC đến chậm 5 hoặc 35 ngày.
+
+\textbf{Kết quả với độ trễ 5 ngày.}
+\begin{itemize}
+  \item Random Forest mịn giảm MAE 2019--2021 từ \textbf{51,71 xuống 49,40\ms}, nhưng MAE 2022--2023 tăng từ \textbf{12,01 lên 13,88\ms}; RMSE cùng kỳ tăng từ 25,69 lên 31,68\ms.
+  \item Huber cho MAE 2022--2023 là \textbf{10,28\ms}, song 2019--2021 tăng tới \textbf{64,96\ms}.
+  \item Tăng trọng số tháng EC cao đưa dự báo 03/2020 lên 217,58\ms, vẫn xa mẫu 692\ms{} và làm kỳ gần đây kém đi.
+\end{itemize}
+\textbf{Quyết định.} Các cách chỉnh có lợi ở một kỳ nhưng chưa bền qua kỳ khác, nên chưa thay mô hình trên trang.
+
+\section{Bổ sung thông tin triều}
+
+\textbf{Cách làm.} Tệp MRC Mỹ Tho có 463 mẫu; 459 mẫu ghi ngày 13--17 và 428 mẫu ghi ngày 15. Mọi dấu giờ đều là 00:00, nên \textbf{không biết giờ lấy mẫu thật}. Nghiên cứu dùng atlas triều FES2022b gần cửa sông để tạo các biến theo lịch: cực đại và trung bình giờ 07--16 của ngày 13--17, cực đại nửa đầu tháng, và biên độ trung bình ngày 05--12. Việc này không khẳng định mẫu MRC được lấy đúng một pha triều.
+
+\textbf{Kết quả.} Khi thêm trung bình triều ban ngày 13--17:
+\begin{itemize}
+  \item MAE 2021--2023 giảm từ \textbf{16,57 xuống 15,59\ms}; 2022--2023 giảm từ 12,19 xuống 11,73\ms.
+  \item MAE 2019--2021 tăng nhẹ từ \textbf{57,81 lên 57,93\ms}. Dự báo 03/2020 chỉ nhích từ 213,67 lên \textbf{229,86\ms}, vẫn xa mẫu 692\ms.
+\end{itemize}
+\textbf{Quyết định.} Sáu tháng EC từ 100\ms{} trở lên ở kỳ 2019--2021 không được cải thiện về MAE. Atlas FES2022b ra sau các ngày phát hành lịch sử, nên kết quả này là đối chiếu hồi cứu. Chưa đưa biến triều vào mô hình chính.
+
+\section{Chọn mô hình theo lưu lượng Kratie}
+
+\textbf{Cách làm.} Với tháng 1--5, nếu tỷ lệ lưu lượng Kratie tháng $t-2$ thấp thì dùng Random Forest chú trọng tháng EC lớn; ngoài điều kiện ấy dùng mô hình chính. Hai mốc được xem xét là 0,75 và 0,85.
+
+\textbf{Kết quả.} Mốc 0,85 làm MAE/RMSE 2019--2021 giảm từ \textbf{57,81/133,82 xuống 56,19/128,17\ms}. Tuy vậy, số tháng EC thật từ 100\ms{} trở lên mà mô hình báo dưới 100 tăng từ \textbf{2 lên 3}. Tháng 02/2020 đo 558\ms, nhưng phương án này chỉ báo \textbf{85,74\ms}.
+
+\textbf{Quyết định.} Mốc 0,85 được xem xét sau khi đã biết tỷ lệ lưu lượng của 03/2020. Giảm sai số trung bình chưa bù được việc bỏ sót thêm tháng EC cao, nên chưa dùng cách này trên WebGIS.
+
+\section{Học trên thang log}
+
+\textbf{Cách làm.} Random Forest học trên $\log(1+\mathrm{EC})$ để các giá trị rất cao không chi phối quá nhiều, rồi đổi kết quả về mS/m. Một bản khác dùng các tháng cuối tập học để hiệu chỉnh khi đổi thang, gọi là \emph{smearing}.
+
+\textbf{Kết quả.} Học trên thang log cho MAE 2019--2021 là \textbf{66,21\ms}, cao hơn mô hình chính 57,81\ms. Bản có hiệu chỉnh đạt 62,83\ms{} ở kỳ này, nhưng 2022--2023 tăng lên \textbf{26,06\ms}, so với 12,19\ms{} của mô hình chính. Dự báo 03/2020 vẫn thấp.
+
+\textbf{Quyết định.} Kết quả chưa ủng hộ việc đổi thang học cho bản đang phục vụ.
+
+\section{Kết hợp Ridge và Random Forest}
+
+\textbf{Cách làm.} Ridge học quan hệ giữa EC với nghịch đảo lưu lượng Kratie, mực nước Tân Châu, mưa và mùa. Random Forest học phần sai số còn lại. Công thức đơn giản nắm xu thế chung, còn cây xử lý chỗ quan hệ không đều.
+
+\textbf{Kết quả.}
+\begin{itemize}
+  \item MAE/RMSE 2019--2021 đạt \textbf{57,43/129,75\ms}; 2022--2023 đạt \textbf{10,33/19,29\ms}. Cả hai kỳ tốt hơn mô hình chính.
+  \item Kỳ 2021--2023 lại xấu hơn: \textbf{17,48/32,88\ms} thay cho 16,57/31,21\ms.
+\end{itemize}
+\textbf{Quyết định.} Phần sai số đang được học từ dự báo Ridge trên chính tập học, nên cần kiểm tiếp bằng dự báo ngoài mẫu. Một cấu hình Ridge khác cũng không thắng ổn định và bỏ sót thêm tháng EC cao. Chưa có căn cứ thay mô hình chính.
+
+\section{Dữ liệu thủy văn theo ngày}
+
+\textbf{Cách làm.} Lấy hai cửa sổ bảy ngày trước mốc đầu vào an toàn, tính mức nhỏ nhất và độ thay đổi của lưu lượng Kratie, mực nước Tân Châu. Mục đích là bắt đợt thiếu nước gần ngày dự báo hơn. Mốc được đặt theo giả định số đo trễ 5 ngày; trong 60 tháng có 59 tháng đủ hai cửa sổ.
+
+\textbf{Kết quả.} MAE 2019--2021 \textbf{tăng từ 57,81 lên 64,82\ms}; dự báo 03/2020 còn 158,90\ms.
+
+\textbf{Quyết định.} Cấu hình này chỉ thêm bốn đặc trưng ngày từ hai nguồn thủy văn, chưa gồm gió ngày hoặc mực nước cửa sông có cùng mốc cao độ. Lịch công bố thật chưa có. Kết quả chỉ áp dụng cho cấu hình đã chấm; chưa đưa nó lên trang.
+
+\section{Thêm EC ở Mỹ Thuận và Tân Châu}
+
+\textbf{Cách làm.} Giả định Mỹ Thuận và Tân Châu vẫn có EC cập nhật. Thêm riêng từng trạm hoặc cả hai vào mô hình có thủy văn. EC trạm khác chỉ được dùng sau độ trễ công bố giả định; EC Mỹ Tho trong kỳ khóa chỉ dùng để chấm.
+
+\textbf{Kết quả.} Thêm cả hai trạm giảm RMSE 2021--2023 từ \textbf{31,21 xuống 29,59\ms}. Nhưng 2019--2021 tăng từ 133,82 lên \textbf{136,58\ms}, và 2022--2023 từ 25,43 lên \textbf{28,09\ms}. Thêm riêng từng trạm cũng cải thiện vài chỉ số, nhưng không đều ba kỳ.
+
+\textbf{Quyết định.} Dữ liệu và cách ghép hiện có chưa tạo lợi ích đủ ổn định để thay mô hình chính. Kết quả này không chứng minh EC trạm lân cận vô ích. Dự án chưa có chuỗi EC trực tiếp đủ tháng 2019--2023 tại Vàm Kênh, Hòa Định hoặc Bình Đại để chấm cùng cách.
+
+\section{Kiểm tra mức trên và phân vị cây}
+
+\textbf{Cách làm.} Lấy phân vị sai số của mùa khô đã biết rồi cộng vào dự báo. Song song, xem phân vị giữa 300 cây Random Forest để kiểm tra liệu chúng có thể cho một mức cảnh báo phía trên hay không.
+
+\textbf{Kết quả.}
+\begin{itemize}
+  \item Khi khóa trước 2019, mức cộng là 40,03\ms. Mức trên cho 03/2020 chỉ \textbf{253,69\ms}, vẫn thấp xa mẫu 692\ms. Trong kỳ 2019--2021, nó bao phủ \textbf{10/15 tháng mùa khô}, tức 66,7\%, so với mục tiêu 90\%.
+  \item Phân vị 90\% giữa các cây bao phủ \textbf{22/36 tháng} toàn kỳ và chỉ \textbf{1/6 tháng} có EC từ 100\ms. Riêng 03/2020, phân vị cây 90\% là 360,97\ms; phân vị 95\% là 425,92\ms.
+\end{itemize}
+\textbf{Quyết định.} Phân vị giữa cây chỉ mô tả độ phân tán của mô hình, chưa phải giới hạn an toàn của EC thật. Chưa đưa mức trên hoặc phân vị cây lên giao diện như một cảnh báo đã bảo đảm.
+
+\chapter{Kết luận và hướng làm tiếp}
+
+Trong ba kỳ khóa EC, thêm Kratie và Tân Châu vào Random Forest giảm MAE và RMSE so với bản chỉ khí tượng. Những cách bổ sung đã xem xét có lúc cải thiện một kỳ hoặc một chỉ số, nhưng chưa đồng thời giải quyết được lỗi bỏ hụt tháng 03/2020, báo cao tháng 04/2022 và độ ổn định trên các kỳ. Vì vậy, \textbf{Random Forest khí tượng + thủy văn tiếp tục là mô hình chính ở Mỹ Tho} với phiên bản đã ghi trong Chương~\ref{chap:model}. Đây là lựa chọn phù hợp nhất trong các phương án đã cân nhắc với dữ liệu hiện có, không phải cam kết sai số cho tương lai.
+
+Ba việc nên ưu tiên khi trao đổi với người hướng dẫn:
+\begin{enumerate}
+  \item Chọn thêm chỉ số riêng cho \textbf{bỏ sót tháng EC cao} và \textbf{báo cao giả}, bên cạnh MAE/RMSE; xác định mốc EC nghiên cứu theo mục đích, không đồng nhất nó với lệnh cống.
+  \item Xác nhận \textbf{ngày giờ và lịch công bố thực} của EC, khí tượng, Kratie, Tân Châu; nếu bổ sung dữ liệu gần cửa sông, cần EC đo trực tiếp đủ dài, cùng đơn vị và nguồn rõ. Dữ liệu độ mặn g/L rời rạc cần giữ riêng cho đến khi có hiệu chuẩn phù hợp.
+  \item Dành một giai đoạn \textbf{EC Mỹ Tho mới sau 2023} chưa từng dùng để chọn phương án, rồi chấm riêng mùa khô, đỉnh lớn và từng lỗi cảnh báo. Sau đó mới cân nhắc thay mô hình hoặc trình bày một khoảng dự báo có kiểm chứng.
+\end{enumerate}
+
+\chapter*{Nguồn đối chiếu}
+\addcontentsline{toc}{chapter}{Nguồn đối chiếu}
+\begin{enumerate}
+  \item Giao diện hiện tại: \qcode{frontend/workspace.html}; điều khiển thời gian: \qcode{frontend/src/features/timeline-scrubber.js}; nội suy bản đồ: \qcode{backend/services/spatial_inputs.py} và \qcode{backend/services/spatial_simulation.py}.
+  \item Mô hình Mỹ Tho: \qcode{docs/mytho_hydrology_primary_2026-11-08.md}; kiểm tra thủy văn và EC trạm lân cận: \qcode{docs/frozen_ec_remedies_2026-11-08.md}, \qcode{docs/frozen_ec_followup_2026-11-08.md}.
+  \item Các cách giảm sai số: \qcode{docs/ec_error_reduction_2026-11-08.md}, \qcode{docs/ec_tide_window_audit_2026-11-08.md}, \qcode{docs/ec_math_physics_experiments_2026-11-08.md}. Mỗi báo cáo dẫn tới bảng dự báo từng tháng, chỉ số, mã chạy và dấu vết nguồn trong dự án.
+\end{enumerate}
+
+\end{document}

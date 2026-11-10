@@ -188,7 +188,7 @@ Các kỳ này và mẫu cực trị đã được nhìn thấy trong quá trìn
 - **Rolling origin**: mỗi tháng là một lần phát hành mới; chỉ dữ liệu giả định đã biết ở tháng ấy được đưa vào huấn luyện. Kết quả có ích để nghiên cứu nhưng **không lấy MAE/RMSE của rolling origin trừ trực tiếp cho điểm khóa EC**.
 
 ### 6.1. Bảng thí nghiệm và quyết định
-z
+
 | Nhóm thử | Cách làm ngắn gọn | Kết quả chính đã ghi nhận | Kết luận hiện nay |
 | --- | --- | --- | --- |
 | **Tinh chỉnh RF, tăng trọng số EC cao, Gradient Boosting Huber** | Thử cấu hình RF mịn hơn, biến biểu diễn thiếu nước, cho mẫu EC cao trọng số lớn hơn; thử mô hình Huber và phối hợp các dự báo. Chấm theo **rolling origin**, EC chậm 5 hoặc 35 ngày. | Với +5 ngày, `RF_fine_compact` giảm MAE giai đoạn 2019–2021 từ **51,71 xuống 49,40**, nhưng MAE 2022–2023 tăng **12,01 lên 13,88**. Huber có MAE 2022–2023 **10,28**, nhưng 2019–2021 tăng lên **64,96**. | Có cải thiện từng kỳ, chưa ổn định; giao thức khác mô hình chính. **Chưa thay mô hình phục vụ.** |
