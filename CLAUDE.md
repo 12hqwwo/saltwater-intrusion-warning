@@ -6,8 +6,8 @@
 
 - Ứng dụng là WebGIS quan trắc EC, dự báo EC theo tháng tại trạm và rà soát hồ sơ cống. Trang chính là `http://127.0.0.1:8000/workspace.html` khi chạy tại máy chủ cục bộ.
 - Người dùng đã xác định **`D:\Study\TLCN` trên nhánh `TinBranch` là checkout chính thức**. Thư mục Codex `C:\Users\QUYNH\.codex\worktrees\tinbranch-map-ui\TLCN` là worktree riêng ở nhánh `codex/tinbranch-map-ui`; không mặc định xem nội dung worktree là bản đang chạy ở cổng 8000.
-- Tại thời điểm ghi biên bản: `TinBranch` ở commit `d124473` (`feat: refine gate map display and EC report`). `origin/temp` trên GitHub cũng ở `d124473`; `origin/TinBranch` còn sau nhánh cục bộ 6 commit. Lần sau phải chạy `git status --short --branch` và kiểm tra remote lại, không coi mốc này là trạng thái vĩnh viễn.
-- Lần push `temp` gần nhất gồm sửa biểu diễn chấm cống/nhãn trạm trên bản đồ và báo cáo LaTeX. Tệp chưa theo dõi `outputs/ec_error_reduction_20261108/experiment_ec_error_reduction.original.py` được **để ngoài commit**; đừng đưa nó vào Git hoặc xóa khi chưa xác định vai trò. `.claude/`, `.security/`, `.venv/`, `.venv-api/`, `.vscode/`, `.env`, `frontend/node_modules/` và `frontend/dist/` được `.gitignore` loại khỏi Git.
+- Mốc **mã ứng dụng** được đối chiếu là commit `d124473` (`feat: refine gate map display and EC report`), đã được đẩy lên `temp`. Biên bản này được thêm sau mốc đó. `origin/TinBranch` không được cập nhật trong đợt push `temp`. Lần sau phải chạy `git status --short --branch` và kiểm tra remote lại, không coi mốc này là HEAD vĩnh viễn.
+- Commit mã `d124473` gồm sửa biểu diễn chấm cống/nhãn trạm trên bản đồ và báo cáo LaTeX. Tệp chưa theo dõi `outputs/ec_error_reduction_20261108/experiment_ec_error_reduction.original.py` được **để ngoài commit**; đừng đưa nó vào Git hoặc xóa khi chưa xác định vai trò. `.claude/`, `.security/`, `.venv/`, `.venv-api/`, `.vscode/`, `.env`, `frontend/node_modules/` và `frontend/dist/` được `.gitignore` loại khỏi Git.
 
 ## 2. Chạy bản đúng và kiểm tra nhanh
 
