@@ -207,6 +207,24 @@ export function createObservations({ onForecast } = {}) {
     $(id).setAttribute('aria-pressed', String(enabled));
     apply(enabled);
   });
+  const motionPreference = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');
+  const motionToggle = $('simulationMotionToggle');
+  let motionChoiceMade = false;
+  function showMotionState(enabled) {
+    motionToggle.setAttribute('aria-pressed', String(enabled));
+    motionToggle.textContent = enabled ? 'Tạm dừng hoạt ảnh' : 'Bật hoạt ảnh';
+    motionToggle.title = enabled ? 'Dừng vệt chuyển động và xem ký hiệu hướng tĩnh.' : 'Phát vệt chuyển động trên sông và lớp gió theo ý bạn.';
+  }
+  showMotionState(!motionPreference?.matches);
+  motionPreference?.addEventListener?.('change', () => {
+    if (!motionChoiceMade) showMotionState(!motionPreference.matches);
+  });
+  motionToggle.addEventListener('click', () => {
+    motionChoiceMade = true;
+    const enabled = motionToggle.getAttribute('aria-pressed') !== 'true';
+    showMotionState(enabled);
+    map.setMotionEnabled(enabled);
+  });
   timeline.load();
   $('mapBaseTheme').addEventListener('change', event => {
     map.setBaseTheme(event.target.value);

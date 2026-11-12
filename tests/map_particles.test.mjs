@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { riverMotion, windVector, boundedDelta, createMapParticles, RIVER_PARTICLE_COUNT, windParticleCount, WIND_TRAIL_POINTS, RIVER_TRAIL_POINTS, appendTrailPoint } from '../frontend/src/features/map-particles.js';
+import { riverMotion, windVector, mapWindVector, windAppearance, boundedDelta, createMapParticles, RIVER_PARTICLE_COUNT, RIVER_STREAK_BANDS, WIND_COLOR, windParticleCount, WIND_TRAIL_POINTS, RIVER_TRAIL_POINTS, appendTrailPoint } from '../frontend/src/features/map-particles.js';
 
 test('distance-sampled tails retain length at high refresh rates while heads move on every frame', () => {
   const trail = [];
@@ -44,14 +44,27 @@ test('meteorological wind FROM bearings and real u10/v10 fields map to canvas tr
   assert.equal(windVector({ speed_ms: -1, direction_from_deg: 0 }), null);
 });
 
+test('monthly ERA5 is preferred and future seasonal map estimate is explicitly separate', () => {
+  const seasonal = { kind: 'SEASONAL_VECTOR_CLIMATOLOGY', available: true,
+    target_month: '2026-11', reference_period: '2010-2023', u10: -1.1, v10: -0.3 };
+  const fallback = mapWindVector({ available: false, speed_ms: 2.2, visualization: seasonal }, '2026-11');
+  assert.equal(fallback.kind, 'SEASONAL_VECTOR_CLIMATOLOGY');
+  assert.equal(fallback.referencePeriod, '2010-2023');
+  assert.ok(fallback.x < 0 && fallback.y > 0);
+  assert.equal(mapWindVector({ available: false, visualization: seasonal }, '2026-12'), null);
+  const current = mapWindVector({ available: true, source_month: '2026-11', u10: 2, v10: 1, visualization: seasonal }, '2026-11');
+  assert.equal(current.kind, 'MONTHLY_ERA5');
+  assert.equal(current.x, 2);
+});
+
 test('river particles show flow without assigning a salinity color', () => {
   const fresh = riverMotion({ flow_direction: 'DOWNSTREAM_FRESHWATER', flow_velocity_factor: 1, salinity_g_l: 0.2 });
   const saline = riverMotion({ flow_direction: 'UPSTREAM_SALINE_INTRUSION', flow_velocity_factor: 0.5, salinity_g_l: 5 });
   assert.equal(fresh.direction, 1); assert.equal(fresh.color, '#ffffff');
   assert.equal(saline.direction, -1); assert.equal(saline.color, '#ffffff');
   assert.equal(saline.speed, fresh.speed / 2);
-  assert.equal(riverMotion({ flow_velocity_factor: 999 }).speed, 33);
-  assert.ok(RIVER_PARTICLE_COUNT >= 45 && RIVER_PARTICLE_COUNT <= 60);
+  assert.equal(riverMotion({ flow_velocity_factor: 999 }).speed, 48);
+  assert.ok(RIVER_PARTICLE_COUNT >= 45 && RIVER_PARTICLE_COUNT <= 90);
   assert.equal(boundedDelta(null, 1000), 0);
   assert.equal(boundedDelta(1000, 1016), 0.016);
   assert.equal(boundedDelta(1000, 999), 0);
@@ -60,9 +73,9 @@ test('river particles show flow without assigning a salinity color', () => {
 
 function harness() {
   const callbacks = new Map(), listeners = new Map(); let next = 1;
-  const context = () => ({ strokes: 0, clears: 0, transform: null, radii: [],
+  const context = () => ({ strokes: 0, clears: 0, transform: null, radii: [], strokeLog: [],
     setTransform(...args) { this.transform = args; }, clearRect() { this.clears++; },
-    beginPath() { this.path = []; }, moveTo(...p) { this.path.push(p); }, lineTo(...p) { this.path.push(p); }, stroke() { this.strokes++; this.lastPath = this.path; }, arc(x, y, radius) { this.radii.push(radius); }, fill() {},
+    beginPath() { this.path = []; }, moveTo(...p) { this.path.push(p); }, lineTo(...p) { this.path.push(p); }, stroke() { this.strokes++; this.lastPath = this.path; this.strokeLog.push({ style: this.strokeStyle, path: this.path }); }, arc(x, y, radius) { this.radii.push(radius); }, fill() {},
   });
   const riverContext = context(), windContext = context();
   const canvas = ctx => ({ getContext: () => ctx, getBoundingClientRect: () => ({ width: 800, height: 600 }) });
@@ -85,6 +98,8 @@ test('separate DPR canvases render both trails, honor toggles and cancel RAF on 
   const original = structuredClone(h.frame);
   h.engine.setFrame(h.frame); h.engine.start(); h.tick(0); h.tick(16);
   assert.ok(h.riverContext.strokes > 0); assert.ok(h.windContext.strokes > 0);
+  assert.ok(h.windContext.strokeLog.some(item => item.style === WIND_COLOR), 'wind particles render over the map');
+  assert.ok(!h.windContext.strokeLog.some(item => item.style === '#7dd3fc'), 'animated wind draws no arrows');
   assert.equal(h.riverContext.radii.length, 0, 'river streaks have no circular heads');
   assert.equal(h.windContext.radii.at(-1), 0.45);
   h.engine.setVisible({ wind: false }); const windStrokes = h.windContext.strokes;
@@ -95,14 +110,72 @@ test('separate DPR canvases render both trails, honor toggles and cancel RAF on 
   assert.deepEqual(h.frame, original);
 });
 
-test('water current uses sparse white 10–16 pixel streaks without round heads', () => {
+test('missing or stale monthly wind direction never animates wind', () => {
+  const h = harness();
+  h.frame.year_month = '2026-11';
+  h.frame.wind = { available: false, u10: null, v10: null, speed_ms: 2.261 };
+  h.engine.setFrame(h.frame); h.engine.start(); h.tick(0);
+  assert.equal(h.windContext.strokes, 0);
+  h.frame.wind = { available: true, u10: 2, v10: 1, source_month: '2026-08' };
+  h.engine.setFrame(h.frame); h.tick(16);
+  assert.equal(h.windContext.strokes, 0);
+  h.engine.destroy();
+});
+
+test('animation shows direction by moving streaks; arrows appear only with reduced motion', () => {
+  const h = harness(); h.frame.year_month = '2026-11';
+  h.frame.wind = { available: false, visualization: { kind: 'SEASONAL_VECTOR_CLIMATOLOGY', available: true,
+    target_month: '2026-11', reference_period: '2010-2023', u10: -1, v10: -0.5 } };
+  h.engine.setFrame(h.frame); h.engine.start(); h.tick(0);
+  const head = () => h.riverContext.strokeLog.filter(item => item.style === '#ffffff').at(-1).path.at(-1);
+  const first = head(); h.tick(16); h.tick(32);
+  assert.notDeepEqual(head(), first, 'river streak heads advance');
+  assert.ok(h.windContext.strokeLog.some(item => item.style === WIND_COLOR), 'seasonal wind particles animate');
+  assert.ok(!h.riverContext.strokeLog.some(item => item.style === '#082130'), 'no chevrons while animating');
+  assert.ok(!h.windContext.strokeLog.some(item => item.style === '#7dd3fc'), 'no wind arrows while animating');
+  h.motion.matches = true; h.listeners.get('motion-change')();
+  assert.equal(h.callbacks.size, 0);
+  assert.ok(h.riverContext.strokeLog.some(item => item.style === '#082130'), 'static river chevrons replace motion');
+  assert.ok(h.windContext.strokeLog.some(item => item.style === '#7dd3fc'), 'static wind arrows replace motion');
+  h.engine.destroy();
+});
+
+test('explicit motion switch can play despite reduced-motion preference and pause on demand', () => {
   const h = harness(); h.engine.setFrame(h.frame); h.engine.start(); h.tick(0);
-  assert.equal(h.riverContext.strokes, RIVER_PARTICLE_COUNT);
-  const points = h.riverContext.lastPath;
-  const length = Math.hypot(points.at(-1)[0] - points[0][0], points.at(-1)[1] - points[0][1]);
-  assert.ok(length >= 10 && length <= 16);
-  assert.equal(h.riverContext.lineWidth, 2);
-  assert.equal(h.riverContext.strokeStyle, 'rgba(255,255,255,0.75)');
+  h.motion.matches = true; h.listeners.get('motion-change')();
+  assert.equal(h.callbacks.size, 0);
+  const arrowCount = () => h.riverContext.strokeLog.filter(item => item.style === '#082130').length;
+  const beforePlay = arrowCount();
+  h.engine.setMotionEnabled(true);
+  assert.equal(h.callbacks.size, 1);
+  h.tick(16);
+  assert.equal(arrowCount(), beforePlay, 'animation does not add chevrons');
+  h.engine.setMotionEnabled(false);
+  assert.equal(h.callbacks.size, 0);
+  assert.ok(arrowCount() > beforePlay, 'pause restores static direction');
+  h.engine.destroy();
+});
+
+test('wind streak contrast follows the selected base map', () => {
+  assert.equal(windAppearance('light').color, WIND_COLOR);
+  assert.ok(windAppearance('dark').opacity > windAppearance('light').opacity);
+  assert.ok(windAppearance('satellite').opacity > windAppearance('light').opacity);
+  const h = harness(); h.engine.setFrame(h.frame); h.engine.start(); h.tick(0); h.tick(16);
+  h.engine.setTheme('dark'); h.tick(32);
+  assert.ok(h.windContext.strokeLog.some(item => item.style === windAppearance('dark').color));
+  h.engine.setTheme('satellite'); h.tick(48);
+  assert.ok(h.windContext.strokeLog.some(item => item.style === windAppearance('satellite').color));
+  h.engine.destroy();
+});
+
+test('water current uses faded 22–36 pixel streaks without round heads', () => {
+  const h = harness(); h.engine.setFrame(h.frame); h.engine.start(); h.tick(0);
+  const bands = h.riverContext.strokeLog.filter(item => item.style === '#ffffff');
+  assert.equal(bands.length, RIVER_PARTICLE_COUNT * RIVER_STREAK_BANDS);
+  const streak = bands.slice(-RIVER_STREAK_BANDS);
+  const start = streak[0].path[0], end = streak.at(-1).path.at(-1);
+  const length = Math.hypot(end[0] - start[0], end[1] - start[1]);
+  assert.ok(length >= 22 && length <= 36);
   assert.equal(h.riverContext.radii.length, 0);
   h.engine.destroy();
 });
@@ -112,6 +185,7 @@ test('hidden/reduced-motion/moving maps stop trails and resume without a large t
   h.document.hidden = true; h.listeners.get('visibilitychange')(); assert.equal(h.callbacks.size, 0);
   h.document.hidden = false; h.listeners.get('visibilitychange')(); assert.equal(h.callbacks.size, 1);
   h.motion.matches = true; h.listeners.get('motion-change')(); assert.equal(h.callbacks.size, 0);
+  assert.ok(h.riverContext.strokeLog.some(item => item.style === '#082130'), 'static arrows remain with reduced motion');
   h.motion.matches = false; h.listeners.get('motion-change')(); assert.equal(h.callbacks.size, 1);
   h.engine.setMoving(true); assert.equal(h.callbacks.size, 0);
   h.engine.setMoving(false); assert.equal(h.callbacks.size, 1);
@@ -136,13 +210,13 @@ test('canal particles require explicit selection and reset on a new frame', () =
   // A source flag alone cannot opt a gate into a visual intake preview.
   h.frame.gates[0].canal_particle_intake_enabled = true;
   h.engine.setFrame(h.frame); h.engine.start(); h.tick(0); h.tick(16);
-  assert.equal(h.riverContext.strokes, 0);
+  assert.equal(h.riverContext.strokeLog.filter(item => item.style === '#ffffff').length, 0);
   h.engine.setIntakeGate('G1');
   // Intake preview also needs a visible river path in the current map frame.
   h.frame.river_segments = [{ geometry: { type: 'LineString', coordinates: [[0, 0], [800, 0]] }, properties: {} }];
   h.engine.setFrame(h.frame); h.engine.setIntakeGate('G1'); h.tick(32); h.tick(48);
-  assert.equal(h.riverContext.strokes, 2 * RIVER_PARTICLE_COUNT + 8, 'river streaks and 8 explicitly selected canal trails');
+  assert.equal(h.riverContext.strokeLog.filter(item => item.style === '#ffffff').length, 2 * RIVER_PARTICLE_COUNT * RIVER_STREAK_BANDS, 'river streaks still render');
   h.engine.setFrame(h.frame); h.tick(64); h.tick(80);
-  assert.equal(h.riverContext.strokes, 4 * RIVER_PARTICLE_COUNT + 8, 'new frame clears the selected canal preview');
+  assert.equal(h.riverContext.strokeLog.filter(item => item.style === '#ffffff').length, 4 * RIVER_PARTICLE_COUNT * RIVER_STREAK_BANDS, 'new frame keeps river streaks');
   h.engine.setFrame(null); assert.equal(h.callbacks.size, 0); h.engine.destroy();
 });

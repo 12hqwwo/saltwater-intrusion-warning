@@ -16,7 +16,7 @@ import { mapFeatures } from '../research-utils.js';
 import { ecComparison } from '../shared/ec-scenario.js';
 import { formatWater, advisoryColor } from '../shared/simulation-display.js';
 import { smoothRiverSegments, smoothCoordinates, riverRibbon } from './river-geometry.js';
-import { createMapParticles } from './map-particles.js';
+import { createMapParticles, mapWindVector } from './map-particles.js';
 import { inspectWaterPoint, validCoordinate } from './point-inspection.js';
 import { cropAdvisories } from '../shared/water-advisory.js';
 import { validPrediction } from '../shared/forecast-contract.js';
@@ -49,6 +49,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   const tileSource = theme => theme === 'satellite' ? new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', crossOrigin: 'anonymous', attributions: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community' }) : new OSM();
   const base = new TileLayer({ source: tileSource(), className: 'simulation-base-tiles' });
   let frame = null, corridor = null, displayUnit = 'ec', selectedGate = null, intakeGate = null, disposed = false;
+  let riverDirectionVisible = true, windDirectionVisible = true;
   let initialSimulationFit = false, hoveredSegment = null, hoveredGate = null, inspectedCoordinate = null;
   const riverSource = new VectorSource({ attributions: 'River geometry &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> · ODbL' }), canalSource = new VectorSource(), simulationGateSource = new VectorSource(), isoSource = new VectorSource();
   const ribbonStyles = new globalThis.Map();
@@ -139,6 +140,31 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   const particles = createMapParticles({ riverCanvas: canvases[0], windCanvas: canvases[1], project: coordinate => map.getPixelFromCoordinate(fromLonLat(coordinate)), isVisible: () => !disposed && !document.hidden && !document.getElementById('observations')?.hidden,
     onFrame: time => { if (hasRenderableSize() && time-lastHaloRender > 65) { lastHaloRender=time; map.render(); } } });
   particles.start();
+  function updateDirectionStatus() {
+    const status = document.getElementById('mapDirectionStatus');
+    const riverRow = document.getElementById('mapRiverDirectionStatus');
+    const windRow = document.getElementById('mapWindDirectionStatus');
+    const windArrow = document.getElementById('mapWindDirectionArrow');
+    const windText = document.getElementById('mapWindDirectionText');
+    if (!status || !riverRow || !windRow || !windArrow || !windText) return;
+    riverRow.hidden = !riverDirectionVisible || !frame?.river_segments?.length;
+    windRow.hidden = !windDirectionVisible || !frame;
+    status.hidden = riverRow.hidden && windRow.hidden;
+    if (!frame || !windDirectionVisible) return;
+    const vector = mapWindVector(frame.wind, frame.year_month);
+    windArrow.hidden = !vector;
+    if (!vector) {
+      windText.textContent = `${frame.year_month}: chưa có dữ liệu hướng gió; tốc độ đơn lẻ không cho biết hướng.`;
+      return;
+    }
+    const heading = (Math.atan2(vector.x, -vector.y) * 180 / Math.PI + 360) % 360;
+    windArrow.style.transform = `rotate(${heading}deg)`;
+    const directions = ['Bắc', 'Đông Bắc', 'Đông', 'Đông Nam', 'Nam', 'Tây Nam', 'Tây', 'Tây Bắc'];
+    const toward = directions[Math.round(heading / 45) % 8];
+    windText.textContent = vector.kind === 'SEASONAL_VECTOR_CLIMATOLOGY'
+      ? `Gió ước tính theo mùa ${frame.year_month} đi về ${toward} · hướng điển hình từ ERA5 ${vector.referencePeriod}; không phải dự báo gió tháng này.`
+      : `Gió vùng ${frame.year_month} đi về ${toward} · ${vector.speed.toFixed(1)} m/s · ERA5 tổng hợp tháng`;
+  }
   map.on('movestart', () => particles.setMoving(true)); map.on('moveend', () => particles.setMoving(false));
   map.on('singleclick', event => {
     const waterwayPicker = document.getElementById('simulationWaterwayPicker'); if (waterwayPicker) waterwayPicker.value = '';
@@ -325,6 +351,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   }
   function setSimulationFrame(value) {
     frame = value; intakeGate = null; hoveredSegment = null; hoveredGate = null; updateRiverTooltip(); riverSource.clear(); simulationGateSource.clear(); isoSource.clear(); isoStyles.clear(); canalLayer.changed();
+    updateDirectionStatus();
     const smoothed = smoothRiverSegments(frame?.river_segments || [], riverInterpolation);
     // Subdivide only display geometry: particles retain the original 35 continuous paths.
     const ribbon = riverRibbon(smoothed.segments, 8, [frame?.thresholds?.open_below_ec_ms_m, frame?.thresholds?.close_at_or_above_ec_ms_m]);
@@ -391,9 +418,10 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     setSimulationCorridor,
     setSimulationFrame,
     setDisplayUnit,
-    setRiverParticles(value) { particles.setVisible({river:Boolean(value)}); },
-    setWindVisible(value) { particles.setVisible({wind:Boolean(value)}); },
-    setBaseTheme(theme) { const next = tileSource(theme); if (onTileError) next.on('tileloaderror', onTileError); base.setSource(next); },
+    setRiverParticles(value) { riverDirectionVisible = Boolean(value); particles.setVisible({river:riverDirectionVisible}); updateDirectionStatus(); },
+    setWindVisible(value) { windDirectionVisible = Boolean(value); particles.setVisible({wind:windDirectionVisible}); updateDirectionStatus(); },
+    setMotionEnabled(value) { particles.setMotionEnabled(value); },
+    setBaseTheme(theme) { const next = tileSource(theme); if (onTileError) next.on('tileloaderror', onTileError); base.setSource(next); particles.setTheme(theme); },
     refresh() { if (!ensureMapMounted()) return; particles.resize(); particles.start(); if (frame && !initialSimulationFit) { fitMap(); initialSimulationFit = true; } map.render(); },
     setStations(value) { collection = value; return update(); },
     setUnconfirmed(value) { showUnconfirmed = value; return update(); },

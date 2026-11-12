@@ -1,4 +1,11 @@
-export const RIVER_PARTICLE_COUNT = 54;
+export const RIVER_PARTICLE_COUNT = 72;
+export const RIVER_STREAK_BANDS = 4;
+export const WIND_COLOR = '#0284c7';
+export function windAppearance(theme) {
+  if (theme === 'dark') return { color: '#67e8f9', opacity: 0.78, thickness: 1.3 };
+  if (theme === 'satellite') return { color: '#b6f1ff', opacity: 0.8, thickness: 1.3 };
+  return { color: WIND_COLOR, opacity: 0.55, thickness: 1.1 };
+}
 export const MAX_PARTICLE_DT = 0.05;
 export const WIND_TRAIL_POINTS = 34;
 export const RIVER_TRAIL_POINTS = 16;
@@ -24,7 +31,7 @@ export function riverMotion(properties = {}) {
   const upstream = properties.flow_direction === 'UPSTREAM_SALINE_INTRUSION';
   const factor = Number(properties.flow_velocity_factor);
   return { direction: upstream ? -1 : 1,
-    speed: 22 * (Number.isFinite(factor) ? Math.max(0.2, Math.min(1.5, factor)) : 1),
+    speed: 32 * (Number.isFinite(factor) ? Math.max(0.2, Math.min(1.5, factor)) : 1),
     color: '#ffffff' };
 }
 
@@ -39,6 +46,15 @@ export function windVector(wind) {
   const radians = direction * Math.PI / 180;
   // Meteorological bearings specify where wind comes FROM; canvas y is south.
   return { x: -speed * Math.sin(radians), y: speed * Math.cos(radians), speed };
+}
+
+export function mapWindVector(wind, targetMonth) {
+  const current = (!wind?.source_month || wind.source_month === targetMonth) ? windVector(wind) : null;
+  if (current?.speed > 0) return { ...current, kind: 'MONTHLY_ERA5' };
+  const visual = wind?.visualization;
+  if (visual?.kind !== 'SEASONAL_VECTOR_CLIMATOLOGY' || visual.target_month !== targetMonth) return null;
+  const seasonal = windVector(visual);
+  return seasonal?.speed > 0 ? { ...seasonal, kind: 'SEASONAL_VECTOR_CLIMATOLOGY', referencePeriod: visual.reference_period } : null;
 }
 
 export function boundedDelta(previous, current) {
@@ -68,10 +84,57 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
   let frame = null, segments = [], canals = [], intakeGate = null, moving = false;
   let width = 0, height = 0, ratio = 1, riverPath = null, spans = [], canalPaths = [];
   let riverParticles = [], windParticles = [], intakeParticles = [];
-  let raf = null, previous = null, running = false, destroyed = false;
+  let raf = null, previous = null, running = false, destroyed = false, motionOverride = null;
+  let windStyle = windAppearance('light');
   const visible = { river: true, wind: true };
   const clear = context => context?.clearRect(0, 0, width, height);
   function clearAll() { clear(riverContext); clear(windContext); }
+  function drawRiverArrows(time = 0) {
+    if (!visible.river || !riverContext || !riverPath?.length || moving || !isVisible() || documentRef?.hidden) return;
+    // Static chevrons only replace the animation when the user prefers reduced motion.
+    for (let distance = 45; distance < riverPath.length; distance += 85) {
+      if (distance < 20 || distance > riverPath.length - 20) continue;
+      const span = spans.find(item => distance <= item.end) || spans.at(-1);
+      const direction = riverMotion(span?.properties).direction;
+      const a = atDistance(riverPath, Math.max(0, distance - 9));
+      const b = atDistance(riverPath, Math.min(riverPath.length, distance + 9));
+      const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      if (length < 2) continue;
+      const dx = direction * (b[0] - a[0]) / length, dy = direction * (b[1] - a[1]) / length;
+      const center = atDistance(riverPath, distance);
+      const tip = [center[0] + dx * 8, center[1] + dy * 8];
+      const wing = [center[0] - dx * 6, center[1] - dy * 6];
+      riverContext.lineCap = riverContext.lineJoin = 'round';
+      riverContext.beginPath();
+      riverContext.moveTo(wing[0] - dy * 5, wing[1] + dx * 5);
+      riverContext.lineTo(...tip);
+      riverContext.lineTo(wing[0] + dy * 5, wing[1] - dx * 5);
+      riverContext.strokeStyle = '#082130'; riverContext.lineWidth = 5; riverContext.stroke();
+      riverContext.strokeStyle = '#ffffff'; riverContext.lineWidth = 2.5; riverContext.stroke();
+    }
+  }
+  function drawWindArrows() {
+    const vector = mapWindVector(frame?.wind, frame?.year_month);
+    if (!visible.wind || !windContext || !vector?.speed
+      || !isVisible() || documentRef?.hidden || moving) return;
+    const dx = vector.x / vector.speed, dy = vector.y / vector.speed;
+    windContext.lineCap = windContext.lineJoin = 'round';
+    for (let y = 110; y < height; y += 220) {
+      for (let x = 120 + (Math.floor(y / 220) % 2) * 100; x < width; x += 250) {
+        const cx = x, cy = y;
+        if (cx < 20 || cx > width - 20 || cy < 20 || cy > height - 20) continue;
+        const tip = [cx + dx * 12, cy + dy * 12], tail = [cx - dx * 12, cy - dy * 12];
+        windContext.beginPath(); windContext.moveTo(...tail); windContext.lineTo(...tip);
+        windContext.moveTo(tip[0] - dx * 8 - dy * 5, tip[1] - dy * 8 + dx * 5);
+        windContext.lineTo(...tip);
+        windContext.lineTo(tip[0] - dx * 8 + dy * 5, tip[1] - dy * 8 - dx * 5);
+        windContext.strokeStyle = '#082130'; windContext.lineWidth = 5; windContext.stroke();
+        windContext.strokeStyle = '#7dd3fc'; windContext.lineWidth = 2.5; windContext.stroke();
+      }
+    }
+  }
+  function motionEnabled() { return motionOverride ?? !motionQuery?.matches; }
+  function drawStill() { clearAll(); if (!motionEnabled()) { drawRiverArrows(); drawWindArrows(); } }
   function projectPoints(points) {
     const result = points.map(project);
     return result.every(p => Array.isArray(p) && p.length >= 2 && p.every(Number.isFinite)) ? result : [];
@@ -88,14 +151,14 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
     spans.forEach(span => { span.end = riverPath.distances[span.endIndex]; });
     riverParticles = Array.from({ length: RIVER_PARTICLE_COUNT }, (_, index) => ({
       distance: (index + random()) / RIVER_PARTICLE_COUNT * riverPath.length,
-      length: 10 + random() * 6,
+      length: 22 + random() * 14,
     }));
     const gate = frame?.gates?.find(item => item.gate_code === intakeGate);
     canalPaths = gate ? canals.filter(feature => feature.properties?.gate_code === intakeGate || gate.canal_ids?.includes(feature.properties?.id ?? feature.id))
       .map(feature => pathMetrics(projectPoints(feature.geometry.coordinates))).filter(path => path.length > 0) : [];
     intakeParticles = canalPaths.flatMap(path => Array.from({ length: 8 }, () => ({ path, distance: random() * path.length, trail: [] })));
     windParticles = Array.from({ length: windParticleCount(width, height) }, () => ({ x: random() * width, y: random() * height, life: random() * 6, trail: [] }));
-    previous = null; clearAll();
+    previous = null; drawStill();
   }
   function resize() {
     const rect = riverCanvas.getBoundingClientRect();
@@ -120,8 +183,9 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
       context.stroke();
     }
     context.globalAlpha = opacity; context.fillStyle = color;
-    context.shadowColor = color; context.shadowBlur = thickness > 1 ? 5 : 0;
-    context.beginPath(); context.arc(...trail.at(-1), thickness > 1 ? 0.7 : 0.45, 0, Math.PI * 2); context.fill();
+    const glow = thickness >= 1.5;
+    context.shadowColor = color; context.shadowBlur = glow ? 5 : 0;
+    context.beginPath(); context.arc(...trail.at(-1), glow ? 0.7 : 0.45, 0, Math.PI * 2); context.fill();
     context.shadowBlur = 0; context.globalAlpha = 1;
   }
   function riverStep(dt) {
@@ -130,17 +194,22 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
       const span = spans.find(item => particle.distance <= item.end) || spans.at(-1);
       const motion = riverMotion(span?.properties);
       particle.distance = (particle.distance + motion.direction * motion.speed * dt + riverPath.length) % riverPath.length;
-      // Sample a 10–16 CSS-pixel streak along the path, without a glowing dot head.
+      // A 22–36 px streak along the path, faded from tail to head so travel direction reads without arrows.
       const tail = Math.max(0, Math.min(riverPath.length, particle.distance - motion.direction * particle.length));
-      const samples = Math.max(1, Math.ceil(Math.abs(particle.distance - tail) / 2));
-      riverContext.strokeStyle = 'rgba(255,255,255,0.75)';
-      riverContext.globalAlpha = 1;
-      riverContext.lineWidth = 2;
+      const reach = particle.distance - tail;
+      riverContext.strokeStyle = '#ffffff';
       riverContext.lineCap = riverContext.lineJoin = 'round';
-      riverContext.beginPath();
-      riverContext.moveTo(...atDistance(riverPath, tail));
-      for (let i = 1; i <= samples; i++) riverContext.lineTo(...atDistance(riverPath, tail + (particle.distance - tail) * i / samples));
-      riverContext.stroke();
+      for (let band = 0; band < RIVER_STREAK_BANDS; band++) {
+        const from = tail + reach * band / RIVER_STREAK_BANDS, to = tail + reach * (band + 1) / RIVER_STREAK_BANDS;
+        const samples = Math.max(1, Math.ceil(Math.abs(to - from) / 2));
+        riverContext.globalAlpha = 0.2 + 0.75 * (band + 1) / RIVER_STREAK_BANDS;
+        riverContext.lineWidth = 1.4 + band * 0.4;
+        riverContext.beginPath();
+        riverContext.moveTo(...atDistance(riverPath, from));
+        for (let i = 1; i <= samples; i++) riverContext.lineTo(...atDistance(riverPath, from + (to - from) * i / samples));
+        riverContext.stroke();
+      }
+      riverContext.globalAlpha = 1;
     }
     for (const particle of intakeParticles) {
       particle.distance += 20 * dt;
@@ -150,7 +219,7 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
     }
   }
   function windStep(dt) {
-    const vector = windVector(frame?.wind);
+    const vector = mapWindVector(frame?.wind, frame?.year_month);
     if (!visible.wind || !vector || vector.speed === 0) return;
     const scale = Math.min(45, 7 + vector.speed * 4) / vector.speed;
     for (const particle of windParticles) {
@@ -159,13 +228,13 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
         particle.x = random() * width; particle.y = random() * height; particle.life = 0; particle.trail = [];
       }
       const trail = appendTrailPoint(particle.trail, [particle.x, particle.y], WIND_TRAIL_POINTS);
-      comet(windContext, trail, '#bae6fd', 0.28, 0.7);
+      comet(windContext, trail, windStyle.color, windStyle.opacity, windStyle.thickness);
     }
   }
-  function permitted() { return !destroyed && running && frame && !moving && !documentRef?.hidden && !motionQuery?.matches && isVisible() && (visible.river || visible.wind); }
+  function permitted() { return !destroyed && running && frame && !moving && !documentRef?.hidden && motionEnabled() && isVisible() && (visible.river || visible.wind); }
   function tick(time) {
     raf = null;
-    if (!permitted()) { previous = null; clearAll(); return; }
+    if (!permitted()) { previous = null; drawStill(); return; }
     if (ratio !== Math.min(3, Math.max(1, environment.devicePixelRatio || 1))) resize();
     const dt = boundedDelta(previous, time); previous = time;
     clearAll(); riverStep(dt); windStep(dt);
@@ -174,7 +243,7 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
   }
   function start() { if (destroyed) return; running = true; if (raf == null && permitted()) { previous = null; raf = requestFrame(tick); } }
   function stop() { running = false; if (raf != null) cancelFrame(raf); raf = null; previous = null; clearAll(); }
-  function resume() { if (!permitted()) { if (raf != null) cancelFrame(raf); raf = null; previous = null; clearAll(); } else start(); }
+  function resume() { if (!permitted()) { if (raf != null) cancelFrame(raf); raf = null; previous = null; drawStill(); } else start(); }
   documentRef?.addEventListener('visibilitychange', resume);
   motionQuery?.addEventListener?.('change', resume);
   const observer = environment.ResizeObserver ? new environment.ResizeObserver(() => { resize(); resume(); }) : null;
@@ -184,7 +253,9 @@ export function createMapParticles({ riverCanvas, windCanvas, project, isVisible
     setFrame(value, smoothedSegments = value?.river_segments || []) { frame = value; segments = smoothedSegments; intakeGate = null; rebuild(); resume(); },
     setCanals(value) { canals = value; rebuild(); },
     setIntakeGate(code) { intakeGate = code || null; rebuild(); },
-    setVisible(value) { Object.assign(visible, value); clearAll(); resume(); },
+    setVisible(value) { Object.assign(visible, value); drawStill(); resume(); },
+    setMotionEnabled(value) { motionOverride = Boolean(value); resume(); },
+    setTheme(theme) { windStyle = windAppearance(theme); resume(); },
     setMoving(value) { moving = Boolean(value); if (!moving) rebuild(); resume(); },
     invalidate() { rebuild(); resume(); },
     resize, start, stop,

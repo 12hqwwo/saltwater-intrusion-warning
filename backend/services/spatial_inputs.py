@@ -88,6 +88,26 @@ def _winds(station):
     return _wind_file(path, stat.st_mtime_ns, stat.st_size)
 
 
+def _seasonal_wind_visuals(winds):
+    """Same-calendar-month ERA5 vector climatology for map display only."""
+    visuals = {}
+    for calendar_month in range(1, 13):
+        rows = [row for month, row in winds.items()
+                if '2010-01' <= month <= '2023-12' and int(month[5:]) == calendar_month]
+        if len(rows) < 10:
+            continue
+        u, v = mean(row['u10'] for row in rows), mean(row['v10'] for row in rows)
+        if math.hypot(u, v) < 0.2:
+            continue
+        visuals[calendar_month] = dict(kind='SEASONAL_VECTOR_CLIMATOLOGY',
+            available=True, u10=u, v10=v, resultant_speed_ms=math.hypot(u, v),
+            source=rows[0]['source'], sha256=rows[0]['sha256'],
+            reference_period='2010-2023', sample_month_count=len(rows),
+            method='MEAN_OF_SAME_CALENDAR_MONTH_VECTORS',
+            note='Map illustration only; not a monthly wind forecast or an EC model input.')
+    return visuals
+
+
 def _observed_months(bundle, site):
     groups = defaultdict(list)
     excluded_invalid = Counter()
@@ -246,6 +266,8 @@ def _monthly_inputs():
         for station in STATIONS:
             forecasts[station, month] = _future_boundaries(month, station, observed, weather, now.date().isoformat())
     winds = {station: _winds(station) for station in STATIONS}
+    seasonal_wind_visuals = {station: _seasonal_wind_visuals(winds[station]) for station in STATIONS}
+    latest_wind_month = {station: max(winds[station], default=None) for station in STATIONS}
     result = {}
     for month in _months('1985-06', end):
         boundaries, station_weather = {}, {}
@@ -285,6 +307,9 @@ def _monthly_inputs():
             wind['speed_ms'] = station_weather[station]['wind_speed_ms']
             wind['speed_source'] = station_weather[station]['source']
             wind['unit'] = 'm/s'
+            if (not wind['available'] and latest_wind_month[station] and month > latest_wind_month[station]
+                    and int(month[5:]) in seasonal_wind_visuals[station]):
+                wind['visualization'] = dict(seasonal_wind_visuals[station][int(month[5:])], target_month=month)
             station_weather[station]['wind'] = wind
         regional = station_weather['MyTho']
         tan_chau, my_tho = boundaries['TanChau']['value'], boundaries['MyTho']['value']

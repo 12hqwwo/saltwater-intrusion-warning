@@ -199,6 +199,21 @@ class SpatialSimulationTests(unittest.TestCase):
                 self.assertIn(month, evidence['source_months'])
                 self.assertFalse(evidence['verified_observation'])
 
+    def test_future_wind_visual_uses_separate_same_month_climatology(self):
+        future = self.read('frame', year_month='2026-11')['wind']
+        self.assertFalse(future['available'])
+        self.assertIsNone(future['u10'])
+        visual = future['visualization']
+        self.assertEqual(visual['kind'], 'SEASONAL_VECTOR_CLIMATOLOGY')
+        self.assertEqual(visual['target_month'], '2026-11')
+        self.assertEqual(visual['reference_period'], '2010-2023')
+        self.assertEqual(visual['sample_month_count'], 14)
+        self.assertNotEqual((visual['u10'], visual['v10']), (0, 0))
+        observed = self.read('frame', year_month='2026-08')['wind']
+        self.assertTrue(observed['available'])
+        self.assertEqual(observed['source_month'], '2026-08')
+        self.assertNotIn('visualization', observed)
+
     def test_frames_preserve_continuity_units_and_simulation_labels(self):
         corridor = self.read('corridor')['corridor']['features']
         axis = next(feature for feature in corridor
