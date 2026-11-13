@@ -1,5 +1,6 @@
 """Validate storage requests independently from operational decision claims."""
 import json
+import logging
 import math
 from functools import wraps
 import psycopg
@@ -7,6 +8,8 @@ from backend.repositories import dss_storage as store
 from backend.services import multivariate
 from backend.services.workspace import WorkspaceError
 from backend.domain.gates import stamp, validate_chronology
+
+logger = logging.getLogger('webgis.dss_storage')
 
 
 def storage_errors(function):
@@ -17,13 +20,25 @@ def storage_errors(function):
         except store.StorageDisabled as exc:
             raise WorkspaceError(503, 'DSS_WRITES_DISABLED: Chưa bật lưu PostgreSQL; bản nháp cục bộ và dự báo vẫn dùng được.') from exc
         except psycopg.Error as exc:
-            if exc.sqlstate in {'42P01', '42703', '3F000'}:
+            state = exc.sqlstate
+            constraint = getattr(exc.diag, 'constraint_name', None)
+            logger.warning('DSS storage SQLSTATE=%s constraint=%s', state or 'unknown', constraint or 'none')
+            if state == '23505':
+                status = 409
+                message = 'DSS_DUPLICATE: Bản ghi đã tồn tại.'
+            elif state in {'23514', '23503', '23502'}:
+                status = 422
+                message = 'DSS_CONSTRAINT_VIOLATION: Dữ liệu không đáp ứng ràng buộc lưu trữ.'
+            elif state in {'42P01', '42703', '3F000'}:
+                status = 503
                 message = 'DSS_SCHEMA_MISSING: Chưa cài migration lưu trữ DSS hoặc schema chưa khớp.'
-            elif exc.sqlstate == '42501':
+            elif state == '42501':
+                status = 503
                 message = 'DSS_PERMISSION_DENIED: Tài khoản thiếu quyền lưu trữ DSS.'
             else:
+                status = 503
                 message = 'DSS_DATABASE_UNAVAILABLE: Không truy cập được kho DSS; kiểm tra kết nối.'
-            raise WorkspaceError(503, message) from exc
+            raise WorkspaceError(status, message) from exc
     return guarded
 
 

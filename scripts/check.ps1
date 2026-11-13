@@ -11,7 +11,7 @@ if (-not (Test-Path $python)) { throw 'Missing .venv\Scripts\python.exe' }
 if ($Full) {
     & $python -m unittest discover -s tests -p 'test_*.py'
 } else {
-    & $python -m unittest tests.test_model_loading tests.test_backend_audit tests.test_security
+    & $python -m unittest tests.test_model_loading tests.test_backend_audit tests.test_security tests.test_spatial_inputs_cache tests.test_dss_storage_errors tests.test_sql_migrations
 }
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
