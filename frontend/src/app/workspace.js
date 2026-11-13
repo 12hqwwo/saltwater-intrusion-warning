@@ -13,10 +13,12 @@ import { showIntake } from "../intake.js";
 import { bindNavigation } from "./navigation.js";
 import { createDatabaseHistory } from "../features/database-history.js";
 import { createMultivariateForecast } from "../features/multivariate-forecast.js";
+import { createFieldMeasurements } from "../features/field-measurements.js";
 
 bindDatabaseCheck();
 const forecasts = createForecasts();
 const multivariate = createMultivariateForecast();
+const fieldMeasurements = createFieldMeasurements($("fieldMeasurementsHost"));
 const observations = createObservations({ onForecast: async (code) => {
   forecasts.selectStation(code);
   await multivariate.selectStation(code);

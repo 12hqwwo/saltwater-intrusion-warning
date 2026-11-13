@@ -16,6 +16,7 @@ def main():
     load_local_env()
     from backend.domain.forecast_issue import score
     from backend.repositories import forecast_issues as repo
+    from backend.repositories import field_measurements as field_repo
     from backend.services import forecast_issues as service
 
     rows = service.list_issues(with_scores=True)['items']
@@ -40,7 +41,9 @@ def main():
             continue
         observation = repo.candidate_mrc_label(slot['station_key'], month)
         if observation is None:
-            print(name, 'no eligible MRC monthly label; field labels await approved protocol data')
+            observation = field_repo.candidate_field_label(slot['station_key'], month)
+        if observation is None:
+            print(name, 'no eligible MRC or approved equivalent field monthly label')
             continue
         point = score(dict(target_month=month.strftime('%Y-%m'),
                            predicted_ec_mS_m=issue['predicted_ec_mS_m']), observation)

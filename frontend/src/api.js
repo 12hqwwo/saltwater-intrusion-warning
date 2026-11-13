@@ -7,7 +7,7 @@ export const TIME_ZONE = 'Asia/Ho_Chi_Minh';
 
 export class APIError extends Error {}
 
-export async function requestJSON(path, { signal, fetcher = globalThis.fetch, method = 'GET', body: payload, timeoutMs = 15_000 } = {}) {
+export async function requestJSON(path, { signal, fetcher = globalThis.fetch, method = 'GET', body: payload, timeoutMs = 15_000, headers = {} } = {}) {
   const controller = new AbortController();
   const abort = () => controller.abort();
   let timedOut = false;
@@ -17,7 +17,7 @@ export async function requestJSON(path, { signal, fetcher = globalThis.fetch, me
   try {
     const response = await fetcher(`${ROOT}${path}`, {
       signal: controller.signal, method,
-      headers: { Accept: 'application/json', ...(payload === undefined ? {} : { 'Content-Type': 'application/json' }) },
+      headers: { Accept: 'application/json', ...(payload === undefined ? {} : { 'Content-Type': 'application/json' }), ...headers },
       ...(payload === undefined ? {} : { body: JSON.stringify(payload) }),
     });
     let body;

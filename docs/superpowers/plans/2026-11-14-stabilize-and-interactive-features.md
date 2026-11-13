@@ -1,6 +1,6 @@
 # Ổn định vận hành và tính năng tương tác — Implementation Plan
 
-> **Bản đồng bộ 14/11/2026:** `docs/ke_hoach_khac_phuc_danh_gia_2026-11-14.md` là quyết định phạm vi/phương pháp. Các bước Task 8 và Task 10 bên dưới là backlog sau giai đoạn lõi, không thuộc cam kết 1–2 tuần. Chưa triển khai mã hay migration bằng việc sửa plan này.
+> **Trạng thái 14/11/2026:** `docs/ke_hoach_khac_phuc_danh_gia_2026-11-14.md` là quyết định phạm vi/phương pháp. Task 1–7 và Task 9 đã triển khai trên `TinBranch`; migration 32, 33 và 35 đã áp dụng và kiểm bằng transaction rollback. Task 8 và Task 10 là backlog sau giai đoạn lõi. Chưa có nhãn EC tháng mới để chấm sai số vận hành; lịch gọi script phát hành/chấm điểm cần cấu hình khi đưa hệ thống vào vận hành.
 
 **Goal:** Trong 1–2 tuần, sửa test/bằng chứng, lưu Mỹ Thuận, cache, pool và quy tắc cống; tạo khung sổ phát hành dự báo cùng phiếu thực địa có kiểm duyệt. Cảnh báo điểm quan tâm và what-if cống là backlog tùy chọn. Chưa tuyên bố có sai số vận hành khi chưa có nhãn EC tháng đủ điều kiện.
 
@@ -102,7 +102,7 @@ dss_reference.forecast_slot (UNIQUE station+target_month+schedule_code)
         │     chỉ nếu đạt tiêu chí tương đương đã chốt trước phiếu đầu tiên
         │   domain.forecast_issue.score(issue, observation) → abs_error
         ▼
-dss_reference.forecast_score (UNIQUE issue_id+label_protocol_version; observation_ref; obs_source)
+dss_reference.forecast_score (UNIQUE(issue_id,label_protocol_version); observation_ref; obs_source)
 ```
 
 **Quy tắc khoa học:** không bao giờ cập nhật `forecast_issue` sau khi phát hành; không ghi lùi `issued_at`. Bảng slot mang khóa lịch, bảng issue tham chiếu slot với `UNIQUE(slot_id)`; sự kiện `MISSED` vẫn còn khi có issue `LATE`. MAE chính chỉ dùng `ON_TIME`; `LATE` có báo cáo riêng. Điểm số chỉ dùng nhãn EC tháng đã được QA theo giao thức tương đương chốt trước, không chỉ dựa vào `observed_at` nằm trong tháng. Nếu không có nhãn đủ điều kiện, hiện “chưa có dữ liệu chấm”, không hiển thị MAE vận hành.

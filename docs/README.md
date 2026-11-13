@@ -7,6 +7,7 @@
 1. [Hướng dẫn luồng WebGIS và hồ sơ giảm sai số](HUONG_DAN_LUONG_WEBGIS_VA_THU_NGHIEM_GIAM_SAI_SO.md): cách dùng từng tab, cách đọc bản đồ/biểu đồ và các phép thử sau khi chọn mô hình chính.
 2. [Mô hình chính Mỹ Tho: khí tượng + lưu lượng Kratie + mực nước Tân Châu](mytho_hydrology_primary_2026-11-08.md): cấu hình hiện hành, các kỳ khóa EC, kết quả và giới hạn. Mỹ Thuận và Tân Châu dùng mô hình riêng.
 3. [Hướng dẫn chạy](run_guide.md), [kiến trúc](architecture.md), [luồng người dùng](user-flow.md): vận hành và cấu trúc dự án.
+4. [Phụ lục triển khai 14/11](on_tap_hoi_dong_2026-11-13/04_cap_nhat_trien_khai_2026-11-14.md): trạng thái phần ổn định và phiếu thực địa sau bộ ôn tập 13/11, các giới hạn khi demo.
 
 Các tên `RF_compact`, mô hình EC trễ và chuỗi ước tính khí tượng cũ là **bằng chứng nghiên cứu**, không phải mô hình chính Mỹ Tho hiện đang phục vụ. Giao diện đặt thí nghiệm EC trễ trong phần phụ lục thu gọn. Kết quả không được chọn vẫn được giữ để người hướng dẫn kiểm tra vì sao chọn mô hình hiện tại.
 

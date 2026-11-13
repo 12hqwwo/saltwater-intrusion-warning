@@ -12,6 +12,7 @@ from backend.api.dss_storage import multivariate_history_router
 from backend.api.data_freshness import router as data_freshness_router
 from backend.api.gate_screening import router as gate_screening_router
 from backend.api.forecast_issues import router as forecast_issues_router
+from backend.api.field_measurements import router as field_measurements_router
 from backend.services.workspace import WorkspaceError
 from backend.intake import router as intake_router
 
@@ -77,6 +78,7 @@ app.include_router(multivariate_history_router, prefix='/api/v1')
 app.include_router(data_freshness_router, prefix='/api/v1')
 app.include_router(gate_screening_router, prefix='/api/v1')
 app.include_router(forecast_issues_router, prefix='/api/v1')
+app.include_router(field_measurements_router, prefix='/api/v1')
 app.include_router(intake_router, prefix='/api/v1/workspace')
 app.include_router(intake_router, prefix='/api/v1/research')
 app.add_middleware(SecurityMiddleware)

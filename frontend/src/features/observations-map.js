@@ -45,7 +45,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   const token = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const warningColors = { safe: token('--ec-safe'), caution: token('--ec-caution'), risk: token('--ec-risk'), unknown: token('--ec-unknown') };
   const gateWarningColor = gate => warningColors[ecWarningLevel(gate?.simulated_outside_ec_mS_m, frame?.thresholds)];
-  const source = new VectorSource(), boundarySource = new VectorSource(), gateSource = new VectorSource(), candidateSource = new VectorSource(), forecastSource = new VectorSource(), inspectSource = new VectorSource();
+  const source = new VectorSource(), boundarySource = new VectorSource(), gateSource = new VectorSource(), candidateSource = new VectorSource(), forecastSource = new VectorSource(), inspectSource = new VectorSource(), fieldSource = new VectorSource();
   const tileSource = theme => theme === 'satellite' ? new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', crossOrigin: 'anonymous', attributions: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community' }) : new OSM();
   const base = new TileLayer({ source: tileSource(), className: 'simulation-base-tiles' });
   let frame = null, corridor = null, displayUnit = 'ec', selectedGate = null, intakeGate = null, disposed = false;
@@ -109,6 +109,10 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     }
     return cache.get(key);
   } });
+  const fieldLayer = new VectorLayer({ source: fieldSource, style: new Style({
+    image: new RegularShape({ points: 3, radius: 8, rotation: Math.PI,
+      fill: new Fill({ color: '#9a4bb5' }), stroke: new Stroke({ color: '#fff', width: 2 }) }), zIndex: 27,
+  }) });
   const gates = new VectorLayer({ source: gateSource, visible: false, style: new Style({ image: new Circle({ radius: 4.5, fill: new Fill({ color: warningColors.unknown }), stroke: new Stroke({ color: '#fff', width: 1.5 }) }) }) });
   const candidates = new VectorLayer({ source: candidateSource, style: new Style({ stroke: new Stroke({ color: '#7560a7', width: 2, lineDash: [6, 5] }) }) });
   const inspection = new VectorLayer({ source: inspectSource, style: new Style({
@@ -119,7 +123,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     return new Style({ image: new Circle({ radius: 13, fill: new Fill({ color: 'rgba(54,105,191,.16)' }), stroke: new Stroke({ color: '#3669bf', width: 3 }) }), text: new Text({ text: `Dự báo ${f.get('target_month')}: ${formatWater(f.get('predicted_ec_mS_m'), displayUnit)}`, offsetY: 27, font: '600 13px Be Vietnam Pro', fill: new Fill({ color: '#234d90' }), backgroundFill: new Fill({ color: '#fff' }), padding: [4, 6, 4, 6], stroke: new Stroke({ color: '#fff', width: 3 }) }), zIndex: 15 });
   } });
   function hasRenderableSize() { return !disposed && target.clientWidth > 0 && target.clientHeight > 0 && !target.closest('[hidden]'); }
-  const map = new Map({ layers: [base, boundaries, canalLayer, riverDiffusion, riverLayer, candidates, gates, simulationGates, stations, forecastLayer, isoLayer, inspection], controls: controls({ rotate: false, attributionOptions: { collapsible: false } }).extend([new ScaleLine()]),
+  const map = new Map({ layers: [base, boundaries, canalLayer, riverDiffusion, riverLayer, candidates, gates, simulationGates, stations, fieldLayer, forecastLayer, isoLayer, inspection], controls: controls({ rotate: false, attributionOptions: { collapsible: false } }).extend([new ScaleLine()]),
     view: new View({ center: fromLonLat([105.8, 10.45]), zoom: 8.7, minZoom: 5, maxZoom: 18, enableRotation: false }) });
   function ensureMapMounted() {
     if (!hasRenderableSize()) {
@@ -176,6 +180,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     if (station) { selectSimulationGate(null, false); onSelect(station.get('site_code')); return; }
     selectSimulationGate(null, false);
     inspectedCoordinate = toLonLat(event.coordinate);
+    window.dispatchEvent(new CustomEvent('workspace:field-point-selected', { detail: { coordinate: inspectedCoordinate } }));
     renderPointCard();
     document.getElementById('simulationGateCard')?.focus({ preventScroll: true });
   });
@@ -213,6 +218,11 @@ export function createResearchMap(target, { onSelect, onTileError }) {
       const name = `${station.get('site_code')} ${station.get('site_name')}`.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/gi,'').toLowerCase();
       const value = name.includes('tanchau') ? frame?.inputs?.tan_chau_ec_mS_m : name.includes('mythuan') ? frame?.inputs?.my_thuan_ec_mS_m : name.includes('mytho') ? frame?.inputs?.my_tho_ec_mS_m : null;
       riverTooltip.hidden = false; riverTooltip.textContent = `${station.get('site_name')} · Mẫu nguồn ${station.get('last_observed_date') || 'chưa rõ ngày'}: ${formatWater(station.get('latest_ec_mS_m'), displayUnit)}${value == null ? '' : ` · Đầu vào mô phỏng ${frame.year_month}: ${formatWater(value,displayUnit)}`}`;
+    }
+    const field = map.forEachFeatureAtPixel(event.pixel, feature => feature, { layerFilter: layer => layer === fieldLayer, hitTolerance: 9 });
+    if (field) {
+      riverTooltip.hidden = false;
+      riverTooltip.textContent = `Số đo thực địa đã duyệt · ${field.get('observed_at')} · ${field.get('submitted_by')} · ${formatWater(field.get('ec_mS_m'), displayUnit)} · không phải dữ liệu MRC`;
     }
   }
   map.on('pointermove', inspectRiver); map.on('singleclick', inspectRiver);
@@ -392,6 +402,10 @@ export function createResearchMap(target, { onSelect, onTileError }) {
       const zoom = Number.isFinite(event.detail.zoom) ? Math.min(18, Math.max(5, event.detail.zoom)) : 10.8;
       map.getView().animate({ center: fromLonLat(coordinate), zoom, duration: 450 });
     }],
+    ['workspace:approved-field-measurements', event => {
+      fieldSource.clear();
+      fieldSource.addFeatures(formatter.readFeatures(fieldMeasurementFeatureCollection(event.detail), options));
+    }],
     ['workspace:viewchange', event => { if (event.detail?.view === 'observations') resumeVisibleMap(); else { particles.stop(); map.setTarget(undefined); } }],
   ];
   listeners.forEach(([name, handler]) => window.addEventListener(name, handler));
@@ -453,4 +467,12 @@ export function databaseGateFeatureCollection(items) {
       type: 'Feature', geometry, properties,
     })),
   };
+}
+
+export function fieldMeasurementFeatureCollection(items) {
+  return { type: 'FeatureCollection', features: (items || []).filter(item =>
+    item.status === 'APPROVED' && Number.isFinite(item.longitude) && Number.isFinite(item.latitude))
+    .map(item => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [item.longitude, item.latitude] },
+      properties: { measurement_id: item.measurement_id, ec_mS_m: item.ec_mS_m,
+        observed_at: item.observed_at, submitted_by: item.submitted_by } })) };
 }
