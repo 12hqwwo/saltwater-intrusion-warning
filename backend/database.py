@@ -3,8 +3,10 @@
 import os
 from contextlib import contextmanager
 from datetime import date, datetime, time, timedelta
+from threading import RLock
 
 import psycopg
+from psycopg_pool import ConnectionPool
 from psycopg.rows import dict_row
 
 from backend.schemas import LOCAL_TZ
@@ -19,25 +21,64 @@ class DatasetNotFound(Exception):
     """Snapshot không có quan trắc EC của trạm được yêu cầu."""
 
 
+_read_pool = None
+_read_pool_key = None
+_read_pool_lock = RLock()
+
+
+def _read_config():
+    return (os.getenv('PGHOST', '127.0.0.1'), os.getenv('PGPORT', '5432'),
+            os.getenv('PGDATABASE', 'dongthap_gis'),
+            os.getenv('WEBGIS_DB_USER', 'webgis_reader'),
+            os.getenv('WEBGIS_DB_PASSWORD'), os.getenv('WEBGIS_DB_POOL_MAX', '6'))
+
+
+def _configure_reader(conn):
+    conn.read_only = True
+    conn.isolation_level = psycopg.IsolationLevel.REPEATABLE_READ
+    try:
+        assert_application_role(conn)
+    finally:
+        conn.rollback()
+
+
+def open_read_pool():
+    global _read_pool, _read_pool_key
+    key = _read_config()
+    with _read_pool_lock:
+        if _read_pool is not None and key == _read_pool_key:
+            return _read_pool
+        if _read_pool is not None:
+            _read_pool.close()
+        host, port, dbname, user, password, size = key
+        kwargs = dict(host=host, port=port, dbname=dbname, user=user,
+                      connect_timeout=5, application_name='webgis_read_api',
+                      options='-c statement_timeout=10000 -c lock_timeout=3000 -c timezone=Asia/Ho_Chi_Minh',
+                      row_factory=dict_row)
+        if password is not None:
+            kwargs['password'] = password
+        maximum = max(1, min(10, int(size)))
+        _read_pool = ConnectionPool(kwargs=kwargs, min_size=0, max_size=maximum,
+                                    configure=_configure_reader, timeout=5,
+                                    name='webgis_read', open=True)
+        _read_pool_key = key
+        return _read_pool
+
+
+def close_read_pool():
+    global _read_pool, _read_pool_key
+    with _read_pool_lock:
+        if _read_pool is not None:
+            _read_pool.close()
+            _read_pool = None
+            _read_pool_key = None
+
+
 @contextmanager
 def read_connection():
     # Password/passfile/SSL settings use libpq's standard PG* environment.
-    # Never interpolate credentials into SQL or log connection strings.
-    with psycopg.connect(
-        host=os.getenv("PGHOST", "127.0.0.1"),
-        port=os.getenv("PGPORT", "5432"),
-        dbname=os.getenv("PGDATABASE", "dongthap_gis"),
-        user=os.getenv("WEBGIS_DB_USER", "webgis_reader"),
-        **({'password': os.environ['WEBGIS_DB_PASSWORD']} if 'WEBGIS_DB_PASSWORD' in os.environ else {}),
-        connect_timeout=5,
-        application_name="webgis_read_api",
-        options="-c statement_timeout=10000 -c lock_timeout=3000 -c timezone=Asia/Ho_Chi_Minh",
-        row_factory=dict_row,
-    ) as conn:
-        conn.read_only = True
-        # Count and page must see the same snapshot within one request.
-        conn.isolation_level = psycopg.IsolationLevel.REPEATABLE_READ
-        assert_application_role(conn)
+    # Pool transactions keep count/page on one REPEATABLE READ snapshot.
+    with open_read_pool().connection() as conn:
         yield conn
 
 

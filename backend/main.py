@@ -31,10 +31,20 @@ logger = logging.getLogger("webgis.api")
 @asynccontextmanager
 async def lifespan(app):
     from backend.domain.multivariate_ec import warmup_models
+    from backend.database import open_read_pool, close_read_pool
+    from backend.repositories.dss_storage import open_write_pool, close_write_pool
     failures = warmup_models()
     if failures:
         logger.warning('Multivariate model warmup unavailable: %s', failures)
-    yield
+    if os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot').lower() == 'postgres':
+        open_read_pool()
+    if os.getenv('WEBGIS_DSS_WRITES_ENABLED', '').lower() == 'true' and os.getenv('DSS_PGUSER'):
+        open_write_pool()
+    try:
+        yield
+    finally:
+        close_write_pool()
+        close_read_pool()
 
 
 app = FastAPI(
