@@ -9,6 +9,7 @@ from backend.research import router as research_router
 from backend.api.workspace import router as workspace_router
 from backend.api.multivariate import router as multivariate_router
 from backend.api.dss_storage import multivariate_history_router
+from backend.api.data_freshness import router as data_freshness_router
 from backend.services.workspace import WorkspaceError
 from backend.intake import router as intake_router
 
@@ -71,6 +72,7 @@ app.include_router(research_router)
 app.include_router(workspace_router, prefix='/api/v1/workspace', tags=['Workspace'])
 app.include_router(multivariate_router, prefix='/api/v1', tags=['Multivariate'])
 app.include_router(multivariate_history_router, prefix='/api/v1')
+app.include_router(data_freshness_router, prefix='/api/v1')
 app.include_router(intake_router, prefix='/api/v1/workspace')
 app.include_router(intake_router, prefix='/api/v1/research')
 app.add_middleware(SecurityMiddleware)

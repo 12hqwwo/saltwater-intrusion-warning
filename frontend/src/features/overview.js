@@ -37,6 +37,7 @@ export function mountQuickScenarios() {
 
 export function renderOverview(summary) {
   mountQuickScenarios();
+  mountFreshnessPanel();
   $("modeBadge").textContent = summary.storage_mode === "postgres" ? "PostgreSQL" : "Snapshot có nguồn";
   $("statRia").textContent = summary.ria2_observations;
   $("statSites").textContent = summary.stations;
@@ -53,6 +54,52 @@ export function renderOverview(summary) {
     );
     if (source.retrieved_at) card.append(node("small", `Ngày thu thập: ${dateOnly(source.retrieved_at)}`));
     $("sourceList").append(card);
+  }
+}
+
+const freshnessLabels = {
+  ERA5_MYTHO: "ERA5 · Mỹ Tho", ERA5_TANCHAU: "ERA5 · Tân Châu",
+  ERA5_MYTHUAN: "ERA5 · Mỹ Thuận", KRATIE_Q: "Lưu lượng Kratie",
+  TANCHAU_STAGE: "Mực nước Tân Châu", MRC_EC_MYTHO: "EC quan trắc Mỹ Tho",
+};
+
+export function freshnessText(key, item) {
+  const status = { FRESH: "Còn hạn", DUE: "Sắp cần cập nhật", STALE: "Đã quá hạn", UNAVAILABLE: "Thiếu dữ liệu" }[item.status] || "Chưa rõ";
+  const latest = item.last_observation || item.last_source_month || "chưa có";
+  const target = item.next_target_month_supported ? ` · Dự báo đến ${item.next_target_month_supported}` : "";
+  return `${freshnessLabels[key] || key}: ${status} · Nguồn mới nhất ${latest}${target}`;
+}
+
+function mountFreshnessPanel() {
+  if ($("dataFreshnessPanel")) return;
+  const workflow = document.querySelector(".workflow-cards");
+  if (!workflow) return;
+  const panel = node("section", undefined, "panel");
+  panel.id = "dataFreshnessPanel";
+  panel.dataset.view = "overview";
+  panel.hidden = Boolean(location.hash && !['#overview', '#main'].includes(location.hash));
+  panel.append(node("h3", "Độ tươi dữ liệu đầu vào"),
+    node("p", "Ngày khả dụng của khí tượng và thủy văn là giả định cuối tháng + 5 ngày; ngày tải về không phải ngày công bố đầu tiên.", "subtle"));
+  const list = node("div"); list.id = "dataFreshnessList";
+  list.textContent = "Đang kiểm tra nguồn…";
+  panel.append(list);
+  $("quickSpatialScenarios")?.after(panel);
+}
+
+export async function loadDataFreshness(options) {
+  mountFreshnessPanel();
+  const list = $("dataFreshnessList");
+  if (!list) return;
+  try {
+    const report = await requestJSON('/data-freshness', options);
+    list.replaceChildren();
+    for (const [key, item] of Object.entries(report.sources || {})) {
+      const row = node("p", freshnessText(key, item));
+      row.dataset.status = item.status;
+      list.append(row);
+    }
+  } catch (error) {
+    list.textContent = `Không kiểm tra được độ tươi nguồn: ${error.message}`;
   }
 }
 

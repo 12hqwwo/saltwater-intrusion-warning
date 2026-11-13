@@ -8,7 +8,7 @@ import { createObservations } from "../features/observations.js";
 import { createForecasts } from "../features/forecasts.js";
 import { createWeatherEstimates } from "../features/weather-estimates.js";
 import { createGateDossiers } from "../features/gate-dossiers.js";
-import { renderOverview, renderOverviewStations, bindDatabaseCheck } from "../features/overview.js";
+import { renderOverview, renderOverviewStations, bindDatabaseCheck, loadDataFreshness } from "../features/overview.js";
 import { showIntake } from "../intake.js";
 import { bindNavigation } from "./navigation.js";
 import { createDatabaseHistory } from "../features/database-history.js";
@@ -69,6 +69,7 @@ async function loadWorkspace() {
   const jobs = [];
   if (summary.status === "fulfilled") {
     renderOverview(summary.value);
+    jobs.push(loadDataFreshness(req));
     jobs.push(forecasts.load(summary.value.experiments || []));
   } else {
     forecasts.showError(summary.reason.message);
