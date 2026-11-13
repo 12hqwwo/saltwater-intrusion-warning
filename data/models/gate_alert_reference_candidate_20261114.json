@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "CANDIDATE_NOT_ACTIVE",
+  "effective_at": null,
+  "model_version": "20261108T_HYDROLOGY_PRIMARY_V1",
+  "model_sha256": "f3bc750b33db5b1de841fce5c2882cf79ce3aba2ea2a81e34a07ef880b1ced0e",
+  "alert_reference": {
+    "p90_mS_m": 70.5,
+    "station": "MYTHO",
+    "source": "data/research/mrc_ec_monthly_samples.csv",
+    "source_sha256": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "label_selection": "station=MYTHO and month_start<=2023-12-01; all 463 training labels including SUSPECT",
+    "label_count": 463,
+    "method": "Nearest-rank empirical P90: sorted values[ceil(0.90*n)-1]",
+    "source_quality": "UNVERIFIED_SOURCE_QA_NOT_PROMOTED"
+  },
+  "activation_note": "Candidate only. The serving RuleProfile remains TECH_SCREENING_RULE_V1.0 with P90 60.42 until after defense and a separate activation decision."
+}
