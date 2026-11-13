@@ -81,6 +81,8 @@ class ThreeStationIntegration(unittest.TestCase):
         with self.assertRaises(WorkspaceError):
             spatial_simulation._anchors(item)
         rows = [r for r in spatial_inputs.estimate_rows() if not (r['station'] == 'MyThuan' and r['year_month'] == '2024-01')]
+        spatial_inputs.monthly_inputs.cache_clear()
+        self.addCleanup(spatial_inputs.monthly_inputs.cache_clear)
         with patch.object(spatial_inputs, 'estimate_rows', return_value=rows):
             with self.assertRaises(WorkspaceError) as result:
                 spatial_inputs.monthly_inputs()

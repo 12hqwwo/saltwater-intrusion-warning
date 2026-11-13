@@ -1,21 +1,32 @@
 """Read-only monthly evidence adapted for the isolated spatial simulation."""
 import calendar
 from collections import Counter, defaultdict
+from collections import OrderedDict
+from contextvars import ContextVar
 from datetime import datetime
 from functools import lru_cache
 import hashlib
 import json
 import math
 from statistics import mean, median
+from threading import RLock
 from zoneinfo import ZoneInfo
 
+import psycopg
+
+from backend.repositories import workspace as workspace_store
 from backend.repositories.workspace import ROOT, load_bundle, estimate_rows
+from backend.repositories import multivariate_inputs, hydrology_inputs
 from backend.repositories.multivariate_inputs import get_monthly_weather
 from backend.services.workspace import WorkspaceError
 from backend.domain.river_interpolation import THREE_STATION_MODE, TWO_STATION_MODE
 
 STATIONS = {'TanChau': 'MRC_VN_019803', 'MyThuan': 'MRC_VN_019804', 'MyTho': 'MRC_VN_019805'}
 SALINITY_FACTOR = 0.0064
+LOCAL_TZ = ZoneInfo('Asia/Ho_Chi_Minh')
+_MONTH_CACHE = OrderedDict()
+_MONTH_CACHE_LOCK = RLock()
+_CACHE_METADATA = ContextVar('spatial_month_cache_metadata', default=None)
 
 
 def _number(value, nonnegative=False):
@@ -333,9 +344,71 @@ def _monthly_inputs():
     return result
 
 
+def _file_stamp(path):
+    stat = path.stat()
+    return (str(path), stat.st_mtime_ns, stat.st_size)
+
+
+def source_stamp(today=None):
+    """Include every changing source and the local day used by future boundaries."""
+    local_day = today or datetime.now(LOCAL_TZ).date().isoformat()
+    registry_path = ROOT / 'data/models/multivariate_registry.json'
+    registry = json.loads(registry_path.read_text(encoding='utf-8'))
+    model_files = [ROOT / entry[key] for entry in registry['models'].values()
+                   for key in ('model_path', 'manifest_path')]
+    wind_files = [ROOT / f'data/external/ec_feature_research_20261019/era5_extra_{station}.json'
+                  for station in STATIONS]
+    return (local_day, workspace_store.bundle_stamp(),
+            _file_stamp(ROOT / 'data/models/future_ec_forecast_2024_2026.csv'),
+            multivariate_inputs._signature(), hydrology_inputs._signature(),
+            _file_stamp(registry_path),
+            tuple(_file_stamp(path) for path in model_files),
+            tuple(_file_stamp(path) for path in wind_files if path.exists()))
+
+
+def cache_metadata():
+    return dict(_CACHE_METADATA.get() or {})
+
+
+def _clear_monthly_cache():
+    with _MONTH_CACHE_LOCK:
+        _MONTH_CACHE.clear()
+        _model_forecast.cache_clear()
+    _CACHE_METADATA.set(None)
+
+
 def monthly_inputs():
-    """Expose source/schema failures as unavailable input, never an API 500."""
+    """One build per source stamp; stale same-day fallback is explicit in API metadata."""
+    unavailable = 'Spatial simulation monthly evidence is unavailable or invalid.'
     try:
-        return _monthly_inputs()
-    except (OSError, ValueError, TypeError, KeyError, IndexError, AttributeError, OverflowError) as exc:
-        raise WorkspaceError(503, 'Spatial simulation monthly evidence is unavailable or invalid.') from exc
+        stamp = source_stamp()
+    except (OSError, ValueError, TypeError, KeyError, IndexError, AttributeError,
+            psycopg.Error) as exc:
+        raise WorkspaceError(503, unavailable) from exc
+    with _MONTH_CACHE_LOCK:
+        cached = _MONTH_CACHE.get(stamp)
+        if cached is not None:
+            _MONTH_CACHE.move_to_end(stamp)
+            _CACHE_METADATA.set(dict(cache_status='FRESH', built_at=cached['built_at']))
+            return cached['data']
+        if _MONTH_CACHE:
+            _model_forecast.cache_clear()
+        try:
+            data = _monthly_inputs()
+        except (OSError, ValueError, TypeError, KeyError, IndexError, AttributeError, OverflowError,
+                psycopg.Error) as exc:
+            previous_stamp = next(reversed(_MONTH_CACHE), None)
+            previous = _MONTH_CACHE.get(previous_stamp)
+            if previous is not None and previous_stamp[0] == stamp[0]:
+                _CACHE_METADATA.set(dict(cache_status='STALE', built_at=previous['built_at']))
+                return previous['data']
+            raise WorkspaceError(503, unavailable) from exc
+        entry = dict(data=data, built_at=datetime.now(LOCAL_TZ).isoformat())
+        _MONTH_CACHE[stamp] = entry
+        while len(_MONTH_CACHE) > 2:
+            _MONTH_CACHE.popitem(last=False)
+        _CACHE_METADATA.set(dict(cache_status='FRESH', built_at=entry['built_at']))
+        return data
+
+
+monthly_inputs.cache_clear = _clear_monthly_cache

@@ -10,7 +10,7 @@ import math
 from pathlib import Path
 
 from backend.repositories import workspace as store
-from backend.services.spatial_inputs import monthly_inputs
+from backend.services.spatial_inputs import monthly_inputs, cache_metadata
 from backend.services.workspace import WorkspaceError, load_bundle
 from backend.domain.river_interpolation import (MY_THUAN_KM, MY_THUAN_COORDINATE,
     THREE_STATION_MODE, TWO_STATION_MODE, interpolate_anchors)
@@ -201,7 +201,7 @@ def simulation_corridor():
 def simulation_timeline():
     items = list(monthly_inputs().values())
     return dict(items=items, total=len(items), start_month=items[0]['year_month'],
-                end_month=items[-1]['year_month'], **_metadata())
+                end_month=items[-1]['year_month'], **cache_metadata(), **_metadata())
 
 
 def _month(year_month):
@@ -350,4 +350,4 @@ def simulation_frame(year_month, open_below_ec=120.0, close_above_ec=150.0):
                     estuary_calibration_status='UNCALIBRATED_SCENARIO',
                     geometry_status='REPRESENTATIVE_SCHEMATIC', flow_is_measured=False,
                     salinity_conversion_basis='EMPIRICAL_ESTIMATE_UNKNOWN_EC_TEMPERATURE_BASIS'),
-                **_metadata())
+                **cache_metadata(), **_metadata())
