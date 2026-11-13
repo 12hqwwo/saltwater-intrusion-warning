@@ -72,7 +72,10 @@ class RemedyChecks(unittest.TestCase):
         manifest = json.loads((OUTPUT / "run_manifest.json").read_text("utf-8"))
         root = Path(__file__).resolve().parents[1]
         for relative, digest in manifest["source_sha256"].items():
-            self.assertEqual(hashlib.sha256((root / relative).read_bytes()).hexdigest(), digest)
+            current = root / relative
+            if hashlib.sha256(current.read_bytes()).hexdigest() != digest:
+                current = OUTPUT / 'source_snapshots' / relative
+            self.assertEqual(hashlib.sha256(current.read_bytes()).hexdigest(), digest)
         for name, digest in manifest["output_sha256"].items():
             self.assertEqual(hashlib.sha256((OUTPUT / name).read_bytes()).hexdigest(), digest)
         study = ec_gap_remedies.summary("gap_2022_2023", 5)

@@ -3,3 +3,7 @@ data/external/user_v3_review_20261015/WebGIS_ML_Time_Series_Ready_v3.csv text eo
 data/external/user_v3_review_20261015/webgis_dongthap_tiengiang_spatial_v3.json text eol=lf
 data/external/user_v3_review_20261015/normalized_review.json text eol=lf
 data/biengioi/tien_osm_waterways_source.json text eol=lf
+# Reproducibility snapshots are hashed byte-for-byte by their run manifests.
+outputs/frozen_ec_remedies_20261108/source_snapshots/scripts/evaluate_frozen_ec_gap_remedies.py -text
+outputs/mythuan_three_station_20261104/source_snapshots/scripts/evaluate_mythuan_three_station.py -text
+outputs/mythuan_three_station_20261104/source_snapshots/scripts/train_multivariate_ec.py -text
