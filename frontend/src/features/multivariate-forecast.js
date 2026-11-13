@@ -6,6 +6,7 @@ import { createPredictionHistory } from "./prediction-history.js";
 import { cropAdvisories } from "../shared/water-advisory.js";
 import { validMonth, inputMonthFor, validPrediction, forecastMonthFromToday } from '../shared/forecast-contract.js';
 import { DIRECT_FORECAST_SUBTITLE } from '../shared/forecast-map-overlay.js';
+import { createForecastIssuePanel } from './forecast-issue-panel.js';
 
 export { forecastMonthFromToday } from '../shared/forecast-contract.js';
 
@@ -129,6 +130,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const evaluationFollowup = node("details", undefined, "mv-remedy-research");
   evaluation.append(evaluationSummary, labelFor('Giai đoạn mất EC giả lập', evaluationExperiment), labelFor('Giả định ngày khả dụng EC', evaluationDelay), evaluationStatus, evaluationGuidance, evaluationChart, evaluationLegend, evaluationMetrics, evaluationRemedies, evaluationFollowup);
   host.append(evaluation);
+  createForecastIssuePanel(host);
   const predictionHistory = createPredictionHistory(host, {
     onSaved(data) {
       result = data;

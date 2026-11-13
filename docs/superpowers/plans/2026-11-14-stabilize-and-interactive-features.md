@@ -102,7 +102,7 @@ dss_reference.forecast_slot (UNIQUE station+target_month+schedule_code)
         │     chỉ nếu đạt tiêu chí tương đương đã chốt trước phiếu đầu tiên
         │   domain.forecast_issue.score(issue, observation) → abs_error
         ▼
-dss_reference.forecast_score (UNIQUE issue_id+observation_ref; obs_source)
+dss_reference.forecast_score (UNIQUE issue_id+label_protocol_version; observation_ref; obs_source)
 ```
 
 **Quy tắc khoa học:** không bao giờ cập nhật `forecast_issue` sau khi phát hành; không ghi lùi `issued_at`. Bảng slot mang khóa lịch, bảng issue tham chiếu slot với `UNIQUE(slot_id)`; sự kiện `MISSED` vẫn còn khi có issue `LATE`. MAE chính chỉ dùng `ON_TIME`; `LATE` có báo cáo riêng. Điểm số chỉ dùng nhãn EC tháng đã được QA theo giao thức tương đương chốt trước, không chỉ dựa vào `observed_at` nằm trong tháng. Nếu không có nhãn đủ điều kiện, hiện “chưa có dữ liệu chấm”, không hiển thị MAE vận hành.

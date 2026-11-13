@@ -117,6 +117,13 @@ def main():
             conn.execute('GRANT SELECT ON ALL TABLES IN SCHEMA public TO webgis_reader')
             conn.execute('GRANT SELECT ON dss_reference.ec_threshold_presets,dss_reference.gate_simulation_drafts,dss_reference.multivariate_prediction_log TO webgis_reader')
             conn.execute('GRANT SELECT,INSERT ON dss_reference.gate_simulation_drafts,dss_reference.multivariate_prediction_log TO webgis_writer')
+            ledger_tables = ['forecast_slot', 'forecast_slot_event', 'forecast_issue', 'forecast_score']
+            if all(conn.execute('SELECT to_regclass(%s)', ('dss_reference.' + table,)).fetchone()[0]
+                   for table in ledger_tables):
+                names = sql.SQL(',').join(sql.Identifier('dss_reference', table) for table in ledger_tables)
+                conn.execute(sql.SQL('GRANT SELECT ON {} TO webgis_reader').format(names))
+                conn.execute(sql.SQL('GRANT SELECT,INSERT ON {} TO webgis_writer').format(names))
+                conn.execute('GRANT USAGE ON SEQUENCE dss_reference.forecast_score_score_id_seq TO webgis_writer')
             sequence = conn.execute("SELECT pg_get_serial_sequence('dss_reference.gate_simulation_drafts','draft_id')").fetchone()[0]
             conn.execute(sql.SQL('GRANT USAGE ON SEQUENCE {} TO webgis_writer').format(sql.Identifier(*sequence.split('.'))))
             if conn.execute("SELECT to_regnamespace('webgis_research')").fetchone()[0] is not None:
