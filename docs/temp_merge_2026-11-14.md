@@ -17,7 +17,7 @@
 
 - JavaScript: **174/174 qua**; frontend production build thành công.
 - Python: **168 test, 166 qua, 2 bỏ qua**. Hai test hợp đồng PostgreSQL mới được chạy thật với bảng/view tạm tạo từ định nghĩa migration, rollback và đóng kết nối sau mỗi test.
-- Hai test bỏ qua thuộc kiểm chứng hash nguồn nghiên cứu có nguồn gốc không đủ tại máy này; không phải các test PostgreSQL mới. Xem thông báo cụ thể trong `merge-python-tests.log`.
+- Hai test bỏ qua: kiểm tra lỗi kết nối FES do chưa cài `paramiko`, và kiểm tra hash nguồn nghiên cứu Mỹ Thuận do thiếu snapshot nguồn gốc. Các test PostgreSQL mới đều đã chạy. Xem thông báo cụ thể trong `merge-python-tests.log`.
 - PostgreSQL tạm kiểm tra lưu issue, đọc issue/score qua API, đọc EC/nhiệt độ phiếu đã duyệt và tạo nhãn tháng từ hai mẫu hợp lệ.
 - Kiểm tra cấu hình máy thật: app-health, workspace summary, danh mục mô hình, độ tươi dữ liệu và frame tháng 08/2026 đều HTTP 200. Dự báo ARCHIVE cho tháng 10/2026 tại Mỹ Tho, Mỹ Thuận, Tân Châu đều HTTP 200 với tháng đầu vào 08/2026.
 - `git diff --check` và kiểm tra diff đã stage đều qua. Đã cài `psycopg-pool==3.3.3` vào `.venv` chính để khởi động được backend mới.
