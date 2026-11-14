@@ -170,7 +170,10 @@ export function createTimelineScrubber() {
     $('simulationMyTho').textContent = formatWater(item.my_tho_ec_mS_m, state.unit, item.my_tho_salinity_g_l);
     $('simulationMyThuan').textContent = Number.isFinite(item.my_thuan_ec_mS_m) ? formatWater(item.my_thuan_ec_mS_m, state.unit) : 'Khuyết mẫu · nội suy 2 trạm';
     const direction = item.wind?.direction_from_degrees;
-    $('simulationWeather').textContent = `${item.data_regime === 'SEASONAL_SCENARIO' ? 'Trung vị ERA5 2010–2023' : 'ERA5'} · Mưa ${num(item.rainfall_mm)} mm · ${num(item.temperature_degC)} °C · Gió ${num(item.wind_speed_ms)} m/s${Number.isFinite(direction) ? ` · từ ${Math.round(direction)}°` : ' · chưa có hướng'}${item.imputed && item.data_regime !== 'SEASONAL_SCENARIO' ? ' · EC có nội suy thời gian' : ''}`;
+    const directionNote = Number.isFinite(direction) ? ` · từ ${Math.round(direction)}°`
+      : item.wind?.visualization?.kind === 'SEASONAL_VECTOR_CLIMATOLOGY' ? ' · hướng trên bản đồ ước tính theo mùa'
+      : ' · chưa có hướng';
+    $('simulationWeather').textContent = `${item.data_regime === 'SEASONAL_SCENARIO' ? 'Trung vị ERA5 2010–2023' : 'ERA5'} · Mưa ${num(item.rainfall_mm)} mm · ${num(item.temperature_degC)} °C · Gió ${num(item.wind_speed_ms)} m/s${directionNote}${item.imputed && item.data_regime !== 'SEASONAL_SCENARIO' ? ' · EC có nội suy thời gian' : ''}`;
   }
   const loader = createSimulationFrameLoader({
     availableMonths: [],

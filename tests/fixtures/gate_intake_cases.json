@@ -1,0 +1,20 @@
+{
+  "now_iso": "2026-11-01T10:00:00Z",
+  "base_measurement": {
+    "gateId": "G1", "gateName": "Cống thí điểm", "measuredAtIso": "2026-11-01T09:00:00Z",
+    "exteriorEcMsM": 80, "interiorEcMsM": 60,
+    "exteriorStageM": 1.15, "interiorStageM": 1,
+    "sameElevationDatum": true, "mechanicalStatus": "READY", "measuredBy": "Phiếu đo 01"
+  },
+  "cases": [
+    { "id": "demo_eligible", "measurement": {}, "context": {}, "expected": "ELIGIBLE_FOR_REVIEW" },
+    { "id": "high_exterior_ec", "measurement": { "exteriorEcMsM": 200 }, "context": {}, "expected": "NOT_SUITABLE" },
+    { "id": "expired_eight_hours", "measurement": { "measuredAtIso": "2026-11-01T02:00:00Z" }, "context": {}, "expected": "INSUFFICIENT_OR_EXPIRED_DATA" },
+    { "id": "head_at_boundary", "measurement": { "exteriorStageM": 1.05 }, "context": {}, "expected": "ELIGIBLE_FOR_REVIEW" },
+    { "id": "datum_unconfirmed", "measurement": { "sameElevationDatum": false }, "context": {}, "expected": "INSUFFICIENT_OR_EXPIRED_DATA" },
+    { "id": "mechanical_fault", "measurement": { "mechanicalStatus": "FAULT" }, "context": {}, "expected": "NOT_SUITABLE" },
+    { "id": "p90_tightens_sample_age", "measurement": { "measuredAtIso": "2026-11-01T07:00:00Z" }, "context": { "mythoEc": 61 }, "expected": "INSUFFICIENT_OR_EXPIRED_DATA" },
+    { "id": "future_measurement", "measurement": { "measuredAtIso": "2026-11-01T10:00:01Z" }, "context": {}, "expected": "INSUFFICIENT_OR_EXPIRED_DATA" },
+    { "id": "simulated_not_field", "measurement": { "dataKind": "SIMULATION" }, "context": {}, "expected": "INSUFFICIENT_OR_EXPIRED_DATA" }
+  ]
+}

@@ -184,20 +184,47 @@ class SpatialSimulationTests(unittest.TestCase):
         forecast = {r['station']: float(r['predicted_ec_mS_m']) for r in estimate_rows() if r['year_month'] == '2024-04'}
         for month, upstream, downstream, regime in [
             ('2016-03', 21.8, 385.0, 'OBSERVED_MRC'),
-            ('2024-04', forecast['TanChau'], forecast['MyTho'], 'ML_FORECAST_ERA5'),
+            ('2024-04', forecast['TanChau'], None, 'ML_FORECAST_ERA5'),
             ('2022-10', 11.5, 13.53, 'OBSERVED_MRC'),
         ]:
             row = indexed[month]
             self.assertAlmostEqual(row['tan_chau_ec_mS_m'], upstream)
-            self.assertAlmostEqual(row['my_tho_ec_mS_m'], downstream)
+            if downstream is None:
+                self.assertNotAlmostEqual(row['my_tho_ec_mS_m'], forecast['MyTho'], places=3)
+                self.assertEqual(
+                    row['boundary_provenance']['MyTho']['model_version'],
+                    '20261108T_HYDROLOGY_PRIMARY_V1',
+                )
+            else:
+                self.assertAlmostEqual(row['my_tho_ec_mS_m'], downstream)
             self.assertEqual(row['data_regime'], regime)
             self.assertFalse(row['imputed'])
             self.assertFalse(row['gate_decision_eligible'])
             self.assertFalse(row['live_forecast_available'])
             self.assertEqual(row['wind']['unit'], 'm/s')
             for evidence in row['boundary_provenance'].values():
-                self.assertIn(month, evidence['source_months'])
+                source_month = (evidence['input_month']
+                                if evidence.get('model_version') == '20261108T_HYDROLOGY_PRIMARY_V1'
+                                else month)
+                self.assertIn(source_month, evidence['source_months'])
+                if evidence.get('model_version') == '20261108T_HYDROLOGY_PRIMARY_V1':
+                    self.assertEqual(source_month, '2024-02')
                 self.assertFalse(evidence['verified_observation'])
+
+    def test_future_wind_visual_uses_separate_same_month_climatology(self):
+        future = self.read('frame', year_month='2026-11')['wind']
+        self.assertFalse(future['available'])
+        self.assertIsNone(future['u10'])
+        visual = future['visualization']
+        self.assertEqual(visual['kind'], 'SEASONAL_VECTOR_CLIMATOLOGY')
+        self.assertEqual(visual['target_month'], '2026-11')
+        self.assertEqual(visual['reference_period'], '2010-2023')
+        self.assertEqual(visual['sample_month_count'], 14)
+        self.assertNotEqual((visual['u10'], visual['v10']), (0, 0))
+        observed = self.read('frame', year_month='2026-08')['wind']
+        self.assertTrue(observed['available'])
+        self.assertEqual(observed['source_month'], '2026-08')
+        self.assertNotIn('visualization', observed)
 
     def test_frames_preserve_continuity_units_and_simulation_labels(self):
         corridor = self.read('corridor')['corridor']['features']

@@ -3,14 +3,16 @@ import { activeForecastContext, forecastModelLabel } from '../shared/forecast-ma
 import { DEFAULT_GATE_RULE_PROFILE, evaluateGateIntakeCondition, deriveForecastAdvisoryForGate,
   gateMeasurementNumber, validateGateRuleProfile } from '../shared/gate-intake-rules.js';
 import { projectForecastContextForGate } from './gate-forecast-context.js';
+import { requestJSON } from '../api.js';
 
 const localTime = value => new Date(value).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour12: false });
 const CHECK_LABELS = { PASSED: 'Đạt', FAILED: 'Không đạt', MISSING_OR_EXPIRED: 'Cần bổ sung / đo lại' };
 
 export function createGateIntakeScreening(host, { now = () => new Date().toISOString(), schedule = setTimeout, cancel = clearTimeout,
+  serverEvaluate = payload => requestJSON('/gate-screening/evaluate', { method: 'POST', body: payload }),
   eventTarget = globalThis.window, documentTarget = globalThis.document } = {}) {
   if (!host) return { setGate() {}, setSpatialFrame() {}, destroy() {} };
-  let gate = null, baseFrame = null, forecast = activeForecastContext, result = null, expiryTimer = null, disposed = false;
+  let gate = null, baseFrame = null, forecast = activeForecastContext, result = null, expiryTimer = null, disposed = false, evaluationSerial = 0;
   const controls = new Map(), ruleControls = new Map();
   const panel = node('section', undefined, 'panel gate-intake-screening');
   panel.append(node('span', 'KIỂM TRA KỸ THUẬT · NGƯỜI VẬN HÀNH XEM XÉT', 'tag'), node('h3', DEFAULT_GATE_RULE_PROFILE.ruleName));
@@ -61,12 +63,13 @@ export function createGateIntakeScreening(host, { now = () => new Date().toISOSt
   actions.append(submit, download); form.append(profileDetails, actions);
   const conclusion = node('div', undefined, 'gate-intake-conclusion'); conclusion.id = 'gateIntakeConclusion'; conclusion.setAttribute('role', 'status');
   const expiry = node('p', '', 'subtle'); expiry.id = 'gateIntakeExpiry';
+  const serverStatus = node('p', '', 'subtle'); serverStatus.id = 'gateIntakeServerStatus';
   const table = node('table', undefined, 'gate-intake-checks'), head = node('thead'), header = node('tr'), rows = node('tbody');
   rows.id = 'gateIntakeCriteria';
   for (const text of ['Điều kiện', 'Kết quả', 'Số đo / khai báo', 'Ngưỡng kiểm tra', 'Giải thích']) header.append(node('th', text));
   head.append(header); table.append(head, rows);
   const wrap = node('div', undefined, 'table-wrap'); wrap.append(table);
-  fieldSection.append(form, conclusion, expiry, wrap); panel.append(contextSection, fieldSection); host.replaceChildren(panel);
+  fieldSection.append(form, conclusion, expiry, serverStatus, wrap); panel.append(contextSection, fieldSection); host.replaceChildren(panel);
 
   function readProfile() {
     const profile = { ...DEFAULT_GATE_RULE_PROFILE };
@@ -104,7 +107,8 @@ export function createGateIntakeScreening(host, { now = () => new Date().toISOSt
     } catch (error) { forecastSummary.append(node('p', error.message, 'error')); }
   }
   function invalidate(message = 'Phiếu đã thay đổi. Cần kiểm tra lại điều kiện hiện tại.') {
-    cancel(expiryTimer); expiryTimer = null; result = null; download.disabled = true;
+    evaluationSerial++; cancel(expiryTimer); expiryTimer = null; result = null; download.disabled = true;
+    serverStatus.textContent = '';
     conclusion.dataset.status = 'PENDING'; conclusion.textContent = message; expiry.textContent = ''; rows.replaceChildren();
   }
   function measurementInput() {
@@ -120,8 +124,28 @@ export function createGateIntakeScreening(host, { now = () => new Date().toISOSt
     if (disposed || !gate) return null;
     cancel(expiryTimer); expiryTimer = null;
     try {
-      const measured = measurementInput();
-      result = { ...evaluateGateIntakeCondition(measured, readProfile(), gateContext(), now()), measurementInput: measured };
+      const measured = measurementInput(), profile = readProfile(), context = gateContext(), evaluatedAt = now();
+      result = { ...evaluateGateIntakeCondition(measured, profile, context, evaluatedAt), measurementInput: measured };
+      const serial = ++evaluationSerial, localResult = result;
+      serverStatus.textContent = 'Đang đối chiếu quy tắc trên máy chủ…';
+      download.disabled = true;
+      Promise.resolve().then(() => serverEvaluate({ measurement: measured, profile, forecast_context: context, now_iso: evaluatedAt }))
+        .then(remote => {
+          if (disposed || serial !== evaluationSerial || result !== localResult) return;
+          const localChecks = localResult.criteriaChecks.map(item => [item.id, item.status]);
+          const remoteChecks = (remote.criteriaChecks || []).map(item => [item.id, item.status]);
+          const matches = remote.status === localResult.status && JSON.stringify(remoteChecks) === JSON.stringify(localChecks) &&
+            remote.effectiveMaxSampleAgeHours === localResult.forecastAdvisory.effectiveMaxSampleAgeHours;
+          serverStatus.textContent = matches ? 'Máy chủ đã đối chiếu cùng kết quả và từng tiêu chí.' :
+            `Kết quả khác nhau: giao diện ${localResult.status}, máy chủ ${remote.status || 'không rõ'}. Cần kiểm tra trước khi dùng.`;
+          serverStatus.dataset.status = matches ? 'MATCH' : 'MISMATCH';
+          download.disabled = !matches;
+        }).catch(error => {
+          if (disposed || serial !== evaluationSerial) return;
+          serverStatus.textContent = `Chưa đối chiếu được với máy chủ: ${error.message}`;
+          serverStatus.dataset.status = 'UNVERIFIED';
+          download.disabled = true;
+        });
       conclusion.dataset.status = result.status;
       conclusion.replaceChildren(node('h4', result.statusTitle), node('p', result.summaryReason));
       expiry.textContent = `Đánh giá ${localTime(result.evaluatedAtIso)} (GMT+7). ${result.validUntilIso ? `Đề xuất có hiệu lực đến ${localTime(result.validUntilIso)} (GMT+7).`
@@ -136,7 +160,7 @@ export function createGateIntakeScreening(host, { now = () => new Date().toISOSt
         for (const value of [check.label, CHECK_LABELS[check.status], display(check.observedValue, check.id), comparison + display(check.thresholdValue, check.id), check.explanation]) row.append(node('td', value));
         rows.append(row);
       }
-      download.disabled = false; renderForecast();
+      renderForecast();
       const delay = result.sampleExpiresAtIso ? Date.parse(result.sampleExpiresAtIso) - Date.parse(result.evaluatedAtIso) + 1 : 0;
       if (delay > 0) expiryTimer = schedule(runEvaluation, Math.min(delay, 2_147_483_647));
       return result;
@@ -158,7 +182,11 @@ export function createGateIntakeScreening(host, { now = () => new Date().toISOSt
   form.addEventListener('submit', event => { event.preventDefault(); runEvaluation(); });
   const edited = () => { invalidate(); renderForecast(); };
   form.addEventListener('input', edited); form.addEventListener('change', edited);
-  download.addEventListener('click', () => { if (result && runEvaluation()) save(`${gate.gate_code}_intake_screening.json`, result); });
+  download.addEventListener('click', () => {
+    if (!result || download.disabled) return;
+    if (result.sampleExpiresAtIso && Date.parse(now()) > Date.parse(result.sampleExpiresAtIso)) { runEvaluation(); return; }
+    save(`${gate.gate_code}_intake_screening.json`, result);
+  });
   const listeners = [['workspace:active-forecast-context', event => updateContext(event.detail)],
     ['workspace:simulation-frame', event => setSpatialFrame(event.detail)]];
   listeners.forEach(([name, listener]) => eventTarget?.addEventListener(name, listener));

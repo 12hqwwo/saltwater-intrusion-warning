@@ -35,7 +35,14 @@ function environment() {
   globalThis.location = { hash: '' };
   globalThis.sessionStorage = { getItem() { return null; }, setItem() {} };
   const pending = [];
-  globalThis.fetch = (url, options) => new Promise(resolve => pending.push({ url, options, respond(data, ok = true) { resolve({ ok, status: ok ? 200 : 503, json: async () => data }); } }));
+  globalThis.fetch = (url, options) => {
+    if (String(url).includes('/forecast-issues')) {
+      return Promise.resolve({ ok: true, status: 200, json: async () => ({
+        items: [], summary: { on_time_n_scored: 0, late_n_scored: 0 },
+      }) });
+    }
+    return new Promise(resolve => pending.push({ url, options, respond(data, ok = true) { resolve({ ok, status: ok ? 200 : 503, json: async () => data }); } }));
+  };
   return { get: id => document.getElementById(id), pending, events, downloads };
 }
 const flush = () => new Promise(resolve => setImmediate(resolve));

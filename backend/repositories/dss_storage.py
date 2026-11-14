@@ -1,7 +1,9 @@
 """Optional PostgreSQL DSS storage; historical observation connections stay read-only."""
 from contextlib import contextmanager
 import os
+from threading import RLock
 import psycopg
+from psycopg_pool import ConnectionPool
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 from backend.database import read_connection
@@ -12,10 +14,64 @@ from backend.security import actor
 class StorageDisabled(Exception):
     pass
 
+_write_pool = None
+_write_pool_key = None
+_write_pool_lock = RLock()
+
 
 def require_writes():
     if os.getenv('WEBGIS_DSS_WRITES_ENABLED', '').lower() != 'true':
         raise StorageDisabled('DSS writes are disabled.')
+
+
+def _write_config():
+    return (os.getenv('PGHOST', '127.0.0.1'), os.getenv('PGPORT', '5432'),
+            os.getenv('PGDATABASE', 'dongthap_gis'), os.getenv('DSS_PGUSER'),
+            os.getenv('DSS_PGPASSWORD'), os.getenv('WEBGIS_DSS_POOL_MAX', '2'))
+
+
+def _configure_writer(conn):
+    try:
+        assert_application_role(conn)
+    finally:
+        conn.rollback()
+
+
+def open_write_pool():
+    global _write_pool, _write_pool_key
+    require_writes()
+    key = _write_config()
+    if not key[3]:
+        raise StorageDisabled('A dedicated DSS_PGUSER is required.')
+    if key[3] == os.getenv('WEBGIS_DB_USER', 'webgis_reader'):
+        raise StorageDisabled('DSS_PGUSER must differ from WEBGIS_DB_USER so each pool respects its role connection limit.')
+    with _write_pool_lock:
+        if _write_pool is not None and key == _write_pool_key:
+            return _write_pool
+        if _write_pool is not None:
+            _write_pool.close()
+        host, port, dbname, user, password, size = key
+        kwargs = dict(host=host, port=port, dbname=dbname, user=user,
+                      connect_timeout=5, row_factory=dict_row,
+                      application_name='webgis_dss_write_api',
+                      options='-c statement_timeout=10000 -c lock_timeout=3000 -c timezone=Asia/Ho_Chi_Minh')
+        if password is not None:
+            kwargs['password'] = password
+        maximum = max(1, min(10, int(size)))
+        _write_pool = ConnectionPool(kwargs=kwargs, min_size=0, max_size=maximum,
+                                     configure=_configure_writer, timeout=5,
+                                     name='webgis_dss_write', open=True)
+        _write_pool_key = key
+        return _write_pool
+
+
+def close_write_pool():
+    global _write_pool, _write_pool_key
+    with _write_pool_lock:
+        if _write_pool is not None:
+            _write_pool.close()
+            _write_pool = None
+            _write_pool_key = None
 
 
 @contextmanager
@@ -23,13 +79,7 @@ def write_connection():
     require_writes()
     if not os.getenv('DSS_PGUSER'):
         raise StorageDisabled('A dedicated DSS_PGUSER is required.')
-    with psycopg.connect(host=os.getenv('PGHOST', '127.0.0.1'),
-        port=os.getenv('PGPORT', '5432'), dbname=os.getenv('PGDATABASE', 'dongthap_gis'),
-        user=os.environ['DSS_PGUSER'],
-        **({'password': os.environ['DSS_PGPASSWORD']} if 'DSS_PGPASSWORD' in os.environ else {}),
-        connect_timeout=5, row_factory=dict_row, application_name='webgis_dss_write_api',
-        options='-c statement_timeout=10000 -c lock_timeout=3000 -c timezone=Asia/Ho_Chi_Minh') as conn:
-        assert_application_role(conn)
+    with open_write_pool().connection() as conn:
         conn.execute("SELECT set_config('webgis.actor', %s, true)", (actor.get(),))
         yield conn
 

@@ -8,6 +8,7 @@ scikit-learn==1.9.1
 statsmodels>=0.14
 fastapi
 uvicorn
+psycopg-pool>=3.2,<4
 cdsapi
 pyarrow
 openpyxl>=3.1

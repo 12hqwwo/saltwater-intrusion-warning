@@ -76,7 +76,7 @@ class ReferenceStationTests(unittest.TestCase):
         connection.execute.side_effect = results
         with patch.object(workspace, 'read_connection') as read, patch.dict('os.environ', WEBGIS_WORKSPACE_DATASETS='{}'):
             read.return_value.__enter__.return_value = connection
-            output = workspace._postgres_bundle(dict(stations=[fallback], sources=[], notes=[]))
+            output = workspace._postgres_bundle(dict(stations=[fallback], sources=[], notes=[], observations=[]))
         station = output['stations'][0]
         self.assertIsNone(station['geometry'])
         self.assertEqual(station['location_status'], 'UNVERIFIED')

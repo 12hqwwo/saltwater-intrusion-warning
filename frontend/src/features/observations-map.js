@@ -16,7 +16,7 @@ import { mapFeatures } from '../research-utils.js';
 import { ecComparison } from '../shared/ec-scenario.js';
 import { formatWater, advisoryColor } from '../shared/simulation-display.js';
 import { smoothRiverSegments, smoothCoordinates, riverRibbon } from './river-geometry.js';
-import { createMapParticles } from './map-particles.js';
+import { createMapParticles, mapWindVector } from './map-particles.js';
 import { inspectWaterPoint, validCoordinate } from './point-inspection.js';
 import { cropAdvisories } from '../shared/water-advisory.js';
 import { validPrediction } from '../shared/forecast-contract.js';
@@ -25,6 +25,11 @@ import { ecWarningLevel, splitGatedWaterways } from './gated-waterways.js';
 // Zero tangents keep every sampled point on its supplied vertex-to-vertex span.
 // The ribbon, canal display and particles must follow the same constrained path.
 const riverInterpolation = { tension: 0, samplesPerSpan: 12 };
+const primaryStationLabels = new globalThis.Map([
+  ['MRC_VN_019803', 'Tân Châu'],
+  ['MRC_VN_019804', 'Mỹ Thuận'],
+  ['MRC_VN_019805', 'Mỹ Tho'],
+]);
 
 // A single cached SVG label supplies rounded glass, a white keyline and a soft shadow.
 function glassLabel(text, zIndex = 25) {
@@ -39,10 +44,12 @@ function glassLabel(text, zIndex = 25) {
 export function createResearchMap(target, { onSelect, onTileError }) {
   const token = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const warningColors = { safe: token('--ec-safe'), caution: token('--ec-caution'), risk: token('--ec-risk'), unknown: token('--ec-unknown') };
-  const source = new VectorSource(), boundarySource = new VectorSource(), gateSource = new VectorSource(), candidateSource = new VectorSource(), forecastSource = new VectorSource(), inspectSource = new VectorSource();
+  const gateWarningColor = gate => warningColors[ecWarningLevel(gate?.simulated_outside_ec_mS_m, frame?.thresholds)];
+  const source = new VectorSource(), boundarySource = new VectorSource(), gateSource = new VectorSource(), candidateSource = new VectorSource(), forecastSource = new VectorSource(), inspectSource = new VectorSource(), fieldSource = new VectorSource();
   const tileSource = theme => theme === 'satellite' ? new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', crossOrigin: 'anonymous', attributions: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community' }) : new OSM();
   const base = new TileLayer({ source: tileSource(), className: 'simulation-base-tiles' });
   let frame = null, corridor = null, displayUnit = 'ec', selectedGate = null, intakeGate = null, disposed = false;
+  let riverDirectionVisible = true, windDirectionVisible = true;
   let initialSimulationFit = false, hoveredSegment = null, hoveredGate = null, inspectedCoordinate = null;
   const riverSource = new VectorSource({ attributions: 'River geometry &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> · ODbL' }), canalSource = new VectorSource(), simulationGateSource = new VectorSource(), isoSource = new VectorSource();
   const ribbonStyles = new globalThis.Map();
@@ -62,18 +69,17 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   const riverLayer = new VectorLayer({ source: riverSource, className: 'river-water-core', opacity: .78, updateWhileAnimating: true, updateWhileInteracting: true, style: (f, resolution) => ribbonStyle(f, resolution, 1) });
   const canalLayer = new VectorLayer({ source: canalSource, style: feature => {
     const inland = feature.get('branch_side') === 'beyond_gate';
+    if (inland) return null;
     const gate = frame?.gates?.find(item => item.gate_code === feature.get('gate_code'));
     const active = selectedGate === feature.get('gate_code');
-    const color = inland ? warningColors.unknown : warningColors[ecWarningLevel(gate?.simulated_outside_ec_mS_m, frame?.thresholds)];
-    return new Style({ stroke: new Stroke({ color, width: inland ? active ? 4 : 2.5 : active ? 7 : 4.5, lineDash: inland ? [7, 6] : undefined, lineCap: 'round', lineJoin: 'round' }) });
+    const color = gateWarningColor(gate);
+    return new Style({ stroke: new Stroke({ color, width: active ? 5 : 2.5, lineCap: 'round', lineJoin: 'round' }) });
   } });
   const simulationGates = new VectorLayer({ source: simulationGateSource, style: f => {
-    const color = advisoryColor(f.get('gate'));
-    const active = [selectedGate, hoveredGate].includes(f.get('gate').gate_code);
-    const radius = active ? 9 : 5.5;
-    return [new Style({ image: new Circle({ radius: radius + 4, fill: new Fill({ color: 'rgba(15,23,42,.08)' }) }), zIndex: active ? 22 : 18 }),
-      new Style({ image: new Circle({ radius: radius + 2, fill: new Fill({ color: 'rgba(15,23,42,.17)' }) }), zIndex: active ? 23 : 19 }),
-      new Style({ image: new Circle({ radius, fill: new Fill({ color }), stroke: new Stroke({ color: '#ffffff', width: 2 }) }), zIndex: active ? 24 : 20 })];
+    const gate = f.get('gate');
+    const active = [selectedGate, hoveredGate].includes(gate.gate_code);
+    const radius = active ? 7 : 4.5;
+    return new Style({ image: new Circle({ radius, fill: new Fill({ color: gateWarningColor(gate) }), stroke: new Stroke({ color: '#ffffff', width: active ? 2 : 1.5 }) }), zIndex: active ? 24 : 20 });
   } });
   const isoStyles = new globalThis.Map();
   const isoLayer = new VectorLayer({ source: isoSource, declutter: true, style: feature => {
@@ -88,8 +94,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   const stations = new VectorLayer({ source, declutter: true, style(f) {
     const comparison = ecComparison(), ec = f.get('latest_ec_mS_m');
     const exceeds = comparison && Number.isFinite(ec) ? ec >= comparison.threshold : null;
-    const stationName = `${f.get('site_code')} ${f.get('site_name')}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/gi, '').toLowerCase();
-    const stationLabel = stationName.includes('tanchau') ? 'Tân Châu' : stationName.includes('mythuan') ? 'Mỹ Thuận' : stationName.includes('mytho') ? 'Mỹ Tho' : f.get('site_name');
+    const stationLabel = primaryStationLabels.get(f.get('site_code')) || f.get('site_name');
     const compactWater = displayUnit === 'salinity' && Number.isFinite(ec)
       ? `${(ec * 0.0064).toLocaleString('vi-VN', { maximumFractionDigits: 3 })} g/L ước tính`
       : formatWater(ec);
@@ -97,14 +102,18 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const key = `${f.get('site_code')}:${f.get('site_code') === selected}:${f.get('assumed_crs')}:${exceeds}:${ec}:${sampleDate}:${displayUnit}`;
     if (!cache.has(key)) {
       const active = f.get('site_code') === selected;
-      const color = exceeds === true ? '#c44d39' : exceeds === false ? '#087f78' : f.get('assumed_crs') ? '#b77a23' : '#097c78';
+      const color = exceeds === true ? '#c44d39' : exceeds === false ? '#087f78' : f.get('assumed_crs') ? '#647985' : '#097c78';
       cache.set(key, [new Style({
-        image: new Circle({ radius: active ? 9 : 6, fill: new Fill({ color }), stroke: new Stroke({ color: '#fff', width: 2, lineDash: f.get('assumed_crs') ? [3, 2] : undefined }) }), zIndex: active ? 24 : 21,
-      }), glassLabel(`${stationLabel} · Mẫu ${sampleDate}: ${compactWater}`, active ? 28 : 26)]);
+        image: new Circle({ radius: active ? 9 : primaryStationLabels.has(f.get('site_code')) ? 6 : 5, fill: new Fill({ color }), stroke: new Stroke({ color: '#fff', width: active ? 2 : 1.5, lineDash: f.get('assumed_crs') ? [3, 2] : undefined }) }), zIndex: active ? 24 : 21,
+      }), ...(primaryStationLabels.has(f.get('site_code')) ? [glassLabel(`${stationLabel} · Mẫu ${sampleDate}: ${compactWater}`, active ? 28 : 26)] : [])]);
     }
     return cache.get(key);
   } });
-  const gates = new VectorLayer({ source: gateSource, style: new Style({ image: new Circle({ radius: 5.5, fill: new Fill({ color: '#7560a7' }), stroke: new Stroke({ color: '#fff', width: 2 }) }) }) });
+  const fieldLayer = new VectorLayer({ source: fieldSource, style: new Style({
+    image: new RegularShape({ points: 3, radius: 8, rotation: Math.PI,
+      fill: new Fill({ color: '#9a4bb5' }), stroke: new Stroke({ color: '#fff', width: 2 }) }), zIndex: 27,
+  }) });
+  const gates = new VectorLayer({ source: gateSource, visible: false, style: new Style({ image: new Circle({ radius: 4.5, fill: new Fill({ color: warningColors.unknown }), stroke: new Stroke({ color: '#fff', width: 1.5 }) }) }) });
   const candidates = new VectorLayer({ source: candidateSource, style: new Style({ stroke: new Stroke({ color: '#7560a7', width: 2, lineDash: [6, 5] }) }) });
   const inspection = new VectorLayer({ source: inspectSource, style: new Style({
     image: new Circle({ radius: 7, fill: new Fill({ color: '#0e7490' }), stroke: new Stroke({ color: '#fff', width: 2 }) }),
@@ -114,7 +123,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     return new Style({ image: new Circle({ radius: 13, fill: new Fill({ color: 'rgba(54,105,191,.16)' }), stroke: new Stroke({ color: '#3669bf', width: 3 }) }), text: new Text({ text: `Dự báo ${f.get('target_month')}: ${formatWater(f.get('predicted_ec_mS_m'), displayUnit)}`, offsetY: 27, font: '600 13px Be Vietnam Pro', fill: new Fill({ color: '#234d90' }), backgroundFill: new Fill({ color: '#fff' }), padding: [4, 6, 4, 6], stroke: new Stroke({ color: '#fff', width: 3 }) }), zIndex: 15 });
   } });
   function hasRenderableSize() { return !disposed && target.clientWidth > 0 && target.clientHeight > 0 && !target.closest('[hidden]'); }
-  const map = new Map({ layers: [base, boundaries, canalLayer, riverDiffusion, riverLayer, candidates, gates, simulationGates, stations, forecastLayer, isoLayer, inspection], controls: controls({ rotate: false, attributionOptions: { collapsible: false } }).extend([new ScaleLine()]),
+  const map = new Map({ layers: [base, boundaries, canalLayer, riverDiffusion, riverLayer, candidates, gates, simulationGates, stations, fieldLayer, forecastLayer, isoLayer, inspection], controls: controls({ rotate: false, attributionOptions: { collapsible: false } }).extend([new ScaleLine()]),
     view: new View({ center: fromLonLat([105.8, 10.45]), zoom: 8.7, minZoom: 5, maxZoom: 18, enableRotation: false }) });
   function ensureMapMounted() {
     if (!hasRenderableSize()) {
@@ -135,6 +144,31 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   const particles = createMapParticles({ riverCanvas: canvases[0], windCanvas: canvases[1], project: coordinate => map.getPixelFromCoordinate(fromLonLat(coordinate)), isVisible: () => !disposed && !document.hidden && !document.getElementById('observations')?.hidden,
     onFrame: time => { if (hasRenderableSize() && time-lastHaloRender > 65) { lastHaloRender=time; map.render(); } } });
   particles.start();
+  function updateDirectionStatus() {
+    const status = document.getElementById('mapDirectionStatus');
+    const riverRow = document.getElementById('mapRiverDirectionStatus');
+    const windRow = document.getElementById('mapWindDirectionStatus');
+    const windArrow = document.getElementById('mapWindDirectionArrow');
+    const windText = document.getElementById('mapWindDirectionText');
+    if (!status || !riverRow || !windRow || !windArrow || !windText) return;
+    riverRow.hidden = !riverDirectionVisible || !frame?.river_segments?.length;
+    windRow.hidden = !windDirectionVisible || !frame;
+    status.hidden = riverRow.hidden && windRow.hidden;
+    if (!frame || !windDirectionVisible) return;
+    const vector = mapWindVector(frame.wind, frame.year_month);
+    windArrow.hidden = !vector;
+    if (!vector) {
+      windText.textContent = `${frame.year_month}: chưa có dữ liệu hướng gió; tốc độ đơn lẻ không cho biết hướng.`;
+      return;
+    }
+    const heading = (Math.atan2(vector.x, -vector.y) * 180 / Math.PI + 360) % 360;
+    windArrow.style.transform = `rotate(${heading}deg)`;
+    const directions = ['Bắc', 'Đông Bắc', 'Đông', 'Đông Nam', 'Nam', 'Tây Nam', 'Tây', 'Tây Bắc'];
+    const toward = directions[Math.round(heading / 45) % 8];
+    windText.textContent = vector.kind === 'SEASONAL_VECTOR_CLIMATOLOGY'
+      ? `Gió ước tính theo mùa ${frame.year_month} đi về ${toward} · hướng điển hình từ ERA5 ${vector.referencePeriod}; không phải dự báo gió tháng này.`
+      : `Gió vùng ${frame.year_month} đi về ${toward} · ${vector.speed.toFixed(1)} m/s · ERA5 tổng hợp tháng`;
+  }
   map.on('movestart', () => particles.setMoving(true)); map.on('moveend', () => particles.setMoving(false));
   map.on('singleclick', event => {
     const waterwayPicker = document.getElementById('simulationWaterwayPicker'); if (waterwayPicker) waterwayPicker.value = '';
@@ -146,6 +180,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     if (station) { selectSimulationGate(null, false); onSelect(station.get('site_code')); return; }
     selectSimulationGate(null, false);
     inspectedCoordinate = toLonLat(event.coordinate);
+    window.dispatchEvent(new CustomEvent('workspace:field-point-selected', { detail: { coordinate: inspectedCoordinate } }));
     renderPointCard();
     document.getElementById('simulationGateCard')?.focus({ preventScroll: true });
   });
@@ -173,11 +208,21 @@ export function createResearchMap(target, { onSelect, onTileError }) {
       riverTooltip.hidden = false;
       riverTooltip.textContent = `${branch.get('name') || 'Kênh có cống'} · ${inland ? 'Sau cống: chưa có EC trong kênh' : gate ? `Từ sông tới cống: ${formatWater(gate.simulated_outside_ec_mS_m, displayUnit)} · ${gate.advisory_label_vi || gate.advisory_label || 'Mức cảnh báo theo ngưỡng EC'}` : 'Chưa có EC mô phỏng cho tháng này'}`;
     }
+    if (gate) {
+      const item = gate.get('gate');
+      riverTooltip.hidden = false;
+      riverTooltip.textContent = `${item.gate_name || item.gate_code} · EC mô phỏng ngoài cống ${frame?.year_month || ''}: ${formatWater(item.simulated_outside_ec_mS_m, displayUnit)} · ${item.advisory_label_vi || item.advisory_label || 'Mức cảnh báo EC chưa xác định'}`;
+    }
     const station = map.forEachFeatureAtPixel(event.pixel, feature => feature, { layerFilter: layer => layer === stations, hitTolerance: 14 });
     if (station) {
       const name = `${station.get('site_code')} ${station.get('site_name')}`.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/gi,'').toLowerCase();
       const value = name.includes('tanchau') ? frame?.inputs?.tan_chau_ec_mS_m : name.includes('mythuan') ? frame?.inputs?.my_thuan_ec_mS_m : name.includes('mytho') ? frame?.inputs?.my_tho_ec_mS_m : null;
       riverTooltip.hidden = false; riverTooltip.textContent = `${station.get('site_name')} · Mẫu nguồn ${station.get('last_observed_date') || 'chưa rõ ngày'}: ${formatWater(station.get('latest_ec_mS_m'), displayUnit)}${value == null ? '' : ` · Đầu vào mô phỏng ${frame.year_month}: ${formatWater(value,displayUnit)}`}`;
+    }
+    const field = map.forEachFeatureAtPixel(event.pixel, feature => feature, { layerFilter: layer => layer === fieldLayer, hitTolerance: 9 });
+    if (field) {
+      riverTooltip.hidden = false;
+      riverTooltip.textContent = `Số đo thực địa đã duyệt · ${field.get('observed_at')} · ${field.get('submitted_by')} · ${formatWater(field.get('ec_mS_m'), displayUnit)} · không phải dữ liệu MRC`;
     }
   }
   map.on('pointermove', inspectRiver); map.on('singleclick', inspectRiver);
@@ -269,7 +314,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     add('p', `${gate.gate_code} · ${gate.waterway_name || gate.waterway || gate.river_name || linkedWaterways.join(', ') || 'Chưa xác minh tên thủy vực'}`);
     add('p', `Lý trình ${Number(gate.chainage_km).toFixed(1)} km · Cách trục sông ${Number(gate.distance_to_axis_km).toFixed(2)} km`);
     add('p', `Từ sông tới cống · tháng ${frame.year_month}: ${formatWater(gate.simulated_outside_ec_mS_m, displayUnit)}`);
-    if (gate.canal_ids?.length) add('p', 'Tuyến màu từ sông tới cống dùng EC ngoài cống. Đoạn sau cống là nét đứt vì chưa có EC nội kênh.');
+    if (gate.canal_ids?.length) add('p', 'Tuyến màu chỉ kéo từ sông tới cống và dùng EC mô phỏng ngoài cống. Đoạn sau cống không tô màu vì chưa có EC nội kênh.');
     const advisory = add('p', gate.advisory_label_vi || gate.advisory_label || gate.advisory_code || gate.simulated_gate_state, 'simulation-advisory'); advisory.style.color = advisoryColor(gate);
     add('p', 'Giá trị EC được nội suy theo kịch bản ngoài cống; chưa có số đo trong kênh sau cống. Mức cảnh báo dựa trên EC, không suy ra trạng thái đóng hoặc mở thực tế.');
   }
@@ -316,6 +361,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
   }
   function setSimulationFrame(value) {
     frame = value; intakeGate = null; hoveredSegment = null; hoveredGate = null; updateRiverTooltip(); riverSource.clear(); simulationGateSource.clear(); isoSource.clear(); isoStyles.clear(); canalLayer.changed();
+    updateDirectionStatus();
     const smoothed = smoothRiverSegments(frame?.river_segments || [], riverInterpolation);
     // Subdivide only display geometry: particles retain the original 35 continuous paths.
     const ribbon = riverRibbon(smoothed.segments, 8, [frame?.thresholds?.open_below_ec_ms_m, frame?.thresholds?.close_at_or_above_ec_ms_m]);
@@ -323,6 +369,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     riverSource.addFeatures(formatter.readFeatures({ type: 'FeatureCollection', features: ribbon }, options));
     particles.setFrame(frame,smoothed.segments);
     for (const gate of frame?.gates || []) {
+      if (!gate.canal_ids?.length) continue;
       const coordinates = gate.coordinates || gate.geometry?.coordinates;
       if (coordinates) simulationGateSource.addFeature(new Feature({ geometry: new Point(fromLonLat(coordinates)), gate }));
     }
@@ -355,6 +402,10 @@ export function createResearchMap(target, { onSelect, onTileError }) {
       const zoom = Number.isFinite(event.detail.zoom) ? Math.min(18, Math.max(5, event.detail.zoom)) : 10.8;
       map.getView().animate({ center: fromLonLat(coordinate), zoom, duration: 450 });
     }],
+    ['workspace:approved-field-measurements', event => {
+      fieldSource.clear();
+      fieldSource.addFeatures(formatter.readFeatures(fieldMeasurementFeatureCollection(event.detail), options));
+    }],
     ['workspace:viewchange', event => { if (event.detail?.view === 'observations') resumeVisibleMap(); else { particles.stop(); map.setTarget(undefined); } }],
   ];
   listeners.forEach(([name, handler]) => window.addEventListener(name, handler));
@@ -364,7 +415,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const context = getVectorContext(event), time = event.frameState.time / 1000;
     const activeGates = simulationGates.getVisible() ? simulationGateSource.getFeatures().filter(feature => [selectedGate, hoveredGate].includes(feature.get('gate').gate_code)) : [];
     for (const feature of [...activeGates, ...isoSource.getFeatures()]) {
-      const color = feature.get('gate') ? advisoryColor(feature.get('gate')) : '#fbbf24';
+      const color = feature.get('gate') ? gateWarningColor(feature.get('gate')) : '#fbbf24';
       context.setStyle(new Style({ image: new Circle({ radius: 10 + (time % 1.8) * 4, stroke: new Stroke({ color: `${color}${Math.round((1 - (time % 1.8) / 1.8) * 160).toString(16).padStart(2, '0')}`, width: 1.5 }) }) })); context.drawGeometry(feature.getGeometry());
     }
   });
@@ -381,15 +432,17 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     setSimulationCorridor,
     setSimulationFrame,
     setDisplayUnit,
-    setRiverParticles(value) { particles.setVisible({river:Boolean(value)}); },
-    setWindVisible(value) { particles.setVisible({wind:Boolean(value)}); },
-    setBaseTheme(theme) { const next = tileSource(theme); if (onTileError) next.on('tileloaderror', onTileError); base.setSource(next); },
+    setRiverParticles(value) { riverDirectionVisible = Boolean(value); particles.setVisible({river:riverDirectionVisible}); updateDirectionStatus(); },
+    setWindVisible(value) { windDirectionVisible = Boolean(value); particles.setVisible({wind:windDirectionVisible}); updateDirectionStatus(); },
+    setMotionEnabled(value) { particles.setMotionEnabled(value); },
+    setBaseTheme(theme) { const next = tileSource(theme); if (onTileError) next.on('tileloaderror', onTileError); base.setSource(next); particles.setTheme(theme); },
     refresh() { if (!ensureMapMounted()) return; particles.resize(); particles.start(); if (frame && !initialSimulationFit) { fitMap(); initialSimulationFit = true; } map.render(); },
     setStations(value) { collection = value; return update(); },
     setUnconfirmed(value) { showUnconfirmed = value; return update(); },
     setBoundaries(value) { boundarySource.clear(); boundarySource.addFeatures(formatter.readFeatures(value, options)); },
     setBoundaryVisible(value) { boundaries.setVisible(value); },
     setGateVisible(value) { gates.setVisible(value); candidates.setVisible(value); simulationGates.setVisible(value); if (!value) { clearGateHover(); selectSimulationGate(null,false); } },
+    setMappedGateVisible(value) { simulationGates.setVisible(value); if (!value) { clearGateHover(); selectSimulationGate(null, false); } },
     refreshComparison() { cache.clear(); stations.changed(); },
     setForecast(value) { forecastResult = validPrediction(value) ? value : null; return updateForecast(); },
     setCandidates(gate, items = []) {
@@ -414,4 +467,12 @@ export function databaseGateFeatureCollection(items) {
       type: 'Feature', geometry, properties,
     })),
   };
+}
+
+export function fieldMeasurementFeatureCollection(items) {
+  return { type: 'FeatureCollection', features: (items || []).filter(item =>
+    item.status === 'APPROVED' && Number.isFinite(item.longitude) && Number.isFinite(item.latitude))
+    .map(item => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [item.longitude, item.latitude] },
+      properties: { measurement_id: item.measurement_id, ec_mS_m: item.ec_mS_m,
+        observed_at: item.observed_at, submitted_by: item.submitted_by } })) };
 }

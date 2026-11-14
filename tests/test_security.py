@@ -6,6 +6,7 @@ import psycopg
 from fastapi.testclient import TestClient
 from backend.main import app
 from backend.db_security import assert_application_role
+from backend.repositories import dss_storage as dss_store
 from backend.repositories.dss_storage import write_connection, StorageDisabled
 
 
@@ -56,20 +57,21 @@ class SecurityTests(unittest.TestCase):
     def test_writer_never_falls_back_to_administrator(self):
         env = dict(os.environ, WEBGIS_DSS_WRITES_ENABLED='true', PGUSER='postgres')
         env.pop('DSS_PGUSER', None)
-        with patch.dict(os.environ, env, clear=True), patch('psycopg.connect') as connect:
+        with patch.dict(os.environ, env, clear=True), patch.object(dss_store, 'open_write_pool') as pool:
             with self.assertRaises(StorageDisabled):
                 with write_connection():
                     self.fail('must not connect')
-            connect.assert_not_called()
+            pool.assert_not_called()
 
     def test_writer_binds_application_actor(self):
         conn = MagicMock()
         conn.execute.return_value.fetchone.return_value = {'elevated': False}
-        with patch.dict(os.environ, WEBGIS_DSS_WRITES_ENABLED='true', DSS_PGUSER='webgis_writer'), patch('psycopg.connect') as connect:
-            connect.return_value.__enter__.return_value = conn
+        with patch.dict(os.environ, WEBGIS_DSS_WRITES_ENABLED='true', DSS_PGUSER='webgis_writer'), \
+             patch.object(dss_store, 'open_write_pool') as pool:
+            pool.return_value.connection.return_value.__enter__.return_value = conn
             with write_connection():
                 pass
-            self.assertEqual(connect.call_args.kwargs['user'], 'webgis_writer')
+            self.assertEqual(dss_store._write_config()[3], 'webgis_writer')
             self.assertIn("SELECT set_config('webgis.actor', %s, true)", conn.execute.call_args.args[0])
 
 

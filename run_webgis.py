@@ -1,5 +1,6 @@
 """Serve the WebGIS application and API from one local process."""
 import argparse
+import ipaddress
 import os
 from pathlib import Path
 
@@ -26,13 +27,37 @@ def port_number(value):
     return port
 
 
+def bind_host(value):
+    try:
+        return str(ipaddress.ip_address(value))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError('Host must be an IPv4 or IPv6 address.') from exc
+
+
+def validate_lan_host(host):
+    address = ipaddress.ip_address(host)
+    if address.is_loopback:
+        return
+    allowed = [item.strip() for item in os.getenv('WEBGIS_ALLOWED_HOSTS', '').split(',') if item.strip()]
+    external = [item for item in allowed if item not in {'localhost', '127.0.0.1', '[::1]', 'testserver'}]
+    if not os.getenv('WEBGIS_WRITE_API_KEY') or not external or '*' in allowed:
+        raise ValueError('LAN binding requires a write API key and explicit WEBGIS_ALLOWED_HOSTS.')
+    if not address.is_unspecified and host not in allowed and f'[{host}]' not in allowed:
+        raise ValueError('Bind host must appear in WEBGIS_ALLOWED_HOSTS.')
+
+
 def main():
     load_local_env()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--mode', choices=['snapshot', 'postgres'], default=os.getenv('WEBGIS_RESEARCH_MODE', 'postgres'))
+    parser.add_argument('--host', type=bind_host, default='127.0.0.1')
     parser.add_argument('--port', type=port_number, default=8000)
     parser.add_argument('--api-only', action='store_true', help='Run without the built frontend.')
     args = parser.parse_args()
+    try:
+        validate_lan_host(args.host)
+    except ValueError as exc:
+        parser.error(str(exc))
     os.environ['WEBGIS_RESEARCH_MODE'] = args.mode
     from backend.security import enabled
     if not enabled():
@@ -55,7 +80,7 @@ def main():
 
         app.mount('/', StaticFiles(directory=frontend, html=True), name='webgis')
     import uvicorn
-    uvicorn.run(app, host='127.0.0.1', port=args.port)
+    uvicorn.run(app, host=args.host, port=args.port, timeout_keep_alive=5)
 
 if __name__ == '__main__':
     main()

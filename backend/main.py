@@ -9,6 +9,10 @@ from backend.research import router as research_router
 from backend.api.workspace import router as workspace_router
 from backend.api.multivariate import router as multivariate_router
 from backend.api.dss_storage import multivariate_history_router
+from backend.api.data_freshness import router as data_freshness_router
+from backend.api.gate_screening import router as gate_screening_router
+from backend.api.forecast_issues import router as forecast_issues_router
+from backend.api.field_measurements import router as field_measurements_router
 from backend.services.workspace import WorkspaceError
 from backend.intake import router as intake_router
 
@@ -31,10 +35,20 @@ logger = logging.getLogger("webgis.api")
 @asynccontextmanager
 async def lifespan(app):
     from backend.domain.multivariate_ec import warmup_models
+    from backend.database import open_read_pool, close_read_pool
+    from backend.repositories.dss_storage import open_write_pool, close_write_pool
     failures = warmup_models()
     if failures:
         logger.warning('Multivariate model warmup unavailable: %s', failures)
-    yield
+    if os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot').lower() == 'postgres':
+        open_read_pool()
+    if os.getenv('WEBGIS_DSS_WRITES_ENABLED', '').lower() == 'true' and os.getenv('DSS_PGUSER'):
+        open_write_pool()
+    try:
+        yield
+    finally:
+        close_write_pool()
+        close_read_pool()
 
 
 app = FastAPI(
@@ -61,6 +75,10 @@ app.include_router(research_router)
 app.include_router(workspace_router, prefix='/api/v1/workspace', tags=['Workspace'])
 app.include_router(multivariate_router, prefix='/api/v1', tags=['Multivariate'])
 app.include_router(multivariate_history_router, prefix='/api/v1')
+app.include_router(data_freshness_router, prefix='/api/v1')
+app.include_router(gate_screening_router, prefix='/api/v1')
+app.include_router(forecast_issues_router, prefix='/api/v1')
+app.include_router(field_measurements_router, prefix='/api/v1')
 app.include_router(intake_router, prefix='/api/v1/workspace')
 app.include_router(intake_router, prefix='/api/v1/research')
 app.add_middleware(SecurityMiddleware)

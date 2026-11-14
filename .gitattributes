@@ -3,3 +3,14 @@ data/external/user_v3_review_20261015/WebGIS_ML_Time_Series_Ready_v3.csv text eo
 data/external/user_v3_review_20261015/webgis_dongthap_tiengiang_spatial_v3.json text eol=lf
 data/external/user_v3_review_20261015/normalized_review.json text eol=lf
 data/biengioi/tien_osm_waterways_source.json text eol=lf
+# Frozen EC gap evidence hashes these source files with CRLF line endings.
+scripts/evaluate_frozen_ec_gap.py text eol=crlf
+scripts/train_multivariate_ec.py text eol=crlf
+scripts/evaluate_mythuan_three_station.py text eol=crlf
+scripts/run_future_forecast_2024_2026.py text eol=crlf
+backend/repositories/multivariate_inputs.py text eol=crlf
+backend/domain/river_interpolation.py text eol=crlf
+# Reproducibility snapshots are hashed byte-for-byte by their run manifests.
+outputs/frozen_ec_remedies_20261108/source_snapshots/scripts/evaluate_frozen_ec_gap_remedies.py -text
+outputs/mythuan_three_station_20261104/source_snapshots/scripts/evaluate_mythuan_three_station.py -text
+outputs/mythuan_three_station_20261104/source_snapshots/scripts/train_multivariate_ec.py -text

@@ -56,6 +56,33 @@ def load_bundle():
         ) from exc
 
 
+def bundle_stamp():
+    """Cheap version marker for the sources used by the monthly simulation."""
+    mode = os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot').lower()
+    path = Path(os.getenv('WEBGIS_RESEARCH_FILE', str(ROOT / 'data/research/workspace.json'))).resolve()
+    manifest = path.with_name('workspace_manifest.json')
+    files = tuple((str(file), file.stat().st_mtime_ns, file.stat().st_size)
+                  for file in (path, manifest))
+    if mode == 'snapshot':
+        return (mode, files)
+    if mode != 'postgres':
+        raise ValueError('WEBGIS_RESEARCH_MODE must be snapshot or postgres.')
+    with read_connection() as conn:
+        datasets = conn.execute('''
+            SELECT dataset_id, sha256, imported_at,
+                   metadata->>'time_precision' AS time_precision
+            FROM public.source_dataset
+            WHERE dataset_kind = 'RAW_EC' AND NOT is_demo
+            ORDER BY dataset_id
+        ''').fetchall()
+        observations = conn.execute('''
+            SELECT count(*) AS observation_count, max(ec_observation_id) AS last_observation_id
+            FROM public.conductivity_observation
+        ''').fetchone()
+    return (mode, files, os.getenv('WEBGIS_WORKSPACE_DATASETS', '{}'),
+            tuple(tuple(row.items()) for row in datasets), tuple(observations.items()))
+
+
 def _snapshot_reference_points(bundle, database_site_codes, database_source_codes):
     """Keep RIA2 bulletin points visible without presenting them as DB measurements."""
     stations = [dict(station, observation_source='RESEARCH_SNAPSHOT_RIA2',
