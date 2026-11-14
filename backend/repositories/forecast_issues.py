@@ -27,14 +27,18 @@ def insert_missed(conn, slot_id, reason_code):
 
 
 def existing_issue(conn, slot_id):
-    return conn.execute('SELECT * FROM dss_reference.forecast_issue WHERE slot_id=%s', (slot_id,)).fetchone()
+    return conn.execute('''SELECT issue_id,slot_id,input_month,model_version,model_sha256,
+        data_version,predicted_ec_mS_m AS "predicted_ec_mS_m",payload,issue_status,issued_at
+        FROM dss_reference.forecast_issue WHERE slot_id=%s''', (slot_id,)).fetchone()
 
 
 def insert_issue(conn, slot_id, issue):
     return conn.execute('''INSERT INTO dss_reference.forecast_issue
         (issue_id,slot_id,input_month,model_version,model_sha256,data_version,
          predicted_ec_mS_m,payload,issue_status)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,'LATE') RETURNING *''',
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,'LATE')
+        RETURNING issue_id,slot_id,input_month,model_version,model_sha256,data_version,
+            predicted_ec_mS_m AS "predicted_ec_mS_m",payload,issue_status,issued_at''',
         (uuid4(), slot_id, issue['input_month'] + '-01', issue['model_version'],
          issue['model_sha256'], issue['data_version'], issue['predicted_ec_mS_m'],
          Jsonb(issue['payload']))).fetchone()
@@ -44,9 +48,10 @@ def list_slots(station=None, date_from=None, date_to=None, limit=200):
     with read_connection() as conn:
         return conn.execute('''SELECT s.*, e.event_id,e.event_type,e.reason_code,e.detected_at,
             i.issue_id,i.input_month,i.model_version,i.model_sha256,i.data_version,
-            i.predicted_ec_mS_m,i.issue_status,i.issued_at,
+            i.predicted_ec_mS_m AS "predicted_ec_mS_m",i.issue_status,i.issued_at,
             sc.score_id,sc.label_protocol_version,sc.observation_ref,sc.obs_source,
-            sc.observed_ec_mS_m,sc.abs_error_mS_m,sc.scored_at
+            sc.observed_ec_mS_m AS "observed_ec_mS_m",
+            sc.abs_error_mS_m AS "abs_error_mS_m",sc.scored_at
             FROM dss_reference.forecast_slot s
             LEFT JOIN dss_reference.forecast_slot_event e ON e.slot_id=s.slot_id
             LEFT JOIN dss_reference.forecast_issue i ON i.slot_id=s.slot_id
@@ -64,7 +69,10 @@ def insert_score(issue_id, score):
         return conn.execute('''INSERT INTO dss_reference.forecast_score
             (issue_id,label_protocol_version,observation_ref,obs_source,
              observed_ec_mS_m,abs_error_mS_m)
-            VALUES (%s,%s,%s,%s,%s,%s) RETURNING *''',
+            VALUES (%s,%s,%s,%s,%s,%s)
+            RETURNING score_id,issue_id,label_protocol_version,observation_ref,obs_source,
+                observed_ec_mS_m AS "observed_ec_mS_m",
+                abs_error_mS_m AS "abs_error_mS_m",scored_at''',
             (issue_id, score['label_protocol_version'], score['observation_ref'],
              score['obs_source'], score['observed_ec_mS_m'], score['abs_error_mS_m'])).fetchone()
 

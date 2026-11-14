@@ -27,7 +27,8 @@ def insert_measurement(value, raw):
 def list_measurements(status, bbox, limit=200):
     with read_connection() as conn:
         return conn.execute('''SELECT measurement_id,ST_X(geom) AS longitude,ST_Y(geom) AS latitude,
-            ec_mS_m,unit_original,ec_basis,calibrated_at,water_temp_degC,
+            ec_mS_m AS "ec_mS_m",unit_original,ec_basis,calibrated_at,
+            water_temp_degC AS "water_temp_degC",
             observed_at,position_kind,device,submitted_by,flags,submitted_at,
             status,review_id,reviewer,review_note,reviewed_at
             FROM dss_reference.v_field_measurement_status
@@ -111,7 +112,7 @@ def candidate_field_label(station, target_month):
         raise ValueError('Unsupported station')
     end = _shift_month(target_month, 1)
     with read_connection() as conn:
-        rows = conn.execute('''SELECT m.measurement_id,m.observed_at,m.ec_mS_m,
+        rows = conn.execute('''SELECT m.measurement_id,m.observed_at,m.ec_mS_m AS "ec_mS_m",
                 m.ec_basis,m.position_kind,m.calibrated_at,
                 m.raw_payload->>'calibration_reference' AS calibration_reference
             FROM dss_reference.v_field_measurement_status m

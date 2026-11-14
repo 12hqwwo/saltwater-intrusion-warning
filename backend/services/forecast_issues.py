@@ -105,7 +105,8 @@ def list_issues(station=None, date_from=None, date_to=None, with_scores=True):
         raise WorkspaceError(422, 'Khoảng tháng không hợp lệ.')
     rows = repo.list_slots(station, start, end)
     items = []
-    by_status = {'ON_TIME': [], 'LATE': []}
+    by_source = {source: {'ON_TIME': [], 'LATE': []}
+                 for source in ('MRC', 'FIELD_APPROVED')}
     for row in rows:
         slot = {key: row[key] for key in ('slot_id', 'station_key', 'target_month', 'schedule_code', 'scheduled_at')}
         events = ([{key: row[key] for key in ('event_id', 'event_type', 'reason_code', 'detected_at')}]
@@ -117,12 +118,17 @@ def list_issues(station=None, date_from=None, date_to=None, with_scores=True):
                   'obs_source', 'observed_ec_mS_m', 'abs_error_mS_m', 'scored_at')}
                  if with_scores and row['score_id'] else None)
         if issue and score:
-            by_status[issue['issue_status']].append(score['abs_error_mS_m'])
+            by_source[score['obs_source']][issue['issue_status']].append(score['abs_error_mS_m'])
         items.append(dict(slot=slot, events=events, issue=issue, score=score))
-    summary = dict(on_time_n_scored=len(by_status['ON_TIME']),
-                   on_time_mae_mS_m=(sum(by_status['ON_TIME']) / len(by_status['ON_TIME'])
-                                        if by_status['ON_TIME'] else None),
-                   late_n_scored=len(by_status['LATE']),
-                   late_mae_mS_m=(sum(by_status['LATE']) / len(by_status['LATE'])
-                                     if by_status['LATE'] else None))
+    def metrics(groups):
+        result = {}
+        for status, prefix in (('ON_TIME', 'on_time'), ('LATE', 'late')):
+            errors = groups[status]
+            result[prefix + '_n_scored'] = len(errors)
+            result[prefix + '_mae_mS_m'] = sum(errors) / len(errors) if errors else None
+        return result
+
+    source_metrics = {source: metrics(groups) for source, groups in by_source.items()}
+    # Keep legacy fields MRC-only: older clients must never display a pooled MAE.
+    summary = dict(source_metrics['MRC'], primary_obs_source='MRC', by_source=source_metrics)
     return dict(items=items, summary=summary, label_protocol_version=rules.LABEL_PROTOCOL_VERSION)

@@ -13,19 +13,23 @@ export function issueRow(item) {
 }
 
 export function scoreSummary(summary) {
-  const primary = summary.on_time_n_scored
-    ? `Đúng hạn: MAE ${num(summary.on_time_mae_mS_m)} mS/m (n=${summary.on_time_n_scored}).`
-    : 'Đúng hạn: chưa có EC tháng đủ điều kiện để chấm — mới kiểm chứng hạ tầng phát hành.';
-  const late = summary.late_n_scored
-    ? `Phát hành trễ: MAE ${num(summary.late_mae_mS_m)} mS/m (n=${summary.late_n_scored}), báo cáo riêng.`
-    : 'Phát hành trễ: chưa có điểm đủ điều kiện.';
-  return `${primary} ${late}`;
+  if (!summary.by_source) return 'Cần cập nhật máy chủ để xem sai số riêng theo nguồn MRC và EC25 thực địa.';
+  return [['MRC', 'MRC'], ['FIELD_APPROVED', 'EC25 thực địa đã duyệt']].map(([source, label]) => {
+    const metrics = summary.by_source[source] || {};
+    const primary = metrics.on_time_n_scored
+      ? `Đúng hạn: MAE ${num(metrics.on_time_mae_mS_m)} mS/m (n=${metrics.on_time_n_scored}).`
+      : 'Đúng hạn: chưa có EC tháng đủ điều kiện để chấm — mới kiểm chứng hạ tầng phát hành.';
+    const late = metrics.late_n_scored
+      ? `Phát hành trễ: MAE ${num(metrics.late_mae_mS_m)} mS/m (n=${metrics.late_n_scored}), báo cáo riêng.`
+      : 'Phát hành trễ: chưa có điểm đủ điều kiện.';
+    return `${label} · ${primary} ${late}`;
+  }).join(' ');
 }
 
 export function createForecastIssuePanel(host, { load = () => requestJSON('/forecast-issues') } = {}) {
   const panel = node('details', undefined, 'mv-issue-ledger');
   panel.append(node('summary', 'Sổ phát hành và sai số vận hành thật'));
-  const note = node('p', 'Lịch MONTHLY_D06_PREV: 09:00 ngày 06 tháng trước. Bản MISSED và LATE được giữ riêng; dự báo đã lưu thủ công không phải bản phát hành mù.', 'subtle');
+  const note = node('p', 'Lịch MONTHLY_D06_PREV: 09:00 ngày 06 tháng trước. Bản MISSED và LATE được giữ riêng; dự báo đã lưu thủ công không phải bản phát hành mù. Sai số MRC và EC25 thực địa báo cáo riêng vì cơ sở nhiệt độ của MRC chưa được xác nhận.', 'subtle');
   const refresh = node('button', 'Làm mới sổ phát hành', 'secondary'); refresh.type = 'button';
   const status = node('p', 'Chưa tải sổ phát hành.', 'subtle');
   const metrics = node('p', '', 'subtle');

@@ -122,11 +122,23 @@ class ForecastIssueServiceTests(unittest.TestCase):
             observation_ref='ref', obs_source='MRC', observed_ec_mS_m=30,
             abs_error_mS_m=5.206, scored_at=ISSUED)
         with patch.object(service.repo, 'list_slots', return_value=[base | dict(issue_status='ON_TIME'),
-                                                                    base | dict(issue_status='LATE', score_id=2)]):
+                base | dict(issue_status='LATE', score_id=2),
+                base | dict(issue_status='ON_TIME', score_id=3, obs_source='FIELD_APPROVED', abs_error_mS_m=90),
+                base | dict(issue_status='LATE', score_id=4, obs_source='FIELD_APPROVED', abs_error_mS_m=70)]):
             result = service.list_issues()
+            without_scores = service.list_issues(with_scores=False)
         self.assertEqual(result['summary']['on_time_n_scored'], 1)
         self.assertEqual(result['summary']['late_n_scored'], 1)
         self.assertAlmostEqual(result['summary']['on_time_mae_mS_m'], 5.206)
+        self.assertEqual(result['summary']['primary_obs_source'], 'MRC')
+        sources = result['summary']['by_source']
+        self.assertAlmostEqual(sources['MRC']['late_mae_mS_m'], 5.206)
+        self.assertEqual(sources['FIELD_APPROVED'], dict(on_time_n_scored=1,
+            on_time_mae_mS_m=90, late_n_scored=1, late_mae_mS_m=70))
+        for metrics in without_scores['summary']['by_source'].values():
+            self.assertEqual(metrics, dict(on_time_n_scored=0, on_time_mae_mS_m=None,
+                                          late_n_scored=0, late_mae_mS_m=None))
+        self.assertTrue(all(item['score'] is None for item in without_scores['items']))
 
 
 if __name__ == '__main__':
