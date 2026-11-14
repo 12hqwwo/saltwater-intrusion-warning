@@ -42,6 +42,14 @@ def _signature():
                  for path in source_paths())
 
 
+@lru_cache(maxsize=3)
+def _source_hashes(signature):
+    """Hash each source version once, rather than once per Timeline month."""
+    return tuple((Path(path).relative_to(ROOT).as_posix(),
+                  hashlib.sha256(Path(path).read_bytes()).hexdigest())
+                 for path, _, _ in signature)
+
+
 def _monthly_stage(paths):
     import pandas as pd
 
@@ -105,17 +113,16 @@ def get_hydrology_input(target_month, now=None):
     today = (now or datetime.now(LOCAL_TZ)).astimezone(LOCAL_TZ).date()
     if available > today:
         raise ValueError("Hydrology month is not yet assumed available")
-    frame = _matrix(_signature())
+    signature = _signature()
+    frame = _matrix(signature)
     rows = frame[frame.weather_month.eq(month + "-01")]
     if len(rows) != 1:
         raise ValueError("Missing hydrology source month")
     values = {key: float(rows.iloc[0][key]) for key in FEATURES}
     if not all(math.isfinite(value) for value in values.values()):
         raise ValueError("Incomplete Kratie or Tan Chau monthly hydrology")
-    paths = source_paths()
     return dict(values, input_month=month, observed_through=end.isoformat(),
                 assumed_available_at=available.isoformat(), complete=True,
                 source="MRC Kratie discharge + Tan Chau manual water level",
-                source_files={path.relative_to(ROOT).as_posix():
-                              hashlib.sha256(path.read_bytes()).hexdigest() for path in paths},
+                source_files=dict(_source_hashes(signature)),
                 availability_note="Month end + 5 days is assumed; historical publication time is unverified.")

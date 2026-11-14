@@ -1,0 +1,169 @@
+{
+  "stations": {
+    "TANCHAU": {
+      "WeatherOnly": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos"
+      ],
+      "WeatherFlow": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2"
+      ],
+      "WeatherLocalStage": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos",
+        "tc_stage_t2",
+        "tc_stage3_t2"
+      ],
+      "WeatherFlowLocalStage": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2",
+        "tc_stage_t2",
+        "tc_stage3_t2"
+      ]
+    },
+    "MYTHUAN": {
+      "WeatherOnly": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos"
+      ],
+      "WeatherFlow": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2"
+      ],
+      "WeatherLocalStage": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos",
+        "mt_stage_t2",
+        "mt_stage3_t2"
+      ],
+      "WeatherFlowLocalStage": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2",
+        "mt_stage_t2",
+        "mt_stage3_t2"
+      ],
+      "WeatherTanChauStage": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos",
+        "tc_stage_t2",
+        "tc_stage3_t2"
+      ],
+      "WeatherFlowTanChauStage": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2",
+        "tc_stage_t2",
+        "tc_stage3_t2"
+      ],
+      "WeatherFlowBothStages": [
+        "rainfall_mm",
+        "temperature_degC",
+        "wind_source_units",
+        "month_sin",
+        "month_cos",
+        "kratie_q_t2",
+        "kratie_q3_t2",
+        "kratie_q_ratio_t2",
+        "tc_stage_t2",
+        "tc_stage3_t2",
+        "mt_stage_t2",
+        "mt_stage3_t2"
+      ]
+    }
+  },
+  "windows": {
+    "2019_2021": [
+      "2019-01-01",
+      "2021-12-01"
+    ],
+    "2021_2023": [
+      "2021-01-01",
+      "2023-12-01"
+    ],
+    "2022_2023": [
+      "2022-01-01",
+      "2023-12-01"
+    ]
+  },
+  "ec_delay_days": [
+    5,
+    35
+  ],
+  "input_lag_months": 2,
+  "sklearn_version": "1.9.1",
+  "pandas_version": "3.0.3",
+  "parameters": {
+    "trees": 300,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "seed": 42
+  },
+  "evaluation": "Fit once before each outage; withheld station EC only used for scoring. Weather-only predictions match existing frozen controls within 1e-8.",
+  "limitations": [
+    "Retrospective screening; periods previously inspected, not blind validation.",
+    "Overlapping windows are not independent; do not pool their scores.",
+    "Historical publication time assumed month end +5 days for weather/hydrology.",
+    "My Thuan stage archive ends in 2023; candidates using it cannot currently serve 2026.",
+    "No independent between-station EC used to validate full-axis interpolation."
+  ],
+  "source_sha256": {
+    "scripts/audit_station_hydrology_20261110.py": "fd4ac73313863b130c6537ea2f0815373e7e383112b79b9082dcaf35b08e94bc",
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "data/external/multivariate_weather/manifest.json": "da9b80d2c54d52a427705d326160b1bacce17e94874ab6e5a757f3e75fd48443",
+    "data/external/mrc_kratie_discharge_20261029/014901_Discharge_Calculated daily discharge_22a8130e.csv": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+    "data/external/tien_manual_long_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "5d461321271099559d84e07d73c949171945ffc0e8fa32a813e722026cda72f8",
+    "data/external/tien_manual_2024_2026_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "f7ee1fb6fee877373fc341496eee8580502fe56e5e870f501252c0167140aab4",
+    "data/external/tien_manual_long_20261029/019804_Water_Level_Manual_cd6c69a7.csv": "39ea7345e3f32952cf751280e25064137f71486751c6717385fee92925b49dbf",
+    "data/external/tien_manual_history_20261029/019804_Water_Level_Manual_cd6c69a7.csv": "006000d2859a6ca9f5fee03223df88dedc6df8a90f55281531814fae818c7e9c",
+    "data/external/tien_multisite_supplement_20261029/019804_Water_Level_Manual_cd6c69a7.csv": "33365a0bd1e66f3334952b8a04ff55bb2285f90fd433ba13c2ba8c9c663d3f20"
+  },
+  "output_sha256": {
+    "metrics.csv": "ba3425581ae4b83f81b1ecbbf6bc5a0d1d7539a0a722e8bd886bce4295f6ad6a",
+    "predictions.csv": "70c3c13eeef66afa2a798bb95a65d94d3db9ae260def5a8b0fbfb593dc35c1f5"
+  }
+}

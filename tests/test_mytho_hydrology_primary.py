@@ -2,6 +2,7 @@
 import hashlib
 import json
 import unittest
+from tempfile import TemporaryDirectory
 from pathlib import Path
 from unittest.mock import patch
 
@@ -15,6 +16,35 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class MyThoHydrologyPrimaryTests(unittest.TestCase):
+    def test_monthly_provenance_reuses_hashes_and_refreshes_changed_sources(self):
+        import pandas as pd
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            paths = [root / f"source_{index}.csv" for index in range(3)]
+            for path in paths:
+                path.write_text("original source", encoding="utf-8")
+            frame = pd.DataFrame([dict(weather_month=month,
+                **{key: 1.0 for key in hydrology_inputs.FEATURES})
+                for month in ("2020-01-01", "2020-02-01")])
+            original_read = Path.read_bytes
+            with patch.object(hydrology_inputs, "ROOT", root), \
+                 patch.object(hydrology_inputs, "source_paths", return_value=paths), \
+                 patch.object(hydrology_inputs, "_matrix", return_value=frame), \
+                 patch.object(Path, "read_bytes", autospec=True,
+                              side_effect=original_read) as reads:
+                first = hydrology_inputs.get_hydrology_input("2020-03")
+                hydrology_inputs.get_hydrology_input("2020-04")
+                self.assertEqual(reads.call_count, 3)
+                first["source_files"][paths[1].name] = "caller edit"
+                paths[0].write_text("updated source with new content", encoding="utf-8")
+                updated = hydrology_inputs.get_hydrology_input("2020-03")
+                self.assertEqual(reads.call_count, 6)
+                self.assertNotEqual(first["source_files"][paths[0].name],
+                                    updated["source_files"][paths[0].name])
+                self.assertEqual(updated["source_files"][paths[1].name],
+                                 hashlib.sha256(b"original source").hexdigest())
+
     def test_serving_hydrology_matches_research_and_rejects_unavailable_month(self):
         reference = monthly_stage("019803", "tc").merge(monthly_kratie_flow(),
                                                          on="weather_month")

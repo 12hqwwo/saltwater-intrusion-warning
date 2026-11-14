@@ -42,7 +42,7 @@ export function createSimulationFrameLoader({ api = workspaceAPI, onFrame, onErr
       onLoading?.({ year_month, thresholds });
       try {
         const query = new URLSearchParams({ year_month, ...thresholds });
-        const frame = await api(`/simulation/frame?${query}`, req);
+        const frame = await api(`/simulation/frame?${query}`, { ...req, timeoutMs: 60_000 });
         if (!req.isCurrent()) return null;
         if (frame.year_month !== year_month || frame.simulation_layer !== true ||
             !Array.isArray(frame.river_segments) || !Array.isArray(frame.gates) ||
@@ -339,7 +339,8 @@ export function createTimelineScrubber() {
     status('Đang tải trục sông và dòng thời gian…');
     try {
       const [corridor, timeline] = await Promise.all([
-        workspaceAPI('/simulation/corridor', req), workspaceAPI('/simulation/timeline', req),
+        workspaceAPI('/simulation/corridor', req),
+        workspaceAPI('/simulation/timeline', { ...req, timeoutMs: 60_000 }),
       ]);
       if (!req.isCurrent()) return;
       if (!Array.isArray(timeline.items) || !timeline.items.length || !Array.isArray(corridor.gates) || !corridor.corridor ||

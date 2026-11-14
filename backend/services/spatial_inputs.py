@@ -140,15 +140,15 @@ def _observation_or_fill(month, records):
 
 
 @lru_cache(maxsize=48)
-def _model_forecast(station, month, rainfall, temperature, wind, source_sha, hydro_sha=None):
+def _model_forecast(station, month, rainfall, temperature, wind, source_sha, hydro_sha=None,
+                    hydro_values=None):
     """Cache deterministic inference; the source hash invalidates refreshed weather."""
     from backend.domain.multivariate_ec import predict_month
     values = dict(rainfall_mm=rainfall, temperature_degC=temperature,
                   wind_source_units=wind)
     if station == 'MyTho':
-        from backend.repositories.hydrology_inputs import FEATURES, get_hydrology_input
-        hydro = get_hydrology_input(month)
-        values.update({key: hydro[key] for key in FEATURES})
+        from backend.repositories.hydrology_inputs import FEATURES
+        values.update(zip(FEATURES, hydro_values))
     result = predict_month(station, month + '-01', values)
     return dict(value=_number(result['predicted_ec_mS_m'], True),
                 model='RandomForestRegressor', model_version=result['model_version'],
@@ -173,9 +173,14 @@ def _future_boundaries(month, station, observed, weather, today):
                 hydro = None
         if station != 'MyTho' or hydro is not None:
             hydro_sha = '|'.join(hydro['source_files'].values()) if hydro else None
+            if hydro:
+                from backend.repositories.hydrology_inputs import FEATURES
+                hydro_values = tuple(hydro[key] for key in FEATURES)
+            else:
+                hydro_values = None
             prediction = _model_forecast(station, month,
                 record['rainfall_mm'], record['temperature_degC'],
-                record['wind_source_units'], record['sha256'], hydro_sha)
+                record['wind_source_units'], record['sha256'], hydro_sha, hydro_values)
             return dict(prediction, site_code=STATIONS[station], imputed=False,
                 input_month=input_month, source=record['source'], sha256=record['sha256'],
                 source_months=[input_month], evidence_kind='ML_FORECAST_ERA5_HYDROLOGY' if hydro else 'ML_FORECAST_ERA5',
