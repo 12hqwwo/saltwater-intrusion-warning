@@ -73,7 +73,7 @@ export function createObservations({ onForecast } = {}) {
     $('mapForecastValue').textContent = `${forecastModelLabel(activeForecast.sourceModel)} · Tân Châu ${ec(activeForecast.tanchauEc)} → Mỹ Thuận ${ec(activeForecast.mythuanEc)} → Mỹ Tho ${ec(activeForecast.mythoEc)} mS/m`;
     const upstreamBasis = activeForecast.interpolationMode === 'TWO_STATION_FALLBACK_MISSING_MYTHUAN'
       ? 'Nội suy 2 trạm: khuyết mẫu lịch sử Mỹ Thuận' : 'Nội suy 3 trạm, 2 chặng dọc sông';
-    $('mapForecastContext').textContent = `Dự báo ${activeForecast.targetMonth} · nền ${baselineMonth || '—'} · ${upstreamBasis}${Number.isFinite(activeForecast.availabilityLagDays) ? ` · độ trễ +${activeForecast.availabilityLagDays} ngày` : ''} · P90 Mỹ Tho ${num(activeForecast.p90Threshold)} mS/m${activeForecast.isHighVigilance ? ' · Cảnh giác cao' : ''}`;
+    $('mapForecastContext').textContent = `Dự báo ${activeForecast.targetMonth} · nền ${baselineMonth || '—'} · ${upstreamBasis} · P90 Mỹ Tho ${num(activeForecast.p90Threshold)} mS/m${activeForecast.isHighVigilance ? ' · Cảnh giác cao' : ''}`;
     $('mapForecastDisclaimer').textContent = `${FORECAST_SPATIAL_DISCLAIMER}. Bản đồ biểu thị mức cảnh báo theo EC; cống của Timeline tạm ẩn khi xem kịch bản dự báo.`;
   }
   function showOverlayError(error) {

@@ -79,6 +79,7 @@ test('multivariate requests frozen-label evidence and renders baseline availabil
   assert.equal(request.searchParams.get('protocol'), 'FROZEN_EC_WEATHER_ONLY_V1');
   assert.equal(request.searchParams.get('experiment'), 'gap_2021_2023');
   assert.equal(request.searchParams.get('ec_delay_days'), '5');
+  assert.equal(ui.all.some(row => row.name === 'gap_ec_delay'), false);
   const text = env.get('multivariateForecastHost').textContent;
   assert.match(text, /khóa EC đến 2020-11/);
   assert.match(text, /mô hình giữ cố định/);
@@ -135,9 +136,9 @@ test('changing outage experiment discards stale evaluation responses and rejects
   oldRequest.respond(frozenEvaluation({ frozen_ec_through: '2021-11-01' })); await old;
   assert.match(env.get('multivariateForecastHost').textContent, /khóa EC đến 2018-11/);
   assert.doesNotMatch(env.get('multivariateForecastHost').textContent, /khóa EC đến 2021-11/);
-  const delay = ui.all.find(row => row.name === 'gap_ec_delay'); delay.value = '35';
-  const reload = delay.emit('change');
-  assert.match(env.pending.at(-1).url, /ec_delay_days=35/);
+  select.value = 'gap_2021_2023';
+  const reload = select.emit('change');
+  assert.match(env.pending.at(-1).url, /ec_delay_days=5(?:&|$)/);
   env.pending.at(-1).respond(frozenEvaluation({ protocol_id: 'HISTORICAL' })); await reload;
   assert.match(env.get('multivariateForecastHost').textContent, /không khớp.*giao thức khóa EC/);
 });
@@ -332,6 +333,7 @@ test('RF_compact actions pass the selected archive value and experiment-specific
       forecast_origin: row.forecast_origin, availability_lag_days: lag });
     await loading;
     assert.equal(env.get('nextForecastApplyMap').disabled, false);
+    assert.doesNotMatch(env.get('nextForecastStatus').textContent, /độ trễ/);
     assert.match(env.get('nextForecastModelInfo').textContent, /Thí nghiệm RF_compact lưu trữ sau mẫu EC cuối/);
     await env.get('nextForecastApplyMap').click();
     assert.equal(env.events.at(-1).type, 'workspace:apply-forecast-overlay');
@@ -354,4 +356,29 @@ test('backtest experiment switch discards stale responses and rejects another si
   assert.match(env.get('forecastStatus').textContent, /không khớp/);
   await feature.selectStation('C');
   assert.equal(env.get('experimentSelect').value, '');
+});
+
+test('backtest station selection restores saved sensitivity runs to each station primary default', async () => {
+  const experiments = [
+    { experiment_id: 'MYTHO_MONTHLY_LAG30', station: 'MYTHO', site_code: 'MRC_VN_019805', availability_lag_days: 35 },
+    { experiment_id: 'TANCHAU_MONTHLY_LAG30', station: 'TANCHAU', site_code: 'MRC_VN_019803', availability_lag_days: 30 },
+    { experiment_id: 'MYTHO_MONTHLY_LAG0', station: 'MYTHO', site_code: 'MRC_VN_019805', availability_lag_days: 5 },
+    { experiment_id: 'TANCHAU_MONTHLY_LAG0', station: 'TANCHAU', site_code: 'MRC_VN_019803', availability_lag_days: 0 },
+  ];
+  for (const [saved, primary] of [[experiments[0], experiments[2]], [experiments[1], experiments[3]]]) {
+    const env = environment();
+    sessionStorage.getItem = () => saved.experiment_id;
+    const feature = createForecasts(), loading = feature.load(experiments);
+    assert.equal(env.pending.at(-1).url.endsWith(`/experiments/${primary.experiment_id}`), true);
+    assert.deepEqual(env.get('experimentSelect').children.map(option => [option.textContent, option.value]), [
+      ['MYTHO', 'MYTHO_MONTHLY_LAG0'], ['TANCHAU', 'TANCHAU_MONTHLY_LAG0'],
+    ]);
+    env.pending.at(-1).respond({ ...primary, unit: 'mS/m', predictions: [], selected_model: 'Persistence',
+      metrics: [{ model: 'Persistence', mae_mS_m: 1, rmse_mS_m: 2, eval_samples: 24 }] });
+    await loading;
+    assert.equal(env.get('experimentSelect').value, primary.experiment_id);
+    assert.doesNotMatch(env.get('forecastStatus').textContent, /độ trễ|khả dụng/);
+    env.pending.at(-1).respond({});
+    await flush();
+  }
 });

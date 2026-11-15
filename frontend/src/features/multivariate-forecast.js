@@ -10,6 +10,8 @@ import { createForecastIssuePanel } from './forecast-issue-panel.js';
 
 export { forecastMonthFromToday } from '../shared/forecast-contract.js';
 
+const EVALUATION_EC_DELAY_DAYS = 5;
+
 export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const host = document.getElementById("multivariateForecastHost");
   if (!host) return { load: async () => {}, selectStation: async () => false };
@@ -115,11 +117,6 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   for (const [value, label] of [['gap_2021_2023', '2021–2023 · thiếu EC liên tục 36 tháng'], ['gap_2022_2023', '2022–2023 · thiếu EC liên tục 24 tháng'], ['gap_2019_2021', '2019–2021 · giai đoạn đối chiếu 36 tháng']]) {
     const option = node('option', label); option.value = value; evaluationExperiment.append(option);
   }
-  const evaluationDelay = node('select');
-  evaluationDelay.name = 'gap_ec_delay';
-  for (const [value, label] of [['5', 'EC khả dụng sau cuối tháng 5 ngày'], ['35', 'Kiểm tra độ nhạy: EC chậm 35 ngày']]) {
-    const option = node('option', label); option.value = value; evaluationDelay.append(option);
-  }
   const evaluationStatus = node("p", "", "subtle");
   evaluationStatus.setAttribute("role", "status");
   const evaluationChart = node("div", undefined, "mv-evaluation-chart");
@@ -128,7 +125,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const evaluationGuidance = node("p", "", "mv-evaluation-guidance");
   const evaluationRemedies = node("details", undefined, "mv-remedy-research");
   const evaluationFollowup = node("details", undefined, "mv-remedy-research");
-  evaluation.append(evaluationSummary, labelFor('Giai đoạn mất EC giả lập', evaluationExperiment), labelFor('Giả định ngày khả dụng EC', evaluationDelay), evaluationStatus, evaluationGuidance, evaluationChart, evaluationLegend, evaluationMetrics, evaluationRemedies, evaluationFollowup);
+  evaluation.append(evaluationSummary, labelFor('Giai đoạn mất EC giả lập', evaluationExperiment), evaluationStatus, evaluationGuidance, evaluationChart, evaluationLegend, evaluationMetrics, evaluationRemedies, evaluationFollowup);
   host.append(evaluation);
   createForecastIssuePanel(host);
   const predictionHistory = createPredictionHistory(host, {
@@ -156,7 +153,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     evaluationStatus.textContent = "Đang tải đánh giá của mô hình đa biến…";
     if (!selected) { evaluationStatus.textContent = "Chọn trạm để xem đánh giá."; return; }
     try {
-      const data = await api(`/multivariate/evaluation?${new URLSearchParams({ station: selected, protocol: 'FROZEN_EC_WEATHER_ONLY_V1', experiment: evaluationExperiment.value, ec_delay_days: evaluationDelay.value })}`, req);
+      const data = await api(`/multivariate/evaluation?${new URLSearchParams({ station: selected, protocol: 'FROZEN_EC_WEATHER_ONLY_V1', experiment: evaluationExperiment.value, ec_delay_days: EVALUATION_EC_DELAY_DAYS })}`, req);
       if (!req.isCurrent() || station.value !== selected) return;
       if (data.station !== selected || data.unit !== "mS/m" || data.protocol_id !== 'FROZEN_EC_WEATHER_ONLY_V1' || !Array.isArray(data.items)) throw new Error("Đánh giá trả về không khớp trạm, đơn vị EC hoặc giao thức khóa EC.");
       evaluationStatus.textContent = `Kiểm chứng hồi cứu ${data.period}: khóa EC đến ${data.frozen_ec_through?.slice(0, 7)} tại lần phát hành đầu ${data.first_issue_date_local}; mô hình giữ cố định, đầu vào t−2 cập nhật mỗi tháng. EC trong kỳ chỉ dùng để chấm sai số. Đây không phải dự báo toàn bộ giai đoạn từ một lần phát hành.`;
@@ -247,7 +244,6 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     }
   }
   evaluationExperiment.addEventListener('change', loadEvaluation);
-  evaluationDelay.addEventListener('change', loadEvaluation);
 
   const currentStation = () => stations.find(item => item.station === station.value);
   const textValue = value => value == null ? "Chưa có" : typeof value === "object" ? JSON.stringify(value) : String(value);

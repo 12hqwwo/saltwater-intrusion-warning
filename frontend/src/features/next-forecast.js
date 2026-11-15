@@ -45,7 +45,7 @@ export function createNextForecast() {
       $('nextForecastApplyMap').disabled = !isCompact || data.selected_prediction.status !== 'SUCCESS';
       $("nextForecastValue").textContent = num(data.selected_prediction?.predicted);
       $("nextForecastTarget").textContent = data.target_month.slice(0, 7);
-      $("nextForecastStatus").textContent = `${data.station} · ${data.selected_model} · mốc phát hành giả định ${dateOnly(data.forecast_origin)} · độ trễ ${data.availability_lag_days} ngày. ${data.target_is_before_current_month ? "Tháng mục tiêu đã qua; đây là kết quả lưu của thí nghiệm." : "Kết quả thử nghiệm sau mẫu cuối của bộ dữ liệu."} Chưa có thực đo cùng kỳ để đối chiếu kết quả này.`;
+      $("nextForecastStatus").textContent = `${data.station} · ${data.selected_model} · mốc phát hành giả định ${dateOnly(data.forecast_origin)}. ${data.target_is_before_current_month ? "Tháng mục tiêu đã qua; đây là kết quả lưu của thí nghiệm." : "Kết quả thử nghiệm sau mẫu cuối của bộ dữ liệu."} Chưa có thực đo cùng kỳ để đối chiếu kết quả này.`;
       for (const row of data.all_predictions || []) {
         const tr = node("tr");
         tr.append(node("td", row.model), node("td", row.status === "SUCCESS" ? num(row.predicted) : "Chưa tính được"), node("td", row.latest_source_month?.slice(0, 7) || "—"), node("td", Number.isFinite(row.age_latest_months) ? `${num(row.age_latest_months)} tháng` : "—"));

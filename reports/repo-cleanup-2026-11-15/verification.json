@@ -1,0 +1,160 @@
+{
+  "checked_at": "2026-11-15T18:44:45.010779+07:00",
+  "root": "C:\\Users\\TOAN TIEN COMPUTER\\Documents\\CodeWebBaoMatCoSoDuLieu\\saltwater-intrusion-warning",
+  "git_baseline": {
+    "branch": "TinBranch",
+    "head": "663b26c",
+    "preexisting_modified_files": 7
+  },
+  "cleanup": {
+    "cache_directories_removed": 1043,
+    "bytecode_files_removed": 8436,
+    "bytecode_bytes_removed": 168870111,
+    "dependency_junction_removed": "tmp/ec_feature_workbook/node_modules",
+    "shared_dependency_target_preserved": true,
+    "qa_moves": [
+      {
+        "source": "tmp/gate-intake-qa",
+        "destination": "docs/qa_archive/gate-intake-qa",
+        "files": [
+          {
+            "path": "criteria-result.jpg",
+            "sha256": "294ccc56439fb7e070a987664738e7d54e215b6b423dca712e2ba96cf6c32f5c"
+          }
+        ]
+      },
+      {
+        "source": "tmp/ui-cleanup-20261104",
+        "destination": "docs/qa_archive/ui-cleanup-20261104",
+        "files": [
+          {
+            "path": "intake-four-columns.jpg",
+            "sha256": "237551d63c9ba90f47b6adb73c94410f1f7e3a1b011e747f808c029432341120"
+          },
+          {
+            "path": "observation-three-columns.jpg",
+            "sha256": "4c55e3647898765c315479e471c0e558112916fdec243ae00709288ca3e30333"
+          }
+        ]
+      }
+    ]
+  },
+  "preservation": {
+    "protected_files_before": 1404,
+    "verified_unchanged_or_relocated": 1403,
+    "permitted_modified_files": [
+      ".gitignore"
+    ],
+    "unexpected_changes": [],
+    "qa_file_relocations": {
+      "tmp/gate-intake-qa/criteria-result.jpg": "docs/qa_archive/gate-intake-qa/criteria-result.jpg",
+      "tmp/ui-cleanup-20261104/intake-four-columns.jpg": "docs/qa_archive/ui-cleanup-20261104/intake-four-columns.jpg",
+      "tmp/ui-cleanup-20261104/observation-three-columns.jpg": "docs/qa_archive/ui-cleanup-20261104/observation-three-columns.jpg"
+    },
+    "native_pyd_files_retained": 326,
+    "native_validation": "Original paths and sizes from pre-clean inventory; no pre-clean native content hashes were captured.",
+    "shared_runtime_target_exists": true,
+    "shared_runtime_package_checksum_unchanged": true,
+    "git_index_unchanged": true,
+    "remaining_cache_directories": [],
+    "remaining_dependency_roots": [
+      "frontend/node_modules"
+    ]
+  },
+  "regression": {
+    "python_before": {
+      "tests": 168,
+      "passed": 164,
+      "skipped": 4,
+      "seconds": 168.487,
+      "skipped_cases": [
+        "test_retry_only_connection_errors (test_collect_fes2022b.Transfers.test_retry_only_connection_errors) ... skipped 'paramiko not installed'",
+        "test_field_list_and_monthly_label_preserve_api_units (test_dss_postgres_contract.PostgresContractTests.test_field_list_and_monthly_label_preserve_api_units) ... skipped 'Set WEBGIS_TEST_PG_DSN for PostgreSQL contracts'",
+        "test_issue_insert_history_and_scores_preserve_api_units (test_dss_postgres_contract.PostgresContractTests.test_issue_insert_history_and_scores_preserve_api_units) ... skipped 'Set WEBGIS_TEST_PG_DSN for PostgreSQL contracts'",
+        "test_source_and_output_hashes_are_reproducible (test_mythuan_three_station.GeneratedEvidenceChecks.test_source_and_output_hashes_are_reproducible) ... skipped 'Original source snapshots unavailable: data/external/multivariate_weather/manifest.json'"
+      ],
+      "log_sha256": "39d40e623a3dcc2f4a9626c05e1231bf6582aa710a101721a0b1fdf08ea96c96"
+    },
+    "python_after": {
+      "tests": 168,
+      "passed": 164,
+      "skipped": 4,
+      "seconds": 48.67,
+      "skipped_cases": [
+        "test_retry_only_connection_errors (test_collect_fes2022b.Transfers.test_retry_only_connection_errors) ... skipped 'paramiko not installed'",
+        "test_field_list_and_monthly_label_preserve_api_units (test_dss_postgres_contract.PostgresContractTests.test_field_list_and_monthly_label_preserve_api_units) ... skipped 'Set WEBGIS_TEST_PG_DSN for PostgreSQL contracts'",
+        "test_issue_insert_history_and_scores_preserve_api_units (test_dss_postgres_contract.PostgresContractTests.test_issue_insert_history_and_scores_preserve_api_units) ... skipped 'Set WEBGIS_TEST_PG_DSN for PostgreSQL contracts'",
+        "test_source_and_output_hashes_are_reproducible (test_mythuan_three_station.GeneratedEvidenceChecks.test_source_and_output_hashes_are_reproducible) ... skipped 'Original source snapshots unavailable: data/external/multivariate_weather/manifest.json'"
+      ],
+      "log_sha256": "9675ee00d8a84c4a00bfced1595acd7f4518bb925601f3400087337213fd32c4"
+    },
+    "javascript_before": {
+      "tests": 175,
+      "pass": 175,
+      "fail": 0,
+      "skipped": 0,
+      "log_sha256": "4cc44772d650465d9c7d2f0a3e2b8911ce457f8071c1c89191801f0de701d856"
+    },
+    "javascript_after": {
+      "tests": 175,
+      "pass": 175,
+      "fail": 0,
+      "skipped": 0,
+      "log_sha256": "c13a2eca8947d411f5f0890e42c4707bcf2992b4211c1aff5b161cc8cac2bc6e"
+    },
+    "javascript_colocated_before": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0,
+      "log_sha256": "d4de3b2e2d496f9764a79489812a64004f69731380af2ee99ab54631d348517d"
+    },
+    "javascript_colocated_after": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0,
+      "log_sha256": "502f945a825e236b465ffb85c14aa49fe4465e87cca706410e13b22fa4a0a690"
+    },
+    "build": {
+      "before_exit_code": 0,
+      "after_exit_code": 0,
+      "same_output_asset_names": true,
+      "assets": [
+        "dist/assets/legacy-Bn0fmIsr.js",
+        "dist/assets/modulepreload-polyfill-B5Qt9EMX.js",
+        "dist/assets/workspace-DBd-YbcA.js",
+        "dist/assets/workspace-kjCKqx5A.css",
+        "dist/index.html",
+        "dist/research.html",
+        "dist/workspace.html"
+      ],
+      "baseline_warnings": [
+        "(!) Some chunks are larger than 500 kB after minification. Consider:"
+      ],
+      "after_warnings": [
+        "(!) Some chunks are larger than 500 kB after minification. Consider:"
+      ]
+    },
+    "git_diff_check_exit_code": 0
+  },
+  "api_inventory": {
+    "paths": 78,
+    "method_path_operations": 85
+  },
+  "scope": {
+    "database_writes": false,
+    "training": false,
+    "dependency_installation": false,
+    "uat_rerun": false,
+    "old_http_db_checks_rerun": false
+  },
+  "commands": [
+    ".\\.venv\\Scripts\\python.exe -B -m unittest discover -s tests -p \"test_*.py\" -v",
+    "node --test 'tests/*.test.mjs'",
+    "node --test 'frontend/src/features/gate-simulation-draft.test.js'",
+    "npm.cmd --prefix frontend run build",
+    "git diff --check"
+  ],
+  "recovery_directory": "C:\\Users\\TOAN TIEN COMPUTER\\AppData\\Local\\Temp\\codex-repo-cleanup-7a073900f0094e2fa8ea668b10b78979"
+}

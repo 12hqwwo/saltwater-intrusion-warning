@@ -96,7 +96,7 @@ export function createForecasts() {
           ex.predictions.some(row => row.unit !== 'mS/m' || row.station !== ex.station || !validMonth(row.target_month?.slice(0, 7)) || !/^\d{4}-\d{2}-01$/.test(row.target_month) ||
             (row.actual != null && !validEc(row.actual)) || (row.status === 'SUCCESS' && !validEc(row.predicted)))) throw new Error('Thí nghiệm trả về không khớp trạm, tháng hoặc đơn vị hợp lệ.');
       const { selected, baseline, beatsBaseline } = experimentAssessment(ex);
-      $("forecastStatus").textContent = `Trạm ${ex.station} · EC khả dụng theo giả định: cuối tháng + ${ex.availability_lag_days} ngày · ${selected.eval_samples} tháng test chung.`;
+      $("forecastStatus").textContent = `Trạm ${ex.station} · ${selected.eval_samples} tháng test chung.`;
       $("modelAssessment").classList.toggle("good", beatsBaseline);
       const rmseHigher = selected.rmse_mS_m > baseline.rmse_mS_m;
       $("modelAssessment").textContent = `${ex.selected_model} được chọn trên tập validation. MAE trên tập đánh giá ${num(selected.mae_mS_m)} mS/m, ${beatsBaseline ? "thấp hơn" : "không thấp hơn"} mô hình đối chứng (${num(baseline.mae_mS_m)} mS/m). RMSE (nhạy với sai số lớn) ${num(selected.rmse_mS_m)} so với ${num(baseline.rmse_mS_m)} mS/m${rmseHigher ? "; mô hình có sai số cực trị cần rà soát" : ""}. ${beatsBaseline ? "Kết quả chỉ có hiệu lực trong phạm vi thí nghiệm này." : "Chưa có căn cứ dùng mô hình này thay đối chứng tại trạm."}`;
@@ -138,9 +138,7 @@ export function createForecasts() {
     if (displayedRows.length) saveCSV(`${activeExperiment.experiment_id}_monthly.csv`, displayedRows, ["experiment_id", "site_code", "target_month", "actual", "selected_model", "predicted", "persistence", "absolute_error", "unit", "data_kind"]);
   });
   async function selectStation(siteCode) {
-    const current = availableExperiments.find(ex => ex.experiment_id === $("experimentSelect").value);
-    const candidates = availableExperiments.filter(ex => ex.site_code === siteCode);
-    const selected = candidates.find(ex => ex.availability_lag_days === current?.availability_lag_days) || candidates[0];
+    const selected = availableExperiments.find(ex => ex.site_code === siteCode);
     if (!selected) {
       experimentRequests.next();
       clearForecast("Chưa có thí nghiệm kiểm chứng EC tháng cho điểm đo này.");
@@ -152,17 +150,24 @@ export function createForecasts() {
   }
 
   async function load(experiments) {
-    availableExperiments = experiments;
+    const defaults = new Map();
+    for (const ex of experiments) {
+      const current = defaults.get(ex.site_code);
+      if (!current || ex.availability_lag_days < current.availability_lag_days) defaults.set(ex.site_code, ex);
+    }
+    availableExperiments = [...defaults.values()];
     $("experimentSelect").replaceChildren();
     $("experimentSelect").disabled = !experiments.length;
     $("retryForecast").disabled = !experiments.length;
-    for (const ex of experiments) {
-      const option = node("option", `${ex.station} · độ trễ ${ex.availability_lag_days} ngày`);
+    for (const ex of availableExperiments) {
+      const option = node("option", ex.station);
       option.value = ex.experiment_id;
       $("experimentSelect").append(option);
     }
     const saved = sessionStorage.getItem("workspace.experiment");
-    if (experiments.some((ex) => ex.experiment_id === saved)) $("experimentSelect").value = saved;
+    const savedExperiment = experiments.find(ex => ex.experiment_id === saved);
+    const savedDefault = savedExperiment && defaults.get(savedExperiment.site_code);
+    if (savedDefault) $("experimentSelect").value = savedDefault.experiment_id;
     await selectExperiment();
   }
 
