@@ -102,8 +102,8 @@ def sample_day_summary(root: Path) -> dict:
 def evaluate(root: Path, monthly: pd.DataFrame, output: Path) -> None:
     from scripts.evaluate_frozen_ec_gap import EXPERIMENTS, freeze_training
     from scripts.evaluate_frozen_ec_gap_remedies import CANDIDATES
-    from scripts.experiment_ec_long_hydrology import data_matrix
-    from scripts.train_multivariate_ec import pipeline
+    from tools.feature_building import data_matrix
+    from tools.model_training import pipeline
 
     saved = pd.read_csv(root / "outputs/frozen_ec_remedies_20261108/predictions.csv")
     base_columns = CANDIDATES["WeatherHydrology"]
@@ -166,7 +166,7 @@ def evaluate(root: Path, monthly: pd.DataFrame, output: Path) -> None:
                            root / "outputs/ec_fes_day15_fixed_20261030/fes_south_feature_days13_17_1985_2023.csv",
                            root / "outputs/frozen_ec_remedies_20261108/predictions.csv",
                            root / "scripts/evaluate_frozen_ec_gap_remedies.py",
-                           root / "scripts/train_multivariate_ec.py")},
+                           root / "tools/model_training.py")},
                    note="FES2022b is retrospective astronomical offshore tide; tree percentiles are not calibrated prediction intervals.")
     (output / "audit.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False,
                                                   default=str) + "\n", encoding="utf-8")

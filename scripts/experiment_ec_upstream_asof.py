@@ -18,78 +18,11 @@ from sklearn.preprocessing import StandardScaler
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.backtest_asof_ec import (
-    TARGET_PATH, WEATHER_MANIFEST, available_date_for, issue_date_for,
-    split_for, training_frame,
-)
+from tools.backtest_protocols import available_date_for, split_for
+from tools.feature_building import OWN, UPSTREAM, build_matrix
 
 OUT = ROOT / "outputs/ec_upstream_asof_20261029"
-EXTRA = ROOT / "data/external/ec_feature_research_20261019"
 BASELINE = ROOT / "outputs/multivariate_ec_asof_20261029/asof_predictions.csv"
-OWN = ["month_sin", "month_cos", "rainfall_mm", "temperature_degC", "wind_source_units",
-       "soil_t2", "wind_u_t2", "wind_v_t2", "ec_latest", "ec_previous", "ec_age_months",
-       "ec_lag12", "ec_mean3", "ec_mean12"]
-UPSTREAM = ["tc_latest", "tc_previous", "tc_age_months", "tc_lag12", "tc_mean3", "tc_mean12"]
-
-
-def ec_features(series, target, issue, delay, prefix):
-    available = pd.Series([available_date_for(t, delay) for t in series.index], index=series.index)
-    known = series[(series.index < target) & (available <= issue)]
-    last3 = known[known.index >= target - pd.DateOffset(months=3)]
-    last12 = known[known.index >= target - pd.DateOffset(months=12)]
-    return {f"{prefix}_latest": known.iloc[-1] if len(known) else np.nan,
-            f"{prefix}_previous": known.iloc[-2] if len(known) > 1 else np.nan,
-            f"{prefix}_age_months": ((target.year-known.index[-1].year)*12 + target.month-known.index[-1].month) if len(known) else np.nan,
-            f"{prefix}_lag12": known.get(target-pd.DateOffset(months=12), np.nan),
-            f"{prefix}_mean3": last3.mean(),
-            f"{prefix}_mean12": last12.mean(),
-            f"{prefix}_source_month": known.index[-1] if len(known) else pd.NaT,
-            f"{prefix}_available_at": available.loc[known.index[-1]] if len(known) else None}
-
-
-def build_matrix(delay):
-    frame, _ = training_frame(TARGET_PATH, WEATHER_MANIFEST)
-    # This frozen two-station experiment has extra ERA5 components only at these sites.
-    frame = frame[frame.station.isin(['MYTHO', 'TANCHAU'])].copy()
-    extra_rows = []
-    for station, name in [("MYTHO", "MyTho"), ("TANCHAU", "TanChau")]:
-        payload = json.loads((EXTRA / f"era5_extra_{name}.json").read_text(encoding="utf-8"))
-        daily = pd.DataFrame(payload["daily"])
-        daily["weather_month"] = pd.to_datetime(daily.time).dt.to_period("M").dt.to_timestamp()
-        direction = np.deg2rad(daily.wind_direction_10m_dominant)
-        daily["wind_u_t2"] = -daily.wind_speed_10m_mean * np.sin(direction)
-        daily["wind_v_t2"] = -daily.wind_speed_10m_mean * np.cos(direction)
-        grouped = daily.groupby("weather_month")
-        month = grouped.agg(soil_t2=("soil_moisture_0_to_100cm_mean", "mean"),
-                            wind_u_t2=("wind_u_t2", "mean"), wind_v_t2=("wind_v_t2", "mean"))
-        count = grouped.size()
-        month.loc[count.to_numpy() != month.index.days_in_month, :] = np.nan
-        month["station"] = station
-        extra_rows.append(month.reset_index())
-    frame = frame.merge(pd.concat(extra_rows), on=["station", "weather_month"], how="left", validate="many_to_one")
-    if frame[["soil_t2", "wind_u_t2", "wind_v_t2"]].isna().any().any():
-        raise ValueError("Missing complete t-2 ERA5 extra weather")
-    source = {s: group.set_index("month_start").conductivity_mS_per_m.sort_index()
-              for s, group in frame.groupby("station")}
-    rows = []
-    for _, row in frame.iterrows():
-        target = row.month_start
-        issue = issue_date_for(target)
-        weather_available = available_date_for(row.weather_month, 5)
-        if weather_available > issue:
-            raise ValueError("Future weather")
-        own = ec_features(source[row.station], target, issue, delay, "ec")
-        upstream = ec_features(source["TANCHAU"], target, issue, delay, "tc") if row.station == "MYTHO" else {}
-        if any(x[f"{prefix}_available_at"] is not None and x[f"{prefix}_available_at"] > issue
-               for prefix, x in [("ec", own), ("tc", upstream)] if x):
-            raise ValueError("Future EC")
-        rows.append({**row.to_dict(), **own, **upstream, "issue_date": issue,
-                     "weather_available_at": weather_available})
-    result = pd.DataFrame(rows)
-    if result.duplicated(["station", "month_start"]).any():
-        raise ValueError("Duplicate station-month")
-    return result
-
 
 def fit_predict(algorithm, x_train, y_train, x_test):
     if algorithm == "RF":
@@ -172,7 +105,5 @@ def run():
     print("SELECTION\n", selection[["station","scenario","model","mae"]].to_string(index=False))
     print("RETROSPECTIVE\n", metrics[metrics.split != "validation"][["station","scenario","model","mae"]].to_string(index=False))
     return pred, metrics
-
-
 if __name__ == "__main__":
     run()

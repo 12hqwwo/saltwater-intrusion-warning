@@ -61,7 +61,7 @@ def main():
     os.environ['WEBGIS_RESEARCH_MODE'] = args.mode
     from backend.security import enabled
     if not enabled():
-        parser.error('Security must be enabled. Run scripts/setup_security.py --apply first.')
+        parser.error('Security must be enabled. Run python -m tools.security_setup roles --apply first.')
     if args.mode == 'postgres':
         from backend.database import read_connection
         with read_connection() as conn:

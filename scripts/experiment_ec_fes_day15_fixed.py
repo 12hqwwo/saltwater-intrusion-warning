@@ -18,9 +18,9 @@ import numpy as np
 import pandas as pd
 import pyfes
 
-from scripts.backtest_asof_ec import available_date_for
+from tools.backtest_protocols import available_date_for
 from scripts.experiment_ec_extreme_robust import COMPACT, fit_predict
-from scripts.experiment_ec_long_hydrology import data_matrix
+from tools.feature_building import data_matrix
 from scripts.experiment_fes_ec import ATLAS, CONFIG, MASK, STATUS
 
 ROOT = Path(__file__).resolve().parents[1]

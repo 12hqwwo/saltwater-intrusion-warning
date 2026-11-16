@@ -25,7 +25,7 @@ def _catalog():
     try:
         return models.model_catalog()
     except (OSError, ValueError, KeyError, TypeError, ImportError) as exc:
-        raise WorkspaceError(503, 'Chưa đọc được mô hình đa biến. Chạy scripts/train_multivariate_ec.py bằng môi trường mô hình của dự án.') from exc
+        raise WorkspaceError(503, 'Chưa đọc được mô hình đa biến. Chạy python -m tools.model_training bằng môi trường mô hình của dự án.') from exc
 
 
 def _station(station):
@@ -76,7 +76,7 @@ def inputs(station: str, target_month: str):
                 input_month=_input_month(target), complete=False, wind_unit='m/s',
                 source='WEATHER_UNAVAILABLE', hydrology=hydro,
                 availability_note='Chưa có đủ khí tượng lưu trữ; có thể nhập khí tượng thủ công.')
-        raise WorkspaceError(422, 'Chưa có đủ khí tượng đúng đơn vị cho tháng đầu vào. Cập nhật bằng scripts/update_multivariate_weather.py hoặc chọn đầu vào do người dùng cung cấp.') from exc
+        raise WorkspaceError(422, 'Chưa có đủ khí tượng đúng đơn vị cho tháng đầu vào. Cập nhật bằng python -m tools.weather_inputs hoặc chọn đầu vào do người dùng cung cấp.') from exc
     if result.get('wind_unit') != 'm/s' or result.get('complete') is not True:
         raise WorkspaceError(422, 'Khí tượng chưa đủ ngày hoặc chưa xác nhận đơn vị gió m/s để chạy mô hình này.')
     try:

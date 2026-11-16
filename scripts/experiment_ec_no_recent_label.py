@@ -13,9 +13,9 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.backtest_asof_ec import available_date_for
-from scripts.experiment_ec_long_hydrology import OUT as PARENT, FLOW, STAGE, data_matrix, predictor
-from scripts.experiment_ec_upstream_asof import OWN
+from tools.backtest_protocols import available_date_for
+from tools.feature_building import FLOW, OWN, STAGE, data_matrix, predictor
+from scripts.experiment_ec_long_hydrology import OUT as PARENT
 
 OUT = PARENT / "no_recent_ec"
 WEATHER = [x for x in OWN if not x.startswith("ec_")]

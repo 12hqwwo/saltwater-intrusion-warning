@@ -19,8 +19,8 @@ from backend.repositories.hydrology_inputs import source_paths
 from backend.repositories.multivariate_inputs import get_monthly_weather
 from scripts.evaluate_frozen_ec_gap import OUTPUT as GAP_OUTPUT
 from scripts.evaluate_frozen_ec_gap_remedies import OUTPUT as REMEDY_OUTPUT
-from scripts.experiment_ec_long_hydrology import data_matrix
-from scripts.train_multivariate_ec import pipeline
+from tools.feature_building import data_matrix
+from tools.model_training import pipeline
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = "20261108T_HYDROLOGY_PRIMARY_V1"

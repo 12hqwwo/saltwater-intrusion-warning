@@ -1,4 +1,4 @@
-"""Offline chronological evaluation and final fit; never train in the API."""
+import argparse
 from pathlib import Path
 import sys
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,8 +27,6 @@ def training_frame(target_path, weather_path):
     if targets.duplicated(['station', 'month_start']).any():
         raise ValueError('Duplicate target month.')
     provenance = json.loads(weather_path.read_text(encoding='utf-8'))
-    # The shared adapter validates every source and selects whole monthly versions.
-    # Repeated archive refreshes can overlap historical chunks without splicing days.
     weather_rows = [row for station in sorted(targets['station'].unique())
         for row in get_monthly_weather(station, require_verified_wind=True)]
     weather = pd.DataFrame(weather_rows)
@@ -76,7 +74,6 @@ def train():
             predictions = fitted.predict(selected[FEATURES])
             for (_, row), predicted in zip(selected.iterrows(), predictions):
                 target = row.month_start
-                # Baselines share the weather model's two-month input latency.
                 prior = lookup[lookup.index <= target - pd.DateOffset(months=2)]
                 seasonal = lookup.get(target - pd.DateOffset(months=12), np.nan)
                 climate = train_rows.loc[train_rows.month_start.dt.month == target.month, y].mean()
@@ -124,5 +121,16 @@ def train():
     (ROOT / 'data/models/multivariate_registry.json').write_text(json.dumps(registry, indent=2), encoding='utf-8')
 
 
-if __name__ == '__main__':
+def main(argv=None):
+    parser = argparse.ArgumentParser(description='Train and package the multivariate EC models.')
+    parser.add_argument('--apply', action='store_true', help='Write model runs and replace the model registry.')
+    args = parser.parse_args(argv)
+    if not args.apply:
+        print('Plan only: train station models under runs/multivariate_ec/ and replace '
+              'data/models/multivariate_registry.json. Use --apply to write.')
+        return
     train()
+
+
+if __name__ == '__main__':
+    main()

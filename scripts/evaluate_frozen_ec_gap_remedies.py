@@ -18,13 +18,13 @@ import sklearn
 
 from backend.domain.multivariate_ec import FEATURES
 from backend.domain import ec_gap_evaluation
-from scripts.backtest_asof_ec import available_date_for, issue_date_for
+from tools.backtest_protocols import available_date_for, issue_date_for
 from scripts.evaluate_frozen_ec_gap import EXPERIMENTS, freeze_training
 from scripts.evaluate_mythuan_three_station import score
-from scripts.experiment_ec_long_hydrology import (
+from tools.feature_building import (
     KRATIE, LONG, RECENT_TC, data_matrix,
 )
-from scripts.train_multivariate_ec import pipeline
+from tools.model_training import pipeline
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "outputs/frozen_ec_remedies_20261108"

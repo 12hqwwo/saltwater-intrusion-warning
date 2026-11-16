@@ -6,7 +6,7 @@ Thực hiện trong PowerShell tại gốc repository. Giữ `.venv` và `.venv-
 .venv\Scripts\python.exe -m pip install -r requirements-prototype.txt
 npm.cmd --prefix frontend ci
 .venv\Scripts\python.exe scripts/apply_dss_storage.py --apply
-.venv\Scripts\python.exe scripts/setup_security.py --apply
+.venv\Scripts\python.exe -m tools.security_setup roles --apply
 .\start.ps1
 ```
 
@@ -63,8 +63,8 @@ Workspace PostgreSQL không cần nhập lại schema nghiên cứu. Mục Quan 
 Khi cần tái tạo đúng hai run Mỹ Tho đang được tham chiếu, chạy tuần tự từ gốc repository:
 
 ```powershell
-.venv\Scripts\python.exe -m scripts.pack_rf_compact_run
-.venv\Scripts\python.exe -m scripts.pack_rf_compact_lag30
+.venv\Scripts\python.exe -m scripts.rf_compact_artifacts --lag 5
+.venv\Scripts\python.exe -m scripts.rf_compact_artifacts --lag 35
 .venv\Scripts\python.exe -m scripts.update_workspace_with_rf_compact
 ```
 

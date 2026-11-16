@@ -10,9 +10,9 @@ import numpy as np
 import pandas as pd
 
 from scripts import rf_compact_artifacts as artifacts
-from scripts.backtest_asof_ec import available_date_for, issue_date_for
+from tools.backtest_protocols import available_date_for, issue_date_for
 from scripts.experiment_ec_extreme_robust import COMPACT
-from scripts.experiment_ec_long_hydrology import data_matrix
+from tools.feature_building import data_matrix
 
 
 class CompactArtifactTests(unittest.TestCase):

@@ -28,17 +28,17 @@ from sklearn.pipeline import make_pipeline
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.backtest_asof_ec import available_date_for
-from scripts.experiment_ec_long_hydrology import data_matrix
+from tools.backtest_protocols import available_date_for
+from tools.feature_building import data_matrix
 
 OUT = ROOT / "outputs/ec_error_reduction_20261108"
 OUT.mkdir(parents=True, exist_ok=True)
 
 SOURCE_FILES = (
     "scripts/experiment_ec_error_reduction.py",
-    "scripts/experiment_ec_long_hydrology.py",
+    "tools/feature_building.py",
     "scripts/experiment_ec_upstream_asof.py",
-    "scripts/backtest_asof_ec.py",
+    "tools/backtest_protocols.py",
     "data/research/mrc_ec_monthly_samples.csv",
     "data/external/multivariate_weather/manifest.json",
 )

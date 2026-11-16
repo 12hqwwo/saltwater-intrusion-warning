@@ -4,8 +4,8 @@ import unittest
 
 import pandas as pd
 
-from scripts.experiment_ec_upstream_asof import ec_features
-from scripts.backtest_asof_ec import issue_date_for
+from tools.feature_building import ec_features
+from tools.backtest_protocols import issue_date_for
 
 
 class AvailabilityTest(unittest.TestCase):

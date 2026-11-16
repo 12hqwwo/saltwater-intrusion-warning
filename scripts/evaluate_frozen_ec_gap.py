@@ -20,9 +20,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from backend.domain.multivariate_ec import FEATURES
 from backend.domain.river_interpolation import MY_THUAN_KM, MY_THUAN_RATIO, interpolate_anchors
-from scripts.backtest_asof_ec import available_date_for, issue_date_for
+from tools.backtest_protocols import available_date_for, issue_date_for
 from scripts.evaluate_mythuan_three_station import score
-from scripts.train_multivariate_ec import pipeline, training_frame
+from tools.model_training import pipeline, training_frame
 
 PROTOCOL = "FROZEN_EC_WEATHER_ONLY_V1"
 OUTPUT = ROOT / "outputs/frozen_ec_gap_20261104"
@@ -189,8 +189,8 @@ def run(output=OUTPUT):
                        ("interpolation_predictions.csv", spatial), ("interpolation_metrics.csv", spatial_scores),
                        ("baseline_availability.csv", pd.DataFrame(availability))):
         data.to_csv(output / name, index=False)
-    sources = [target_path, Path(__file__), ROOT / "scripts/train_multivariate_ec.py",
-               ROOT / "scripts/backtest_asof_ec.py", ROOT / "backend/domain/multivariate_ec.py",
+    sources = [target_path, Path(__file__), ROOT / "tools/model_training.py",
+               ROOT / "tools/backtest_protocols.py", ROOT / "backend/domain/multivariate_ec.py",
                ROOT / "scripts/evaluate_mythuan_three_station.py",
                ROOT / "scripts/run_future_forecast_2024_2026.py",
                ROOT / "backend/repositories/multivariate_inputs.py",

@@ -30,8 +30,8 @@ from sklearn.inspection import permutation_importance
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.backtest_asof_ec import available_date_for
-from scripts.experiment_ec_long_hydrology import data_matrix
+from tools.backtest_protocols import available_date_for
+from tools.feature_building import data_matrix
 
 CLI = ROOT / "data/external/climate_indices_20261029/climate_indices_combined.csv"
 OUT = ROOT / "outputs/ec_feature_enhanced_20261029"

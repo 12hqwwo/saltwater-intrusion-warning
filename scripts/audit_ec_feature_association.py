@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 from scipy.stats import spearmanr
 from scripts.experiment_ec_feature_enhanced import load_climate
-from scripts.experiment_ec_long_hydrology import data_matrix
+from tools.feature_building import data_matrix
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'outputs/ec_feature_association_20261030'

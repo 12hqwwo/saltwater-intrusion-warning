@@ -25,8 +25,8 @@ from scripts.evaluate_frozen_ec_gap_remedies import (
     HYDRO, NEIGHBOR, ROOT, OUTPUT as PRIOR_OUTPUT,
     forecast_candidates, metrics as prior_metrics, neighbor_asof_features,
 )
-from scripts.experiment_ec_long_hydrology import KRATIE, LONG, RECENT_TC, data_matrix
-from scripts.train_multivariate_ec import pipeline
+from tools.feature_building import KRATIE, LONG, RECENT_TC, data_matrix
+from tools.model_training import pipeline
 
 OUTPUT = ROOT / "outputs/frozen_ec_followup_20261108"
 PROTOCOL = "FROZEN_EC_FOLLOWUP_RESEARCH_V1"
@@ -160,9 +160,9 @@ def run(output=OUTPUT):
         PRIOR_OUTPUT / "run_manifest.json", PRIOR_OUTPUT / "predictions.csv",
         ROOT / "scripts/evaluate_frozen_ec_gap_remedies.py",
         ROOT / "scripts/evaluate_frozen_ec_gap.py",
-        ROOT / "scripts/experiment_ec_long_hydrology.py",
-        ROOT / "scripts/backtest_asof_ec.py",
-        ROOT / "scripts/train_multivariate_ec.py", Path(__file__)]
+        ROOT / "tools/feature_building.py",
+        ROOT / "tools/backtest_protocols.py",
+        ROOT / "tools/model_training.py", Path(__file__)]
     manifest = dict(schema_version=1, protocol_id=PROTOCOL, station="MYTHO",
         experiments=EXPERIMENTS, ec_delay_days=[5, 35], unit="mS/m",
         candidates=NEW_CANDIDATES, controls=ALL_CANDIDATES[:4],

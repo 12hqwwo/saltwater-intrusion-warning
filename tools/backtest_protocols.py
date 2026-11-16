@@ -1,5 +1,4 @@
-"""Monthly rolling-origin EC backtest with explicit issue-time availability assumptions."""
-
+import argparse
 import csv
 import calendar
 import hashlib
@@ -16,7 +15,7 @@ import sklearn
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.train_multivariate_ec import FEATURES, pipeline, training_frame
+from tools.model_training import FEATURES, pipeline, training_frame
 
 
 OUTPUT = ROOT / "outputs/multivariate_ec_asof_20261029"
@@ -27,7 +26,6 @@ MODELS = ("RandomForest", "Persistence", "SeasonalNaive", "MonthlyClimatology")
 
 
 def issue_date_for(target_month):
-    """Forecast month t is issued on day 6 of month t-1 (local calendar)."""
     month = target_month.date() if hasattr(target_month, "date") else target_month
     previous = date(month.year - (month.month == 1), (month.month - 2) % 12 + 1, 1)
     return date(previous.year, previous.month, 6)
@@ -35,7 +33,6 @@ def issue_date_for(target_month):
 
 @lru_cache(maxsize=4096)
 def available_date_for(month_start, lag_days):
-    """Assumed publication on month end plus lag_days, inclusive at issue date."""
     first = pd.Timestamp(month_start).date()
     month_end = date(first.year, first.month, calendar.monthrange(first.year, first.month)[1])
     return month_end + timedelta(days=int(lag_days))
@@ -65,7 +62,6 @@ def write_csv(path, rows):
 
 def run(output_dir=OUTPUT):
     frame, _ = training_frame(TARGET_PATH, WEATHER_MANIFEST)
-    # Preserve this original two-station protocol; My Thuan has a separate audited run.
     frame = frame[frame.station.isin(['MYTHO', 'TANCHAU'])].copy()
     frame["weather_available_at"] = frame.weather_month.map(lambda month: available_date_for(month, 5))
     predictions = []
@@ -144,9 +140,14 @@ def run(output_dir=OUTPUT):
     return predictions, summary
 
 
-if __name__ == "__main__":
+def main(argv=None):
+    argparse.ArgumentParser(description='Run the monthly EC rolling-origin backtest.').parse_args(argv)
     predictions, summary = run()
     print(f"Saved {len(predictions)} predictions and {len(summary)} metric rows to {OUTPUT}")
     for row in summary:
         if row["segment"] == "all" and row["model"] == "RandomForest":
             print(row["station"], row["scenario"], row["split"], round(row["mae_mS_m"], 3))
+
+
+if __name__ == "__main__":
+    main()

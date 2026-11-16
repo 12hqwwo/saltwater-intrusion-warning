@@ -13,7 +13,7 @@ Migration `sql/30_dss_storage.sql` tạo danh mục ngưỡng kịch bản, lị
 
 Lệnh đầu chỉ in kế hoạch, không kết nối DB. Lệnh `--apply` đọc `.env` qua `load_local_env`, dùng cấu hình PG*, thực hiện trong một transaction và khóa migration. Checksum được ghi vào `dss_reference.schema_migrations`. Chạy lại cùng checksum không thay đổi gì; checksum khác hoặc bảng có sẵn chưa được đăng ký sẽ gây lỗi và rollback, không ghi đè. Không chạy riêng SQL để bỏ qua cơ chế theo dõi này.
 
-Sau khi cài thành công, bật `WEBGIS_DSS_WRITES_ENABLED=true` trong `.env` rồi khởi động lại server. Mặc định thao tác ghi bị tắt. Kết nối đọc vẫn dùng `read_connection()` với transaction chỉ đọc. Kết nối ghi bắt buộc có `DSS_PGUSER` riêng; không fallback sang `PGUSER`. Chạy `scripts/setup_security.py --apply` để tạo hai role và bật ghi an toàn. Cấu hình mật khẩu/SSL theo libpq PG* hoặc passfile, không ghi mật khẩu vào SQL.
+Sau khi cài thành công, bật `WEBGIS_DSS_WRITES_ENABLED=true` trong `.env` rồi khởi động lại server. Mặc định thao tác ghi bị tắt. Kết nối đọc vẫn dùng `read_connection()` với transaction chỉ đọc. Kết nối ghi bắt buộc có `DSS_PGUSER` riêng; không fallback sang `PGUSER`. Chạy `python -m tools.security_setup roles --apply` để tạo hai role và bật ghi an toàn. Cấu hình mật khẩu/SSL theo libpq PG* hoặc passfile, không ghi mật khẩu vào SQL.
 
 Tài khoản đọc cần `USAGE` schema và `SELECT` ba bảng DSS. Tài khoản ghi cần thêm `INSERT` bảng lịch sử/nháp, `SELECT` cột trả về và `USAGE` sequence draft_id; không cần quyền sửa/xóa bảng hoặc ghi bảng quan trắc. Migration dùng tài khoản quản trị do người triển khai chọn, không tự cấp quyền rộng.
 

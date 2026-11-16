@@ -65,7 +65,7 @@ def mythuan_records():
 def archive_audit_inputs():
     """Keep exact historical inputs when mutable application inputs evolve."""
     manifest = json.loads((AUDIT / 'run_manifest.json').read_text('utf-8'))
-    for relative in ('data/research/mrc_ec_monthly_samples.csv', 'scripts/train_multivariate_ec.py', 'scripts/backtest_asof_ec.py'):
+    for relative in ('data/research/mrc_ec_monthly_samples.csv', 'tools/model_training.py', 'tools/backtest_protocols.py'):
         expected = manifest['input_sha256'][relative]
         archive = AUDIT / 'source_snapshots' / relative
         if archive.exists() and sha(archive) == expected:
@@ -120,7 +120,7 @@ def register_model():
     import pandas as pd
     import sklearn
     from backend.domain.multivariate_ec import FEATURES, UNITS
-    from scripts.backtest_asof_ec import available_date_for
+    from tools.backtest_protocols import available_date_for
     model_dir = ROOT / 'runs/multivariate_ec/mythuan' / VERSION
     model_dir.mkdir(parents=True, exist_ok=True)
     model_path = model_dir / 'model.joblib'

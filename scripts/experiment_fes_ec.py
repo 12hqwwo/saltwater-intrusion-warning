@@ -26,7 +26,7 @@ import pyfes
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 from backend.domain.multivariate_ec import FEATURES
-from scripts.train_multivariate_ec import pipeline, training_frame
+from tools.model_training import pipeline, training_frame
 
 
 ATLAS = ROOT / "data/raw/tide/fes2022b/ocean_tide_extrapolated"

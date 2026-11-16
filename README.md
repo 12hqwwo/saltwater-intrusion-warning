@@ -12,7 +12,7 @@ Từ gốc repository, dùng môi trường Python hiện có. Chuẩn bị depe
 .venv\Scripts\python.exe -m pip install -r requirements-prototype.txt
 npm.cmd --prefix frontend ci
 .venv\Scripts\python.exe scripts/apply_dss_storage.py --apply
-.venv\Scripts\python.exe scripts/setup_security.py --apply
+.venv\Scripts\python.exe -m tools.security_setup roles --apply
 .\start.ps1
 ```
 
@@ -56,7 +56,7 @@ Lưu trữ bổ trợ sử dụng schema `dss_reference`, không sửa bảng qu
 
 Lệnh import mặc định chỉ kiểm tra, không ghi DB. Hướng dẫn cấu hình/nhập DB: [docs/run_guide.md](docs/run_guide.md). Kết quả làm sạch, các kiểm tra và khôi phục: [docs/handover.md](docs/handover.md).
 
-Để tái tạo đúng hai run RF_compact đã sửa, dùng các wrapper đóng gói rồi cập nhật workspace theo [hướng dẫn riêng](docs/run_guide.md#tái-tạo-artifact-rf_compact-sau-rà-soát-01112026). Builder tổng quát với `--fit` ở trên chạy lại thí nghiệm và có thể thay registry.
+Để tái tạo đúng hai run RF_compact đã sửa, chạy `python -m scripts.rf_compact_artifacts --lag 5` và `--lag 35`, rồi cập nhật workspace theo [hướng dẫn riêng](docs/run_guide.md#tái-tạo-artifact-rf_compact-sau-rà-soát-01112026). Builder tổng quát với `--fit` ở trên chạy lại thí nghiệm và có thể thay registry.
 
 ## Cấu trúc
 
@@ -75,8 +75,9 @@ run_webgis.py            Trình chạy Windows
 run_monthly_ec.py        Đánh giá dự báo mẫu EC tháng
 run_gate_advisor.py      Rà soát hồ sơ kế hoạch cống
 run_station_gate_link.py Kiểm tra bằng chứng liên kết trạm–cống
-scripts/                 Thu thập, chuẩn hóa, kiểm toán, xây/nạp dữ liệu
-etl/, pipelines/         ETL có QA và đánh giá baseline
+tools/                   Lõi đặc trưng, huấn luyện, hồi cứu, khí tượng và cấu hình bảo mật đã chuyển
+scripts/                 Các lệnh nghiên cứu, thu thập và kiểm toán đang chuyển tiếp
+etl/                     Hàm CSV vẫn được audit dữ liệu cục bộ sử dụng
 sql/                     Schema, migration và truy vấn kiểm toán
 config/                  Cấu hình nguồn dữ liệu
  data/raw/, external/    Nguồn gốc và hồ sơ tải/biến đổi
@@ -87,6 +88,28 @@ runs/local_ec_backtest/  Metrics, predictions, split và manifest
 ```
 
 Các phân tích lịch sử không dùng làm chứng nhận chất lượng mô hình hiện tại. Nghiên cứu feature 19/10 chưa thay đổi bộ mô hình đang phục vụ; thư mục kết quả này hiện không còn trong checkout, nên cần có đủ artifact trước khi tích hợp.
+
+### Ánh xạ lệnh sau khi đổi tên
+
+Manifest trong `runs/` và bản chụp nguồn trong `outputs/` giữ đường dẫn cũ để bảo toàn bằng chứng và mã băm. Tag Git cục bộ `archive/scripts-before-refactor` lưu mã ở các đường dẫn cũ để đối chiếu hash gốc; tag này chưa được push. Test bằng chứng băm nội dung tại commit `705ee73`, xét cả LF và CRLF vì một số manifest được tạo từ checkout Windows. Manifest không bị viết lại. Khi chạy mã hiện tại, dùng:
+
+| Tên cũ | Lệnh hiện tại |
+| --- | --- |
+| `scripts/experiment_ec_long_hydrology.py` | `python -m tools feature hydrology-study --delay 5` (hoặc chạy script trực tiếp) |
+| `scripts/backtest_asof_ec.py` | `python -m tools backtest rolling` |
+| `scripts/train_multivariate_ec.py` | `python -m tools model train --apply` (không có `--apply` chỉ in kế hoạch) |
+| `scripts/update_multivariate_weather.py` | `python -m tools weather update` |
+| `scripts/verify_mrc_export.py` | `python -m tools observation verify-mrc <MRC ZIP>` |
+| `scripts/setup_security.py` | `python -m tools security roles --apply` |
+| `scripts/setup_field_keys.py` | `python -m tools security field-keys --apply` |
+| `scripts/pack_rf_compact_run.py` | `python -m tools model package-rf --lag 5` |
+| `scripts/pack_rf_compact_lag30.py` | `python -m tools model package-rf --lag 35` |
+| `scripts/check.ps1` | `python -m tools check smoke` hoặc `check full` |
+| `scripts/utilities/START_FES_DOWNLOAD.cmd` | `python -m tools source fes --download` |
+
+Các lệnh huấn luyện, hồi cứu và đóng gói có thể ghi artifact; chỉ chạy khi muốn tạo lại kết quả.
+Lệnh `feature hydrology-study` chạy `scripts/experiment_ec_long_hydrology.py`; `tools/feature_building.py` giữ hàm và danh sách đặc trưng dùng chung.
+Hai đường dẫn manifest `scripts/experiment_ec_extreme_robust.py` và `scripts/run_future_forecast_2024_2026.py` hiện vẫn giữ nguyên tên trong giai đoạn chuyển tiếp.
 
 ## Kiểm tra và tài liệu
 

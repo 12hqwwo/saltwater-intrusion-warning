@@ -16,7 +16,7 @@ Máy hiện tại đã được áp dụng. Máy khác cần PostgreSQL có sche
 
 ```powershell
 .\.venv\Scripts\python.exe scripts/apply_dss_storage.py --apply
-.\.venv\Scripts\python.exe scripts/setup_security.py --apply
+.\.venv\Scripts\python.exe -m tools.security_setup roles --apply
 .\start.ps1
 ```
 

@@ -1,4 +1,3 @@
-"""Provision restricted runtime roles and audit logging; default is a plan only."""
 import argparse
 import csv
 import hashlib
@@ -42,17 +41,14 @@ def update_env(path, values):
     protect(path)
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--apply', action='store_true')
-    args = parser.parse_args()
+def setup_runtime_roles(apply=False):
     private = ROOT / '.security'
     if private.is_symlink() or (ROOT / '.env').is_symlink():
         raise ValueError('Refusing symlinked local security paths.')
     print('Plan: create webgis_reader and webgis_writer without administrative privileges;')
     print('grant read access and append-only DSS access, add audit triggers, protect local credentials,')
     print('and enable PostgreSQL forecast/draft storage. Observation rows remain unchanged.')
-    if not args.apply:
+    if not apply:
         print('No changes. Use --apply to install.')
         return
     load_local_env()
@@ -70,7 +66,6 @@ def main():
     passwords = {}
     migration = ROOT / 'sql/31_database_security.sql'
     digest = hashlib.sha256(migration.read_bytes()).hexdigest()
-    # Restore files if SQL execution, file writes, or the transaction commit fails.
     managed = [env_path]
     originals = {path: path.read_bytes() if path.exists() else None for path in managed}
     try:
@@ -149,7 +144,6 @@ def main():
                 conn.execute('INSERT INTO webgis_security.migrations VALUES (%s,%s,now())', ('31_database_security', digest))
             conn.execute('GRANT USAGE ON SCHEMA webgis_security TO webgis_reader')
             conn.execute('GRANT SELECT ON webgis_security.audit_log TO webgis_reader')
-            # Persist generated credentials before commit: a failed file write rolls back the DB transaction.
             credentials = dict(passwords, WEBGIS_DB_USER='webgis_reader', DSS_PGUSER='webgis_writer',
                                WEBGIS_SECURITY_ENABLED='true', WEBGIS_RESEARCH_MODE='postgres',
                                WEBGIS_ALLOWED_HOSTS='127.0.0.1,localhost,[::1]',
@@ -165,6 +159,39 @@ def main():
         raise
     print('Security installed. Runtime credentials are in the protected, Git-ignored .env.')
     print('PostgreSQL history/draft writes enabled. Restart the server; no UI login is required.')
+
+
+def setup_field_keys(apply=False):
+    load_local_env()
+    existing = {name: os.getenv(name, '') for name in ('WEBGIS_WRITE_API_KEY', 'WEBGIS_REVIEW_API_KEY')}
+    missing = [name for name, value in existing.items() if not value]
+    if not missing:
+        if existing['WEBGIS_WRITE_API_KEY'] == existing['WEBGIS_REVIEW_API_KEY']:
+            raise ValueError('Submission and review keys must differ.')
+        print('Both distinct staff API keys are configured in protected .env.')
+        return
+    print('Missing:', ', '.join(missing))
+    if not apply:
+        print('Plan only. Use --apply to generate missing keys in protected .env.')
+        return
+    path = ROOT / '.env'
+    if path.is_symlink():
+        raise ValueError('Refusing symlinked .env.')
+    generated = {name: secrets.token_urlsafe(36) for name in missing}
+    update_env(path, generated)
+    print('Generated missing keys in protected .env. Restart run_webgis.py to load them.')
+    print('Values are not printed; the local operator reads .env when entering the keys in the UI.')
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description='Configure runtime security roles or protected field API keys.')
+    parser.add_argument('command', choices=('roles', 'field-keys'))
+    parser.add_argument('--apply', action='store_true')
+    args = parser.parse_args(argv)
+    if args.command == 'roles':
+        setup_runtime_roles(args.apply)
+    else:
+        setup_field_keys(args.apply)
 
 
 if __name__ == '__main__':

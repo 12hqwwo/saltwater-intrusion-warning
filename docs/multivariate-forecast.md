@@ -48,15 +48,15 @@ Trong PowerShell tại gốc dự án, dùng `.venv` hiện có:
 
 ```powershell
 # Cập nhật tháng khí tượng hoàn chỉnh gần nhất; không sửa tệp nguồn cũ
-.venv\Scripts\python.exe scripts/update_multivariate_weather.py
+.venv\Scripts\python.exe -m tools.weather_inputs
 
 # Chỉ huấn luyện lại khi cần đổi dữ liệu / phiên bản mô hình
-.venv\Scripts\python.exe scripts/train_multivariate_ec.py
+.venv\Scripts\python.exe -m tools.model_training --apply
 
 # Mở ứng dụng
 .\start.ps1 -Mode postgres
 ```
 
-Model được lưu dưới `runs/multivariate_ec/`; registry ở `data/models/multivariate_registry.json`. Runtime phải cùng phiên bản scikit-learn ghi trong manifest (bản hiện tại: 1.9.1). Các API ở `/api/v1/workspace/multivariate/` và `/api/v1/multivariate/`: `catalog`, `inputs`, `predict`, `evaluation`, `history`.
+Không có `--apply`, lệnh huấn luyện chỉ in kế hoạch và không ghi model hay registry. Khi áp dụng, model được lưu dưới `runs/multivariate_ec/`; registry ở `data/models/multivariate_registry.json`. Runtime phải cùng phiên bản scikit-learn ghi trong manifest (bản hiện tại: 1.9.1). Các API ở `/api/v1/workspace/multivariate/` và `/api/v1/multivariate/`: `catalog`, `inputs`, `predict`, `evaluation`, `history`.
 
 Mã được chia theo chức năng: `backend/domain/multivariate_ec.py`, `backend/repositories/multivariate_inputs.py`, `backend/services/multivariate.py`, `backend/api/multivariate.py`, `frontend/src/features/multivariate-forecast.js`. Các script tải và huấn luyện chạy ngoài request web.

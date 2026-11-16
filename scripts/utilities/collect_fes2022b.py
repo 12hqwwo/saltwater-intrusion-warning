@@ -185,7 +185,7 @@ def download_one(opener, name):
         part.rename(output)
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--download", action="store_true")
     parser.add_argument("--verify-existing", action="store_true")
@@ -193,7 +193,7 @@ def main():
                         help="SFTP avoids the THREDDS HTTP 404 reported after login")
     parser.add_argument("--max-attempts", type=int, default=6,
                         help="Reconnect after temporary network failures (default: 6 per file)")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if args.max_attempts < 1:
         parser.error("--max-attempts must be at least 1")
     DATA.mkdir(parents=True, exist_ok=True)

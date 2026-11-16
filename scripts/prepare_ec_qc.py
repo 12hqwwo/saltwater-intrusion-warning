@@ -5,16 +5,18 @@ import csv
 import io
 import json
 import statistics
+import sys
 from collections import Counter
 from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
 from zipfile import ZipFile
 
-from verify_mrc_export import verify
-
-
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from tools.observation_cleaning import verify
+
+
 STATIONS = {"019805": "MYTHO", "019803": "TANCHAU"}
 
 

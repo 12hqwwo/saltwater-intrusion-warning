@@ -9,10 +9,10 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
 
-from scripts.backtest_asof_ec import available_date_for
+from tools.backtest_protocols import available_date_for
 from scripts.experiment_ec_feature_enhanced import load_climate
 from scripts.experiment_ec_final_candidates import COMPACT
-from scripts.experiment_ec_long_hydrology import data_matrix
+from tools.feature_building import data_matrix
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'outputs/ec_adaptive_asof_audit_20261030'

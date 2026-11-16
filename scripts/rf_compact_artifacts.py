@@ -6,6 +6,7 @@ never invents predictions, evaluation scores, or a replacement model chart.
 """
 from __future__ import annotations
 
+import argparse
 from datetime import datetime, time, timedelta, timezone
 import hashlib
 import json
@@ -19,9 +20,9 @@ import pandas as pd
 import sklearn
 
 from backend.repositories.multivariate_inputs import get_weather_input
-from scripts.backtest_asof_ec import available_date_for, issue_date_for
+from tools.backtest_protocols import available_date_for, issue_date_for
 from scripts.experiment_ec_extreme_robust import COMPACT, fit_predict
-from scripts.experiment_ec_long_hydrology import (
+from tools.feature_building import (
     data_matrix, monthly_kratie_flow, monthly_stage,
 )
 
@@ -264,8 +265,8 @@ def build_run(delay, output_dir=None):
     target_file = ROOT / "data/research/mrc_ec_monthly_samples.csv"
     source_paths = [source_file, primary_file, SOURCE / f"protocol_{delay}d.json", target_file,
                     ROOT / "scripts/experiment_ec_extreme_robust.py",
-                    ROOT / "scripts/experiment_ec_long_hydrology.py",
-                    ROOT / "scripts/backtest_asof_ec.py",
+                    ROOT / "tools/feature_building.py",
+                    ROOT / "tools/backtest_protocols.py",
                     ROOT / "data/external/multivariate_weather/manifest.json",
                     ROOT / "data/external/mrc_kratie_discharge_20261029/014901_Discharge_Calculated daily discharge_22a8130e.csv",
                     ROOT / "data/external/tien_manual_long_20261029/019803_Water_Level_Manual_3bd17f3a.csv",
@@ -327,3 +328,16 @@ def build_run(delay, output_dir=None):
         for path in staging.iterdir():
             path.replace(destination / path.name)
     return manifest
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Rebuild archived RF_compact artifacts from verified source predictions.")
+    parser.add_argument("--lag", type=int, choices=(5, 35), required=True,
+                        help="Assumed EC release delay in days (5 or 35).")
+    arguments = parser.parse_args(argv)
+    manifest = build_run(arguments.lag)
+    print(f"Rebuilt {manifest['run_id']} from verified source predictions.")
+
+
+if __name__ == "__main__":
+    main()

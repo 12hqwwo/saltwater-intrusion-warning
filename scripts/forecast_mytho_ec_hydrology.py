@@ -14,7 +14,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from backend.repositories.multivariate_inputs import get_weather_input
-from scripts.experiment_ec_long_hydrology import (
+from tools.feature_building import (
     FLOW, STAGE, data_matrix, fit_candidate_model, monthly_kratie_flow, monthly_stage,
 )
 from scripts.experiment_ec_no_recent_label import WEATHER

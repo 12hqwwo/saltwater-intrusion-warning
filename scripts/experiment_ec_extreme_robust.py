@@ -15,8 +15,8 @@ from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import make_pipeline
 
-from scripts.backtest_asof_ec import available_date_for
-from scripts.experiment_ec_long_hydrology import data_matrix
+from tools.backtest_protocols import available_date_for
+from tools.feature_building import data_matrix
 from scripts.experiment_ec_no_recent_label import WEATHER, FLOW, STAGE
 
 ROOT = Path(__file__).resolve().parents[1]

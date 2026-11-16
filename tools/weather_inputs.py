@@ -1,12 +1,13 @@
-"""Download immutable, unit-verified ERA5 inputs without modifying legacy CSVs."""
 import argparse
 import calendar
 from datetime import date, datetime, timedelta, timezone
 import hashlib
+from http.client import IncompleteRead
 import json
 from pathlib import Path
 import ssl
 import time
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
@@ -14,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'data/external/multivariate_weather'
 SITES = {'MyTho': (10.36, 106.36), 'TanChau': (10.804, 105.234),
          'MyThuan': (10.27532005, 105.9263229)}
+RETRYABLE_HTTP_STATUS = {408, 429, 500, 502, 503, 504}
 
 
 def verified_context():
@@ -32,12 +34,29 @@ def month(value):
     return parsed
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+def fetch_archive(url, context):
+    for attempt in range(4):
+        try:
+            with urlopen(url, context=context, timeout=90) as response:
+                return response.read()
+        except HTTPError as exc:
+            if exc.code not in RETRYABLE_HTTP_STATUS or attempt == 3:
+                raise
+        except URLError as exc:
+            if isinstance(exc.reason, ssl.SSLCertVerificationError) or attempt == 3:
+                raise
+        except (TimeoutError, ConnectionError, IncompleteRead):
+            if attempt == 3:
+                raise
+        time.sleep(3 * (attempt + 1))
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description='Download unit-verified ERA5 inputs without modifying legacy CSVs.')
     parser.add_argument('--history', action='store_true')
     parser.add_argument('--start-month', type=month)
     parser.add_argument('--end-month', type=month)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     today = date.today()
     last = date(today.year, today.month, 1) - timedelta(days=1)
     start = args.start_month or (date(1985, 1, 1) if args.history else last.replace(day=1))
@@ -64,28 +83,20 @@ def main():
                               models='era5', timezone='Asia/Ho_Chi_Minh', wind_speed_unit='ms',
                               temperature_unit='celsius', precipitation_unit='mm')
                 url = 'https://archive-api.open-meteo.com/v1/archive?' + urlencode(params)
-                for attempt in range(4):
-                    try:
-                        with urlopen(url, context=context, timeout=90) as response:
-                            raw = response.read()
-                        payload = json.loads(raw)
-                        if payload.get('error'):
-                            raise ValueError(payload.get('reason'))
-                        units = payload['daily_units']
-                        if units['wind_speed_10m_mean'] != 'm/s' or units['precipitation_sum'] != 'mm' or units['temperature_2m_mean'] not in ('\u00b0C', 'celsius'):
-                            raise ValueError(f'Unexpected units: {units}')
-                        expected = (chunk_end - chunk_start).days + 1
-                        daily = payload['daily']
-                        if len(daily['time']) != expected or daily['time'][0] != str(chunk_start) or daily['time'][-1] != str(chunk_end):
-                            raise ValueError('Incomplete date range from archive')
-                        for key in ('precipitation_sum', 'temperature_2m_mean', 'wind_speed_10m_mean'):
-                            if len(daily[key]) != expected or any(v is None for v in daily[key]):
-                                raise ValueError(f'Incomplete daily values: {key}')
-                        break
-                    except Exception:
-                        if attempt == 3:
-                            raise
-                        time.sleep(3 * (attempt + 1))
+                raw = fetch_archive(url, context)
+                payload = json.loads(raw)
+                if payload.get('error'):
+                    raise ValueError(payload.get('reason'))
+                units = payload['daily_units']
+                if units['wind_speed_10m_mean'] != 'm/s' or units['precipitation_sum'] != 'mm' or units['temperature_2m_mean'] not in ('\u00b0C', 'celsius'):
+                    raise ValueError(f'Unexpected units: {units}')
+                expected = (chunk_end - chunk_start).days + 1
+                daily = payload['daily']
+                if len(daily['time']) != expected or daily['time'][0] != str(chunk_start) or daily['time'][-1] != str(chunk_end):
+                    raise ValueError('Incomplete date range from archive')
+                for key in ('precipitation_sum', 'temperature_2m_mean', 'wind_speed_10m_mean'):
+                    if len(daily[key]) != expected or any(v is None for v in daily[key]):
+                        raise ValueError(f'Incomplete daily values: {key}')
                 path.write_bytes(raw)
                 record = dict(station=station, file=filename, sha256=hashlib.sha256(raw).hexdigest(),
                               retrieved_at=datetime.now(timezone.utc).isoformat(), url=url,

@@ -1,5 +1,3 @@
-"""Read-only comparison of a purchased MRC ZIP with the project's monthly EC CSV."""
-
 import argparse
 import csv
 import hashlib
@@ -63,12 +61,16 @@ def verify(zip_path, monthly_path):
             "missing_in_project": missing, "extra_in_project": extra, "value_or_count_mismatches": different}
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
+def main(argv=None):
+    parser = argparse.ArgumentParser(description='Compare an MRC ZIP with the project monthly EC CSV without writing files.')
     parser.add_argument("zip_path", type=Path)
     parser.add_argument("--monthly", type=Path, default=ROOT / "data/research/mrc_ec_monthly_samples.csv")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     result = verify(args.zip_path, args.monthly)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     if result["missing_in_project"] or result["extra_in_project"] or result["value_or_count_mismatches"]:
         raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,7 +1,7 @@
 import unittest
 from datetime import date
 
-from scripts.backtest_asof_ec import available_date_for, issue_date_for, split_for
+from tools.backtest_protocols import available_date_for, issue_date_for, split_for
 
 
 class AsOfBacktestDates(unittest.TestCase):

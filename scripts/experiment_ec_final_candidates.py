@@ -23,8 +23,8 @@ from sklearn.pipeline import make_pipeline
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.backtest_asof_ec import available_date_for
-from scripts.experiment_ec_long_hydrology import data_matrix
+from tools.backtest_protocols import available_date_for
+from tools.feature_building import data_matrix
 from scripts.experiment_ec_feature_enhanced import add_derived_features, load_climate
 
 OUT = ROOT / "outputs/ec_final_candidates_20261029"

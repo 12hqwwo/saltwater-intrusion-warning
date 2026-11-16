@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -16,6 +17,16 @@ from backend.main import app
 from scripts.evaluate_frozen_ec_gap import (
     FEATURES, MODELS, OUTPUT, ROOT, forecast_gap, freeze_training, spatial_predictions,
 )
+
+
+ARCHIVE_COMMIT = '705ee7320c6ffcac67e0685861c513af15c11c6e'
+
+
+def archived_script_hashes(relative):
+    source = subprocess.run(['git', 'show', f'{ARCHIVE_COMMIT}:{relative}'], cwd=ROOT,
+                            capture_output=True, check=True).stdout
+    windows_source = source.replace(b'\r\n', b'\n').replace(b'\n', b'\r\n')
+    return {hashlib.sha256(content).hexdigest() for content in (source, windows_source)}
 
 
 def synthetic():
@@ -132,7 +143,10 @@ class FrozenEvidenceChecks(unittest.TestCase):
         for relative, expected in self.manifest['input_sha256'].items():
             with self.subTest(source=relative):
                 if relative != 'backend/domain/multivariate_ec.py':
-                    self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), expected)
+                    if relative.startswith('scripts/'):
+                        self.assertIn(expected, archived_script_hashes(relative))
+                    else:
+                        self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), expected)
         for relative, expected in self.manifest['weather_source_sha256'].items():
             with self.subTest(weather=relative):
                 self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), expected)

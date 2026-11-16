@@ -2,10 +2,12 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from urllib.error import HTTPError
 from unittest.mock import MagicMock, patch
 
 from backend.domain import multivariate_ec as models
 from backend.repositories import workspace
+from tools import model_training, weather_inputs
 
 
 class ModelLoadingTests(unittest.TestCase):
@@ -84,6 +86,33 @@ class ReferenceStationTests(unittest.TestCase):
         self.assertEqual(station['coordinate_crs'], fallback['coordinate_crs'])
         self.assertEqual(station['admin_label_source'], fallback['admin_label_source'])
         self.assertEqual(station['location_reference'], 'DB reference')
+
+
+class ToolCommandSafetyTests(unittest.TestCase):
+    def test_model_training_needs_apply_before_writing(self):
+        with patch.object(model_training, 'train') as train:
+            model_training.main([])
+            train.assert_not_called()
+            model_training.main(['--apply'])
+            train.assert_called_once_with()
+
+    def test_weather_retry_only_for_transient_http_status(self):
+        response = MagicMock()
+        response.__enter__.return_value.read.return_value = b'archive data'
+        transient = HTTPError('https://example.test', 503, 'Unavailable', None, None)
+        with patch.object(weather_inputs, 'urlopen', side_effect=[transient, response]) as opener, \
+             patch.object(weather_inputs.time, 'sleep') as sleep:
+            self.assertEqual(weather_inputs.fetch_archive('https://example.test', None), b'archive data')
+            self.assertEqual(opener.call_count, 2)
+            sleep.assert_called_once_with(3)
+
+        permanent = HTTPError('https://example.test', 401, 'Unauthorized', None, None)
+        with patch.object(weather_inputs, 'urlopen', side_effect=permanent) as opener, \
+             patch.object(weather_inputs.time, 'sleep') as sleep:
+            with self.assertRaises(HTTPError):
+                weather_inputs.fetch_archive('https://example.test', None)
+            opener.assert_called_once()
+            sleep.assert_not_called()
 
 
 if __name__ == '__main__':

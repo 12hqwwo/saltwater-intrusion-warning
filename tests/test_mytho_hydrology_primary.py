@@ -10,7 +10,7 @@ from backend.domain import multivariate_ec
 from backend.repositories import hydrology_inputs
 from backend.services import multivariate
 from backend.services.workspace import WorkspaceError
-from scripts.experiment_ec_long_hydrology import monthly_kratie_flow, monthly_stage
+from tools.feature_building import monthly_kratie_flow, monthly_stage
 
 ROOT = Path(__file__).resolve().parents[1]
 

@@ -77,7 +77,7 @@ Từ mục Quan trắc, nút xem kiểm chứng chuyển sang đúng thí nghi�
 
 Lịch sử PostgreSQL cũng đã tích hợp vào mục Quan trắc qua `features/database-history.js`. Bản đồ nằm ở `features/observations-map.js`; biểu đồ ở `shared/time-series.js`; ngưỡng tự nhập ở `shared/ec-scenario.js`; kiểu giao diện ở `app/workspace.css`. `features/next-forecast.js` đọc dự báo sau mẫu cuối đã lưu. `backend/domain/gate_simulation.py` tính kịch bản cống độc lập với trạng thái phê duyệt. Các entry point `research` chỉ giữ tương thích cho phần đã chuyển.
 
-Nhánh dự báo đa biến chính dùng `backend/api/multivariate.py` → `services/multivariate.py` → `domain/multivariate_ec.py`; khí tượng do `repositories/multivariate_inputs.py` cung cấp. `scripts/update_multivariate_weather.py` cập nhật nguồn ERA5 có đơn vị; `scripts/train_multivariate_ec.py` đánh giá và lưu model ngoài request. `features/multivariate-forecast.js` gọi suy luận và gửi kết quả sang lớp dự báo riêng trên bản đồ. Phần đánh giá mô hình EC trễ cũ được thu gọn để tham khảo; CSV dùng khí tượng cùng tháng nằm trong mục chất lượng dữ liệu.
+Nhánh dự báo đa biến chính dùng `backend/api/multivariate.py` → `services/multivariate.py` → `domain/multivariate_ec.py`; khí tượng do `repositories/multivariate_inputs.py` cung cấp. `tools/weather_inputs.py` cập nhật nguồn ERA5 có đơn vị; `tools/model_training.py` đánh giá và lưu model ngoài request. `features/multivariate-forecast.js` gọi suy luận và gửi kết quả sang lớp dự báo riêng trên bản đồ. Phần đánh giá mô hình EC trễ cũ được thu gọn để tham khảo; CSV dùng khí tượng cùng tháng nằm trong mục chất lượng dữ liệu.
 
 ## 5. Phân biệt các sản phẩm mô hình
 
@@ -93,7 +93,7 @@ Nghiên cứu mới giữ các nhãn nguồn hữu hạn, không âm; bản feat
 
 ### Đóng gói RF_compact và ranh giới với suy luận trực tiếp
 
-`scripts/rf_compact_artifacts.py` là bộ đóng gói dùng chung cho wrapper `pack_rf_compact_run.py` (+5 ngày) và `pack_rf_compact_lag30.py` (+35 ngày). Luồng cụ thể:
+`scripts/rf_compact_artifacts.py` là bộ đóng gói dùng chung cho lệnh `--lag 5` và `--lag 35`. Luồng cụ thể:
 
 1. Đọc các dự báo nguồn trong `outputs/ec_extreme_robust_20261029/`, dựng ma trận đầu vào và kiểm tra cohort, số mẫu huấn luyện, nhãn thực tế, ngày phát hành và hai baseline. Các dự báo hồi cứu RF_compact được bảo toàn, không huấn luyện lại chỉ để đóng gói.
 2. Tái dựng metadata as-of theo ngày phát hành 06 của tháng trước tháng đích; lọc nhãn theo độ trễ +5/+35 và dùng khí tượng/thủy văn `t−2`. Dấu thời gian nửa đêm +07:00 chỉ là quy ước tuần tự hóa ngày. Tuổi nguồn mới nhất và tuổi nhãn EC được lưu riêng; baseline chỉ nhận nguồn EC mà nó sử dụng.

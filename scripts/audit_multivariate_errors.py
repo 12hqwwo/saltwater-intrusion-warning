@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.verify_mrc_export import verify as verify_mrc_export
+from tools.observation_cleaning import verify as verify_mrc_export
 
 
 VERSION = "20261023T041813Z"

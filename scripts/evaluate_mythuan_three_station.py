@@ -27,8 +27,8 @@ sys.path.insert(0, str(ROOT))
 from backend.domain.multivariate_ec import FEATURES, UNITS
 from backend.repositories.multivariate_inputs import get_monthly_weather, _aggregate
 from backend.services.spatial_simulation import RiverAxis, _read_corridor
-from scripts.backtest_asof_ec import available_date_for, issue_date_for, split_for
-from scripts.train_multivariate_ec import pipeline
+from tools.backtest_protocols import available_date_for, issue_date_for, split_for
+from tools.model_training import pipeline
 
 OUTPUT = ROOT / "outputs/mythuan_three_station_20261104"
 WEATHER = ROOT / "data/external/mythuan_weather_20261104"
@@ -55,7 +55,7 @@ def station_metadata():
 
 def fetch_weather(directory=WEATHER):
     """Download ERA5 at the existing MRC My Thuan station, in an isolated archive."""
-    from scripts.update_multivariate_weather import verified_context
+    from tools.weather_inputs import verified_context
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / "manifest.json"
     manifest = json.loads(path.read_text("utf-8")) if path.exists() else {"schema_version": 1, "retrievals": []}
@@ -364,7 +364,7 @@ def run(output=OUTPUT, delays=(5, 35)):
     write_report(output, metrics, spatial, improvements, axis)
     source_paths = list(SOURCES.values()) + [MID_SOURCE / "manifest.json", ROOT / "data/research/mrc_ec_monthly_samples.csv",
         ROOT / "data/external/multivariate_weather/manifest.json", WEATHER / "manifest.json", Path(__file__),
-        ROOT / "scripts/backtest_asof_ec.py", ROOT / "scripts/train_multivariate_ec.py"]
+        ROOT / "tools/backtest_protocols.py", ROOT / "tools/model_training.py"]
     for directory in (ROOT / "data/external/multivariate_weather", WEATHER):
         archive = json.loads((directory / "manifest.json").read_text("utf-8"))
         source_paths.extend(directory / r["file"] for r in archive["retrievals"])

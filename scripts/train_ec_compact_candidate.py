@@ -15,7 +15,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import make_pipeline
 
 from scripts.experiment_ec_extreme_robust import COMPACT
-from scripts.experiment_ec_long_hydrology import data_matrix
+from tools.feature_building import data_matrix
 from scripts.forecast_mytho_ec_hydrology import current_row
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -52,8 +52,8 @@ def main():
               ROOT / "data/external/tien_manual_2024_2026_20261029/019803_Water_Level_Manual_3bd17f3a.csv",
               ROOT / "data/external/ec_hydrology_current_20261029/era5_extra_MyTho_2026-09.json",
               ROOT / "scripts/experiment_ec_extreme_robust.py",
-              ROOT / "scripts/experiment_ec_long_hydrology.py",
-              ROOT / "scripts/backtest_asof_ec.py"]
+              ROOT / "tools/feature_building.py",
+              ROOT / "tools/backtest_protocols.py"]
     scores = {}
     for delay in [5,35]:
         frame = pd.read_csv(ROOT / "outputs/ec_extreme_robust_20261029" / f"metrics_{delay}d.csv")

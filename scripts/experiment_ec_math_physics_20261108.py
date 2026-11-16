@@ -41,7 +41,7 @@ def daily_series(path: Path, agg: str) -> pd.Series:
 
 
 def recent_daily_features(root: Path, months: pd.Series) -> pd.DataFrame:
-    from scripts.backtest_asof_ec import issue_date_for
+    from tools.backtest_protocols import issue_date_for
 
     qpath = next((root / "data/external/mrc_kratie_discharge_20261029").glob(
         "014901_Discharge_Calculated daily discharge_*.csv"))
@@ -72,7 +72,7 @@ def recent_daily_features(root: Path, months: pd.Series) -> pd.DataFrame:
 
 
 def forest():
-    from scripts.train_multivariate_ec import pipeline
+    from tools.model_training import pipeline
     return pipeline().set_params(randomforestregressor__n_jobs=1)
 
 
@@ -137,7 +137,7 @@ def conformal_upper(known: pd.DataFrame, future: pd.DataFrame,
 def evaluate(root: Path, output: Path) -> None:
     from scripts.evaluate_frozen_ec_gap import EXPERIMENTS, freeze_training
     from scripts.evaluate_frozen_ec_gap_remedies import CANDIDATES
-    from scripts.experiment_ec_long_hydrology import data_matrix
+    from tools.feature_building import data_matrix
 
     original = pd.read_csv(root / "outputs/frozen_ec_remedies_20261108/predictions.csv")
     columns = CANDIDATES["WeatherHydrology"]
