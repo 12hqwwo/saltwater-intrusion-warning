@@ -7,7 +7,6 @@ from fastapi import Depends, Header, HTTPException
 from backend.auth.access_tokens import decode_access_token
 from backend.auth.roles import Role
 from backend.repositories import app_users
-from backend.security import actor
 
 
 @dataclass(frozen=True)
@@ -33,7 +32,6 @@ def read_optional_user(authorization: str | None = Header(default=None)) -> Auth
     if user is None or user.get('is_active') is False or user['username'] != claims['username'] or user['role'] != claims['role']:
         raise HTTPException(401, 'Tài khoản không còn hiệu lực.')
     identity = AuthenticatedUser(str(user['user_id']), user['username'], user['display_name'], Role(user['role']))
-    actor.set(f'USER:{identity.username}')
     return identity
 
 

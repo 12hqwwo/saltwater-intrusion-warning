@@ -12,6 +12,7 @@ from backend.main import app
 from backend.repositories import app_users
 from backend.services import field_measurements, forecast_issues
 from backend.domain.gate_intake_rules import DEFAULT_PROFILE
+from backend.security import actor
 
 
 USER_ID = UUID('00000000-0000-0000-0000-000000000123')
@@ -19,7 +20,7 @@ USER_ID = UUID('00000000-0000-0000-0000-000000000123')
 
 class AuthTests(unittest.TestCase):
     def setUp(self):
-        env = patch.dict(os.environ, WEBGIS_AUTH_SECRET='test-secret-' * 5)
+        env = patch.dict(os.environ, WEBGIS_AUTH_SECRET='test-secret-' * 5, WEBGIS_RESEARCH_MODE='postgres')
         env.start(); self.addCleanup(env.stop)
         self.client = TestClient(app)
         self.user = {'user_id': USER_ID, 'username': 'staff', 'display_name': 'Cán bộ A',
@@ -51,6 +52,11 @@ class AuthTests(unittest.TestCase):
             result = self.client.post('/api/v1/auth/login', json={'username': 'staff', 'password': 'correct-password'})
         self.assertEqual(result.status_code, 503)
 
+    def test_login_unavailable_in_snapshot_mode(self):
+        with patch.dict(os.environ, WEBGIS_RESEARCH_MODE='snapshot'):
+            result = self.client.post('/api/v1/auth/login', json={'username': 'staff', 'password': 'correct-password'})
+        self.assertEqual(result.status_code, 503)
+
     def test_roles_cover_all_write_endpoints(self):
         token = issue_access_token(self.user)
         with patch.object(app_users, 'find_active_user_by_id', return_value=self.user):
@@ -74,6 +80,16 @@ class AuthTests(unittest.TestCase):
             self.assertEqual(self.client.post('/api/v1/forecast-issues', headers=headers,
                                               json={'target_month': '2026-12'}).status_code, 201)
             self.assertEqual(self.client.post('/api/v1/field-measurements', headers=headers, json={}).status_code, 403)
+
+    def test_audit_actor_uses_signed_username(self):
+        inspector = self.user | {'username': 'inspector', 'role': 'INSPECTOR'}
+        token = issue_access_token(inspector)
+        with patch.object(app_users, 'find_active_user_by_id', return_value=inspector), \
+             patch.object(forecast_issues, 'issue_month', side_effect=lambda *args: {'actor': actor.get()}):
+            response = self.client.post('/api/v1/forecast-issues',
+                                        headers={'Authorization': f'Bearer {token}'}, json={'target_month': '2026-12'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['actor'], 'USER:inspector')
 
     def test_guest_gate_result_is_reduced_and_custom_profile_is_forbidden(self):
         payload = {'measurement': {}, 'now_iso': '2026-11-17T10:00:00+07:00'}

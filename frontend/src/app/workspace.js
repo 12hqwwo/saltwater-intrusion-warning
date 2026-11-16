@@ -51,7 +51,7 @@ window.addEventListener("workspace:multivariate-clear", () => {
   $("mapForecastStatus").hidden = true;
 });
 let databaseHistoryMounted = false;
-const weather = createWeatherEstimates();
+let weather = null;
 let gates = createGateDossiers(observations.map, ROLE_PUBLIC);
 bindNavigation(view => roleCanViewSection(getCurrentRole(), view));
 window.addEventListener('workspace:auth-changed', () => {
@@ -62,6 +62,8 @@ window.addEventListener('workspace:auth-changed', () => {
   gates.destroy();
   gates = createGateDossiers(observations.map, role);
   if (role !== ROLE_PUBLIC && !databaseHistoryMounted) { createDatabaseHistory(); databaseHistoryMounted = true; }
+  if (role !== ROLE_PUBLIC) { weather?.destroy(); weather = createWeatherEstimates(); weather.load(); }
+  else { weather?.destroy(); weather = null; }
   loadWorkspace();
   if (role !== ROLE_PUBLIC) loadIntake();
 });
@@ -115,5 +117,4 @@ async function loadIntake() {
 $("retryWorkspace").addEventListener("click", loadWorkspace);
 $("retryIntake").addEventListener("click", loadIntake);
 restoreSessionFromStorage();
-weather.load();
 multivariate.load();

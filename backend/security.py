@@ -28,7 +28,16 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         try:
             if request.url.path.startswith('/api/') and request.method not in {'GET', 'HEAD', 'OPTIONS'}:
                 same_origin(request)
-            marker = actor.set('LOCAL_APPLICATION')
+            application_actor = 'LOCAL_APPLICATION'
+            authorization = request.headers.get('authorization', '')
+            if authorization.lower().startswith('bearer '):
+                from backend.auth.access_tokens import decode_access_token
+                try:
+                    claims = decode_access_token(authorization[7:])
+                    application_actor = f"USER:{claims['username']}"
+                except HTTPException:
+                    pass
+            marker = actor.set(application_actor)
             try:
                 response = await call_next(request)
             finally:

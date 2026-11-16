@@ -8,8 +8,11 @@ export function bindNavigation(canViewSection = () => true) {
     const hash = location.hash.slice(1), requested = aliases[hash] || (views.has(hash) ? hash : "overview");
     const view = canViewSection(requested) ? requested : 'observations';
     if (view !== requested) location.hash = '#observations';
-    for (const panel of document.querySelectorAll("[data-view]")) panel.hidden = panel.dataset.view !== view;
     applyRoleVisibility(getCurrentRole());
+    for (const panel of document.querySelectorAll("[data-view]")) {
+      const allowed = !panel.dataset.visibleForRoles || panel.dataset.visibleForRoles.split(/\s+/).includes(getCurrentRole());
+      panel.hidden = panel.dataset.view !== view || !allowed;
+    }
     for (const link of document.querySelectorAll("nav a")) {
       if (link.hash === "#" + view) link.setAttribute("aria-current", "page");
       else link.removeAttribute("aria-current");

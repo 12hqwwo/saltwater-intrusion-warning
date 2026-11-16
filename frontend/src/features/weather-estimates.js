@@ -73,7 +73,7 @@ export function createWeatherEstimates() {
   }
   $("futureStationSelect").addEventListener("change", load);
   $("retryFuture").addEventListener("click", load);
-  $("downloadFutureCsv").addEventListener("click", () => {
+  const downloadCsv = () => {
     if (displayed) {
       saveCSV(`${displayed.station}_ec_weather_estimate.csv`, displayed.items, [
         "station",
@@ -89,6 +89,12 @@ export function createWeatherEstimates() {
         "gate_decision_eligible"
       ]);
     }
-  });
-  return { load };
+  };
+  $("downloadFutureCsv").addEventListener("click", downloadCsv);
+  return { load, destroy() {
+    requests.next();
+    $("futureStationSelect").removeEventListener("change", load);
+    $("retryFuture").removeEventListener("click", load);
+    $("downloadFutureCsv").removeEventListener("click", downloadCsv);
+  } };
 }

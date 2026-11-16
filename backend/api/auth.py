@@ -6,6 +6,7 @@ from backend.auth.current_user import AuthenticatedUser, require_role
 from backend.auth.password_hashing import verify_password
 from backend.auth.roles import Role
 from backend.repositories import app_users
+import os
 
 
 router = APIRouter(prefix='/auth', tags=['Đăng nhập'])
@@ -23,6 +24,8 @@ def public_user(user):
 
 @router.post('/login')
 def login(payload: LoginRequest):
+    if os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot').lower() != 'postgres':
+        raise HTTPException(503, 'Đăng nhập chỉ khả dụng khi dùng PostgreSQL.')
     user = app_users.find_active_user_by_username(payload.username.strip())
     if user is None or not verify_password(payload.password, user['password_hash']):
         raise HTTPException(401, 'Tên đăng nhập hoặc mật khẩu không đúng.')
