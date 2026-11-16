@@ -158,40 +158,34 @@ def setup_runtime_roles(apply=False):
                 protect(path)
         raise
     print('Security installed. Runtime credentials are in the protected, Git-ignored .env.')
-    print('PostgreSQL history/draft writes enabled. Restart the server; no UI login is required.')
+    print('PostgreSQL history/draft writes enabled. Restart the server and configure application users.')
 
 
-def setup_field_keys(apply=False):
+def setup_auth_secret(apply=False):
     load_local_env()
-    existing = {name: os.getenv(name, '') for name in ('WEBGIS_WRITE_API_KEY', 'WEBGIS_REVIEW_API_KEY')}
-    missing = [name for name, value in existing.items() if not value]
-    if not missing:
-        if existing['WEBGIS_WRITE_API_KEY'] == existing['WEBGIS_REVIEW_API_KEY']:
-            raise ValueError('Submission and review keys must differ.')
-        print('Both distinct staff API keys are configured in protected .env.')
+    if len(os.getenv('WEBGIS_AUTH_SECRET', '')) >= 32:
+        print('Application token signing secret is configured in protected .env.')
         return
-    print('Missing:', ', '.join(missing))
+    print('Missing: WEBGIS_AUTH_SECRET')
     if not apply:
-        print('Plan only. Use --apply to generate missing keys in protected .env.')
+        print('Plan only. Use --apply to generate a signing secret in protected .env.')
         return
     path = ROOT / '.env'
     if path.is_symlink():
         raise ValueError('Refusing symlinked .env.')
-    generated = {name: secrets.token_urlsafe(36) for name in missing}
-    update_env(path, generated)
-    print('Generated missing keys in protected .env. Restart run_webgis.py to load them.')
-    print('Values are not printed; the local operator reads .env when entering the keys in the UI.')
+    update_env(path, {'WEBGIS_AUTH_SECRET': secrets.token_urlsafe(48)})
+    print('Generated signing secret in protected .env. Restart run_webgis.py to load it.')
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description='Configure runtime security roles or protected field API keys.')
-    parser.add_argument('command', choices=('roles', 'field-keys'))
+    parser = argparse.ArgumentParser(description='Configure runtime security roles or token signing secret.')
+    parser.add_argument('command', choices=('roles', 'auth-secret'))
     parser.add_argument('--apply', action='store_true')
     args = parser.parse_args(argv)
     if args.command == 'roles':
         setup_runtime_roles(args.apply)
     else:
-        setup_field_keys(args.apply)
+        setup_auth_secret(args.apply)
 
 
 if __name__ == '__main__':

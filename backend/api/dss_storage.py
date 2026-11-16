@@ -1,4 +1,3 @@
-"""Optional DSS persistence endpoints; independent from the inference endpoint."""
 import json
 import os
 from typing import Annotated
@@ -8,6 +7,8 @@ from starlette.concurrency import run_in_threadpool
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from backend.api.multivariate import ForecastRequest, Month
 from backend.services import dss_storage
+from backend.auth.current_user import require_role
+from backend.auth.roles import Role
 
 router = APIRouter(tags=['DSS storage'])
 multivariate_history_router = APIRouter(prefix='/multivariate', tags=['DSS storage'])
@@ -50,7 +51,7 @@ def saved_prediction(prediction_id: UUID):
     return dss_storage.prediction(prediction_id)
 
 
-@multivariate_history_router.post('/history', dependencies=[Depends(same_origin_write)])
+@multivariate_history_router.post('/history', dependencies=[Depends(same_origin_write), Depends(require_role(Role.FIELD_STAFF, Role.INSPECTOR))])
 def save_prediction(payload: ForecastRequest):
     return dss_storage.save_prediction(payload.model_dump())
 
@@ -60,7 +61,7 @@ def drafts(gate_code: GateCode, limit: Limit = 20, offset: Offset = 0):
     return dss_storage.drafts(gate_code, limit, offset)
 
 
-@router.post('/gate-drafts', dependencies=[Depends(same_origin_write)])
+@router.post('/gate-drafts', dependencies=[Depends(same_origin_write), Depends(require_role(Role.FIELD_STAFF, Role.INSPECTOR))])
 async def save_draft(request: Request):
     chunks, size = [], 0
     async for chunk in request.stream():

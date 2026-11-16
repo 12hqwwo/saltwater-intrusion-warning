@@ -1,4 +1,3 @@
-"""Validate staff field EC and keep review status separate from source observations."""
 import json
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -28,7 +27,7 @@ def submit(raw):
 
 
 @storage_errors
-def list_measurements(status=None, bbox=None):
+def list_measurements(status=None, bbox=None, submitted_by=None):
     if status not in (None, 'PENDING', 'APPROVED', 'REJECTED'):
         raise WorkspaceError(422, 'Trạng thái duyệt không hợp lệ.')
     parsed = None
@@ -40,14 +39,17 @@ def list_measurements(status=None, bbox=None):
                 raise ValueError()
         except (ValueError, TypeError) as exc:
             raise WorkspaceError(422, 'bbox phải là minLon,minLat,maxLon,maxLat hợp lệ.') from exc
-    return dict(items=repo.list_measurements(status, parsed), status=status)
+    return dict(items=repo.list_measurements(status, parsed, submitted_by=submitted_by), status=status)
 
 
 @storage_errors
 def review(measurement_id, decision, reviewer, note):
     if decision not in ('APPROVED', 'REJECTED') or not isinstance(reviewer, str) or not reviewer.strip():
         raise WorkspaceError(422, 'Quyết định và người duyệt không hợp lệ.')
-    saved = repo.insert_review(measurement_id, decision, reviewer.strip(), note)
+    try:
+        saved = repo.insert_review(measurement_id, decision, reviewer.strip(), note)
+    except ValueError as exc:
+        raise WorkspaceError(403, str(exc)) from exc
     if saved is None:
         raise WorkspaceError(404, 'Không tìm thấy phiếu thực địa.')
     return saved

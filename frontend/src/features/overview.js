@@ -1,6 +1,8 @@
 import { $, node, num, sourceAnchor } from "../shared/ui.js";
 import { dateOnly } from "../research-utils.js";
 import { requestJSON } from "../api.js";
+import { getCurrentRole } from '../auth/auth-service.js';
+import { ROLE_PUBLIC } from '../auth/auth-roles.js';
 
 
 export function mountQuickScenarios() {
@@ -37,7 +39,7 @@ export function mountQuickScenarios() {
 
 export function renderOverview(summary) {
   mountQuickScenarios();
-  mountFreshnessPanel();
+  if (getCurrentRole() !== ROLE_PUBLIC) mountFreshnessPanel();
   $("modeBadge").textContent = summary.storage_mode === "postgres" ? "PostgreSQL" : "Snapshot có nguồn";
   $("statRia").textContent = summary.ria2_observations;
   $("statSites").textContent = summary.stations;
@@ -77,6 +79,7 @@ function mountFreshnessPanel() {
   const panel = node("section", undefined, "panel");
   panel.id = "dataFreshnessPanel";
   panel.dataset.view = "overview";
+  panel.dataset.visibleForRoles = 'FIELD_STAFF INSPECTOR';
   panel.hidden = Boolean(location.hash && !['#overview', '#main'].includes(location.hash));
   panel.append(node("h3", "Độ tươi dữ liệu đầu vào"),
     node("p", "Ngày khả dụng của khí tượng và thủy văn là giả định cuối tháng + 5 ngày; ngày tải về không phải ngày công bố đầu tiên.", "subtle"));

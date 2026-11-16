@@ -1,5 +1,3 @@
-"""Chạy từ gốc repo: python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000."""
-
 from contextlib import asynccontextmanager
 import logging
 import os
@@ -13,6 +11,7 @@ from backend.api.data_freshness import router as data_freshness_router
 from backend.api.gate_screening import router as gate_screening_router
 from backend.api.forecast_issues import router as forecast_issues_router
 from backend.api.field_measurements import router as field_measurements_router
+from backend.api.auth import router as auth_router
 from backend.services.workspace import WorkspaceError
 from backend.intake import router as intake_router
 
@@ -69,7 +68,7 @@ app.add_middleware(
     ],
     allow_credentials=False,
     allow_methods=["GET", "POST"],
-    allow_headers=["Accept", "Content-Type", "X-API-Key"],
+    allow_headers=["Accept", "Content-Type", "Authorization"],
 )
 app.include_router(research_router)
 app.include_router(workspace_router, prefix='/api/v1/workspace', tags=['Workspace'])
@@ -79,6 +78,7 @@ app.include_router(data_freshness_router, prefix='/api/v1')
 app.include_router(gate_screening_router, prefix='/api/v1')
 app.include_router(forecast_issues_router, prefix='/api/v1')
 app.include_router(field_measurements_router, prefix='/api/v1')
+app.include_router(auth_router, prefix='/api/v1')
 app.include_router(intake_router, prefix='/api/v1/workspace')
 app.include_router(intake_router, prefix='/api/v1/research')
 app.add_middleware(SecurityMiddleware)
@@ -97,7 +97,6 @@ def app_health():
             'database_checked': False}
 
 def get_repository() -> Repository:
-    # No connection here: invalid requests can return 422 while PostgreSQL is offline.
     return Repository()
 
 
@@ -122,7 +121,6 @@ async def dataset_not_found(request: Request, exc: DatasetNotFound):
 
 @app.exception_handler(psycopg.Error)
 async def database_error(request: Request, exc: psycopg.Error):
-    # Do not send SQL, passwords or raw connection errors to the browser/log.
     logger.error("Database error: %s; SQLSTATE=%s", type(exc).__name__, exc.sqlstate or "unknown")
     if exc.sqlstate in {"42P01", "42703", "42883"}:
         code, message = "DB_SCHEMA_MISMATCH", "Schema hoặc PostGIS chưa khớp với API."
@@ -135,13 +133,11 @@ async def database_error(request: Request, exc: psycopg.Error):
 
 @app.get("/api/v1/health", response_model=Health, tags=["Kiểm tra"])
 def health(repo: Repo):
-    """Kiểm tra kết nối thật và chế độ transaction chỉ đọc."""
     return repo.health()
 
 
 @app.get("/api/v1/stations", response_model=StationCollection, tags=["Trạm"])
 def stations(repo: Repo):
-    """GeoJSON: tọa độ [kinh độ, vĩ độ]; trạm thiếu vị trí có geometry=null."""
     features = [
         StationFeature(
             id=row["site_code"], geometry=row["geometry"],
@@ -154,7 +150,6 @@ def stations(repo: Repo):
 
 @app.get("/api/v1/stations/{site_code}/datasets", response_model=DatasetCollection, tags=["EC"])
 def datasets(site_code: SiteCode, repo: Repo):
-    """Liệt kê các snapshot EC của một trạm để người gọi chọn dataset_code."""
     return DatasetCollection(site_code=site_code, items=repo.datasets(site_code))
 
 
@@ -170,7 +165,6 @@ def observations(
     limit: Annotated[int, Query(ge=1, le=1000)] = 500,
     offset: Annotated[int, Query(ge=0, le=1_000_000)] = 0,
 ):
-    """EC gốc theo một snapshot. Mặc định giữ tất cả cờ, gồm UNVERIFIED và INVALID."""
     if date_from is not None and date_to is not None and date_from > date_to:
         raise HTTPException(status_code=422, detail="date_from phải nhỏ hơn hoặc bằng date_to.")
     if date_to == date.max:

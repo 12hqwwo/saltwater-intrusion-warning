@@ -1,10 +1,12 @@
-"""Immutable forecast publication ledger and separate on-time/late scores."""
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, ConfigDict, Field
 
 from backend.services import forecast_issues
+from backend.auth.current_user import require_role
+from backend.auth.roles import Role
+from backend.api.dss_storage import same_origin_write
 
 router = APIRouter(prefix='/forecast-issues', tags=['Sổ phát hành dự báo'])
 Month = Annotated[str, Field(pattern=r'^\d{4}-(0[1-9]|1[0-2])$')]
@@ -16,7 +18,7 @@ class IssueRequest(BaseModel):
     schedule_code: Literal['MONTHLY_D06_PREV'] = 'MONTHLY_D06_PREV'
 
 
-@router.post('', status_code=201)
+@router.post('', status_code=201, dependencies=[Depends(same_origin_write), Depends(require_role(Role.INSPECTOR))])
 def issue(payload: IssueRequest):
     return forecast_issues.issue_month(payload.target_month, payload.schedule_code)
 

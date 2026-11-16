@@ -3,7 +3,6 @@ import test from 'node:test';
 import { createGateIntakeScreening } from '../frontend/src/features/gate-intake-screening.js';
 import { evaluateGateIntakeCondition } from '../frontend/src/shared/gate-intake-rules.js';
 
-// Small DOM harness: exercise public form events and rendered text, with an injected clock.
 class Element extends EventTarget {
   children = []; dataset = {}; checked = false; disabled = false; attributes = {}; _text = ''; _value = '';
   constructor(tag) { super(); this.tagName = tag; }
@@ -18,14 +17,14 @@ function harness(t, serverEvaluate = payload => Promise.resolve(evaluateGateInta
   payload.measurement, payload.profile, payload.forecast_context, payload.now_iso)).then(result => ({
     status: result.status, criteriaChecks: result.criteriaChecks,
     effectiveMaxSampleAgeHours: result.forecastAdvisory.effectiveMaxSampleAgeHours,
-  }))) {
+  })), role = 'INSPECTOR') {
   const previous = globalThis.document;
   const doc = new EventTarget(); doc.hidden = false; doc.createElement = tag => new Element(tag);
   globalThis.document = doc;
   const events = new EventTarget(), host = new Element('div'), timers = new Map();
   let clock = '2026-11-01T10:00:00Z', timerId = 0;
   const app = createGateIntakeScreening(host, { now: () => clock, eventTarget: events, documentTarget: doc,
-    serverEvaluate,
+    serverEvaluate, role,
     schedule: (callback, delay) => { timers.set(++timerId, { callback, delay }); return timerId; }, cancel: id => timers.delete(id) });
   t.after(() => { app.destroy(); globalThis.document = previous; });
   const all = (root = host) => [root, ...root.children.flatMap(child => all(child))];
@@ -155,4 +154,16 @@ test('original spatial frame projects gate forecast and can activate vigilance w
   assert.equal(h.app.getResult().forecastAdvisory.projectedGateEc, 140);
   assert.equal(h.app.getResult().status, 'INSUFFICIENT_OR_EXPIRED_DATA');
   assert.match(h.id('gateIntakeForecastSummary').textContent, /vị trí chiếu của cống: 140/);
+});
+test('guest can evaluate measurements without profile editor, criteria or JSON export', async t => {
+  const h = harness(t, payload => Promise.resolve({ status: evaluateGateIntakeCondition(
+    payload.measurement, payload.profile, payload.forecast_context, payload.now_iso).status }), 'PUBLIC');
+  h.select(); h.fill(); h.app.evaluate();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.match(h.id('gateIntakeConclusion').textContent, /Đề nghị xem xét lấy nước/);
+  assert.equal(h.id('gateIntakeCriteria'), undefined);
+  assert.equal(h.id('gateIntakeExpiry'), undefined);
+  assert.equal(h.all().some(item => item.textContent === 'Tải bảng kiểm tra JSON ↓'), false);
+  assert.equal(h.all().some(item => item.textContent.includes('RuleProfile · Xem')), false);
+  assert.match(h.id('gateIntakeServerStatus').textContent, /đối chiếu kết luận/);
 });

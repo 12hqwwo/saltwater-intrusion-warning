@@ -1,4 +1,3 @@
-/** API contract for backend/main.py. No sample data or fallback observations. */
 const ROOT = '/api/v1';
 const PAGE_SIZE = 500;
 const MAX_ROWS = 20_000;
@@ -6,6 +5,13 @@ const FLAGS = new Set(['UNVERIFIED', 'VALIDATED', 'SUSPECT', 'INVALID']);
 export const TIME_ZONE = 'Asia/Ho_Chi_Minh';
 
 export class APIError extends Error {}
+let authorizationHeaderProvider = () => ({});
+let unauthorizedHandler = () => {};
+
+export function registerAuthorizationHeaderProvider(provider, onUnauthorized = () => {}) {
+  authorizationHeaderProvider = provider;
+  unauthorizedHandler = onUnauthorized;
+}
 
 export async function requestJSON(path, { signal, fetcher = globalThis.fetch, method = 'GET', body: payload, timeoutMs = 15_000, headers = {} } = {}) {
   const controller = new AbortController();
@@ -17,13 +23,14 @@ export async function requestJSON(path, { signal, fetcher = globalThis.fetch, me
   try {
     const response = await fetcher(`${ROOT}${path}`, {
       signal: controller.signal, method,
-      headers: { Accept: 'application/json', ...(payload === undefined ? {} : { 'Content-Type': 'application/json' }), ...headers },
+      headers: { Accept: 'application/json', ...(payload === undefined ? {} : { 'Content-Type': 'application/json' }), ...authorizationHeaderProvider(), ...headers },
       ...(payload === undefined ? {} : { body: JSON.stringify(payload) }),
     });
     let body;
     try { body = await response.json(); }
     catch { throw new APIError('API chưa trả về dữ liệu JSON. Kiểm tra backend của địa chỉ đang mở.'); }
     if (!response.ok) {
+      if (response.status === 401 && !path.startsWith('/auth/login')) unauthorizedHandler();
       const message = typeof body.detail === 'string' ? body.detail : body.detail?.message;
       throw new APIError(message || `Không đọc được dữ liệu (HTTP ${response.status}).`);
     }
@@ -121,7 +128,6 @@ export async function getHistory(siteCode, datasetCode, filters = {}, options = 
   return { ...first, items, offset: 0, has_more: false };
 }
 
-/** One active request: old station/filter results cannot overwrite the new view. */
 export function createRequestGate() {
   let controller;
   let serial = 0;

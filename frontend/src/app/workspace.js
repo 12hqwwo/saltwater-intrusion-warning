@@ -14,11 +14,17 @@ import { bindNavigation } from "./navigation.js";
 import { createDatabaseHistory } from "../features/database-history.js";
 import { createMultivariateForecast } from "../features/multivariate-forecast.js";
 import { createFieldMeasurements } from "../features/field-measurements.js";
+import { createLoginPanel } from '../auth/login-panel.js';
+import { getCurrentRole, restoreSessionFromStorage } from '../auth/auth-service.js';
+import { roleCanViewSection, ROLE_PUBLIC } from '../auth/auth-roles.js';
+import { applyRoleVisibility } from '../auth/role-visibility.js';
 
+createLoginPanel($("authHost"));
+applyRoleVisibility(ROLE_PUBLIC);
 bindDatabaseCheck();
 const forecasts = createForecasts();
 const multivariate = createMultivariateForecast();
-const fieldMeasurements = createFieldMeasurements($("fieldMeasurementsHost"));
+let fieldMeasurements = createFieldMeasurements($("fieldMeasurementsHost"), ROLE_PUBLIC);
 const observations = createObservations({ onForecast: async (code) => {
   forecasts.selectStation(code);
   await multivariate.selectStation(code);
@@ -44,14 +50,24 @@ window.addEventListener("workspace:multivariate-clear", () => {
   observations.map.setForecast(null);
   $("mapForecastStatus").hidden = true;
 });
-createDatabaseHistory();
+let databaseHistoryMounted = false;
 const weather = createWeatherEstimates();
-const gates = createGateDossiers(observations.map);
-bindNavigation();
+let gates = createGateDossiers(observations.map, ROLE_PUBLIC);
+bindNavigation(view => roleCanViewSection(getCurrentRole(), view));
+window.addEventListener('workspace:auth-changed', () => {
+  const role = getCurrentRole();
+  applyRoleVisibility(role);
+  fieldMeasurements.destroy?.();
+  fieldMeasurements = createFieldMeasurements($("fieldMeasurementsHost"), role);
+  gates.destroy();
+  gates = createGateDossiers(observations.map, role);
+  if (role !== ROLE_PUBLIC && !databaseHistoryMounted) { createDatabaseHistory(); databaseHistoryMounted = true; }
+  loadWorkspace();
+  if (role !== ROLE_PUBLIC) loadIntake();
+});
 const requests = createRequestGate();
 async function loadWorkspace() {
   const req = requests.next();
-  // Invalidate child requests immediately, before replacement catalogues arrive.
   forecasts.showError('Đang tải danh sách thí nghiệm…');
   observations.showError('Đang tải nguồn quan trắc…');
   gates.load([]);
@@ -71,7 +87,7 @@ async function loadWorkspace() {
   const jobs = [];
   if (summary.status === "fulfilled") {
     renderOverview(summary.value);
-    jobs.push(loadDataFreshness(req));
+    if (getCurrentRole() !== ROLE_PUBLIC) jobs.push(loadDataFreshness(req));
     jobs.push(forecasts.load(summary.value.experiments || []));
   } else {
     forecasts.showError(summary.reason.message);
@@ -88,6 +104,7 @@ async function loadWorkspace() {
   await Promise.allSettled(jobs);
 }
 async function loadIntake() {
+  if (getCurrentRole() === ROLE_PUBLIC) return;
   $("retryIntake").disabled = true;
   try {
     await showIntake();
@@ -97,7 +114,6 @@ async function loadIntake() {
 }
 $("retryWorkspace").addEventListener("click", loadWorkspace);
 $("retryIntake").addEventListener("click", loadIntake);
-loadWorkspace();
-loadIntake();
+restoreSessionFromStorage();
 weather.load();
 multivariate.load();

@@ -8,7 +8,6 @@
     <title>WebGIS Đồng Tháp · Không gian làm việc</title>
     <link rel="icon" href="data:,">
     <style>
-      /* Hallmark · keyboard states while the application styles load */
       html,body{overflow-x:clip}
       :focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}
       button:active{transform:translateY(1px)}
@@ -29,10 +28,11 @@
         <a href="#overview">Tổng quan</a>
         <a href="#observations">Quan trắc</a>
         <a href="#forecasts">Dự báo EC đa biến</a>
-        <a href="#data-quality">Chất lượng dữ liệu</a>
+        <a href="#data-quality" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>Chất lượng dữ liệu</a>
         <a href="#gates">Hồ sơ cống</a>
       </nav>
-      <span id="modeBadge" class="badge">Đang tải…</span>
+      <span id="modeBadge" class="badge" hidden>Đang tải…</span>
+      <div id="authHost"></div>
     </header>
     <main id="main" class="shell">
       <section id="overview" data-view="overview" class="intro">
@@ -42,7 +42,7 @@
           <div class="intro-actions"><a class="primary-link" href="#observations">Mở bản đồ quan trắc</a><a class="quiet-link" href="#forecasts">Xem dự báo EC</a></div>
         </div>
         <figure class="intro-map"><img src="/river-diagram.svg" alt="Sơ đồ trục Sông Tiền và 10 tuyến kênh đi qua cống từ dữ liệu không gian của dự án"><figcaption>Hình học nghiên cứu của trục Sông Tiền và các kênh có cống. Màu EC chỉ xuất hiện khi chọn tháng mô phỏng trên bản đồ.</figcaption></figure>
-        <aside class="scope">
+        <aside class="scope" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>
           <strong>Phạm vi hệ thống</strong>
           <p>Chọn trạm và tháng để chạy mô hình đa biến. Mỗi kết quả ghi rõ các biến khí tượng đầu vào, phiên bản mô hình và kỳ huấn luyện.</p>
           <button id="checkDatabase" class="text-button">Kiểm tra PostgreSQL</button>
@@ -53,7 +53,7 @@
       <div id="loadError" class="notice error" role="alert" hidden>
       </div>
       <button id="retryWorkspace" class="secondary" hidden>Tải lại dữ liệu nền</button>
-      <section data-view="overview" class="stats" aria-label="Độ phủ dữ liệu">
+      <section data-view="overview" class="stats" aria-label="Độ phủ dữ liệu" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>
         <article>
           <span>Mẫu EC RIA2 tại Đồng Tháp</span>
           <strong id="statRia">…</strong>
@@ -78,7 +78,7 @@
       <section data-view="overview" class="workflow-cards" aria-label="Luồng sử dụng">
         <a class="panel workflow-card" href="#observations"><h2>Chọn trạm trên bản đồ</h2><p>Xem EC, nguồn số đo, khoảng thời gian và tải dữ liệu đang xem.</p></a>
         <a class="panel workflow-card" href="#forecasts"><h2>Chạy mô hình dự báo EC</h2><p>Chọn trạm, tháng và đầu vào mưa / nhiệt độ / gió để nhận kết quả.</p></a>
-        <a class="panel workflow-card" href="#data-quality"><h2>Truy nguồn dữ liệu</h2><p>Xem dữ liệu đầu vào, chất lượng nguồn và xuất kết quả dự báo.</p></a>
+        <a class="panel workflow-card" href="#data-quality" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden><h2>Truy nguồn dữ liệu</h2><p>Xem dữ liệu đầu vào, chất lượng nguồn và xuất kết quả dự báo.</p></a>
       </section>
       <section data-view="overview" class="panel source-summary" aria-labelledby="overviewEcHeading">
         <h3 id="overviewEcHeading">EC quan trắc gần nhất theo trạm</h3>
@@ -229,7 +229,7 @@
           </details>
         </article>
         </details>
-        <details class="panel compact-details"><summary>Tra cứu lịch sử quan trắc PostgreSQL</summary><div id="databaseHistoryHost" class="panel database-history"></div></details>
+        <details class="panel compact-details" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden><summary>Tra cứu lịch sử quan trắc PostgreSQL</summary><div id="databaseHistoryHost" class="panel database-history"></div></details>
       </section>
       <section data-view="forecasts" id="multivariate-forecast" class="section">
         <div class="section-title"><div><h2>Dự báo EC theo trạm.</h2></div><span class="badge">Random Forest · mS/m</span></div>
@@ -306,14 +306,14 @@
         </article>
         </details>
       </section>
-      <section id="data-quality" data-view="data-quality" class="section">
+      <section id="data-quality" data-view="data-quality" class="section" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>
         <h2>Dữ liệu có thể tin đến đâu?</h2>
         <p class="subtle">Xem nguồn, phạm vi và tình trạng xác minh trước khi dùng kết quả trên bản đồ.</p>
         <button id="retryIntake" class="secondary">Làm mới thông tin dữ liệu</button>
         <div id="fieldMeasurementsHost"></div>
         <div id="intakeHost"></div>
       </section>
-      <section data-view="data-quality" id="future-forecast" class="section">
+      <section data-view="data-quality" id="future-forecast" class="section" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>
         <details class="panel compact-details historical-estimates"><summary>Ước tính EC lịch sử từ khí tượng · xem thêm</summary>
         <div class="section-title">
           <div>
@@ -404,7 +404,7 @@
         <div id="gateIntakeScreeningHost"></div>
       </section>
       <section data-view="overview" class="section">
-        <details class="panel">
+        <details class="panel" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>
           <summary>Nguồn dữ liệu, phạm vi và minh chứng</summary>
           <div id="sourceList" class="source-list">
           </div>

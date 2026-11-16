@@ -1,4 +1,3 @@
-"""Restricted DSS field submissions and append-only reviews."""
 from uuid import uuid4
 from datetime import timedelta, time
 import hashlib
@@ -24,7 +23,7 @@ def insert_measurement(value, raw):
              value['device'], value['submitted_by'], value['flags'], Jsonb(raw))).fetchone()
 
 
-def list_measurements(status, bbox, limit=200):
+def list_measurements(status, bbox, limit=200, submitted_by=None):
     with read_connection() as conn:
         return conn.execute('''SELECT measurement_id,ST_X(geom) AS longitude,ST_Y(geom) AS latitude,
             ec_mS_m AS "ec_mS_m",unit_original,ec_basis,calibrated_at,
@@ -33,18 +32,21 @@ def list_measurements(status, bbox, limit=200):
             status,review_id,reviewer,review_note,reviewed_at
             FROM dss_reference.v_field_measurement_status
             WHERE (%s::text IS NULL OR status=%s)
+              AND (%s::text IS NULL OR submitted_by=%s)
               AND (%s::float8 IS NULL OR ST_Intersects(geom,ST_MakeEnvelope(%s,%s,%s,%s,4326)))
             ORDER BY submitted_at DESC,measurement_id DESC LIMIT %s''',
-            (status, status, bbox[0] if bbox else None,
+            (status, status, submitted_by, submitted_by, bbox[0] if bbox else None,
              *(bbox or (None, None, None, None)), limit)).fetchall()
 
 
 def insert_review(measurement_id, decision, reviewer, note):
     with write_connection() as conn:
-        exists = conn.execute('SELECT 1 FROM dss_reference.field_measurement WHERE measurement_id=%s',
+        exists = conn.execute('SELECT submitted_by FROM dss_reference.field_measurement WHERE measurement_id=%s',
                               (measurement_id,)).fetchone()
         if exists is None:
             return None
+        if exists['submitted_by'] == reviewer:
+            raise ValueError('Không được duyệt phiếu do chính mình gửi.')
         return conn.execute('''INSERT INTO dss_reference.field_measurement_review
             (measurement_id,decision,reviewer,note)
             VALUES (%s,%s,%s,%s) RETURNING review_id,measurement_id,decision,reviewer,reviewed_at''',
@@ -56,7 +58,6 @@ LABEL_SITES = {'MYTHO': 'MRC_VN_019805', 'MYTHUAN': 'MRC_VN_019804',
 
 
 def historical_month_median(longitude, latitude, observed_at):
-    """Reference median for a review flag, using the nearest of the three MRC stations."""
     with read_connection() as conn:
         row = conn.execute('''WITH nearest AS (
                 SELECT site_id FROM public.measurement_site
@@ -78,7 +79,6 @@ def historical_month_median(longitude, latitude, observed_at):
 
 
 def field_label_from_rows(rows, target_month):
-    """Apply the 14 Nov preregistered temporal, calibration and agreement criteria."""
     selected = []
     for row in rows:
         observed = row['observed_at'].astimezone(LOCAL_TZ)

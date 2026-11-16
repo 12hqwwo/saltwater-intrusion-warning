@@ -122,4 +122,4 @@ npm.cmd --prefix frontend run build
 
 Kiểm thử dùng snapshot và client trong tiến trình, không ghi DB hoặc huấn luyện lại. [Kiến trúc](docs/architecture.md) giải thích trách nhiệm từng lớp; [kế hoạch triển khai](docs/implementation-plan.md) ghi phạm vi khả thi, tiêu chí nghiệm thu và điều kiện để phát triển tiếp. [Hướng dẫn chạy](docs/run_guide.md) mô tả cấu hình môi trường và chế độ dữ liệu.
 
-[Bảo mật cơ sở dữ liệu](docs/database-security.md): hai role đọc/ghi riêng, audit và lưu dự báo/nháp trực tiếp, không cần màn hình đăng nhập.
+[Bảo mật cơ sở dữ liệu](docs/database-security.md): hai role đọc/ghi PostgreSQL riêng, tài khoản cán bộ `FIELD_STAFF`/`INSPECTOR`, audit và phân quyền lưu dự báo/phiếu thực địa.

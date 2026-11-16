@@ -1,10 +1,10 @@
-"""Serve the WebGIS application and API from one local process."""
 import argparse
 import ipaddress
 import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
+DESCRIPTION = 'Serve the WebGIS application and API from one local process.'
 
 
 def load_local_env():
@@ -40,15 +40,15 @@ def validate_lan_host(host):
         return
     allowed = [item.strip() for item in os.getenv('WEBGIS_ALLOWED_HOSTS', '').split(',') if item.strip()]
     external = [item for item in allowed if item not in {'localhost', '127.0.0.1', '[::1]', 'testserver'}]
-    if not os.getenv('WEBGIS_WRITE_API_KEY') or not external or '*' in allowed:
-        raise ValueError('LAN binding requires a write API key and explicit WEBGIS_ALLOWED_HOSTS.')
+    if len(os.getenv('WEBGIS_AUTH_SECRET', '')) < 32 or not external or '*' in allowed:
+        raise ValueError('LAN binding requires WEBGIS_AUTH_SECRET and explicit WEBGIS_ALLOWED_HOSTS.')
     if not address.is_unspecified and host not in allowed and f'[{host}]' not in allowed:
         raise ValueError('Bind host must appear in WEBGIS_ALLOWED_HOSTS.')
 
 
 def main():
     load_local_env()
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument('--mode', choices=['snapshot', 'postgres'], default=os.getenv('WEBGIS_RESEARCH_MODE', 'postgres'))
     parser.add_argument('--host', type=bind_host, default='127.0.0.1')
     parser.add_argument('--port', type=port_number, default=8000)

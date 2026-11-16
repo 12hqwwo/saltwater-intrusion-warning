@@ -7,10 +7,14 @@ Thực hiện trong PowerShell tại gốc repository. Giữ `.venv` và `.venv-
 npm.cmd --prefix frontend ci
 .venv\Scripts\python.exe scripts/apply_dss_storage.py --apply
 .venv\Scripts\python.exe -m tools.security_setup roles --apply
+.venv\Scripts\python.exe -m tools.security_setup auth-secret --apply
+.venv\Scripts\python.exe scripts/apply_dss_migration.py --file sql/36_app_user.sql --version 36_app_user --apply
 .\start.ps1
 ```
 
 Mở http://127.0.0.1:8000/workspace.html. Script mặc định chọn PostgreSQL, kiểm tra build thành công rồi chạy máy chủ ngay trong terminal hiện tại; Ctrl+C để dừng. Có thể dùng `.\start.ps1 -Mode postgres -Port 8016`. Chỉ dùng `-SkipBuild` khi bản build đã cập nhật; script không báo khởi động thành công trước khi Uvicorn sẵn sàng.
+
+Tạo tài khoản sau migration bằng `scripts/create_app_user.py --username <tên> --display-name <tên hiển thị> --role FIELD_STAFF|INSPECTOR --apply`. Script hỏi mật khẩu qua terminal, không nhận mật khẩu trên dòng lệnh. Trên giao diện, khách bấm **Đăng nhập** ở góc trên để dùng chức năng cán bộ. Đăng xuất xóa phiên trong tab hiện tại.
 
 Có thể chạy từng bước:
 
@@ -103,4 +107,4 @@ npm.cmd --prefix frontend run build
 
 Bộ kiểm thử dùng snapshot và client trong tiến trình; không truy cập DB để thay đổi dữ liệu. Xem [kiến trúc](architecture.md) và [kế hoạch triển khai](implementation-plan.md) để nắm cấu trúc mới và phạm vi nghiệm thu. [handover.md](handover.md) là bằng chứng lịch sử ngày 16/10, không phải kết quả kiểm tra phiên bản hiện tại.
 
-Xem [bảo mật PostgreSQL và lưu lịch sử](database-security.md) về hai role, audit, API key tùy chọn và cách kiểm tra quyền.
+Xem [bảo mật PostgreSQL và lưu lịch sử](database-security.md) về hai role DB, tài khoản cán bộ, audit và cách kiểm tra quyền.

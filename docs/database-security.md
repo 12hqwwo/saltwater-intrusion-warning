@@ -1,6 +1,6 @@
 # Bảo mật PostgreSQL và lưu lịch sử
 
-Ứng dụng dùng hai role kết nối PostgreSQL, không cần đăng nhập trên giao diện. Đây là phân quyền ở tầng DB, không phải hai tài khoản người dùng web.
+Ứng dụng dùng hai role kết nối PostgreSQL và tài khoản web riêng cho cán bộ. Quyền DB và quyền người dùng web được kiểm tra ở hai tầng.
 
 | Role | Quyền |
 | --- | --- |
@@ -17,6 +17,10 @@ Máy hiện tại đã được áp dụng. Máy khác cần PostgreSQL có sche
 ```powershell
 .\.venv\Scripts\python.exe scripts/apply_dss_storage.py --apply
 .\.venv\Scripts\python.exe -m tools.security_setup roles --apply
+.\.venv\Scripts\python.exe -m tools.security_setup auth-secret --apply
+.\.venv\Scripts\python.exe scripts/apply_dss_migration.py --file sql/36_app_user.sql --version 36_app_user --apply
+.\.venv\Scripts\python.exe scripts/create_app_user.py --username canbo --display-name "Cán bộ đo" --role FIELD_STAFF --apply
+.\.venv\Scripts\python.exe scripts/create_app_user.py --username kiemtra --display-name "Cán bộ kiểm tra" --role INSPECTOR --apply
 .\start.ps1
 ```
 
@@ -24,11 +28,11 @@ Setup tạo mật khẩu ngẫu nhiên riêng cho hai role, cập nhật `.env`,
 
 `start.ps1` mặc định dùng PostgreSQL; `-Mode snapshot` chọn bản tệp để xem demo. Lịch sử DSS vẫn dùng PostgreSQL ngay cả khi xem snapshot. Không tự chuyển sang tệp khi DB lỗi. Dừng server cũ bằng Ctrl+C rồi chạy lại để nạp quyền và cấu hình mới.
 
-Trong Dự báo EC đa biến, tùy chọn **Lưu lượt chạy vào PostgreSQL** bật sẵn: mỗi lần bấm chạy tạo một dự báo và lưu chính kết quả đó, gồm đầu vào, phiên bản mô hình và thời điểm. Bỏ chọn nếu chỉ muốn xem thử; lỗi lưu được báo rõ, không báo thành công giả. Xem lại bằng **Lịch sử PostgreSQL**. Trong hồ sơ cống, dùng **Lưu nháp vào PostgreSQL** và khôi phục nháp mới nhất. Các bản ghi này không sửa số đo EC gốc và không trở thành lệnh vận hành cống.
+Trong Dự báo EC đa biến, khách chỉ chạy thử; cán bộ đã đăng nhập mới được lưu lịch sử PostgreSQL. Hai vai `FIELD_STAFF` và `INSPECTOR` được lưu dự báo và nháp cống. Chỉ `INSPECTOR` được phát hành dự báo và duyệt phiếu EC. Các bản ghi không sửa số đo EC gốc và không trở thành lệnh vận hành cống.
 
 ## Audit và kiểm tra quyền
 
-Trigger `webgis_security.audit_log` ghi thời gian, role PostgreSQL, nguồn ứng dụng, bảng và mã bản ghi khi thêm dự báo/nháp. Mặc định nguồn là `LOCAL_APPLICATION`; nếu dùng API key là `API_KEY_CLIENT`. Đây không phải danh tính cá nhân. Hai role ứng dụng không được sửa/xóa audit; quản trị PostgreSQL vẫn có quyền bảo trì.
+Trigger `webgis_security.audit_log` ghi thời gian, role PostgreSQL, nguồn ứng dụng, bảng và mã bản ghi khi thêm dự báo/nháp. Với thao tác có đăng nhập, nguồn ứng dụng là `USER:<username>`. Hai role ứng dụng không được sửa/xóa audit; quản trị PostgreSQL vẫn có quyền bảo trì.
 
 ```powershell
 .\.venv\Scripts\python.exe scripts/verify_database_security.py
@@ -46,8 +50,8 @@ FROM dss_reference.gate_simulation_drafts ORDER BY created_at DESC LIMIT 20;
 SELECT * FROM webgis_security.audit_log ORDER BY audit_id DESC LIMIT 20;
 ```
 
-## API key tùy chọn và phạm vi
+## Đăng nhập và phạm vi
 
-Mặc định web local không yêu cầu API key. Đặt `WEBGIS_WRITE_API_KEY` trong `.env` nếu muốn yêu cầu header `X-API-Key` trên hai POST lưu lịch sử/nháp; đọc dữ liệu và chạy dự báo không lưu vẫn được phép. Không đưa key vào frontend hoặc URL. Giao diện mặc định không gửi key; khi bật cấu hình này, dùng API client có header hoặc bổ sung proxy xác thực phù hợp. CORS, Origin và Host được kiểm tra nhưng không thay thế xác thực người dùng.
+Tài khoản web nằm trong `webgis_security.app_user`; mật khẩu được băm bằng scrypt với salt riêng. API cấp JWT HS256 sống 8 giờ, ký bằng `WEBGIS_AUTH_SECRET` trong `.env`. Trình duyệt giữ token trong `sessionStorage`, xác nhận lại qua `/api/v1/auth/me` khi tải trang và xóa khi đăng xuất. Các POST ghi kiểm vai ở router; khách không thể ghi bằng cách gọi API trực tiếp. Khách vẫn được chạy kiểm tra cống với ngưỡng mặc định nhưng chỉ nhận kết luận rút gọn. `webgis_reader` không được đọc bảng mật khẩu. Chế độ snapshot không có đăng nhập.
 
 Server chạy ở `127.0.0.1`; phân quyền DB bảo vệ dữ liệu khỏi các thao tác mà ứng dụng không được phép thực hiện, không giới hạn ai được truy cập web local. Triển khai qua mạng cần xác thực ở reverse proxy, HTTPS, firewall và chính sách sao lưu riêng. PostgreSQL ở máy khác cần TLS với `PGSSLMODE=verify-full` và chứng chỉ tin cậy; thiết lập này không tự thay pg_hba.conf, firewall hoặc mã hóa ổ đĩa/backup. Máy hiện tại chưa được cấu hình các phần triển khai từ xa đó.

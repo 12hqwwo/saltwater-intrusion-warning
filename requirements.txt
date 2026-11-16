@@ -9,6 +9,7 @@ statsmodels>=0.14
 fastapi
 uvicorn
 psycopg-pool>=3.2,<4
+PyJWT==2.10.1
 cdsapi
 pyarrow
 openpyxl>=3.1

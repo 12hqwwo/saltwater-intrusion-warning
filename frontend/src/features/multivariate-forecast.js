@@ -7,12 +7,14 @@ import { cropAdvisories } from "../shared/water-advisory.js";
 import { validMonth, inputMonthFor, validPrediction, forecastMonthFromToday } from '../shared/forecast-contract.js';
 import { DIRECT_FORECAST_SUBTITLE } from '../shared/forecast-map-overlay.js';
 import { createForecastIssuePanel } from './forecast-issue-panel.js';
+import { getCurrentRole } from '../auth/auth-service.js';
+import { ROLE_PUBLIC } from '../auth/auth-roles.js';
 
 export { forecastMonthFromToday } from '../shared/forecast-contract.js';
 
 const EVALUATION_EC_DELAY_DAYS = 5;
 
-export function createMultivariateForecast({ onStation, onPrediction } = {}) {
+export function createMultivariateForecast({ onStation, onPrediction, role = getCurrentRole } = {}) {
   const host = document.getElementById("multivariateForecastHost");
   if (!host) return { load: async () => {}, selectStation: async () => false };
   const catalogRequests = createRequestGate();
@@ -91,6 +93,13 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const persistLabel = node('label', 'Lưu lượt chạy vào PostgreSQL');
   persistLabel.prepend(persistRun);
   action.append(persistLabel);
+  const updatePersistencePermission = () => {
+    const guest = role() === ROLE_PUBLIC;
+    persistLabel.hidden = guest;
+    if (guest) persistRun.checked = false;
+  };
+  window.addEventListener('workspace:auth-changed', updatePersistencePermission);
+  updatePersistencePermission();
   form.append(source, action);
   const status = node("p", "Đang tải danh mục mô hình…", "subtle mv-status");
   status.setAttribute("role", "status");
@@ -128,7 +137,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   evaluation.append(evaluationSummary, labelFor('Giai đoạn mất EC giả lập', evaluationExperiment), evaluationStatus, evaluationGuidance, evaluationChart, evaluationLegend, evaluationMetrics, evaluationRemedies, evaluationFollowup);
   host.append(evaluation);
   createForecastIssuePanel(host);
-  const predictionHistory = createPredictionHistory(host, {
+  const predictionHistory = createPredictionHistory(host, { role,
     onSaved(data) {
       result = data;
       renderResult(data);
@@ -316,7 +325,6 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
       hydrologyReady = station.value !== 'MyTho' || data.hydrology?.complete === true;
       inputMonth.textContent = `Dự báo EC tháng ${target} · kỳ khí tượng đầu vào: ${data.input_month || previous}.`;
       if (data.wind_unit) fieldLabels.get("wind_source_units").textContent = `Gió (${data.wind_unit})`;
-      // An explicit manual choice can start from the visible archived values.
       for (const field of fields) controls.get(field.name).value = Number.isFinite(data[field.name]) ? data[field.name] : "";
       applyMode();
       status.textContent = data.complete ? "Đã nạp đầu vào. Có thể chạy dự báo đa biến." : "Kỳ lưu trữ thiếu dữ liệu. Chọn dữ liệu do người dùng cung cấp và điền đủ ba biến để dự báo.";

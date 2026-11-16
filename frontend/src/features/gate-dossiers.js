@@ -5,8 +5,8 @@ import { loadMultivariateForecastContext } from '../shared/forecast-map-overlay.
 import { createSpatialGateDraft } from './gate-simulation-draft.js';
 import { createGateIntakeScreening } from './gate-intake-screening.js';
 
-export function createGateDossiers(map) {
-  const screening = createGateIntakeScreening($('gateIntakeScreeningHost'));
+export function createGateDossiers(map, role = 'PUBLIC') {
+  const screening = createGateIntakeScreening($('gateIntakeScreeningHost'), { role });
   const candidateRequests = createRequestGate(), databaseRequests = createRequestGate(), forecastRequests = createRequestGate();
   let gates = [], catalog = [], spatialGates = [], databaseGates = [];
 

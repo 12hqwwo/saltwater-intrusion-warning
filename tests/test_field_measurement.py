@@ -9,6 +9,7 @@ from backend.domain.field_measurement import normalize
 from backend.main import app
 from backend.services import field_measurements as service
 from backend.repositories.field_measurements import field_label_from_rows
+from backend.services.workspace import WorkspaceError
 
 NOW = datetime(2026, 11, 14, 10, tzinfo=ZoneInfo('Asia/Ho_Chi_Minh'))
 RAW = dict(ec=1500, unit='µS/cm', observed_at='2026-11-14T09:00:00+07:00',
@@ -54,31 +55,25 @@ class FieldMeasurementTests(unittest.TestCase):
         self.assertIn('NO_EC25', value['flags'])
         self.assertIn('CALIBRATION_UNVERIFIED', value['flags'])
 
-    def test_review_requires_separate_configured_key(self):
-        import os
-        with patch.dict(os.environ, WEBGIS_REVIEW_API_KEY='', WEBGIS_WRITE_API_KEY='submit-secret'):
-            response = TestClient(app).post('/api/v1/field-measurements/00000000-0000-0000-0000-000000000001/review',
-                headers={'x-api-key': 'submit-secret'}, json=dict(decision='APPROVED', reviewer='A'))
-        self.assertEqual(response.status_code, 503)
+    def test_review_requires_inspector(self):
+        response = TestClient(app).post('/api/v1/field-measurements/00000000-0000-0000-0000-000000000001/review',
+            json=dict(decision='APPROVED'))
+        self.assertEqual(response.status_code, 401)
 
-    def test_submission_requires_internal_key(self):
-        import os
-        with patch.dict(os.environ, WEBGIS_WRITE_API_KEY=''):
-            response = TestClient(app).post('/api/v1/field-measurements', json=RAW)
-        self.assertEqual(response.status_code, 503)
-        with patch.dict(os.environ, WEBGIS_WRITE_API_KEY='submit-secret'), \
-             patch.object(service, 'submit', return_value={'measurement_id': 'x', 'status': 'PENDING'}) as saved:
-            response = TestClient(app).post('/api/v1/field-measurements',
-                headers={'x-api-key': 'submit-secret'}, json=RAW)
-        self.assertEqual(response.status_code, 201)
-        saved.assert_called_once()
+    def test_submission_requires_field_staff(self):
+        response = TestClient(app).post('/api/v1/field-measurements', json={key: value for key, value in RAW.items() if key != 'submitted_by'})
+        self.assertEqual(response.status_code, 401)
 
-    def test_only_approved_list_is_readable_without_review_key(self):
-        import os
-        with patch.dict(os.environ, WEBGIS_REVIEW_API_KEY=''), \
-             patch.object(service, 'list_measurements', return_value={'items': [], 'status': 'APPROVED'}):
+    def test_only_approved_list_is_readable_without_login(self):
+        with patch.object(service, 'list_measurements', return_value={'items': [], 'status': 'APPROVED'}):
             self.assertEqual(TestClient(app).get('/api/v1/field-measurements?status=APPROVED').status_code, 200)
-            self.assertEqual(TestClient(app).get('/api/v1/field-measurements?status=PENDING').status_code, 503)
+            self.assertEqual(TestClient(app).get('/api/v1/field-measurements?status=PENDING').status_code, 401)
+
+    def test_self_review_is_rejected(self):
+        with patch.object(service.repo, 'insert_review', side_effect=ValueError('Không được duyệt phiếu do chính mình gửi.')):
+            with self.assertRaises(WorkspaceError) as caught:
+                service.review('measurement-1', 'APPROVED', 'canbo', '')
+        self.assertEqual(caught.exception.status_code, 403)
 
     def test_equivalent_field_label_requires_two_calibrated_agreeing_samples(self):
         base = dict(ec_basis='EC25', position_kind='RIVER', calibrated_at=date(2026, 11, 1),

@@ -2,8 +2,10 @@ import { node, num, save, saveCSV } from "../shared/ui.js";
 import { workspaceAPI as api } from "../shared/workspace-api.js";
 import { createRequestGate } from "../api.js";
 import { validPrediction, validMonth } from '../shared/forecast-contract.js';
+import { getCurrentRole } from '../auth/auth-service.js';
+import { ROLE_PUBLIC } from '../auth/auth-roles.js';
 
-export function createPredictionHistory(host, { onSaved } = {}) {
+export function createPredictionHistory(host, { onSaved, role = getCurrentRole } = {}) {
   const requests = createRequestGate();
   let candidate = null, candidateVersion = 0, saving = false, rows = [], offset = 0, total = 0, knownStations = [];
   const catalogIdentity = name => {
@@ -16,6 +18,13 @@ export function createPredictionHistory(host, { onSaved } = {}) {
   const saveStatus = node("p", "Lưu sẽ chạy lại mô hình trên máy chủ với cùng yêu cầu và lưu kết quả máy chủ tạo ra.", "subtle");
   saveStatus.setAttribute("role", "status");
   host.append(saveButton, saveStatus);
+  const updateSavePermission = () => {
+    const guest = role() === ROLE_PUBLIC;
+    saveButton.hidden = guest;
+    saveStatus.hidden = guest;
+  };
+  window.addEventListener('workspace:auth-changed', updateSavePermission);
+  updateSavePermission();
 
   const comparison = node("details", undefined, "mv-scenario-history"); comparison.hidden = true;
   const summary = node("summary", "So sánh các lượt dự báo trong phiên");
@@ -105,7 +114,7 @@ export function createPredictionHistory(host, { onSaved } = {}) {
     finally { if (req.isCurrent()) reload.disabled = false; }
   }
   saveButton.addEventListener("click", async () => {
-    if (!candidate || saving) return;
+    if (!candidate || saving || role() === ROLE_PUBLIC) return;
     const payload = { ...candidate }, version = candidateVersion;
     saving = true; saveButton.disabled = true;
     saveStatus.textContent = "Máy chủ đang chạy lại mô hình và lưu dự báo vào PostgreSQL…";

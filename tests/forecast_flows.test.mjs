@@ -64,8 +64,8 @@ function frozenEvaluation(overrides = {}) {
     metrics: { RandomForest: { n: 36, mae_mS_m: 2, rmse_mS_m: 3 }, FrozenPersistence: { n: 36, mae_mS_m: 4, rmse_mS_m: 5 } },
     seasonal_naive: { available_months: 11, total_months: 36 }, ...overrides };
 }
-async function loadMultivariate(env) {
-  const feature = createMultivariateForecast();
+async function loadMultivariate(env, role = 'FIELD_STAFF') {
+  const feature = createMultivariateForecast({ role: () => role });
   const loading = feature.load(); env.pending[0].respond(catalog); await flush();
   env.pending.find(row => row.url.includes('/evaluation')).respond(frozenEvaluation());
   env.pending.find(row => row.url.includes('/inputs')).respond(input()); await loading;
@@ -92,7 +92,7 @@ test('multivariate requests frozen-label evidence and renders baseline availabil
 
 test('outage evidence separates hydrology remedies from the served weather model', async () => {
   const env = environment();
-  const feature = createMultivariateForecast();
+  const feature = createMultivariateForecast({ role: () => 'FIELD_STAFF' });
   const loading = feature.load(); env.pending[0].respond(catalog); await flush();
   const remedy_research = {
     protocol_id: 'FROZEN_EC_REMEDY_RESEARCH_V1', station: 'MyTho', experiment: 'gap_2021_2023', ec_delay_days: 5,
@@ -223,7 +223,7 @@ test('selecting a station without a model clears the prior prediction, candidate
 
 test('saved prediction cannot replace a newer form candidate and history rejects rows outside requested filters', async () => {
   const env = environment(), host = new Element(), saved = [];
-  const feature = createPredictionHistory(host, { onSaved: value => saved.push(value) });
+  const feature = createPredictionHistory(host, { role: () => 'FIELD_STAFF', onSaved: value => saved.push(value) });
   const all = descendants(host), save = all.find(row => row.textContent === 'Chạy và lưu dự báo vào PostgreSQL');
   feature.setCandidate({ station: 'MyTho', target_month: '2026-11', input_mode: 'ARCHIVE' });
   const saving = save.emit('click'); feature.setCandidate(null);
@@ -381,4 +381,15 @@ test('backtest station selection restores saved sensitivity runs to each station
     env.pending.at(-1).respond({});
     await flush();
   }
+});
+test('guest forecast runs without saving and does not show save controls', async () => {
+  const env = environment(), ui = await loadMultivariate(env, 'PUBLIC');
+  const save = ui.all.find(row => row.textContent === 'Chạy và lưu dự báo vào PostgreSQL');
+  const persist = ui.all.find(row => row.tagName === 'label' && row.textContent.includes('Lưu lượt chạy vào PostgreSQL'));
+  assert.equal(save.hidden, true);
+  assert.equal(persist.hidden, true);
+  const submission = ui.form.emit('submit');
+  assert.match(env.pending.at(-1).url, /\/multivariate\/predict$/);
+  env.pending.at(-1).respond(prediction());
+  await submission;
 });
