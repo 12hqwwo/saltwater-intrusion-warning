@@ -9,12 +9,13 @@ npm.cmd --prefix frontend ci
 .venv\Scripts\python.exe -m tools.security_setup roles --apply
 .venv\Scripts\python.exe -m tools.security_setup auth-secret --apply
 .venv\Scripts\python.exe scripts/apply_dss_migration.py --file sql/36_app_user.sql --version 36_app_user --apply
+.venv\Scripts\python.exe scripts/apply_dss_migration.py --file sql/37_app_registration.sql --version 37_app_registration --apply
 .\start.ps1
 ```
 
 Mở http://127.0.0.1:8000/workspace.html. Script mặc định chọn PostgreSQL, kiểm tra build thành công rồi chạy máy chủ ngay trong terminal hiện tại; Ctrl+C để dừng. Có thể dùng `.\start.ps1 -Mode postgres -Port 8016`. Chỉ dùng `-SkipBuild` khi bản build đã cập nhật; script không báo khởi động thành công trước khi Uvicorn sẵn sàng.
 
-Tạo tài khoản sau migration bằng `scripts/create_app_user.py --username <tên> --display-name <tên hiển thị> --role FIELD_STAFF|INSPECTOR --apply`. Script hỏi mật khẩu qua terminal, không nhận mật khẩu trên dòng lệnh. Trên giao diện, khách bấm **Đăng nhập** ở góc trên để dùng chức năng cán bộ. Đăng xuất xóa phiên trong tab hiện tại.
+Tạo tài khoản quản trị ban đầu sau migration bằng `scripts/create_app_user.py --username <tên> --display-name <tên hiển thị> --role INSPECTOR --apply`. Script hỏi mật khẩu qua terminal, không nhận mật khẩu trên dòng lệnh. Người mới bấm **Đăng ký**; tài khoản `FIELD_STAFF` chỉ đăng nhập được sau khi `INSPECTOR` bấm **Duyệt tài khoản**. Đăng xuất xóa phiên trong tab hiện tại. Khách không truy cập được dự báo EC đa biến.
 
 Có thể chạy từng bước:
 

@@ -11,6 +11,8 @@ from fastapi.testclient import TestClient
 import psycopg
 
 from backend.main import app
+from backend.auth.current_user import AuthenticatedUser, read_optional_user
+from backend.auth.roles import Role
 from backend.services import spatial_simulation
 
 
@@ -373,6 +375,8 @@ class SpatialSimulationTests(unittest.TestCase):
         self.assertEqual(response.json()['detail']['code'], 'DATABASE_ERROR')
 
     def test_simulation_requests_leave_core_outputs_unchanged(self):
+        app.dependency_overrides[read_optional_user] = lambda: AuthenticatedUser('test', 'staff', 'Cán bộ', Role.FIELD_STAFF)
+        self.addCleanup(app.dependency_overrides.pop, read_optional_user, None)
         paths = ['summary', 'stations', 'gates', 'monthly-estimates?station=MyTho',
                  'multivariate/catalog', 'multivariate/evaluation?station=MyTho']
         before = {}

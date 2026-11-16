@@ -24,6 +24,10 @@ export function mountQuickScenarios() {
   ];
   for (const scenario of scenarios) {
     const card = node("article", undefined, "quick-scenario-card");
+    if (scenario.view === 'forecasts') {
+      card.dataset.visibleForRoles = 'FIELD_STAFF INSPECTOR';
+      card.hidden = getCurrentRole() === ROLE_PUBLIC;
+    }
     const button = node("button", scenario.action, "secondary");
     button.type = "button";
     button.addEventListener("click", () => {

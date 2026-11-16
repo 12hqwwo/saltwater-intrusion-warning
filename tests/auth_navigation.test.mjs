@@ -9,7 +9,7 @@ test('guest cannot open staff tab and staff navigation shows only the selected s
     sessionStorage: globalThis.sessionStorage, fetch: globalThis.fetch, CustomEvent: globalThis.CustomEvent };
   const events = new EventTarget();
   const elements = ['overview', 'observations', 'forecasts', 'data-quality', 'gates'].map(view => ({
-    dataset: { view, ...(view === 'data-quality' ? { visibleForRoles: 'FIELD_STAFF INSPECTOR' } : {}) },
+    dataset: { view, ...(['data-quality', 'forecasts'].includes(view) ? { visibleForRoles: 'FIELD_STAFF INSPECTOR' } : {}) },
     hidden: false, scrollIntoView() {},
   }));
   const links = elements.map(element => ({ hash: '#' + element.dataset.view, textContent: element.dataset.view,
@@ -37,6 +37,9 @@ test('guest cannot open staff tab and staff navigation shows only the selected s
     bindNavigation(view => roleCanViewSection(getCurrentRole(), view));
     assert.equal(location.hash, '#observations');
     assert.equal(elements.find(item => item.dataset.view === 'data-quality').hidden, true);
+    location.hash = '#forecasts'; events.dispatchEvent(new Event('hashchange'));
+    assert.equal(location.hash, '#observations');
+    assert.equal(elements.find(item => item.dataset.view === 'forecasts').hidden, true);
     await loginWithPassword('canbo', 'test-password');
     location.hash = '#data-quality'; events.dispatchEvent(new Event('hashchange'));
     assert.equal(elements.find(item => item.dataset.view === 'data-quality').hidden, false);

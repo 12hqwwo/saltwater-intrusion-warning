@@ -19,6 +19,7 @@ Máy hiện tại đã được áp dụng. Máy khác cần PostgreSQL có sche
 .\.venv\Scripts\python.exe -m tools.security_setup roles --apply
 .\.venv\Scripts\python.exe -m tools.security_setup auth-secret --apply
 .\.venv\Scripts\python.exe scripts/apply_dss_migration.py --file sql/36_app_user.sql --version 36_app_user --apply
+.\.venv\Scripts\python.exe scripts/apply_dss_migration.py --file sql/37_app_registration.sql --version 37_app_registration --apply
 .\.venv\Scripts\python.exe scripts/create_app_user.py --username canbo --display-name "Cán bộ đo" --role FIELD_STAFF --apply
 .\.venv\Scripts\python.exe scripts/create_app_user.py --username kiemtra --display-name "Cán bộ kiểm tra" --role INSPECTOR --apply
 .\start.ps1
@@ -52,6 +53,6 @@ SELECT * FROM webgis_security.audit_log ORDER BY audit_id DESC LIMIT 20;
 
 ## Đăng nhập và phạm vi
 
-Tài khoản web nằm trong `webgis_security.app_user`; mật khẩu được băm bằng scrypt với salt riêng. API cấp JWT HS256 sống 8 giờ, ký bằng `WEBGIS_AUTH_SECRET` trong `.env`. Trình duyệt giữ token trong `sessionStorage`, xác nhận lại qua `/api/v1/auth/me` khi tải trang và xóa khi đăng xuất. Các POST ghi kiểm vai ở router; khách không thể ghi bằng cách gọi API trực tiếp. Khách vẫn được chạy kiểm tra cống với ngưỡng mặc định nhưng chỉ nhận kết luận rút gọn. `webgis_reader` không được đọc bảng mật khẩu. Chế độ snapshot không có đăng nhập.
+Tài khoản web nằm trong `webgis_security.app_user`; mật khẩu được băm bằng scrypt với salt riêng. Đăng ký công khai tạo `FIELD_STAFF` chưa kích hoạt; chỉ `INSPECTOR` được xem hàng chờ và kích hoạt, với người duyệt và thời điểm được lưu trong bảng. API cấp JWT HS256 sống 8 giờ, ký bằng `WEBGIS_AUTH_SECRET` trong `.env`. Trình duyệt giữ token trong `sessionStorage`, xác nhận lại qua `/api/v1/auth/me` khi tải trang và xóa khi đăng xuất. Các POST ghi kiểm vai ở router; khách không thể ghi bằng cách gọi API trực tiếp. Khách không truy cập API dự báo EC đa biến. Khách vẫn được chạy kiểm tra cống với ngưỡng mặc định nhưng chỉ nhận kết luận rút gọn. `webgis_reader` không được đọc bảng mật khẩu. Chế độ snapshot không có đăng nhập và đăng ký.
 
 Server chạy ở `127.0.0.1`; phân quyền DB bảo vệ dữ liệu khỏi các thao tác mà ứng dụng không được phép thực hiện, không giới hạn ai được truy cập web local. Triển khai qua mạng cần xác thực ở reverse proxy, HTTPS, firewall và chính sách sao lưu riêng. PostgreSQL ở máy khác cần TLS với `PGSSLMODE=verify-full` và chứng chỉ tin cậy; thiết lập này không tự thay pg_hba.conf, firewall hoặc mã hóa ổ đĩa/backup. Máy hiện tại chưa được cấu hình các phần triển khai từ xa đó.

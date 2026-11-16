@@ -27,7 +27,7 @@
       <nav aria-label="Điều hướng chính">
         <a href="#overview">Tổng quan</a>
         <a href="#observations">Quan trắc</a>
-        <a href="#forecasts">Dự báo EC đa biến</a>
+        <a href="#forecasts" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>Dự báo EC đa biến</a>
         <a href="#data-quality" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>Chất lượng dữ liệu</a>
         <a href="#gates">Hồ sơ cống</a>
       </nav>
@@ -38,8 +38,8 @@
       <section id="overview" data-view="overview" class="intro">
         <div class="intro-copy">
           <h1>Đọc dòng sông qua dữ liệu EC.</h1>
-          <p>Quan sát trục Sông Tiền, các kênh có cống và dự báo EC theo tháng trên cùng một không gian làm việc.</p>
-          <div class="intro-actions"><a class="primary-link" href="#observations">Mở bản đồ quan trắc</a><a class="quiet-link" href="#forecasts">Xem dự báo EC</a></div>
+          <p>Quan sát trục Sông Tiền, các kênh có cống và dữ liệu EC trên cùng một không gian làm việc.</p>
+          <div class="intro-actions"><a class="primary-link" href="#observations">Mở bản đồ quan trắc</a><a class="quiet-link" href="#forecasts" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>Xem dự báo EC</a></div>
         </div>
         <figure class="intro-map"><img src="/river-diagram.svg" alt="Sơ đồ trục Sông Tiền và 10 tuyến kênh đi qua cống từ dữ liệu không gian của dự án"><figcaption>Hình học nghiên cứu của trục Sông Tiền và các kênh có cống. Màu EC chỉ xuất hiện khi chọn tháng mô phỏng trên bản đồ.</figcaption></figure>
         <aside class="scope" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>
@@ -77,7 +77,7 @@
       </section>
       <section data-view="overview" class="workflow-cards" aria-label="Luồng sử dụng">
         <a class="panel workflow-card" href="#observations"><h2>Chọn trạm trên bản đồ</h2><p>Xem EC, nguồn số đo, khoảng thời gian và tải dữ liệu đang xem.</p></a>
-        <a class="panel workflow-card" href="#forecasts"><h2>Chạy mô hình dự báo EC</h2><p>Chọn trạm, tháng và đầu vào mưa / nhiệt độ / gió để nhận kết quả.</p></a>
+        <a class="panel workflow-card" href="#forecasts" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden><h2>Chạy mô hình dự báo EC</h2><p>Chọn trạm, tháng và đầu vào mưa / nhiệt độ / gió để nhận kết quả.</p></a>
         <a class="panel workflow-card" href="#data-quality" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden><h2>Truy nguồn dữ liệu</h2><p>Xem dữ liệu đầu vào, chất lượng nguồn và xuất kết quả dự báo.</p></a>
       </section>
       <section data-view="overview" class="panel source-summary" aria-labelledby="overviewEcHeading">
@@ -194,7 +194,7 @@
           <p id="siteWarning" class="notice">
           </p>
           <p id="stationComparisonStatus" class="subtle" role="status"></p>
-          <button id="openStationForecast" type="button" class="secondary" hidden>Dự báo EC cho trạm này</button>
+          <button id="openStationForecast" type="button" class="secondary" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>Dự báo EC cho trạm này</button>
           <p id="stationForecastNote" class="subtle"></p>
           <form id="dateFilter" class="filters">
             <label>Từ ngày<input id="dateFrom" type="date" required>
@@ -231,11 +231,11 @@
         </details>
         <details class="panel compact-details" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden><summary>Tra cứu lịch sử quan trắc PostgreSQL</summary><div id="databaseHistoryHost" class="panel database-history"></div></details>
       </section>
-      <section data-view="forecasts" id="multivariate-forecast" class="section">
+      <section data-view="forecasts" id="multivariate-forecast" class="section" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>
         <div class="section-title"><div><h2>Dự báo EC theo trạm.</h2></div><span class="badge">Random Forest · mS/m</span></div>
         <article class="panel"><p class="subtle">Mỹ Tho dùng khí tượng, lưu lượng Kratie và mực nước Tân Châu của tháng t−2 cùng chu kỳ tháng. Mỹ Thuận và Tân Châu dùng mô hình khí tượng riêng. Mỗi dự báo chỉ chạy khi có đủ đầu vào phù hợp.</p><div id="multivariateForecastHost"></div></article>
       </section>
-      <section data-view="forecasts" id="forecast" class="section">
+      <section data-view="forecasts" id="forecast" class="section" data-visible-for-roles="FIELD_STAFF INSPECTOR" hidden>
         <details class="historical-forecast"><summary>Phụ lục nghiên cứu cũ: mô hình EC trễ và Persistence</summary>
         <div class="section-title">
           <div>

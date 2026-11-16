@@ -9,6 +9,8 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 from fastapi.testclient import TestClient
 from backend.main import app
+from backend.auth.current_user import AuthenticatedUser, read_optional_user
+from backend.auth.roles import Role
 from backend.domain.river_interpolation import interpolate_anchors, MY_THUAN_KM
 from backend.services import spatial_simulation, spatial_inputs
 from backend.domain import multivariate_ec
@@ -89,6 +91,8 @@ class ThreeStationIntegration(unittest.TestCase):
             self.assertEqual(result.exception.status_code, 503)
 
     def test_registered_model_weather_and_both_api_prefixes(self):
+        app.dependency_overrides[read_optional_user] = lambda: AuthenticatedUser('test', 'staff', 'Cán bộ', Role.FIELD_STAFF)
+        self.addCleanup(app.dependency_overrides.pop, read_optional_user, None)
         self.assertEqual(multivariate_ec.normalize_station('MRC_VN_019804'), 'MYTHUAN')
         weather = get_weather_input('MYTHUAN','2024-04')
         self.assertEqual(weather['input_month'],'2024-02')

@@ -11,6 +11,8 @@ import { formatWater } from "../shared/simulation-display.js";
 import { createRiverProfile } from './river-profile.js';
 import { createObservationLoader } from '../shared/observation-contract.js';
 import { validPrediction } from '../shared/forecast-contract.js';
+import { getCurrentRole } from '../auth/auth-service.js';
+import { ROLE_PUBLIC } from '../auth/auth-roles.js';
 import { createForecastMapBridge, loadMultivariateForecastContext, forecastModelLabel,
   normalizeForecastContext, FORECAST_SPATIAL_DISCLAIMER } from '../shared/forecast-map-overlay.js';
 
@@ -317,7 +319,7 @@ export function createObservations({ onForecast } = {}) {
     $("siteRole").textContent = site.study_role || "Quan trắc EC có nguồn tại điểm đo";
     renderSiteValue();
     const hasExperiment = Boolean(site.model_station) || state.summary.experiments?.some(ex => ex.site_code === code);
-    $("openStationForecast").hidden = !hasExperiment;
+    $("openStationForecast").hidden = !hasExperiment || getCurrentRole() === ROLE_PUBLIC;
     $("stationForecastNote").textContent = hasExperiment
       ? "Chạy mô hình đa biến từ khí tượng có nguồn tại cùng trạm; xem dự báo EC tháng và đầu vào."
       : "Điểm này chưa có thí nghiệm kiểm chứng EC tháng; chỉ hiển thị quan trắc có nguồn.";
@@ -390,7 +392,7 @@ export function createObservations({ onForecast } = {}) {
   });
   $("downloadRows").addEventListener("click", exportRows);
   $("openStationForecast").addEventListener("click", () => {
-    if (!state.site) return;
+    if (!state.site || getCurrentRole() === ROLE_PUBLIC) return;
     onForecast?.(state.site.site_code);
     location.hash = "forecasts";
   });

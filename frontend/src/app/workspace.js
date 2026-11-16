@@ -26,6 +26,7 @@ const forecasts = createForecasts();
 const multivariate = createMultivariateForecast();
 let fieldMeasurements = createFieldMeasurements($("fieldMeasurementsHost"), ROLE_PUBLIC);
 const observations = createObservations({ onForecast: async (code) => {
+  if (getCurrentRole() === ROLE_PUBLIC) return;
   forecasts.selectStation(code);
   await multivariate.selectStation(code);
 } });
@@ -64,6 +65,7 @@ window.addEventListener('workspace:auth-changed', () => {
   if (role !== ROLE_PUBLIC && !databaseHistoryMounted) { createDatabaseHistory(); databaseHistoryMounted = true; }
   if (role !== ROLE_PUBLIC) { weather?.destroy(); weather = createWeatherEstimates(); weather.load(); }
   else { weather?.destroy(); weather = null; }
+  if (role !== ROLE_PUBLIC) multivariate.load();
   loadWorkspace();
   if (role !== ROLE_PUBLIC) loadIntake();
 });
@@ -90,7 +92,7 @@ async function loadWorkspace() {
   if (summary.status === "fulfilled") {
     renderOverview(summary.value);
     if (getCurrentRole() !== ROLE_PUBLIC) jobs.push(loadDataFreshness(req));
-    jobs.push(forecasts.load(summary.value.experiments || []));
+    if (getCurrentRole() !== ROLE_PUBLIC) jobs.push(forecasts.load(summary.value.experiments || []));
   } else {
     forecasts.showError(summary.reason.message);
   }
@@ -117,4 +119,3 @@ async function loadIntake() {
 $("retryWorkspace").addEventListener("click", loadWorkspace);
 $("retryIntake").addEventListener("click", loadIntake);
 restoreSessionFromStorage();
-multivariate.load();

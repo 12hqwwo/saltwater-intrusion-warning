@@ -14,6 +14,8 @@ from fastapi.testclient import TestClient
 
 from backend.domain import ec_gap_evaluation, multivariate_ec
 from backend.main import app
+from backend.auth.current_user import AuthenticatedUser, read_optional_user
+from backend.auth.roles import Role
 from scripts.evaluate_frozen_ec_gap import (
     FEATURES, MODELS, OUTPUT, ROOT, forecast_gap, freeze_training, spatial_predictions,
 )
@@ -171,6 +173,8 @@ class FrozenEvidenceChecks(unittest.TestCase):
             self.assertTrue(group.loc[group.gap_year > 1, 'SeasonalNaive'].isna().all())
 
     def test_both_api_prefixes_all_stations_and_alternate_protocols(self):
+        app.dependency_overrides[read_optional_user] = lambda: AuthenticatedUser('test', 'staff', 'Cán bộ', Role.FIELD_STAFF)
+        self.addCleanup(app.dependency_overrides.pop, read_optional_user, None)
         with patch.dict(os.environ, WEBGIS_RESEARCH_MODE='snapshot'), TestClient(app) as client:
             for prefix in ('/api/v1/multivariate', '/api/v1/workspace/multivariate'):
                 for station in ('TANCHAU', 'MYTHUAN', 'MYTHO'):

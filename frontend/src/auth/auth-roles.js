@@ -3,5 +3,5 @@ export const ROLE_FIELD_STAFF = 'FIELD_STAFF';
 export const ROLE_INSPECTOR = 'INSPECTOR';
 
 export function roleCanViewSection(role, view) {
-  return view !== 'data-quality' || role !== ROLE_PUBLIC;
+  return role !== ROLE_PUBLIC || !['data-quality', 'forecasts'].includes(view);
 }

@@ -1,10 +1,12 @@
 """HTTP contracts for multivariate monthly EC inference."""
 from typing import Annotated, Literal
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, ConfigDict, Field
 from backend.services import multivariate
+from backend.auth.current_user import require_role
+from backend.auth.roles import Role
 
-router = APIRouter(prefix='/multivariate', tags=['Dự báo EC đa biến'])
+router = APIRouter(prefix='/multivariate', tags=['Dự báo EC đa biến'], dependencies=[Depends(require_role(Role.FIELD_STAFF, Role.INSPECTOR))])
 Month = Annotated[str, Field(pattern=r'^\d{4}-(0[1-9]|1[0-2])$')]
 
 

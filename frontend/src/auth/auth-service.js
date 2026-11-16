@@ -29,6 +29,18 @@ export async function loginWithPassword(username, password) {
   return currentUser;
 }
 
+export function registerAccount(username, displayName, password) {
+  return requestJSON('/auth/register', { method: 'POST', body: { username, display_name: displayName, password } });
+}
+
+export function listPendingAccounts() {
+  return requestJSON('/auth/pending');
+}
+
+export function approveAccount(userId) {
+  return requestJSON(`/auth/pending/${encodeURIComponent(userId)}/approve`, { method: 'POST' });
+}
+
 export async function restoreSessionFromStorage() {
   if (!readAccessToken()) { changed(); return null; }
   try {

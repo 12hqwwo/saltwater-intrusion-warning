@@ -2,6 +2,7 @@ import os
 import unittest
 from unittest.mock import patch
 from uuid import UUID
+from psycopg.errors import UniqueViolation
 
 from fastapi.testclient import TestClient
 import jwt
@@ -56,6 +57,48 @@ class AuthTests(unittest.TestCase):
         with patch.dict(os.environ, WEBGIS_RESEARCH_MODE='snapshot'):
             result = self.client.post('/api/v1/auth/login', json={'username': 'staff', 'password': 'correct-password'})
         self.assertEqual(result.status_code, 503)
+
+    def test_registration_is_pending_and_cannot_choose_role(self):
+        request = {'username': 'new.staff', 'display_name': 'Cán bộ mới', 'password': 'long-test-password'}
+        with patch.object(app_users, 'create_pending_user') as create:
+            response = self.client.post('/api/v1/auth/register', json=request)
+            self.assertEqual(response.status_code, 201)
+            self.assertIn('duyệt', response.json()['message'])
+            self.assertEqual(create.call_args.args[:2], ('new.staff', 'Cán bộ mới'))
+            self.assertTrue(verify_password(request['password'], create.call_args.args[2]))
+            self.assertEqual(self.client.post('/api/v1/auth/register', json=request | {'role': 'INSPECTOR'}).status_code, 422)
+            self.assertEqual(self.client.post('/api/v1/auth/register', json=request | {'password': 'short'}).status_code, 422)
+        with patch.object(app_users, 'create_pending_user', side_effect=UniqueViolation('duplicate')):
+            self.assertEqual(self.client.post('/api/v1/auth/register', json=request).status_code, 409)
+        with patch.dict(os.environ, WEBGIS_RESEARCH_MODE='snapshot'):
+            self.assertEqual(self.client.post('/api/v1/auth/register', json=request).status_code, 503)
+
+    def test_only_inspector_can_approve_pending_registration(self):
+        pending_id = UUID('00000000-0000-0000-0000-000000000124')
+        path = f'/api/v1/auth/pending/{pending_id}/approve'
+        self.assertEqual(self.client.get('/api/v1/auth/pending').status_code, 401)
+        self.assertEqual(self.client.post(path).status_code, 401)
+        staff_token = issue_access_token(self.user)
+        with patch.object(app_users, 'find_active_user_by_id', return_value=self.user):
+            headers = {'Authorization': f'Bearer {staff_token}'}
+            self.assertEqual(self.client.get('/api/v1/auth/pending', headers=headers).status_code, 403)
+            self.assertEqual(self.client.post(path, headers=headers).status_code, 403)
+        inspector = self.user | {'username': 'inspector', 'role': 'INSPECTOR'}
+        inspector_token = issue_access_token(inspector)
+        headers = {'Authorization': f'Bearer {inspector_token}'}
+        with patch.object(app_users, 'find_active_user_by_id', return_value=inspector), \
+             patch.object(app_users, 'list_pending_users', return_value=[{'user_id': pending_id, 'username': 'new.staff'}]), \
+             patch.object(app_users, 'approve_pending_user', return_value={'username': 'new.staff', 'display_name': 'Cán bộ mới', 'role': 'FIELD_STAFF'}) as approve:
+            self.assertEqual(len(self.client.get('/api/v1/auth/pending', headers=headers).json()['items']), 1)
+            response = self.client.post(path, headers=headers)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json()['user']['role'], 'FIELD_STAFF')
+            self.assertEqual(approve.call_args.args, (pending_id, USER_ID))
+
+    def test_guest_cannot_access_multivariate_api_aliases(self):
+        for prefix in ('/api/v1/multivariate', '/api/v1/workspace/multivariate', '/api/v1/research/multivariate'):
+            self.assertEqual(self.client.get(f'{prefix}/catalog').status_code, 401)
+            self.assertEqual(self.client.post(f'{prefix}/predict', json={'station': 'MyTho', 'target_month': '2026-12'}).status_code, 401)
 
     def test_roles_cover_all_write_endpoints(self):
         token = issue_access_token(self.user)
