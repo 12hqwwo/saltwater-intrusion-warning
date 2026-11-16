@@ -8,6 +8,8 @@ from backend.domain.forecast_issue import (LABEL_PROTOCOL_VERSION, build_issue, 
 from backend.services import forecast_issues as service
 from backend.services.workspace import WorkspaceError
 from backend.main import app
+from backend.auth.current_user import AuthenticatedUser, read_optional_user
+from backend.auth.roles import Role
 
 PRED = dict(station='MyTho', target_month='2026-12', input_month='2026-10',
     input_mode='ARCHIVE', model_version='v1',
@@ -48,6 +50,8 @@ class ForecastIssueServiceTests(unittest.TestCase):
         self.assertEqual(caught.exception.status_code, 422)
 
     def test_api_contract_exposes_issue_and_history(self):
+        app.dependency_overrides[read_optional_user] = lambda: AuthenticatedUser('test', 'inspector', 'Người kiểm tra', Role.INSPECTOR)
+        self.addCleanup(app.dependency_overrides.pop, read_optional_user, None)
         with patch.object(service, 'issue_month', return_value=dict(items=[])):
             response = TestClient(app).post('/api/v1/forecast-issues', json={'target_month': '2026-12'})
         self.assertEqual(response.status_code, 201)
