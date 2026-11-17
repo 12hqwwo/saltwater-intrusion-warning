@@ -2,6 +2,12 @@ import hashlib
 import hmac
 import os
 
+DUMMY_PASSWORD_HASH = (
+    'scrypt$16384$8$1'
+    '$00000000000000000000000000000000'
+    '$0000000000000000000000000000000000000000000000000000000000000000'
+)
+
 
 def hash_password(password: str) -> str:
     if len(password) < 12 or len(password) > 1024:

@@ -13,7 +13,7 @@ from backend.main import app
 from backend.repositories import app_users
 from backend.services import field_measurements, forecast_issues
 from backend.domain.gate_intake_rules import DEFAULT_PROFILE
-from backend.security import actor
+from backend.security import actor, reset_rate_limits
 
 
 USER_ID = UUID('00000000-0000-0000-0000-000000000123')
@@ -23,6 +23,7 @@ class AuthTests(unittest.TestCase):
     def setUp(self):
         env = patch.dict(os.environ, WEBGIS_AUTH_SECRET='test-secret-' * 5, WEBGIS_RESEARCH_MODE='postgres')
         env.start(); self.addCleanup(env.stop)
+        reset_rate_limits(); self.addCleanup(reset_rate_limits)
         self.client = TestClient(app)
         self.user = {'user_id': USER_ID, 'username': 'staff', 'display_name': 'Cán bộ A',
                      'role': 'FIELD_STAFF', 'is_active': True, 'password_hash': hash_password('correct-password')}
@@ -57,6 +58,24 @@ class AuthTests(unittest.TestCase):
         with patch.dict(os.environ, WEBGIS_RESEARCH_MODE='snapshot'):
             result = self.client.post('/api/v1/auth/login', json={'username': 'staff', 'password': 'correct-password'})
         self.assertEqual(result.status_code, 503)
+
+    def test_login_lookup_miss_still_runs_password_hash(self):
+        with patch.object(app_users, 'find_active_user_by_username', return_value=None) as lookup, \
+             patch('backend.api.auth.verify_password', wraps=verify_password) as verify:
+            response = self.client.post('/api/v1/auth/login', json={'username': 'nobody', 'password': 'whatever12345'})
+        self.assertEqual(response.status_code, 401)
+        lookup.assert_called_once()
+        verify.assert_called_once()
+
+    def test_login_rate_limited_after_too_many_attempts(self):
+        with patch.dict(os.environ, WEBGIS_AUTH_RATE_LIMIT_MAX_ATTEMPTS='3'), \
+             patch.object(app_users, 'find_active_user_by_username', return_value=None):
+            for _ in range(3):
+                self.assertEqual(self.client.post('/api/v1/auth/login',
+                    json={'username': 'staff', 'password': 'wrong-password'}).status_code, 401)
+            blocked = self.client.post('/api/v1/auth/login', json={'username': 'staff', 'password': 'wrong-password'})
+        self.assertEqual(blocked.status_code, 429)
+        self.assertIn('Retry-After', blocked.headers)
 
     def test_registration_is_pending_and_cannot_choose_role(self):
         request = {'username': 'new.staff', 'display_name': 'Cán bộ mới', 'password': 'long-test-password'}

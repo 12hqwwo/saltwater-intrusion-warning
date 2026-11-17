@@ -18,6 +18,10 @@ _write_pool = None
 _write_pool_key = None
 _write_pool_lock = RLock()
 
+_auth_read_pool = None
+_auth_read_pool_key = None
+_auth_read_pool_lock = RLock()
+
 
 def require_writes():
     if os.getenv('WEBGIS_DSS_WRITES_ENABLED', '').lower() != 'true':
@@ -30,6 +34,12 @@ def _write_config():
             os.getenv('DSS_PGPASSWORD'), os.getenv('WEBGIS_DSS_POOL_MAX', '2'))
 
 
+def _auth_read_config():
+    return (os.getenv('PGHOST', '127.0.0.1'), os.getenv('PGPORT', '5432'),
+            os.getenv('PGDATABASE', 'dongthap_gis'), os.getenv('DSS_PGUSER'),
+            os.getenv('DSS_PGPASSWORD'), os.getenv('WEBGIS_DSS_AUTH_POOL_MAX', '4'))
+
+
 def _configure_writer(conn):
     try:
         assert_application_role(conn)
@@ -37,30 +47,38 @@ def _configure_writer(conn):
         conn.rollback()
 
 
-def open_write_pool():
-    global _write_pool, _write_pool_key
-    require_writes()
-    key = _write_config()
+def _require_dss_role(key):
     if not key[3]:
         raise StorageDisabled('A dedicated DSS_PGUSER is required.')
     if key[3] == os.getenv('WEBGIS_DB_USER', 'webgis_reader'):
         raise StorageDisabled('DSS_PGUSER must differ from WEBGIS_DB_USER so each pool respects its role connection limit.')
+
+
+def _build_dss_pool(key, pool_name):
+    host, port, dbname, user, password, size = key
+    kwargs = dict(host=host, port=port, dbname=dbname, user=user,
+                  connect_timeout=5, row_factory=dict_row,
+                  application_name=pool_name,
+                  options='-c statement_timeout=10000 -c lock_timeout=3000 -c timezone=Asia/Ho_Chi_Minh')
+    if password is not None:
+        kwargs['password'] = password
+    maximum = max(1, min(10, int(size)))
+    return ConnectionPool(kwargs=kwargs, min_size=0, max_size=maximum,
+                          configure=_configure_writer, timeout=5,
+                          name=pool_name, open=True)
+
+
+def open_write_pool():
+    global _write_pool, _write_pool_key
+    require_writes()
+    key = _write_config()
+    _require_dss_role(key)
     with _write_pool_lock:
         if _write_pool is not None and key == _write_pool_key:
             return _write_pool
         if _write_pool is not None:
             _write_pool.close()
-        host, port, dbname, user, password, size = key
-        kwargs = dict(host=host, port=port, dbname=dbname, user=user,
-                      connect_timeout=5, row_factory=dict_row,
-                      application_name='webgis_dss_write_api',
-                      options='-c statement_timeout=10000 -c lock_timeout=3000 -c timezone=Asia/Ho_Chi_Minh')
-        if password is not None:
-            kwargs['password'] = password
-        maximum = max(1, min(10, int(size)))
-        _write_pool = ConnectionPool(kwargs=kwargs, min_size=0, max_size=maximum,
-                                     configure=_configure_writer, timeout=5,
-                                     name='webgis_dss_write', open=True)
+        _write_pool = _build_dss_pool(key, 'webgis_dss_write')
         _write_pool_key = key
         return _write_pool
 
@@ -74,6 +92,31 @@ def close_write_pool():
             _write_pool_key = None
 
 
+def open_auth_read_pool():
+    """Separate, larger-concurrency DSS-role pool so auth lookups never queue behind the tiny write pool."""
+    global _auth_read_pool, _auth_read_pool_key
+    require_writes()
+    key = _auth_read_config()
+    _require_dss_role(key)
+    with _auth_read_pool_lock:
+        if _auth_read_pool is not None and key == _auth_read_pool_key:
+            return _auth_read_pool
+        if _auth_read_pool is not None:
+            _auth_read_pool.close()
+        _auth_read_pool = _build_dss_pool(key, 'webgis_dss_auth_read')
+        _auth_read_pool_key = key
+        return _auth_read_pool
+
+
+def close_auth_read_pool():
+    global _auth_read_pool, _auth_read_pool_key
+    with _auth_read_pool_lock:
+        if _auth_read_pool is not None:
+            _auth_read_pool.close()
+            _auth_read_pool = None
+            _auth_read_pool_key = None
+
+
 @contextmanager
 def write_connection():
     require_writes()
@@ -81,6 +124,16 @@ def write_connection():
         raise StorageDisabled('A dedicated DSS_PGUSER is required.')
     with open_write_pool().connection() as conn:
         conn.execute("SELECT set_config('webgis.actor', %s, true)", (actor.get(),))
+        yield conn
+
+
+@contextmanager
+def auth_read_connection():
+    """Pure-read app_user lookups; no actor/audit bookkeeping since nothing is written."""
+    require_writes()
+    if not os.getenv('DSS_PGUSER'):
+        raise StorageDisabled('A dedicated DSS_PGUSER is required.')
+    with open_auth_read_pool().connection() as conn:
         yield conn
 
 

@@ -5,7 +5,7 @@ from uuid import UUID
 
 from backend.auth.access_tokens import TOKEN_LIFETIME_SECONDS, issue_access_token
 from backend.auth.current_user import AuthenticatedUser, require_role
-from backend.auth.password_hashing import hash_password, verify_password
+from backend.auth.password_hashing import DUMMY_PASSWORD_HASH, hash_password, verify_password
 from backend.auth.roles import Role
 from backend.repositories import app_users
 import os
@@ -50,7 +50,9 @@ def login(payload: LoginRequest):
     if os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot').lower() != 'postgres':
         raise HTTPException(503, 'Đăng nhập chỉ khả dụng khi dùng PostgreSQL.')
     user = app_users.find_active_user_by_username(payload.username.strip())
-    if user is None or not verify_password(payload.password, user['password_hash']):
+    password_hash = user['password_hash'] if user is not None else DUMMY_PASSWORD_HASH
+    password_ok = verify_password(payload.password, password_hash)
+    if user is None or not password_ok:
         raise HTTPException(401, 'Tên đăng nhập hoặc mật khẩu không đúng.')
     return {'access_token': issue_access_token(user), 'token_type': 'Bearer',
             'expires_in': TOKEN_LIFETIME_SECONDS, 'user': public_user(user)}
