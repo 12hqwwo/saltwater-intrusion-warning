@@ -90,7 +90,8 @@ def build_matrix(delay):
 
 
 def monthly_stage(code: str, prefix: str) -> pd.DataFrame:
-    paths = [next(folder.glob(f"{code}_Water_Level_Manual_*.csv"))
+    paths = [next(path for path in folder.glob(f"{code}_Water_Level_Manual_*.csv")
+                  if not path.stem.endswith("_daily"))
              for folder in ([LONG, RECENT_TC] if code == "019803" else [LONG, HISTORY, RECENT])]
     frame = pd.concat([pd.read_csv(path, usecols=["observed_at", "value", "unit"])
                        for path in paths], ignore_index=True)
