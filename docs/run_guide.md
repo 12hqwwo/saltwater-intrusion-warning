@@ -41,7 +41,7 @@ Phát triển frontend bằng `npm.cmd --prefix frontend run dev`; Vite chuyển
 
 File `sql/38_app_user_username_case_insensitive.sql` kiểm tra tài khoản trùng khác hoa/thường trước khi tạo unique index. Ngày 18/11/2026, migration đã được chạy riêng bằng `--apply` trên DB cục bộ `dongthap_gis`, phiên bản `38_app_user_username_case_insensitive`, checksum `93cbb62439f8ce7636787971555ef82f179e139e50d1654b8b0526ef7a1d5c92`. DB khác vẫn cần rà dữ liệu và triển khai migration riêng; không chạy lại chỉ vì file có trong repo.
 
-Hai test hợp đồng PostgreSQL trong `tests/test_dss_postgres_contract.py` đã đạt trên DB tách biệt `webgis_test_20261118` có PostGIS; chúng dùng bảng tạm và rollback. Migration 38 cũng được thử trên DB này với username trùng, chạy lặp và ràng buộc unique. Một test bằng chứng nguồn Mỹ Thuận vẫn skip vì checksum của `data/external/multivariate_weather/manifest.json` hiện tại khác manifest của thí nghiệm cũ và bản snapshot gốc không có trong repo; không sửa checksum lịch sử để làm test đạt.
+Hai test hợp đồng PostgreSQL trong `tests/test_dss_postgres_contract.py` đã đạt trên DB tách biệt `webgis_test_20261118` có PostGIS; chúng dùng bảng tạm và rollback. Migration 38 cũng được thử trên DB này với username trùng, chạy lặp và ràng buộc unique. Test bằng chứng nguồn Mỹ Thuận dùng bản manifest lịch sử đã khôi phục vào `outputs/mythuan_three_station_20261104/source_snapshots/`; checksum khớp với run cũ, trong khi manifest dữ liệu hiện tại được giữ nguyên.
 
 ## Đo hiệu năng cục bộ
 
@@ -130,6 +130,6 @@ node --test tests/*.test.mjs frontend/src/features/gate-simulation-draft.test.js
 npm.cmd --prefix frontend run build
 ```
 
-Bộ kiểm thử dùng snapshot và client trong tiến trình; không truy cập DB để thay đổi dữ liệu. Xem [kiến trúc](architecture.md) và [kế hoạch triển khai](implementation-plan.md) để nắm cấu trúc mới và phạm vi nghiệm thu. [handover.md](handover.md) là bằng chứng lịch sử ngày 16/10, không phải kết quả kiểm tra phiên bản hiện tại.
+Bộ kiểm thử chủ yếu dùng snapshot và client trong tiến trình. Hai test PostgreSQL chỉ chạy khi đặt `WEBGIS_TEST_PG_DSN` trỏ tới DB test riêng có PostGIS; không đặt biến này trỏ tới DB chứa dữ liệu thật. Xem [kiến trúc](architecture.md) và [kế hoạch triển khai](implementation-plan.md) để nắm cấu trúc mới và phạm vi nghiệm thu. [handover.md](handover.md) là bằng chứng lịch sử ngày 16/10, không phải kết quả kiểm tra phiên bản hiện tại.
 
 Xem [bảo mật PostgreSQL và lưu lịch sử](database-security.md) về hai role DB, tài khoản cán bộ, audit và cách kiểm tra quyền.

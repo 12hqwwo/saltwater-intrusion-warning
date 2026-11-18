@@ -1,0 +1,564 @@
+{
+  "schema_version": 1,
+  "retrievals": [
+    {
+      "station": "MyTho",
+      "file": "era5_MyTho_1985-01-01_1989-12-31.json",
+      "sha256": "b7a44f1bc437e4e9232d96997f999238ed7811367831a6bfe805aa2859a95e37",
+      "retrieved_at": "2026-10-23T04:16:46.578552+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=1985-01-01&end_date=1989-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.36,
+        "longitude": 106.36,
+        "start_date": "1985-01-01",
+        "end_date": "1989-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "1985-01-01",
+      "end_date": "1989-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "MyTho",
+      "file": "era5_MyTho_1990-01-01_1994-12-31.json",
+      "sha256": "de14505996122950cbed03ee58394df29a46a9708699494a13140cef8b979088",
+      "retrieved_at": "2026-10-23T04:16:48.140177+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=1990-01-01&end_date=1994-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.36,
+        "longitude": 106.36,
+        "start_date": "1990-01-01",
+        "end_date": "1994-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "1990-01-01",
+      "end_date": "1994-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "MyTho",
+      "file": "era5_MyTho_1995-01-01_1999-12-31.json",
+      "sha256": "756665880ca14fe873fd24cdf535cd1f035189d94da66b6074fff912d1170ecb",
+      "retrieved_at": "2026-10-23T04:16:49.593124+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=1995-01-01&end_date=1999-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.36,
+        "longitude": 106.36,
+        "start_date": "1995-01-01",
+        "end_date": "1999-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "1995-01-01",
+      "end_date": "1999-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "MyTho",
+      "file": "era5_MyTho_2000-01-01_2004-12-31.json",
+      "sha256": "07bbcb21705c6acf53945f8858a40317002181b9deaf00a9fe625e347149dd95",
+      "retrieved_at": "2026-10-23T04:16:51.044689+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2000-01-01&end_date=2004-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.36,
+        "longitude": 106.36,
+        "start_date": "2000-01-01",
+        "end_date": "2004-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2000-01-01",
+      "end_date": "2004-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "MyTho",
+      "file": "era5_MyTho_2005-01-01_2009-12-31.json",
+      "sha256": "e371ef1a44f215485b7d5c2bba72c37a355df3b103f1dd9eca36ad1b3c8b4a48",
+      "retrieved_at": "2026-10-23T04:16:52.636005+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2005-01-01&end_date=2009-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.36,
+        "longitude": 106.36,
+        "start_date": "2005-01-01",
+        "end_date": "2009-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2005-01-01",
+      "end_date": "2009-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "MyTho",
+      "file": "era5_MyTho_2010-01-01_2014-12-31.json",
+      "sha256": "5b61bf193585eb3c114a80f12e44269f1b96ca98462417fcf70c8846c60a83dc",
+      "retrieved_at": "2026-10-23T04:16:54.168494+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2010-01-01&end_date=2014-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.36,
+        "longitude": 106.36,
+        "start_date": "2010-01-01",
+        "end_date": "2014-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2010-01-01",
+      "end_date": "2014-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "MyTho",
+      "file": "era5_MyTho_2015-01-01_2019-12-31.json",
+      "sha256": "70954940bece8bdbbf545ce3b35ccf72eed62ee57a2593505fc4bed08876e515",
+      "retrieved_at": "2026-10-23T04:16:55.490184+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2015-01-01&end_date=2019-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.36,
+        "longitude": 106.36,
+        "start_date": "2015-01-01",
+        "end_date": "2019-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2015-01-01",
+      "end_date": "2019-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "MyTho",
+      "file": "era5_MyTho_2020-01-01_2024-12-31.json",
+      "sha256": "44ae7303979eae69a11a4c2dce51391970cb56fe24d8e6266b7f51489bac26b7",
+      "retrieved_at": "2026-10-23T04:16:57.222513+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2020-01-01&end_date=2024-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.36,
+        "longitude": 106.36,
+        "start_date": "2020-01-01",
+        "end_date": "2024-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2020-01-01",
+      "end_date": "2024-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "MyTho",
+      "file": "era5_MyTho_2025-01-01_2026-09-30.json",
+      "sha256": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+      "retrieved_at": "2026-10-23T04:16:58.471583+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.36&longitude=106.36&start_date=2025-01-01&end_date=2026-09-30&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.36,
+        "longitude": 106.36,
+        "start_date": "2025-01-01",
+        "end_date": "2026-09-30",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2025-01-01",
+      "end_date": "2026-09-30",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "TanChau",
+      "file": "era5_TanChau_1985-01-01_1989-12-31.json",
+      "sha256": "b6eaef2bbaa3985db3e2f89f1f5ac682738ab37d0e0c7aedb8ca803219f46657",
+      "retrieved_at": "2026-10-23T04:16:59.792343+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.804&longitude=105.234&start_date=1985-01-01&end_date=1989-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.804,
+        "longitude": 105.234,
+        "start_date": "1985-01-01",
+        "end_date": "1989-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "1985-01-01",
+      "end_date": "1989-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "TanChau",
+      "file": "era5_TanChau_1990-01-01_1994-12-31.json",
+      "sha256": "8eefee5b5e63ea116c76da0c267a8043d449958db2abddaa4d3c1548f74a3742",
+      "retrieved_at": "2026-10-23T04:17:01.290403+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.804&longitude=105.234&start_date=1990-01-01&end_date=1994-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.804,
+        "longitude": 105.234,
+        "start_date": "1990-01-01",
+        "end_date": "1994-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "1990-01-01",
+      "end_date": "1994-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "TanChau",
+      "file": "era5_TanChau_1995-01-01_1999-12-31.json",
+      "sha256": "1e0927dbb089cc7a47c54af64656d179e07c4952a98500047599e0acb29126aa",
+      "retrieved_at": "2026-10-23T04:17:02.671556+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.804&longitude=105.234&start_date=1995-01-01&end_date=1999-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.804,
+        "longitude": 105.234,
+        "start_date": "1995-01-01",
+        "end_date": "1999-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "1995-01-01",
+      "end_date": "1999-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "TanChau",
+      "file": "era5_TanChau_2000-01-01_2004-12-31.json",
+      "sha256": "b10c51d00915f042665383f00a74353d63e85ec279a1e8b97bc327d36911d3c4",
+      "retrieved_at": "2026-10-23T04:17:04.156886+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.804&longitude=105.234&start_date=2000-01-01&end_date=2004-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.804,
+        "longitude": 105.234,
+        "start_date": "2000-01-01",
+        "end_date": "2004-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2000-01-01",
+      "end_date": "2004-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "TanChau",
+      "file": "era5_TanChau_2005-01-01_2009-12-31.json",
+      "sha256": "d513aace4198d682cb9e4ac9b244487938c955fdc7b86017f646e8e7822ad6b4",
+      "retrieved_at": "2026-10-23T04:17:05.599814+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.804&longitude=105.234&start_date=2005-01-01&end_date=2009-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.804,
+        "longitude": 105.234,
+        "start_date": "2005-01-01",
+        "end_date": "2009-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2005-01-01",
+      "end_date": "2009-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "TanChau",
+      "file": "era5_TanChau_2010-01-01_2014-12-31.json",
+      "sha256": "4a26c8c8f644bb978daa5c01a31ef03fd323bd9f79fbb3993b87415092e53a32",
+      "retrieved_at": "2026-10-23T04:17:07.194772+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.804&longitude=105.234&start_date=2010-01-01&end_date=2014-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.804,
+        "longitude": 105.234,
+        "start_date": "2010-01-01",
+        "end_date": "2014-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2010-01-01",
+      "end_date": "2014-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "TanChau",
+      "file": "era5_TanChau_2015-01-01_2019-12-31.json",
+      "sha256": "abc00a9db129ea38e4c720ce8a04eb96d18600a10e6be18174d561b17e11ccaf",
+      "retrieved_at": "2026-10-23T04:17:08.645697+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.804&longitude=105.234&start_date=2015-01-01&end_date=2019-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.804,
+        "longitude": 105.234,
+        "start_date": "2015-01-01",
+        "end_date": "2019-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2015-01-01",
+      "end_date": "2019-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "TanChau",
+      "file": "era5_TanChau_2020-01-01_2024-12-31.json",
+      "sha256": "9058526e3833ed8ea53174c4e2ffa3f3edd2e894a36dea815f82e6e0fc56084f",
+      "retrieved_at": "2026-10-23T04:17:10.056800+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.804&longitude=105.234&start_date=2020-01-01&end_date=2024-12-31&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.804,
+        "longitude": 105.234,
+        "start_date": "2020-01-01",
+        "end_date": "2024-12-31",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2020-01-01",
+      "end_date": "2024-12-31",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    },
+    {
+      "station": "TanChau",
+      "file": "era5_TanChau_2025-01-01_2026-09-30.json",
+      "sha256": "f87718b0b6d4a9acbae1ba4bd4477bacc87549905ff70b7f7fc096ebbc036fa7",
+      "retrieved_at": "2026-10-23T04:17:11.272757+00:00",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=10.804&longitude=105.234&start_date=2025-01-01&end_date=2026-09-30&daily=precipitation_sum%2Ctemperature_2m_mean%2Cwind_speed_10m_mean&models=era5&timezone=Asia%2FHo_Chi_Minh&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm",
+      "request_parameters": {
+        "latitude": 10.804,
+        "longitude": 105.234,
+        "start_date": "2025-01-01",
+        "end_date": "2026-09-30",
+        "daily": "precipitation_sum,temperature_2m_mean,wind_speed_10m_mean",
+        "models": "era5",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "wind_speed_unit": "ms",
+        "temperature_unit": "celsius",
+        "precipitation_unit": "mm"
+      },
+      "daily_units": {
+        "time": "iso8601",
+        "precipitation_sum": "mm",
+        "temperature_2m_mean": "\u00b0C",
+        "wind_speed_10m_mean": "m/s"
+      },
+      "start_date": "2025-01-01",
+      "end_date": "2026-09-30",
+      "source": "Open-Meteo archive / ERA5",
+      "wind_statistic": "monthly mean of daily mean 10m wind speed",
+      "license": "CC-BY-4.0",
+      "citation": "ERA5 / Copernicus Climate Change Service via Open-Meteo"
+    }
+  ],
+  "updated_at": "2026-10-23T04:17:11.272757+00:00"
+}

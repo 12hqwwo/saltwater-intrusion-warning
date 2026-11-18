@@ -23,6 +23,9 @@ backend/domain/river_interpolation.py text eol=crlf
 outputs/frozen_ec_remedies_20261108/source_snapshots/scripts/evaluate_frozen_ec_gap_remedies.py -text
 outputs/mythuan_three_station_20261104/source_snapshots/scripts/evaluate_mythuan_three_station.py -text
 outputs/mythuan_three_station_20261104/source_snapshots/scripts/train_multivariate_ec.py -text
+outputs/mythuan_three_station_20261104/source_snapshots/data/external/multivariate_weather/manifest.json -text whitespace=cr-at-eol
+outputs/mythuan_three_station_20261104/*.csv text eol=crlf
+outputs/mythuan_three_station_20261104/*.md text eol=crlf
 
 # Checksummed research snapshots and model evidence must keep exact source bytes
 # across Windows and Linux checkouts. Git line-ending conversion invalidates SHA-256.
