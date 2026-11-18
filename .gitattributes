@@ -14,3 +14,12 @@ backend/domain/river_interpolation.py text eol=crlf
 outputs/frozen_ec_remedies_20261108/source_snapshots/scripts/evaluate_frozen_ec_gap_remedies.py -text
 outputs/mythuan_three_station_20261104/source_snapshots/scripts/evaluate_mythuan_three_station.py -text
 outputs/mythuan_three_station_20261104/source_snapshots/scripts/train_multivariate_ec.py -text
+
+# Checksummed research snapshots and model evidence must keep exact source bytes
+# across Windows and Linux checkouts. Git line-ending conversion invalidates SHA-256.
+data/research/** -text whitespace=cr-at-eol
+data/models/** -text whitespace=cr-at-eol
+runs/multivariate_ec/** -text whitespace=cr-at-eol
+outputs/frozen_ec_gap_20261104/** -text whitespace=cr-at-eol
+outputs/frozen_ec_followup_20261108/** -text whitespace=cr-at-eol
+outputs/frozen_ec_remedies_20261108/** -text whitespace=cr-at-eol
