@@ -24,6 +24,8 @@ outputs/frozen_ec_remedies_20261108/source_snapshots/scripts/evaluate_frozen_ec_
 outputs/mythuan_three_station_20261104/source_snapshots/scripts/evaluate_mythuan_three_station.py -text
 outputs/mythuan_three_station_20261104/source_snapshots/scripts/train_multivariate_ec.py -text
 outputs/mythuan_three_station_20261104/source_snapshots/data/external/multivariate_weather/manifest.json -text whitespace=cr-at-eol
+outputs/mythuan_three_station_20261104/source_snapshots/data/research/mrc_ec_monthly_samples.csv text eol=crlf
+outputs/mythuan_three_station_20261104/source_snapshots/scripts/backtest_asof_ec.py text eol=crlf
 outputs/mythuan_three_station_20261104/*.csv text eol=crlf
 outputs/mythuan_three_station_20261104/*.md text eol=crlf
 
