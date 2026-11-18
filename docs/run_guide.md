@@ -39,7 +39,9 @@ Phát triển frontend bằng `npm.cmd --prefix frontend run dev`; Vite chuyển
 
 `POST /api/v1/auth/login` và `/register` mặc định giới hạn 10 yêu cầu/IP trong 60 giây; login còn giới hạn 5 lần theo cặp `(IP, username viết thường)`. Có thể đặt `WEBGIS_AUTH_RATE_LIMIT_WINDOW_SECONDS`, `WEBGIS_AUTH_RATE_LIMIT_MAX_ATTEMPTS`, `WEBGIS_AUTH_USERNAME_RATE_LIMIT_MAX_ATTEMPTS` **trước khi khởi động** máy chủ. Bộ đếm ở trong bộ nhớ từng worker và tối đa 10.000 khóa; khởi động lại sẽ xóa bộ đếm. Khi đặt sau reverse proxy, cấu hình `--forwarded-allow-ips` của Uvicorn chỉ cho IP proxy tin cậy để `request.client.host` là IP người dùng. Ứng dụng không tự đọc `X-Forwarded-For`.
 
-File `sql/38_app_user_username_case_insensitive.sql` kiểm tra tài khoản trùng khác hoa/thường trước khi tạo unique index. File này được bàn giao cùng mã nhưng **chưa áp dụng vào PostgreSQL**; quản trị viên cần rà dữ liệu và triển khai migration riêng.
+File `sql/38_app_user_username_case_insensitive.sql` kiểm tra tài khoản trùng khác hoa/thường trước khi tạo unique index. Ngày 18/11/2026, migration đã được chạy riêng bằng `--apply` trên DB cục bộ `dongthap_gis`, phiên bản `38_app_user_username_case_insensitive`, checksum `93cbb62439f8ce7636787971555ef82f179e139e50d1654b8b0526ef7a1d5c92`. DB khác vẫn cần rà dữ liệu và triển khai migration riêng; không chạy lại chỉ vì file có trong repo.
+
+Hai test hợp đồng PostgreSQL trong `tests/test_dss_postgres_contract.py` đã đạt trên DB tách biệt `webgis_test_20261118` có PostGIS; chúng dùng bảng tạm và rollback. Migration 38 cũng được thử trên DB này với username trùng, chạy lặp và ràng buộc unique. Một test bằng chứng nguồn Mỹ Thuận vẫn skip vì checksum của `data/external/multivariate_weather/manifest.json` hiện tại khác manifest của thí nghiệm cũ và bản snapshot gốc không có trong repo; không sửa checksum lịch sử để làm test đạt.
 
 ## Đo hiệu năng cục bộ
 
@@ -55,7 +57,7 @@ Mỗi bên dùng 10 mẫu tuần tự trên cùng máy và payload trong script;
 
 ## Docker và CI
 
-`Dockerfile` tạo frontend rồi chạy API ở chế độ snapshot. Cần cấp `WEBGIS_AUTH_SECRET` (ít nhất 32 ký tự) lúc chạy container; không đưa bí mật vào image. Ví dụ sau khi đặt biến môi trường trên máy chủ: `docker build -t webgis-tlcn .` và `docker run --rm -p 127.0.0.1:8000:8000 -e WEBGIS_AUTH_SECRET webgis-tlcn`. Máy hiện tại chưa cài Docker, nên image chưa được build/chạy thử. Workflow `.github/workflows/ci.yml` chạy kiểm thử Python, kiểm thử frontend và build Vite khi push hoặc tạo PR; chưa có kết quả chạy trên GitHub Actions trong lượt này.
+`Dockerfile` tạo frontend rồi chạy API ở chế độ snapshot. Cần cấp `WEBGIS_AUTH_SECRET` (ít nhất 32 ký tự) lúc chạy container; không đưa bí mật vào image. Ví dụ sau khi đặt biến môi trường trên máy chủ: `docker build -t webgis-tlcn .` và `docker run --rm -p 127.0.0.1:8000:8000 -e WEBGIS_AUTH_SECRET webgis-tlcn`. Workflow `.github/workflows/ci.yml` chạy kiểm thử Python với DB PostGIS riêng, kiểm thử frontend, build Vite, đồng thời build và smoke-test Docker image khi push hoặc tạo PR. Kết quả CI phải được xác nhận từ một lượt chạy GitHub Actions thực tế.
 
 ## PostgreSQL/PostGIS
 

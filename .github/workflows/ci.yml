@@ -7,6 +7,18 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_DB: webgis_test_ci
+          POSTGRES_USER: webgis_test
+          POSTGRES_PASSWORD: webgis_test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U webgis_test -d webgis_test_ci"
+          --health-interval 10s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -14,6 +26,10 @@ jobs:
           python-version: '3.12'
       - name: Install Python dependencies
         run: python -m pip install -r requirements-dev.txt
+      - name: Enable PostGIS in isolated test database
+        env:
+          WEBGIS_TEST_PG_DSN: postgresql://webgis_test:webgis_test_password@127.0.0.1:5432/webgis_test_ci
+        run: python -c "import os, psycopg; c = psycopg.connect(os.environ['WEBGIS_TEST_PG_DSN']); c.execute('CREATE EXTENSION IF NOT EXISTS postgis'); c.commit(); c.close()"
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -22,8 +38,30 @@ jobs:
       - name: Install frontend dependencies
         run: npm --prefix frontend ci
       - name: Python tests
+        env:
+          WEBGIS_TEST_PG_DSN: postgresql://webgis_test:webgis_test_password@127.0.0.1:5432/webgis_test_ci
         run: python -m unittest discover -s tests -p 'test_*.py'
       - name: Frontend tests
         run: node --test frontend/src/auth/auth-service.test.js frontend/src/features/gate-simulation-draft.test.js
       - name: Build frontend
         run: npm --prefix frontend run build
+
+  container-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build --tag webgis-tlcn-ci .
+      - name: Start snapshot container and check API
+        run: |
+          docker run -d --name webgis-smoke -p 127.0.0.1:8000:8000 \
+            -e WEBGIS_AUTH_SECRET=ci-only-test-secret-at-least-32-characters \
+            webgis-tlcn-ci
+          for i in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:8000/api/v1/app-health > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs webgis-smoke
+          exit 1
