@@ -49,9 +49,12 @@ jobs:
           if [ "$status" -ne 0 ]; then
             python - <<'PY'
           from pathlib import Path
-          output = Path('/tmp/webgis-python-tests.log').read_text(errors='replace')[-48000:]
-          escaped = output.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
-          print('::error title=Python tests failed::' + escaped)
+          output = Path('/tmp/webgis-python-tests.log').read_text(errors='replace')
+          sections = output.split('\n' + '=' * 70 + '\n')
+          failures = [part for part in sections if part.startswith(('ERROR:', 'FAIL:'))]
+          for index, part in enumerate(failures or [output[-3000:]], 1):
+              escaped = part[:3500].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+              print(f'::error title=Python test failure {index}::' + escaped)
           PY
           fi
           exit "$status"

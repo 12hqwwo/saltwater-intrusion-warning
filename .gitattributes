@@ -4,6 +4,14 @@ data/external/user_v3_review_20261015/webgis_dongthap_tiengiang_spatial_v3.json 
 data/external/user_v3_review_20261015/normalized_review.json text eol=lf
 data/biengioi/tien_osm_waterways_source.json text eol=lf
 data/external/multivariate_weather/manifest.json -text
+data/external/mythuan_weather_20261104/manifest.json text eol=crlf
+"data/external/mrc_kratie_discharge_20261029/014901_Discharge_Calculated daily discharge_22a8130e.csv" text eol=crlf
+data/external/tien_manual_long_20261029/019803_Water_Level_Manual_3bd17f3a.csv text eol=crlf
+data/external/tien_manual_2024_2026_20261029/019803_Water_Level_Manual_3bd17f3a.csv text eol=crlf
+data/external/mrc_20261014_network/019803_Conductivity_Water_Quality_bc365241.csv text eol=crlf
+data/external/mrc_20261014_network/019805_Conductivity_Water_Quality_acce65db.csv text eol=crlf
+"data/external/tien_multisite_20261029_verified/019804_Conductivity_Water Quality_4c105414.csv" text eol=crlf
+data/external/tien_multisite_20261029_verified/manifest.json text eol=crlf
 # Frozen EC gap evidence hashes these source files with CRLF line endings.
 scripts/evaluate_frozen_ec_gap.py text eol=crlf
 scripts/train_multivariate_ec.py text eol=crlf
