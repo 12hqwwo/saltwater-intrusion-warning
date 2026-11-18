@@ -9,7 +9,7 @@ import hashlib
 import json
 import math
 from statistics import mean, median
-from threading import RLock
+from threading import Event, RLock
 from zoneinfo import ZoneInfo
 
 import psycopg
@@ -26,6 +26,8 @@ SALINITY_FACTOR = 0.0064
 LOCAL_TZ = ZoneInfo('Asia/Ho_Chi_Minh')
 _MONTH_CACHE = OrderedDict()
 _MONTH_CACHE_LOCK = RLock()
+_MONTH_BUILD_EVENT = None
+_MONTH_GENERATION = 0
 _CACHE_METADATA = ContextVar('spatial_month_cache_metadata', default=None)
 
 
@@ -376,7 +378,9 @@ def cache_metadata():
 
 
 def _clear_monthly_cache():
+    global _MONTH_GENERATION
     with _MONTH_CACHE_LOCK:
+        _MONTH_GENERATION += 1
         _MONTH_CACHE.clear()
         _model_forecast.cache_clear()
     _CACHE_METADATA.set(None)
@@ -384,34 +388,63 @@ def _clear_monthly_cache():
 
 def monthly_inputs():
     """One build per source stamp; stale same-day fallback is explicit in API metadata."""
+    global _MONTH_BUILD_EVENT
     unavailable = 'Spatial simulation monthly evidence is unavailable or invalid.'
     try:
         stamp = source_stamp()
     except (OSError, ValueError, TypeError, KeyError, IndexError, AttributeError,
             psycopg.Error) as exc:
         raise WorkspaceError(503, unavailable) from exc
-    with _MONTH_CACHE_LOCK:
-        cached = _MONTH_CACHE.get(stamp)
-        if cached is not None:
-            _MONTH_CACHE.move_to_end(stamp)
-            _CACHE_METADATA.set(dict(cache_status='FRESH', built_at=cached['built_at']))
-            return cached['data']
-        if _MONTH_CACHE:
-            _model_forecast.cache_clear()
+    while True:
+        with _MONTH_CACHE_LOCK:
+            cached = _MONTH_CACHE.get(stamp)
+            if cached is not None:
+                _MONTH_CACHE.move_to_end(stamp)
+                _CACHE_METADATA.set(dict(cache_status='FRESH', built_at=cached['built_at']))
+                return cached['data']
+            if _MONTH_BUILD_EVENT is not None:
+                previous_stamp = next(reversed(_MONTH_CACHE), None)
+                previous = _MONTH_CACHE.get(previous_stamp)
+                if previous is not None and previous_stamp[0] == stamp[0]:
+                    _CACHE_METADATA.set(dict(cache_status='STALE', built_at=previous['built_at']))
+                    return previous['data']
+                waiting_for = _MONTH_BUILD_EVENT
+            else:
+                waiting_for = None
+                building = Event()
+                _MONTH_BUILD_EVENT = building
+                generation = _MONTH_GENERATION
+                if _MONTH_CACHE:
+                    _model_forecast.cache_clear()
+        if waiting_for is not None:
+            waiting_for.wait()
+            continue
         try:
             data = _monthly_inputs()
         except (OSError, ValueError, TypeError, KeyError, IndexError, AttributeError, OverflowError,
                 psycopg.Error) as exc:
-            previous_stamp = next(reversed(_MONTH_CACHE), None)
-            previous = _MONTH_CACHE.get(previous_stamp)
+            with _MONTH_CACHE_LOCK:
+                previous_stamp = next(reversed(_MONTH_CACHE), None)
+                previous = _MONTH_CACHE.get(previous_stamp)
+                _MONTH_BUILD_EVENT = None
+                building.set()
             if previous is not None and previous_stamp[0] == stamp[0]:
                 _CACHE_METADATA.set(dict(cache_status='STALE', built_at=previous['built_at']))
                 return previous['data']
             raise WorkspaceError(503, unavailable) from exc
-        entry = dict(data=data, built_at=datetime.now(LOCAL_TZ).isoformat())
-        _MONTH_CACHE[stamp] = entry
-        while len(_MONTH_CACHE) > 2:
-            _MONTH_CACHE.popitem(last=False)
+        except BaseException:
+            with _MONTH_CACHE_LOCK:
+                _MONTH_BUILD_EVENT = None
+                building.set()
+            raise
+        with _MONTH_CACHE_LOCK:
+            entry = dict(data=data, built_at=datetime.now(LOCAL_TZ).isoformat())
+            if generation == _MONTH_GENERATION:
+                _MONTH_CACHE[stamp] = entry
+                while len(_MONTH_CACHE) > 2:
+                    _MONTH_CACHE.popitem(last=False)
+            _MONTH_BUILD_EVENT = None
+            building.set()
         _CACHE_METADATA.set(dict(cache_status='FRESH', built_at=entry['built_at']))
         return data
 

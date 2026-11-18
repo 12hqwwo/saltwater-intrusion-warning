@@ -7,9 +7,10 @@ import hashlib
 import json
 import os
 import psycopg
+import time
 from pathlib import Path
 from backend.domain.workspace import validate_bundle
-from backend.database import read_connection, STATIONS_SQL, DATASETS_SELECT, DATASETS_GROUP
+from backend.database import read_connection, STATIONS_SQL
 from backend.schemas import LOCAL_TZ
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -47,7 +48,9 @@ def load_bundle():
             path.with_name('workspace_manifest.json').stat().st_mtime_ns,
         )
         if mode == 'postgres':
-            return _postgres_bundle(bundle)
+            return _postgres_cached_bundle(str(path), path.stat().st_mtime_ns,
+                                           path.with_name('workspace_manifest.json').stat().st_mtime_ns,
+                                           bundle_stamp())
         return dict(bundle, storage_mode='snapshot', observation_source='RESEARCH_SNAPSHOT',
                     dataset_selection='BUNDLED_SNAPSHOT')
     except (OSError, ValueError, KeyError, TypeError, psycopg.Error) as exc:
@@ -67,6 +70,12 @@ def bundle_stamp():
         return (mode, files)
     if mode != 'postgres':
         raise ValueError('WEBGIS_RESEARCH_MODE must be snapshot or postgres.')
+    return _postgres_stamp_for_bucket(int(time.monotonic() // 30), files,
+                                      os.getenv('WEBGIS_WORKSPACE_DATASETS', '{}'))
+
+
+@lru_cache(maxsize=2)
+def _postgres_stamp_for_bucket(bucket, files, selection):
     with read_connection() as conn:
         datasets = conn.execute('''
             SELECT dataset_id, sha256, imported_at,
@@ -79,8 +88,13 @@ def bundle_stamp():
             SELECT count(*) AS observation_count, max(ec_observation_id) AS last_observation_id
             FROM public.conductivity_observation
         ''').fetchone()
-    return (mode, files, os.getenv('WEBGIS_WORKSPACE_DATASETS', '{}'),
+    return ('postgres', files, selection,
             tuple(tuple(row.items()) for row in datasets), tuple(observations.items()))
+
+
+@lru_cache(maxsize=2)
+def _postgres_cached_bundle(path, stamp, manifest_stamp, version):
+    return _postgres_bundle(_file_bundle(path, stamp, manifest_stamp))
 
 
 def _snapshot_reference_points(bundle, database_site_codes, database_source_codes):
@@ -113,36 +127,73 @@ def _postgres_bundle(bundle):
         site_rows = conn.execute(STATIONS_SQL).fetchall()
         if set(wanted) - {s['site_code'] for s in site_rows}:
             raise ValueError('Configured dataset selection references an unknown station.')
+        site_ids = {row['site_code']: row['site_id'] for row in conn.execute('''
+            SELECT site_code, site_id FROM public.measurement_site
+            WHERE site_code = ANY(%s)''', ([site['site_code'] for site in site_rows],)).fetchall()}
         sources = conn.execute('''SELECT source_code AS source_id, source_code,
             source_name, source_type, reference FROM public.data_source
             WHERE NOT is_demo ORDER BY source_code''').fetchall()
         for source in sources:
             source.update(provider=source['source_code'],
                 url=source['reference'] if source['reference'].startswith('https://') else None)
+        available_by_site = {site_id: [] for site_id in site_ids.values()}
+        if site_ids:
+            for dataset in conn.execute('''SELECT o.site_id, d.dataset_id, d.dataset_code,
+                d.sha256, d.source_filename, d.imported_at, src.source_code,
+                d.metadata->>'time_precision' AS time_precision,
+                count(*) AS observation_count, min(o.observed_at) AS first_observation,
+                max(o.observed_at) AS last_observation,
+                count(*) FILTER (WHERE o.observed_or_estimated='O') AS observed_rows,
+                count(*) FILTER (WHERE o.observed_or_estimated='E') AS estimated_rows,
+                count(*) FILTER (WHERE o.quality_flag='UNVERIFIED') AS unverified_rows,
+                count(*) FILTER (WHERE o.quality_flag='VALIDATED') AS validated_rows,
+                count(*) FILTER (WHERE o.quality_flag='SUSPECT') AS suspect_rows,
+                count(*) FILTER (WHERE o.quality_flag='INVALID') AS invalid_rows
+                FROM public.conductivity_observation o
+                JOIN public.source_dataset d ON d.dataset_id=o.dataset_id
+                JOIN public.data_source src ON src.source_id=d.source_id
+                WHERE o.site_id = ANY(%s) AND d.dataset_kind='RAW_EC'
+                  AND NOT d.is_demo AND NOT src.is_demo
+                GROUP BY o.site_id,d.dataset_id,d.dataset_code,d.sha256,d.source_filename,
+                         d.imported_at,src.source_code,d.metadata
+                ORDER BY d.imported_at DESC,d.dataset_code''',
+                (list(site_ids.values()),)).fetchall():
+                available_by_site[dataset['site_id']].append(dataset)
+        selected_by_site = {}
         for site in site_rows:
-            fallback = bundle_stations.get(site['site_code'], {})
-            site_id = conn.execute('SELECT site_id FROM public.measurement_site WHERE site_code=%s',
-                                   (site['site_code'],)).fetchone()['site_id']
-            available = conn.execute(DATASETS_SELECT + DATASETS_GROUP, (site_id,)).fetchall()
+            available = available_by_site[site_ids[site['site_code']]]
             selected = next((d for d in available if d['dataset_code'] == wanted[site['site_code']]), None) if site['site_code'] in wanted else next(iter(available), None)
             if site['site_code'] in wanted and selected is None:
                 raise ValueError('Configured RAW_EC dataset is unavailable for this station.')
+            selected_by_site[site['site_code']] = selected
+        rows_by_pair = {}
+        pairs = {(site_ids[code], dataset['dataset_id']) for code, dataset in selected_by_site.items() if dataset}
+        if pairs:
+            for row in conn.execute('''SELECT site_id,dataset_id,ec_observation_id,source_row,observed_at,
+                conductivity_ms_per_m,unit,observed_or_estimated,quality_flag,
+                approval_level,grade,source_label FROM public.conductivity_observation
+                WHERE site_id = ANY(%s) AND dataset_id = ANY(%s)
+                ORDER BY site_id,observed_at,ec_observation_id''',
+                (list({site_id for site_id, _ in pairs}), list({dataset_id for _, dataset_id in pairs}))).fetchall():
+                pair = (row['site_id'], row['dataset_id'])
+                if pair in pairs:
+                    rows_by_pair.setdefault(pair, []).append(row)
+        for site in site_rows:
+            fallback = bundle_stations.get(site['site_code'], {})
+            site_id = site_ids[site['site_code']]
+            available = available_by_site[site_id]
+            selected = selected_by_site[site['site_code']]
             for dataset in available:
-                datasets.append(dict(dataset, site_code=site['site_code'], selected=dataset is selected))
-            rows = conn.execute('''SELECT ec_observation_id, source_row, observed_at,
-                conductivity_ms_per_m, unit, observed_or_estimated, quality_flag,
-                approval_level, grade, source_label FROM public.conductivity_observation
-                WHERE site_id=%s AND dataset_id=%s ORDER BY observed_at, ec_observation_id''',
-                (site_id, selected['dataset_id'])).fetchall() if selected else []
-            precision = conn.execute(
-                "SELECT metadata->>'time_precision' AS time_precision FROM public.source_dataset WHERE dataset_id=%s",
-                (selected['dataset_id'],),
-            ).fetchone()['time_precision'] if selected else None
+                datasets.append(dict({key: value for key, value in dataset.items()
+                                      if key not in {'site_id', 'time_precision'}},
+                                     site_code=site['site_code'], selected=dataset is selected))
+            rows = rows_by_pair.get((site_id, selected['dataset_id']), []) if selected else []
+            precision = selected['time_precision'] if selected else None
             date_only = precision == 'DATE_ONLY'
             station_rows = []
             for row in rows:
                 local_time = row['observed_at'].astimezone(LOCAL_TZ)
-                station_rows.append(dict(row, site_code=site['site_code'],
+                station_rows.append(dict({key: value for key, value in row.items() if key != 'site_id'}, site_code=site['site_code'],
                     observed_at=None if date_only else local_time.isoformat(), observed_date=local_time.date().isoformat(),
                     time_precision='DATE_ONLY' if date_only else 'SOURCE_TIMESTAMP', ec_mS_m=float(row['conductivity_ms_per_m']),
                     source_id=site['source_code'], source_sha256=selected['sha256'],

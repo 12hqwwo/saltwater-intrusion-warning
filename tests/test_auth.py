@@ -2,6 +2,8 @@ import os
 import unittest
 from unittest.mock import patch
 from uuid import UUID
+import psycopg
+from psycopg_pool import PoolTimeout
 from psycopg.errors import UniqueViolation
 
 from fastapi.testclient import TestClient
@@ -11,9 +13,10 @@ from backend.auth.access_tokens import issue_access_token
 from backend.auth.password_hashing import hash_password, verify_password
 from backend.main import app
 from backend.repositories import app_users
-from backend.services import field_measurements, forecast_issues
+from backend.services import dss_storage, field_measurements, forecast_issues
 from backend.domain.gate_intake_rules import DEFAULT_PROFILE
 from backend.security import actor, reset_rate_limits
+from backend import security
 
 
 USER_ID = UUID('00000000-0000-0000-0000-000000000123')
@@ -68,7 +71,7 @@ class AuthTests(unittest.TestCase):
         verify.assert_called_once()
 
     def test_login_rate_limited_after_too_many_attempts(self):
-        with patch.dict(os.environ, WEBGIS_AUTH_RATE_LIMIT_MAX_ATTEMPTS='3'), \
+        with patch.object(security, '_RATE_LIMIT_MAX_ATTEMPTS', 3), \
              patch.object(app_users, 'find_active_user_by_username', return_value=None):
             for _ in range(3):
                 self.assertEqual(self.client.post('/api/v1/auth/login',
@@ -76,6 +79,39 @@ class AuthTests(unittest.TestCase):
             blocked = self.client.post('/api/v1/auth/login', json={'username': 'staff', 'password': 'wrong-password'})
         self.assertEqual(blocked.status_code, 429)
         self.assertIn('Retry-After', blocked.headers)
+
+    def test_login_username_limit_normalizes_case(self):
+        with patch.object(security, '_RATE_LIMIT_MAX_ATTEMPTS', 10), \
+             patch.object(security, '_RATE_LIMIT_USERNAME_MAX_ATTEMPTS', 2), \
+             patch.object(app_users, 'find_active_user_by_username', return_value=None):
+            for name in ('Staff', 'staff'):
+                self.assertEqual(self.client.post('/api/v1/auth/login',
+                    json={'username': name, 'password': 'wrong-password'}).status_code, 401)
+            blocked = self.client.post('/api/v1/auth/login',
+                json={'username': 'STAFF', 'password': 'wrong-password'})
+        self.assertEqual(blocked.status_code, 429)
+
+    def test_registration_rate_limit_and_bounded_state(self):
+        request = {'username': 'new.staff', 'display_name': 'Cán bộ mới', 'password': 'long-test-password'}
+        with patch.object(security, '_RATE_LIMIT_MAX_ATTEMPTS', 1), \
+             patch.object(app_users, 'create_pending_user'):
+            self.assertEqual(self.client.post('/api/v1/auth/register', json=request).status_code, 201)
+            response = self.client.post('/api/v1/auth/register', json=request)
+        self.assertEqual(response.status_code, 429)
+        self.assertIn('Retry-After', response.headers)
+        reset_rate_limits()
+        with patch.object(security, '_RATE_LIMIT_MAX_KEYS', 3):
+            for index in range(8):
+                security._enforce_rate_limit(('ip', str(index), 'login'), 10)
+        self.assertLessEqual(len(security._rate_limit_state), 3)
+
+    def test_public_api_survives_auth_database_failure(self):
+        token = issue_access_token(self.user)
+        headers = {'Authorization': f'Bearer {token}'}
+        for failure in (psycopg.OperationalError('database down'), PoolTimeout('pool busy')):
+            with patch.object(app_users, 'find_active_user_by_id', side_effect=failure):
+                response = self.client.get('/api/v1/app-health', headers=headers)
+            self.assertEqual(response.status_code, 200)
 
     def test_registration_is_pending_and_cannot_choose_role(self):
         request = {'username': 'new.staff', 'display_name': 'Cán bộ mới', 'password': 'long-test-password'}
@@ -115,9 +151,36 @@ class AuthTests(unittest.TestCase):
             self.assertEqual(approve.call_args.args, (pending_id, USER_ID))
 
     def test_guest_cannot_access_multivariate_api_aliases(self):
-        for prefix in ('/api/v1/multivariate', '/api/v1/workspace/multivariate', '/api/v1/research/multivariate'):
+        for prefix in ('/api/v1/multivariate', '/api/v1/workspace/multivariate'):
             self.assertEqual(self.client.get(f'{prefix}/catalog').status_code, 401)
             self.assertEqual(self.client.post(f'{prefix}/predict', json={'station': 'MyTho', 'target_month': '2026-12'}).status_code, 401)
+        self.assertEqual(self.client.get('/api/v1/research/multivariate/catalog').status_code, 404)
+
+    def test_guest_cannot_read_saved_predictions_or_gate_drafts(self):
+        urls = ('/api/v1/multivariate/history', '/api/v1/workspace/multivariate/history',
+                '/api/v1/multivariate/history/00000000-0000-0000-0000-000000000123',
+                '/api/v1/workspace/multivariate/history/00000000-0000-0000-0000-000000000123',
+                '/api/v1/workspace/gate-drafts?gate_code=G1')
+        for url in urls:
+            with self.subTest(url=url):
+                self.assertEqual(self.client.get(url).status_code, 401)
+        self.assertEqual(self.client.get('/api/v1/research/gate-drafts?gate_code=G1').status_code, 404)
+
+    def test_staff_and_inspector_can_read_saved_data(self):
+        prediction_id = '00000000-0000-0000-0000-000000000123'
+        for role in ('FIELD_STAFF', 'INSPECTOR'):
+            user = self.user | {'role': role}
+            headers = {'Authorization': f'Bearer {issue_access_token(user)}'}
+            with self.subTest(role=role), \
+                 patch.object(app_users, 'find_active_user_by_id', return_value=user), \
+                 patch.object(dss_storage, 'predictions', return_value={'items': []}), \
+                 patch.object(dss_storage, 'prediction', return_value={'prediction': {}}), \
+                 patch.object(dss_storage, 'drafts', return_value={'items': []}):
+                for prefix in ('/api/v1/multivariate', '/api/v1/workspace/multivariate'):
+                    self.assertEqual(self.client.get(f'{prefix}/history', headers=headers).status_code, 200)
+                    self.assertEqual(self.client.get(f'{prefix}/history/{prediction_id}', headers=headers).status_code, 200)
+                self.assertEqual(self.client.get('/api/v1/workspace/gate-drafts?gate_code=G1',
+                                                 headers=headers).status_code, 200)
 
     def test_roles_cover_all_write_endpoints(self):
         token = issue_access_token(self.user)

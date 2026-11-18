@@ -24,14 +24,17 @@ class ModelLoadingTests(unittest.TestCase):
             registry.write_text(json.dumps(dict(models=dict(MYTHO=entry))))
             with patch.object(models, '_load_cached_artifact', return_value=('model', {})) as loader:
                 models.load_model('MyTho', registry)
+                with patch.object(models, 'sha256', wraps=models.sha256) as checksum:
+                    models.load_model('MyTho', registry)
+                    checksum.assert_not_called()
                 artifact.write_bytes(b'corrupted model')
                 with self.assertRaisesRegex(ValueError, 'checksum'):
                     models.load_model('MyTho', registry)
-                loader.assert_called_once()
+                self.assertEqual(loader.call_count, 2)
                 entry['model_sha256'] = models.sha256(artifact)
                 registry.write_text(json.dumps(dict(models=dict(MYTHO=entry))))
                 models.load_model('MyTho', registry)
-                self.assertNotEqual(loader.call_args_list[0].args[1], loader.call_args_list[1].args[1])
+                self.assertNotEqual(loader.call_args_list[0].args[1], loader.call_args_list[2].args[1])
 
     def test_tree_quantiles_use_transformed_pipeline_input(self):
         try:
@@ -72,8 +75,8 @@ class ReferenceStationTests(unittest.TestCase):
         connection = MagicMock()
         results = [MagicMock(), MagicMock(), MagicMock(), MagicMock()]
         results[0].fetchall.return_value = [site]
-        results[1].fetchall.return_value = []
-        results[2].fetchone.return_value = dict(site_id=1)
+        results[1].fetchall.return_value = [dict(site_code='RIA2_DT_01', site_id=1)]
+        results[2].fetchall.return_value = []
         results[3].fetchall.return_value = []
         connection.execute.side_effect = results
         with patch.object(workspace, 'read_connection') as read, patch.dict('os.environ', WEBGIS_WORKSPACE_DATASETS='{}'):

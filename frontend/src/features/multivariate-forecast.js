@@ -529,5 +529,9 @@ export function createMultivariateForecast({ onStation, onPrediction, role = get
     return true;
   }
   applyMode();
-  return { load, selectStation };
+  return { load, selectStation, clearPrivate() {
+    catalogRequests.next(); inputRequests.next(); evaluationRequests.next();
+    predictionHistory.clearPrivate();
+    clearResult('Đăng nhập để xem dự báo.');
+  } };
 }

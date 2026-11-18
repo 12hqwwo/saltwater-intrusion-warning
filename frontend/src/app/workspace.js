@@ -51,20 +51,28 @@ window.addEventListener("workspace:multivariate-clear", () => {
   observations.map.setForecast(null);
   $("mapForecastStatus").hidden = true;
 });
-let databaseHistoryMounted = false;
+let databaseHistory = null;
 let weather = null;
 let gates = createGateDossiers(observations.map, ROLE_PUBLIC);
 bindNavigation(view => roleCanViewSection(getCurrentRole(), view));
+let lastRole = null;
 window.addEventListener('workspace:auth-changed', () => {
   const role = getCurrentRole();
   applyRoleVisibility(role);
+  if (role === lastRole) return;
+  lastRole = role;
   fieldMeasurements.destroy?.();
   fieldMeasurements = createFieldMeasurements($("fieldMeasurementsHost"), role);
   gates.destroy();
   gates = createGateDossiers(observations.map, role);
-  if (role !== ROLE_PUBLIC && !databaseHistoryMounted) { createDatabaseHistory(); databaseHistoryMounted = true; }
+  if (role !== ROLE_PUBLIC && !databaseHistory) databaseHistory = createDatabaseHistory();
   if (role !== ROLE_PUBLIC) { weather?.destroy(); weather = createWeatherEstimates(); weather.load(); }
-  else { weather?.destroy(); weather = null; }
+  else {
+    weather?.destroy(); weather = null;
+    databaseHistory?.destroy(); databaseHistory = null;
+    multivariate.clearPrivate();
+    window.dispatchEvent(new CustomEvent('workspace:multivariate-clear'));
+  }
   if (role !== ROLE_PUBLIC) multivariate.load();
   loadWorkspace();
   if (role !== ROLE_PUBLIC) loadIntake();

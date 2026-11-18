@@ -9,35 +9,36 @@ from backend.services import workspace, forecasts, gates, spatial_simulation
 from backend.api.multivariate import router as multivariate_router
 from backend.api.dss_storage import router as dss_storage_router
 
+core_router = APIRouter()
 router = APIRouter()
 router.include_router(multivariate_router)
 router.include_router(dss_storage_router)
 
-router.add_api_route('/summary', workspace.summary, methods=['GET'])
-router.add_api_route('/stations', workspace.stations, methods=['GET'])
-router.add_api_route(
+core_router.add_api_route('/summary', workspace.summary, methods=['GET'])
+core_router.add_api_route('/stations', workspace.stations, methods=['GET'])
+core_router.add_api_route(
     '/stations/{site_code}/observations', workspace.observations, methods=['GET']
 )
-router.add_api_route('/experiments/{experiment_id}', workspace.experiment, methods=['GET'])
-router.add_api_route('/experiments/{experiment_id}/next-forecast', forecasts.next_forecast, methods=['GET'])
-router.add_api_route('/boundaries', workspace.boundaries, methods=['GET'])
-router.add_api_route('/gates', workspace.gates, methods=['GET'])
-router.add_api_route('/database-gates', workspace.database_gates, methods=['GET'])
-router.add_api_route('/future-forecast', forecasts.monthly_estimates, methods=['GET'])
-router.add_api_route('/monthly-estimates', forecasts.monthly_estimates, methods=['GET'])
+core_router.add_api_route('/experiments/{experiment_id}', workspace.experiment, methods=['GET'])
+core_router.add_api_route('/experiments/{experiment_id}/next-forecast', forecasts.next_forecast, methods=['GET'])
+core_router.add_api_route('/boundaries', workspace.boundaries, methods=['GET'])
+core_router.add_api_route('/gates', workspace.gates, methods=['GET'])
+core_router.add_api_route('/database-gates', workspace.database_gates, methods=['GET'])
+core_router.add_api_route('/future-forecast', forecasts.monthly_estimates, methods=['GET'])
+core_router.add_api_route('/monthly-estimates', forecasts.monthly_estimates, methods=['GET'])
 
 
-@router.get('/simulation/corridor')
+@core_router.get('/simulation/corridor')
 def simulation_corridor():
     return spatial_simulation.simulation_corridor()
 
 
-@router.get('/simulation/timeline')
+@core_router.get('/simulation/timeline')
 def simulation_timeline():
     return spatial_simulation.simulation_timeline()
 
 
-@router.get('/simulation/frame')
+@core_router.get('/simulation/frame')
 def simulation_frame(
     year_month: Annotated[str, Query(pattern=r'^\d{4}-(0[1-9]|1[0-2])$')],
     open_below_ec: Annotated[float, Query(ge=0, allow_inf_nan=False)] = 120.0,
@@ -46,7 +47,7 @@ def simulation_frame(
     return spatial_simulation.simulation_frame(year_month, open_below_ec, close_above_ec)
 
 
-@router.get('/database-gates/{gate_code}/candidate-stations')
+@core_router.get('/database-gates/{gate_code}/candidate-stations')
 def candidate_stations(
     gate_code: str,
     radius_km: Annotated[float, Query(gt=0, le=200)] = 50,
@@ -54,7 +55,7 @@ def candidate_stations(
     return workspace.candidate_stations(gate_code, radius_km)
 
 
-@router.get('/gate-template/{kind}')
+@core_router.get('/gate-template/{kind}')
 def gate_template(
     kind: str,
     gate_code: Annotated[str | None, Query(max_length=64)] = None,
@@ -62,7 +63,7 @@ def gate_template(
     return workspace.gate_template(kind, gate_code)
 
 
-@router.post('/gate-evaluation')
+@core_router.post('/gate-evaluation')
 async def gate_evaluation(request: Request):
     chunks, size = [], 0
     async for chunk in request.stream():
@@ -86,7 +87,7 @@ async def gate_evaluation(request: Request):
         ) from exc
 
 
-@router.get('/monthly-estimates/export')
+@core_router.get('/monthly-estimates/export')
 def export_estimates(station: str | None = None):
     result = forecasts.monthly_estimates(station)
     stream = io.StringIO(newline='')
@@ -106,7 +107,7 @@ def export_estimates(station: str | None = None):
     )
 
 
-@router.get('/artifacts/{experiment_id}/{filename}')
+@core_router.get('/artifacts/{experiment_id}/{filename}')
 def artifact(experiment_id: str, filename: str):
     return FileResponse(
         workspace.artifact_path(experiment_id, filename),
@@ -114,9 +115,12 @@ def artifact(experiment_id: str, filename: str):
     )
 
 
-@router.get('/gate-source')
+@core_router.get('/gate-source')
 def gate_source():
     return FileResponse(
         workspace.ROOT / 'data/raw/gates/dongthap_gate_catalog_2025.pdf',
         media_type='application/pdf',
     )
+
+
+router.include_router(core_router)

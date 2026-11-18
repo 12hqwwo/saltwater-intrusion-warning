@@ -2,8 +2,10 @@ import os
 import time
 from contextvars import ContextVar
 from threading import Lock
+import psycopg
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
+from starlette.concurrency import run_in_threadpool
 from starlette.middleware.base import BaseHTTPMiddleware
 
 actor = ContextVar('webgis_actor', default='LOCAL_APPLICATION')
@@ -11,7 +13,11 @@ REFERRER_POLICY_ORIGIN_ONLY_CROSS_SITE = 'strict-origin-when-cross-origin'
 
 RATE_LIMITED_PATHS = {'/api/v1/auth/login', '/api/v1/auth/register'}
 _rate_limit_lock = Lock()
-_rate_limit_state: dict[tuple[str, str], tuple[float, int]] = {}
+_rate_limit_state: dict[tuple[str, ...], tuple[float, int]] = {}
+_RATE_LIMIT_WINDOW_SECONDS = max(1, int(os.getenv('WEBGIS_AUTH_RATE_LIMIT_WINDOW_SECONDS', '60')))
+_RATE_LIMIT_MAX_ATTEMPTS = max(1, int(os.getenv('WEBGIS_AUTH_RATE_LIMIT_MAX_ATTEMPTS', '10')))
+_RATE_LIMIT_USERNAME_MAX_ATTEMPTS = max(1, int(os.getenv('WEBGIS_AUTH_USERNAME_RATE_LIMIT_MAX_ATTEMPTS', '5')))
+_RATE_LIMIT_MAX_KEYS = 10_000
 
 
 def enabled():
@@ -23,20 +29,29 @@ def reset_rate_limits():
         _rate_limit_state.clear()
 
 
-def _enforce_rate_limit(client_ip, path):
-    window_seconds = int(os.getenv('WEBGIS_AUTH_RATE_LIMIT_WINDOW_SECONDS', '60'))
-    max_attempts = int(os.getenv('WEBGIS_AUTH_RATE_LIMIT_MAX_ATTEMPTS', '10'))
-    key = (client_ip, path)
+def _enforce_rate_limit(key, max_attempts):
     now = time.monotonic()
     with _rate_limit_lock:
+        if len(_rate_limit_state) >= _RATE_LIMIT_MAX_KEYS and key not in _rate_limit_state:
+            expired = [item for item, (started, _) in _rate_limit_state.items()
+                       if now - started >= _RATE_LIMIT_WINDOW_SECONDS]
+            for item in expired:
+                del _rate_limit_state[item]
+            if len(_rate_limit_state) >= _RATE_LIMIT_MAX_KEYS:
+                oldest = min(_rate_limit_state, key=lambda item: _rate_limit_state[item][0])
+                del _rate_limit_state[oldest]
         window_start, count = _rate_limit_state.get(key, (now, 0))
-        if now - window_start >= window_seconds:
+        if now - window_start >= _RATE_LIMIT_WINDOW_SECONDS:
             window_start, count = now, 0
         count += 1
         _rate_limit_state[key] = (window_start, count)
     if count > max_attempts:
-        retry_after = max(1, int(window_seconds - (now - window_start)))
+        retry_after = max(1, int(_RATE_LIMIT_WINDOW_SECONDS - (now - window_start)))
         raise HTTPException(429, 'Quá nhiều yêu cầu, thử lại sau.', headers={'Retry-After': str(retry_after)})
+
+
+def enforce_login_username_rate_limit(client_ip: str, username: str):
+    _enforce_rate_limit(('login-user', client_ip, username.strip().lower()), _RATE_LIMIT_USERNAME_MAX_ATTEMPTS)
 
 
 def same_origin(request):
@@ -57,7 +72,7 @@ class SecurityMiddleware(BaseHTTPMiddleware):
                 same_origin(request)
             if request.method == 'POST' and request.url.path in RATE_LIMITED_PATHS:
                 client_ip = request.client.host if request.client else 'unknown'
-                _enforce_rate_limit(client_ip, request.url.path)
+                _enforce_rate_limit(('ip', client_ip, request.url.path), _RATE_LIMIT_MAX_ATTEMPTS)
             application_actor = 'LOCAL_APPLICATION'
             authorization = request.headers.get('authorization', '')
             if authorization.lower().startswith('bearer '):
@@ -65,11 +80,11 @@ class SecurityMiddleware(BaseHTTPMiddleware):
                 from backend.repositories import app_users
                 try:
                     claims = decode_access_token(authorization[7:])
-                    user = app_users.find_active_user_by_id(claims['sub'])
+                    user = await run_in_threadpool(app_users.find_active_user_by_id, claims['sub'])
                     if user is not None and user.get('is_active') is not False \
                             and user['username'] == claims['username'] and user['role'] == claims['role']:
                         application_actor = f"USER:{claims['username']}"
-                except HTTPException:
+                except (HTTPException, psycopg.Error):
                     pass
             marker = actor.set(application_actor)
             try:

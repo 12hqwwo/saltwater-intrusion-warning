@@ -42,6 +42,33 @@ class MonthlyInputsCacheTests(unittest.TestCase):
         self.assertEqual(builder.call_count, 1)
         self.assertTrue(all(item is results[0] for item in results))
 
+    def test_rebuild_serves_same_day_stale_without_waiting(self):
+        started, release = Event(), Event()
+        old, new = {'old': {}}, {'new': {}}
+
+        def build():
+            started.set()
+            self.assertTrue(release.wait(5))
+            return new
+
+        builds = iter((lambda: old, build))
+
+        def next_build():
+            return next(builds)()
+
+        with patch.object(spatial_inputs, 'source_stamp', side_effect=[
+                ('2026-11-14', 'v1'), ('2026-11-14', 'v2'), ('2026-11-14', 'v2')]), \
+             patch.object(spatial_inputs, '_monthly_inputs', side_effect=next_build) as builder:
+            self.assertIs(spatial_inputs.monthly_inputs(), old)
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                future = pool.submit(spatial_inputs.monthly_inputs)
+                self.assertTrue(started.wait(5))
+                self.assertIs(spatial_inputs.monthly_inputs(), old)
+                self.assertEqual(spatial_inputs.cache_metadata()['cache_status'], 'STALE')
+                release.set()
+                self.assertIs(future.result(timeout=5), new)
+        self.assertEqual(builder.call_count, 2)
+
     def test_changed_source_failure_is_explicitly_stale(self):
         data = {'2026-11': {'year_month': '2026-11'}}
         with patch.object(spatial_inputs, 'source_stamp', side_effect=[

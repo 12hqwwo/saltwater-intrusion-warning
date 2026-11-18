@@ -17,8 +17,11 @@ export function getAuthorizationHeader() {
 
 export function logout() { clearAccessToken(); currentUser = null; changed(); }
 
-registerAuthorizationHeaderProvider(getAuthorizationHeader, () => {
-  if (readAccessToken()) logout();
+registerAuthorizationHeaderProvider(getAuthorizationHeader, authorization => {
+  const token = readAccessToken();
+  if (token && authorization === `Bearer ${token}`) {
+    window.dispatchEvent(new CustomEvent('workspace:session-expired'));
+  }
 });
 
 export async function loginWithPassword(username, password) {
@@ -42,13 +45,15 @@ export function approveAccount(userId) {
 }
 
 export async function restoreSessionFromStorage() {
-  if (!readAccessToken()) { changed(); return null; }
+  const token = readAccessToken();
+  if (!token) { changed(); return null; }
   try {
     currentUser = await requestJSON('/auth/me');
     changed();
     return currentUser;
-  } catch {
-    if (readAccessToken()) logout();
+  } catch (error) {
+    if (error.status === 401 && readAccessToken() === token) logout();
+    else if (currentUser === null) changed();
     return null;
   }
 }

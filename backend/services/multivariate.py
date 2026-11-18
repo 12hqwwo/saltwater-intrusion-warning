@@ -57,9 +57,9 @@ def evaluation(station: str, protocol='HISTORICAL', experiment=None, ec_delay_da
         raise WorkspaceError(503, 'Chưa đọc được kết quả đánh giá của mô hình đa biến này.') from exc
 
 
-def inputs(station: str, target_month: str):
+def inputs(station: str, target_month: str, _selected=None):
     target = _target(target_month)
-    selected = _station(station)
+    selected = _selected if _selected is not None else _station(station)
     if selected is None:
         raise WorkspaceError(404, 'Chưa đăng ký mô hình cho trạm này.')
     hydro = None
@@ -109,7 +109,7 @@ def predict(payload):
         raise WorkspaceError(422, 'Chọn tháng sau kỳ huấn luyện ' + selected['trained_through'][:7] + ' để tránh dùng mô hình đã học nhãn của tháng cần dự báo.')
     mode = payload['input_mode']
     if mode == 'ARCHIVE':
-        source = inputs(selected['station'], target_month)
+        source = inputs(selected['station'], target_month, _selected=selected)
         if source.get('complete') is not True:
             raise WorkspaceError(422, 'Chưa đủ khí tượng lưu trữ; chọn đầu vào khí tượng do người dùng cung cấp.')
         values = {key: source[key] for key in models.WEATHER_AGG}

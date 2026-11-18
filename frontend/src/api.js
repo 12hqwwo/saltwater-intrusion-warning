@@ -4,7 +4,13 @@ const MAX_ROWS = 20_000;
 const FLAGS = new Set(['UNVERIFIED', 'VALIDATED', 'SUSPECT', 'INVALID']);
 export const TIME_ZONE = 'Asia/Ho_Chi_Minh';
 
-export class APIError extends Error {}
+export class APIError extends Error {
+  constructor(message, status = null) {
+    super(message);
+    this.name = 'APIError';
+    this.status = status;
+  }
+}
 let authorizationHeaderProvider = () => ({});
 let unauthorizedHandler = () => {};
 
@@ -21,18 +27,20 @@ export async function requestJSON(path, { signal, fetcher = globalThis.fetch, me
   signal?.addEventListener('abort', abort, { once: true });
   const timer = setTimeout(() => { timedOut = true; abort(); }, timeoutMs);
   try {
+    const authorizationHeaders = authorizationHeaderProvider();
+    const requestHeaders = { Accept: 'application/json', ...(payload === undefined ? {} : { 'Content-Type': 'application/json' }), ...authorizationHeaders, ...headers };
     const response = await fetcher(`${ROOT}${path}`, {
       signal: controller.signal, method,
-      headers: { Accept: 'application/json', ...(payload === undefined ? {} : { 'Content-Type': 'application/json' }), ...authorizationHeaderProvider(), ...headers },
+      headers: requestHeaders,
       ...(payload === undefined ? {} : { body: JSON.stringify(payload) }),
     });
     let body;
     try { body = await response.json(); }
-    catch { throw new APIError('API chưa trả về dữ liệu JSON. Kiểm tra backend của địa chỉ đang mở.'); }
+    catch { throw new APIError('API chưa trả về dữ liệu JSON. Kiểm tra backend của địa chỉ đang mở.', response.status); }
     if (!response.ok) {
-      if (response.status === 401 && !path.startsWith('/auth/login')) unauthorizedHandler();
+      if (response.status === 401 && !path.startsWith('/auth/login')) unauthorizedHandler(requestHeaders.Authorization || null);
       const message = typeof body.detail === 'string' ? body.detail : body.detail?.message;
-      throw new APIError(message || `Không đọc được dữ liệu (HTTP ${response.status}).`);
+      throw new APIError(message || `Không đọc được dữ liệu (HTTP ${response.status}).`, response.status);
     }
     return body;
   } catch (error) {

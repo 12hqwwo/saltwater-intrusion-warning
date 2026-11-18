@@ -1,6 +1,9 @@
 import hashlib
 import hmac
 import os
+from threading import BoundedSemaphore
+
+_verify_slots = BoundedSemaphore(4)
 
 DUMMY_PASSWORD_HASH = (
     'scrypt$16384$8$1'
@@ -22,7 +25,8 @@ def verify_password(password: str, encoded: str) -> bool:
         algorithm, n, r, p, salt, digest = encoded.split('$')
         if algorithm != 'scrypt' or (int(n), int(r), int(p)) != (16384, 8, 1):
             return False
-        actual = hashlib.scrypt(password.encode(), salt=bytes.fromhex(salt), n=16384, r=8, p=1)
+        with _verify_slots:
+            actual = hashlib.scrypt(password.encode(), salt=bytes.fromhex(salt), n=16384, r=8, p=1)
         return hmac.compare_digest(actual, bytes.fromhex(digest))
     except (ValueError, TypeError, UnicodeError):
         return False

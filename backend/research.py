@@ -1,6 +1,6 @@
 """Compatibility imports for existing scripts and legacy API consumers."""
 from fastapi import APIRouter
-from backend.api.workspace import router as workspace_router
+from backend.api.workspace import core_router as workspace_router
 from backend.domain.workspace import validate_bundle
 from backend.services.workspace import load_bundle
 

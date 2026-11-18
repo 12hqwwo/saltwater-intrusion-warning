@@ -116,5 +116,10 @@ export function createLoginPanel(host) {
     if (user?.role !== 'INSPECTOR' && pendingPanel.open) pendingPanel.close();
   }
   window.addEventListener('workspace:auth-changed', refresh);
+  window.addEventListener('workspace:session-expired', () => {
+    status.textContent = 'Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại để tiếp tục; nội dung đang nhập vẫn được giữ.';
+    if (!panel.open) panel.showModal();
+    username.focus();
+  });
   refresh();
 }

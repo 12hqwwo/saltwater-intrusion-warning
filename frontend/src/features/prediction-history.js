@@ -120,6 +120,7 @@ export function createPredictionHistory(host, { onSaved, role = getCurrentRole }
     saveStatus.textContent = "Máy chủ đang chạy lại mô hình và lưu dự báo vào PostgreSQL…";
     try {
       const saved = await api("/multivariate/history", { method: "POST", body: payload, timeoutMs: 120_000 });
+      if (role() === ROLE_PUBLIC) return;
       const prediction = saved.prediction;
       if (!validPrediction(prediction, { ...payload, ...catalogIdentity(payload.station) })) throw new Error("Phản hồi lưu dự báo không khớp yêu cầu.");
       record(prediction);
@@ -128,7 +129,7 @@ export function createPredictionHistory(host, { onSaved, role = getCurrentRole }
       history.open = true;
       loadHistory(0);
     } catch (error) { saveStatus.textContent = `Chưa lưu được: ${error.message} Dự báo hiện tại vẫn có thể tải JSON/CSV.`; }
-    finally { saving = false; saveButton.disabled = !candidate; }
+    finally { saving = false; saveButton.disabled = role() === ROLE_PUBLIC || !candidate; }
   });
   filters.addEventListener("submit", event => { event.preventDefault(); loadHistory(0); });
   for (const control of [station, month]) control.addEventListener("input", () => {
@@ -141,6 +142,14 @@ export function createPredictionHistory(host, { onSaved, role = getCurrentRole }
   clear.addEventListener("click", () => { session.length = 0; renderComparison(); });
   return {
     record,
+    clearPrivate() {
+      requests.next(); candidate = null; candidateVersion++; rows = []; offset = 0; total = 0;
+      session.length = 0; renderComparison(); tableHost.replaceChildren();
+      history.open = false; count.textContent = '0 lượt';
+      status.textContent = 'Đăng nhập để xem lịch sử dự báo đã lưu.';
+      saveStatus.textContent = ''; saveButton.disabled = true;
+      previous.disabled = next.disabled = true;
+    },
     setCandidate(payload) { candidate = payload ? { ...payload } : null; candidateVersion++; saveButton.disabled = saving || !candidate; },
     setStations(items) {
       knownStations = items;

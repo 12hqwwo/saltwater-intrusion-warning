@@ -36,6 +36,30 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def _file_signature(path):
+    path = Path(path)
+    stat = path.stat()
+    return (str(path.resolve()), stat.st_mtime_ns, stat.st_size)
+
+
+@lru_cache(maxsize=32)
+def _cached_sha256(path, mtime_ns, size):
+    return sha256(path)
+
+
+@lru_cache(maxsize=32)
+def _verified_manifest(path, mtime_ns, size, expected_sha):
+    raw = Path(path).read_bytes()
+    if hashlib.sha256(raw).hexdigest() != expected_sha:
+        raise ValueError('Model manifest checksum mismatch.')
+    return raw, json.loads(raw)
+
+
+@lru_cache(maxsize=8)
+def _registry(path, mtime_ns, size):
+    return json.loads(Path(path).read_text())
+
+
 def monthly_weather(frame):
     import pandas as pd
     frame = frame.copy()
@@ -74,16 +98,12 @@ def _load_cached_artifact(model_path, model_sha, manifest_raw):
 
 def load_model(station, registry_path=None):
     station = normalize_station(station)
-    registry = json.loads(Path(registry_path or ROOT / 'data/models/multivariate_registry.json').read_text())
+    registry = _registry(*_file_signature(registry_path or ROOT / 'data/models/multivariate_registry.json'))
     entry = registry['models'][station]
     model_path, manifest_path = ROOT / entry['model_path'], ROOT / entry['manifest_path']
-    manifest_raw = manifest_path.read_bytes()
-    # Verify on every access, including cache hits: changed/tampered files cannot
-    # silently reuse a previously trusted model. Cache only expensive deserialization.
-    if (hashlib.sha256(manifest_raw).hexdigest() != entry['manifest_sha256']
-            or sha256(model_path) != entry['model_sha256']):
+    manifest_raw, manifest = _verified_manifest(*_file_signature(manifest_path), entry['manifest_sha256'])
+    if _cached_sha256(*_file_signature(model_path)) != entry['model_sha256']:
         raise ValueError('Model artifact checksum mismatch.')
-    manifest = json.loads(manifest_raw)
     if manifest.get('model_sha256', entry['model_sha256']) != entry['model_sha256']:
         raise ValueError('Model manifest artifact identity mismatch.')
     allowed_orders = [FEATURES, FEATURES + HYDRO_FEATURES] if station == 'MYTHO' else [FEATURES]
@@ -121,13 +141,11 @@ def ensemble_distribution(model, features):
 
 def model_catalog(registry_path=None):
     from backend.domain import ec_gap_evaluation
-    registry = json.loads(Path(registry_path or ROOT / 'data/models/multivariate_registry.json').read_text())
+    registry = _registry(*_file_signature(registry_path or ROOT / 'data/models/multivariate_registry.json'))
     items = []
     for station, entry in registry['models'].items():
         path = ROOT / entry['manifest_path']
-        if sha256(path) != entry['manifest_sha256']:
-            raise ValueError('Model manifest checksum mismatch.')
-        manifest = json.loads(path.read_text())
+        _, manifest = _verified_manifest(*_file_signature(path), entry['manifest_sha256'])
         name, site_code, site_name = STATIONS[station]
         gap_validation = manifest.get('gap_validation')
         if gap_validation is None and registry_path is None and ec_gap_evaluation.INDEX.exists():

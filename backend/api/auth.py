@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field
 from psycopg.errors import UniqueViolation
 from uuid import UUID
@@ -8,6 +8,7 @@ from backend.auth.current_user import AuthenticatedUser, require_role
 from backend.auth.password_hashing import DUMMY_PASSWORD_HASH, hash_password, verify_password
 from backend.auth.roles import Role
 from backend.repositories import app_users
+from backend.security import enforce_login_username_rate_limit
 import os
 
 
@@ -46,9 +47,10 @@ def register(payload: RegistrationRequest):
 
 
 @router.post('/login')
-def login(payload: LoginRequest):
+def login(payload: LoginRequest, request: Request):
     if os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot').lower() != 'postgres':
         raise HTTPException(503, 'Đăng nhập chỉ khả dụng khi dùng PostgreSQL.')
+    enforce_login_username_rate_limit(request.client.host if request.client else 'unknown', payload.username)
     user = app_users.find_active_user_by_username(payload.username.strip())
     password_hash = user['password_hash'] if user is not None else DUMMY_PASSWORD_HASH
     password_ok = verify_password(payload.password, password_hash)

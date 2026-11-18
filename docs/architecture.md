@@ -119,7 +119,7 @@ Các giả định công bố không thay thế lịch sử phiên bản nguồn
 
 ## 7. Chuyển đổi tương thích và bảo toàn bằng chứng
 
-API workspace dùng tiền tố `/api/v1/workspace`; `/api/v1/research` là alias tương thích. Nhánh ước tính khí tượng dùng `/monthly-estimates`; `/future-forecast` còn là alias cho client cũ. CSV có đường dẫn `/monthly-estimates/export?station=...` dưới tiền tố workspace. API lịch sử `/api/v1/stations` vẫn riêng cho PostgreSQL.
+API workspace dùng tiền tố `/api/v1/workspace`; `/api/v1/research` chỉ giữ route workspace lõi và tiếp nhận cũ. Nhánh ước tính khí tượng dùng `/monthly-estimates`; `/future-forecast` còn là alias cho client cũ. CSV có đường dẫn `/monthly-estimates/export?station=...` dưới tiền tố workspace. API lịch sử `/api/v1/stations` vẫn riêng cho PostgreSQL.
 
 Giữ đường dẫn/API cũ cần thiết trong giai đoạn chuyển đổi, chuyển nghiệp vụ sang module chuyên trách và cập nhật runner/build để trang chính mới được phục vụ. Chỉ đổi bố cục hoặc tên module không được làm đổi giá trị nguồn, tập thí nghiệm, đơn vị hoặc ý nghĩa cờ chất lượng.
 

@@ -40,13 +40,13 @@ def presets():
     return dss_storage.presets()
 
 
-@multivariate_history_router.get('/history')
+@multivariate_history_router.get('/history', dependencies=[Depends(require_role(Role.FIELD_STAFF, Role.INSPECTOR))])
 def history(station: Annotated[str | None, Query(max_length=64)] = None,
             target_month: Month | None = None, limit: Limit = 20, offset: Offset = 0):
     return dss_storage.predictions(station, target_month, limit, offset)
 
 
-@multivariate_history_router.get('/history/{prediction_id}')
+@multivariate_history_router.get('/history/{prediction_id}', dependencies=[Depends(require_role(Role.FIELD_STAFF, Role.INSPECTOR))])
 def saved_prediction(prediction_id: UUID):
     return dss_storage.prediction(prediction_id)
 
@@ -56,7 +56,7 @@ def save_prediction(payload: ForecastRequest):
     return dss_storage.save_prediction(payload.model_dump())
 
 
-@router.get('/gate-drafts')
+@router.get('/gate-drafts', dependencies=[Depends(require_role(Role.FIELD_STAFF, Role.INSPECTOR))])
 def drafts(gate_code: GateCode, limit: Limit = 20, offset: Offset = 0):
     return dss_storage.drafts(gate_code, limit, offset)
 

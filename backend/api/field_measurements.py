@@ -2,6 +2,7 @@ from typing import Annotated, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from starlette.concurrency import run_in_threadpool
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from backend.api.dss_storage import same_origin_write
@@ -44,7 +45,7 @@ async def submit(request: Request, user: AuthenticatedUser = Depends(require_rol
         payload = FieldRequest.model_validate_json(body)
     except ValidationError as exc:
         raise HTTPException(422, 'Phiếu số đo không đúng cấu trúc.') from exc
-    return service.submit(payload.model_dump() | {'submitted_by': user.username})
+    return await run_in_threadpool(service.submit, payload.model_dump() | {'submitted_by': user.username})
 
 
 @router.get('/mine')

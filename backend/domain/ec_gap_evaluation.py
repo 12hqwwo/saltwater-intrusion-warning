@@ -1,6 +1,7 @@
 """Read verified frozen-label outage evidence, separate from rolling-origin scores."""
 import hashlib
 import json
+from functools import lru_cache
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -15,18 +16,34 @@ LABELS = {
 }
 
 
-def _verified(path, expected):
+def _signature(path):
     path = Path(path).resolve()
-    if not path.is_relative_to(ROOT.resolve()):
-        raise ValueError('Evaluation artifact must stay inside repository')
-    raw = path.read_bytes()
+    stat = path.stat()
+    return str(path), stat.st_mtime_ns, stat.st_size
+
+
+@lru_cache(maxsize=16)
+def _verified_cached(path, mtime_ns, size, expected):
+    raw = Path(path).read_bytes()
     if hashlib.sha256(raw).hexdigest() != expected:
         raise ValueError('Frozen EC evaluation checksum mismatch')
     return raw
 
 
+def _verified(path, expected):
+    path = Path(path).resolve()
+    if not path.is_relative_to(ROOT.resolve()):
+        raise ValueError('Evaluation artifact must stay inside repository')
+    return _verified_cached(*_signature(path), expected)
+
+
+@lru_cache(maxsize=4)
+def _index(path, mtime_ns, size):
+    return json.loads(Path(path).read_text('utf-8'))
+
+
 def evidence():
-    index = json.loads(INDEX.read_text('utf-8'))
+    index = _index(*_signature(INDEX))
     manifest_path = ROOT / index['run_manifest_path']
     manifest = json.loads(_verified(manifest_path, index['run_manifest_sha256']))
     if index['protocol_id'] != PROTOCOL or manifest['protocol_id'] != PROTOCOL:
@@ -36,10 +53,16 @@ def evidence():
     return manifest, manifest_path.parent
 
 
-def _table(manifest, directory, filename):
+@lru_cache(maxsize=8)
+def _table_cached(path, mtime_ns, size, expected):
     import pandas as pd
     from io import BytesIO
-    return pd.read_csv(BytesIO(_verified(directory / filename, manifest['output_sha256'][filename])))
+    return pd.read_csv(BytesIO(_verified(path, expected)))
+
+
+def _table(manifest, directory, filename):
+    path = directory / filename
+    return _table_cached(*_signature(path), manifest['output_sha256'][filename])
 
 
 def summary(station):

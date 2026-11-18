@@ -33,7 +33,29 @@ Phát triển frontend bằng `npm.cmd --prefix frontend run dev`; Vite chuyển
 - `/index.html` và `/api/v1/health`, `/api/v1/stations` luôn truy cập DB thật. `/api/v1/app-health` chỉ xác nhận tiến trình, không chứng nhận DB.
 - Tiếp nhận v3 luôn đọc tệp riêng; chưa nhập vào quan trắc hay huấn luyện, dù chọn chế độ PostgreSQL.
 - Ước tính EC từ khí tượng 2024–2026 luôn đọc artifact tệp. Đây là ước tính hồi cứu dùng khí tượng cùng tháng, không phải dự báo hiện tại hoặc căn cứ vận hành cống.
-- API chính của workspace là `/api/v1/workspace`; `/api/v1/research` vẫn hoạt động để giữ tương thích.
+- API chính của workspace là `/api/v1/workspace`. `/api/v1/research` chỉ còn các route workspace lõi và tiếp nhận cũ; không chứa route multivariate hoặc DSS storage. Lịch sử dự báo đã lưu vẫn có ở `/api/v1/workspace/multivariate/history` và `/api/v1/multivariate/history`, đều yêu cầu đăng nhập.
+
+## Phiên đăng nhập và giới hạn yêu cầu
+
+`POST /api/v1/auth/login` và `/register` mặc định giới hạn 10 yêu cầu/IP trong 60 giây; login còn giới hạn 5 lần theo cặp `(IP, username viết thường)`. Có thể đặt `WEBGIS_AUTH_RATE_LIMIT_WINDOW_SECONDS`, `WEBGIS_AUTH_RATE_LIMIT_MAX_ATTEMPTS`, `WEBGIS_AUTH_USERNAME_RATE_LIMIT_MAX_ATTEMPTS` **trước khi khởi động** máy chủ. Bộ đếm ở trong bộ nhớ từng worker và tối đa 10.000 khóa; khởi động lại sẽ xóa bộ đếm. Khi đặt sau reverse proxy, cấu hình `--forwarded-allow-ips` của Uvicorn chỉ cho IP proxy tin cậy để `request.client.host` là IP người dùng. Ứng dụng không tự đọc `X-Forwarded-For`.
+
+File `sql/38_app_user_username_case_insensitive.sql` kiểm tra tài khoản trùng khác hoa/thường trước khi tạo unique index. File này được bàn giao cùng mã nhưng **chưa áp dụng vào PostgreSQL**; quản trị viên cần rà dữ liệu và triển khai migration riêng.
+
+## Đo hiệu năng cục bộ
+
+Chạy `.venv\Scripts\python.exe -m scripts.benchmark_api --samples 10` khi PostgreSQL cục bộ và một tài khoản nhân viên đang hoạt động. Script dùng TestClient trong cùng tiến trình, đọc DB thật, bỏ lượt khởi động đầu tiên của từng endpoint và đếm lệnh `Connection.execute`; nó không đo mạng hay tải đồng thời.
+
+| Endpoint | Trước P1 p50/p95 (ms) | Sau P1 p50/p95 (ms) | Số truy vấn trước → sau |
+|---|---:|---:|---:|
+| `/simulation/frame` | 42,15 / 50,92 | 28,37 / 41,36 | 17 → 1 |
+| `/stations` | 2,90 / 3,28 | 2,72 / 3,18 | 1 → 1 |
+| `/multivariate/predict` | 83,01 / 109,82 | 73,85 / 88,83 | 2 → 2 |
+
+Mỗi bên dùng 10 mẫu tuần tự trên cùng máy và payload trong script; số liệu mang tính tham khảo cho lần chạy này. Các lần đo lại sau P1 dao động theo tải máy (p50 frame khoảng 18–28 ms, predict khoảng 53–74 ms), còn số truy vấn là 1 và 2. Cache mô hình kiểm tra checksum khi nạp hoặc khi `mtime_ns`/kích thước thay đổi. File bị sửa nhưng giữ nguyên cả hai metadata có thể chưa được phát hiện cho tới lần nạp sau.
+
+## Docker và CI
+
+`Dockerfile` tạo frontend rồi chạy API ở chế độ snapshot. Cần cấp `WEBGIS_AUTH_SECRET` (ít nhất 32 ký tự) lúc chạy container; không đưa bí mật vào image. Ví dụ sau khi đặt biến môi trường trên máy chủ: `docker build -t webgis-tlcn .` và `docker run --rm -p 127.0.0.1:8000:8000 -e WEBGIS_AUTH_SECRET webgis-tlcn`. Máy hiện tại chưa cài Docker, nên image chưa được build/chạy thử. Workflow `.github/workflows/ci.yml` chạy kiểm thử Python, kiểm thử frontend và build Vite khi push hoặc tạo PR; chưa có kết quả chạy trên GitHub Actions trong lượt này.
 
 ## PostgreSQL/PostGIS
 
