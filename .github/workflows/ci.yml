@@ -42,7 +42,19 @@ jobs:
       - name: Python tests
         env:
           WEBGIS_TEST_PG_DSN: postgresql://webgis_test:webgis_test_password@127.0.0.1:5432/webgis_test_ci
-        run: python -m unittest discover -s tests -p 'test_*.py'
+        run: |
+          set +e
+          python -m unittest discover -s tests -p 'test_*.py' 2>&1 | tee /tmp/webgis-python-tests.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            python - <<'PY'
+          from pathlib import Path
+          output = Path('/tmp/webgis-python-tests.log').read_text(errors='replace')[-16000:]
+          escaped = output.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          print('::error title=Python tests failed::' + escaped)
+          PY
+          fi
+          exit "$status"
       - name: Frontend tests
         run: node --test frontend/src/auth/auth-service.test.js frontend/src/features/gate-simulation-draft.test.js
       - name: Build frontend
