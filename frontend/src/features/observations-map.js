@@ -222,7 +222,7 @@ export function createResearchMap(target, { onSelect, onTileError }) {
     const field = map.forEachFeatureAtPixel(event.pixel, feature => feature, { layerFilter: layer => layer === fieldLayer, hitTolerance: 9 });
     if (field) {
       riverTooltip.hidden = false;
-      riverTooltip.textContent = `Số đo thực địa đã duyệt · ${field.get('observed_at')} · ${field.get('submitted_by')} · ${formatWater(field.get('ec_mS_m'), displayUnit)} · không phải dữ liệu MRC`;
+      riverTooltip.textContent = `Số đo thực địa đã duyệt · ${field.get('observed_at')} · ${formatWater(field.get('ec_mS_m'), displayUnit)} · không phải dữ liệu MRC`;
     }
   }
   map.on('pointermove', inspectRiver); map.on('singleclick', inspectRiver);
@@ -474,5 +474,5 @@ export function fieldMeasurementFeatureCollection(items) {
     item.status === 'APPROVED' && Number.isFinite(item.longitude) && Number.isFinite(item.latitude))
     .map(item => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [item.longitude, item.latitude] },
       properties: { measurement_id: item.measurement_id, ec_mS_m: item.ec_mS_m,
-        observed_at: item.observed_at, submitted_by: item.submitted_by } })) };
+        observed_at: item.observed_at } })) };
 }

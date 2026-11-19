@@ -104,10 +104,13 @@ def list_issues(station=None, date_from=None, date_to=None, with_scores=True):
     if start and end and start > end:
         raise WorkspaceError(422, 'Khoảng tháng không hợp lệ.')
     rows = repo.list_slots(station, start, end)
+    scores = repo.score_summary(station, start, end) if with_scores else []
     items = []
-    by_source = {source: {'ON_TIME': [], 'LATE': []}
+    by_source = {source: {'ON_TIME': None, 'LATE': None}
                  for source in ('MRC', 'FIELD_APPROVED')}
-    for row in rows:
+    for row in scores:
+        by_source[row['obs_source']][row['issue_status']] = row
+    for row in rows[:200]:
         slot = {key: row[key] for key in ('slot_id', 'station_key', 'target_month', 'schedule_code', 'scheduled_at')}
         events = ([{key: row[key] for key in ('event_id', 'event_type', 'reason_code', 'detected_at')}]
                   if row['event_id'] else [])
@@ -117,18 +120,17 @@ def list_issues(station=None, date_from=None, date_to=None, with_scores=True):
         score = ({key: row[key] for key in ('score_id', 'label_protocol_version', 'observation_ref',
                   'obs_source', 'observed_ec_mS_m', 'abs_error_mS_m', 'scored_at')}
                  if with_scores and row['score_id'] else None)
-        if issue and score:
-            by_source[score['obs_source']][issue['issue_status']].append(score['abs_error_mS_m'])
         items.append(dict(slot=slot, events=events, issue=issue, score=score))
     def metrics(groups):
         result = {}
         for status, prefix in (('ON_TIME', 'on_time'), ('LATE', 'late')):
-            errors = groups[status]
-            result[prefix + '_n_scored'] = len(errors)
-            result[prefix + '_mae_mS_m'] = sum(errors) / len(errors) if errors else None
+            aggregate = groups[status]
+            result[prefix + '_n_scored'] = aggregate['n_scored'] if aggregate else 0
+            result[prefix + '_mae_mS_m'] = aggregate['mae_mS_m'] if aggregate else None
         return result
 
     source_metrics = {source: metrics(groups) for source, groups in by_source.items()}
     # Keep legacy fields MRC-only: older clients must never display a pooled MAE.
     summary = dict(source_metrics['MRC'], primary_obs_source='MRC', by_source=source_metrics)
-    return dict(items=items, summary=summary, label_protocol_version=rules.LABEL_PROTOCOL_VERSION)
+    return dict(items=items, items_truncated=len(rows) > 200, summary=summary,
+                label_protocol_version=rules.LABEL_PROTOCOL_VERSION)

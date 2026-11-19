@@ -77,19 +77,12 @@ def bundle_stamp():
 @lru_cache(maxsize=2)
 def _postgres_stamp_for_bucket(bucket, files, selection):
     with read_connection() as conn:
-        datasets = conn.execute('''
-            SELECT dataset_id, sha256, imported_at,
-                   metadata->>'time_precision' AS time_precision
-            FROM public.source_dataset
-            WHERE dataset_kind = 'RAW_EC' AND NOT is_demo
-            ORDER BY dataset_id
-        ''').fetchall()
-        observations = conn.execute('''
-            SELECT count(*) AS observation_count, max(ec_observation_id) AS last_observation_id
-            FROM public.conductivity_observation
+        version = conn.execute('''
+            SELECT version FROM public.workspace_cache_version WHERE singleton = true
         ''').fetchone()
-    return ('postgres', files, selection,
-            tuple(tuple(row.items()) for row in datasets), tuple(observations.items()))
+    if version is None:
+        raise ValueError('Workspace cache version is missing; apply migration 40.')
+    return ('postgres', files, selection, version['version'])
 
 
 @lru_cache(maxsize=2)
@@ -116,6 +109,12 @@ def _snapshot_reference_points(bundle, database_site_codes, database_source_code
     return stations, observations, sources
 
 
+def _latest_display_observation(rows):
+    return next((row for row in reversed(rows)
+                 if row['observed_or_estimated'] == 'O'
+                 and row['quality_flag'] in ('VALIDATED', 'UNVERIFIED')), None)
+
+
 def _postgres_bundle(bundle):
     stations, observations, datasets = [], [], []
     bundle_stations = {station['site_code']: station for station in bundle.get('stations', [])}
@@ -138,24 +137,16 @@ def _postgres_bundle(bundle):
                 url=source['reference'] if source['reference'].startswith('https://') else None)
         available_by_site = {site_id: [] for site_id in site_ids.values()}
         if site_ids:
-            for dataset in conn.execute('''SELECT o.site_id, d.dataset_id, d.dataset_code,
+            for dataset in conn.execute('''SELECT sites.site_id, d.dataset_id, d.dataset_code,
                 d.sha256, d.source_filename, d.imported_at, src.source_code,
-                d.metadata->>'time_precision' AS time_precision,
-                count(*) AS observation_count, min(o.observed_at) AS first_observation,
-                max(o.observed_at) AS last_observation,
-                count(*) FILTER (WHERE o.observed_or_estimated='O') AS observed_rows,
-                count(*) FILTER (WHERE o.observed_or_estimated='E') AS estimated_rows,
-                count(*) FILTER (WHERE o.quality_flag='UNVERIFIED') AS unverified_rows,
-                count(*) FILTER (WHERE o.quality_flag='VALIDATED') AS validated_rows,
-                count(*) FILTER (WHERE o.quality_flag='SUSPECT') AS suspect_rows,
-                count(*) FILTER (WHERE o.quality_flag='INVALID') AS invalid_rows
-                FROM public.conductivity_observation o
-                JOIN public.source_dataset d ON d.dataset_id=o.dataset_id
+                d.metadata->>'time_precision' AS time_precision
+                FROM unnest(%s::bigint[]) AS sites(site_id)
+                CROSS JOIN public.source_dataset d
                 JOIN public.data_source src ON src.source_id=d.source_id
-                WHERE o.site_id = ANY(%s) AND d.dataset_kind='RAW_EC'
+                WHERE d.dataset_kind='RAW_EC'
                   AND NOT d.is_demo AND NOT src.is_demo
-                GROUP BY o.site_id,d.dataset_id,d.dataset_code,d.sha256,d.source_filename,
-                         d.imported_at,src.source_code,d.metadata
+                  AND EXISTS (SELECT 1 FROM public.conductivity_observation o
+                              WHERE o.site_id=sites.site_id AND o.dataset_id=d.dataset_id)
                 ORDER BY d.imported_at DESC,d.dataset_code''',
                 (list(site_ids.values()),)).fetchall():
                 available_by_site[dataset['site_id']].append(dataset)
@@ -169,12 +160,13 @@ def _postgres_bundle(bundle):
         rows_by_pair = {}
         pairs = {(site_ids[code], dataset['dataset_id']) for code, dataset in selected_by_site.items() if dataset}
         if pairs:
-            for row in conn.execute('''SELECT site_id,dataset_id,ec_observation_id,source_row,observed_at,
+            for row in conn.execute('''SELECT o.site_id,o.dataset_id,o.ec_observation_id,o.source_row,o.observed_at,
                 conductivity_ms_per_m,unit,observed_or_estimated,quality_flag,
-                approval_level,grade,source_label FROM public.conductivity_observation
-                WHERE site_id = ANY(%s) AND dataset_id = ANY(%s)
-                ORDER BY site_id,observed_at,ec_observation_id''',
-                (list({site_id for site_id, _ in pairs}), list({dataset_id for _, dataset_id in pairs}))).fetchall():
+                approval_level,grade,source_label FROM public.conductivity_observation o
+                JOIN unnest(%s::bigint[], %s::bigint[]) AS selected(site_id,dataset_id)
+                  ON selected.site_id = o.site_id AND selected.dataset_id = o.dataset_id
+                ORDER BY o.site_id,o.observed_at,o.ec_observation_id''',
+                ([pair[0] for pair in sorted(pairs)], [pair[1] for pair in sorted(pairs)])).fetchall():
                 pair = (row['site_id'], row['dataset_id'])
                 if pair in pairs:
                     rows_by_pair.setdefault(pair, []).append(row)
@@ -183,11 +175,20 @@ def _postgres_bundle(bundle):
             site_id = site_ids[site['site_code']]
             available = available_by_site[site_id]
             selected = selected_by_site[site['site_code']]
-            for dataset in available:
-                datasets.append(dict({key: value for key, value in dataset.items()
-                                      if key not in {'site_id', 'time_precision'}},
-                                     site_code=site['site_code'], selected=dataset is selected))
             rows = rows_by_pair.get((site_id, selected['dataset_id']), []) if selected else []
+            if selected:
+                datasets.append(dict({key: value for key, value in selected.items()
+                                      if key not in {'site_id', 'time_precision'}},
+                    site_code=site['site_code'], selected=True,
+                    observation_count=len(rows),
+                    first_observation=rows[0]['observed_at'] if rows else None,
+                    last_observation=rows[-1]['observed_at'] if rows else None,
+                    observed_rows=sum(row['observed_or_estimated'] == 'O' for row in rows),
+                    estimated_rows=sum(row['observed_or_estimated'] == 'E' for row in rows),
+                    unverified_rows=sum(row['quality_flag'] == 'UNVERIFIED' for row in rows),
+                    validated_rows=sum(row['quality_flag'] == 'VALIDATED' for row in rows),
+                    suspect_rows=sum(row['quality_flag'] == 'SUSPECT' for row in rows),
+                    invalid_rows=sum(row['quality_flag'] == 'INVALID' for row in rows)))
             precision = selected['time_precision'] if selected else None
             date_only = precision == 'DATE_ONLY'
             station_rows = []
@@ -204,6 +205,7 @@ def _postgres_bundle(bundle):
             observations.extend(station_rows)
             dates = [date.fromisoformat(row['observed_date']) for row in station_rows]
             gaps = [(right - left).days for left, right in zip(dates, dates[1:])]
+            latest_observed = _latest_display_observation(station_rows)
             stations.append(dict(site, provider=site['source_code'], unit='mS/m',
                 observation_source='POSTGRESQL_PUBLIC_RAW_EC', reference_only=False,
                 model_station=fallback.get('model_station'), chainage_km=fallback.get('chainage_km'),
@@ -217,8 +219,9 @@ def _postgres_bundle(bundle):
                 sampling_label='Mẫu EC nguồn PostgreSQL; giữ cờ O/E, không nội suy',
                 max_gap_days=max(gaps, default=0), median_gap_days=median(gaps) if gaps else 0,
                 observation_count=len(rows), first_observed_date=station_rows[0]['observed_date'] if rows else None,
-                last_observed_date=station_rows[-1]['observed_date'] if rows else None,
-                latest_ec_mS_m=station_rows[-1]['ec_mS_m'] if rows else None,
+                last_observed_date=latest_observed['observed_date'] if latest_observed else None,
+                latest_ec_mS_m=latest_observed['ec_mS_m'] if latest_observed else None,
+                latest_ec_quality_flag=latest_observed['quality_flag'] if latest_observed else None,
                 selected_dataset_code=selected['dataset_code'] if selected else None,
                 available_dataset_codes=[d['dataset_code'] for d in available],
                 model_status='HISTORICAL_DATA_ONLY', hourly_validation_eligible=False,

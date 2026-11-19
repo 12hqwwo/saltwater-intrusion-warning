@@ -35,17 +35,18 @@ logger = logging.getLogger("webgis.api")
 async def lifespan(app):
     from backend.domain.multivariate_ec import warmup_models
     from backend.database import open_read_pool, close_read_pool
-    from backend.repositories.dss_storage import open_write_pool, close_write_pool
-    failures = warmup_models()
-    if failures:
-        logger.warning('Multivariate model warmup unavailable: %s', failures)
-    if os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot').lower() == 'postgres':
-        open_read_pool()
-    if os.getenv('WEBGIS_DSS_WRITES_ENABLED', '').lower() == 'true' and os.getenv('DSS_PGUSER'):
-        open_write_pool()
+    from backend.repositories.dss_storage import open_write_pool, close_write_pool, close_auth_read_pool
     try:
+        failures = warmup_models()
+        if failures:
+            logger.warning('Multivariate model warmup unavailable: %s', failures)
+        if os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot').lower() == 'postgres':
+            open_read_pool()
+        if os.getenv('WEBGIS_DSS_WRITES_ENABLED', '').lower() == 'true' and os.getenv('DSS_PGUSER'):
+            open_write_pool()
         yield
     finally:
+        close_auth_read_pool()
         close_write_pool()
         close_read_pool()
 
@@ -95,6 +96,15 @@ async def workspace_error(request: Request, exc: WorkspaceError):
 def app_health():
     return {'status': 'ok', 'research_mode': os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot'),
             'database_checked': False}
+
+
+@app.get('/api/v1/ready')
+def readiness():
+    """Container readiness checks PostgreSQL only when it is a required source."""
+    mode = os.getenv('WEBGIS_RESEARCH_MODE', 'snapshot').lower()
+    if mode == 'postgres':
+        Repository().health()
+    return {'status': 'ok', 'research_mode': mode, 'database_checked': mode == 'postgres'}
 
 def get_repository() -> Repository:
     return Repository()

@@ -1,7 +1,8 @@
 import unittest
 from datetime import datetime, timedelta
 from datetime import date
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
+from uuid import UUID
 from zoneinfo import ZoneInfo
 from fastapi.testclient import TestClient
 
@@ -9,6 +10,7 @@ from backend.domain.field_measurement import normalize
 from backend.main import app
 from backend.services import field_measurements as service
 from backend.repositories.field_measurements import field_label_from_rows
+from backend.repositories import field_measurements as field_repo
 from backend.services.workspace import WorkspaceError
 
 NOW = datetime(2026, 11, 14, 10, tzinfo=ZoneInfo('Asia/Ho_Chi_Minh'))
@@ -68,6 +70,51 @@ class FieldMeasurementTests(unittest.TestCase):
         with patch.object(service, 'list_measurements', return_value={'items': [], 'status': 'APPROVED'}):
             self.assertEqual(TestClient(app).get('/api/v1/field-measurements?status=APPROVED').status_code, 200)
             self.assertEqual(TestClient(app).get('/api/v1/field-measurements?status=PENDING').status_code, 401)
+
+    def test_public_approved_response_omits_staff_identity(self):
+        item = dict(measurement_id='id', longitude=105.8, latitude=10.5, ec_mS_m=150,
+                    observed_at=NOW, status='APPROVED', submitted_by='staff',
+                    reviewer='inspector', review_note='private', device='meter')
+        page = dict(items=[item], total=1, has_more=False, next_cursor=None, status='APPROVED')
+        with patch.object(service, 'list_measurements', return_value=page):
+            result = TestClient(app).get('/api/v1/field-measurements?status=APPROVED').json()
+        self.assertEqual(result['items'][0]['ec_mS_m'], 150)
+        for key in ('submitted_by', 'reviewer', 'review_note', 'device'):
+            self.assertNotIn(key, result['items'][0])
+
+    def test_keyset_page_exposes_next_cursor_and_total(self):
+        first_id = UUID('00000000-0000-0000-0000-000000000002')
+        second_id = UUID('00000000-0000-0000-0000-000000000001')
+        rows = [dict(measurement_id=first_id, submitted_at=NOW),
+                dict(measurement_id=second_id, submitted_at=NOW),
+                dict(measurement_id=UUID('00000000-0000-0000-0000-000000000000'), submitted_at=NOW)]
+        conn = MagicMock()
+        conn.execute.side_effect = [MagicMock(fetchone=MagicMock(return_value={'total': 3})),
+                                    MagicMock(fetchall=MagicMock(return_value=rows))]
+        with patch.object(field_repo, 'read_connection') as read:
+            read.return_value.__enter__.return_value = conn
+            result = field_repo.list_measurements('APPROVED', None, limit=2)
+        self.assertEqual(len(result['items']), 2)
+        self.assertEqual(result['total'], 3)
+        self.assertTrue(result['has_more'])
+        self.assertEqual(result['next_cursor']['before_measurement_id'], second_id)
+        self.assertIn('ORDER BY submitted_at DESC,measurement_id DESC', conn.execute.call_args_list[1].args[0])
+        conn.execute.side_effect = [MagicMock(fetchone=MagicMock(return_value={'total': 3})),
+                                    MagicMock(fetchall=MagicMock(return_value=[rows[2]]))]
+        with patch.object(field_repo, 'read_connection') as read:
+            read.return_value.__enter__.return_value = conn
+            next_page = field_repo.list_measurements('APPROVED', None, limit=2,
+                                                      before=(NOW, second_id))
+        self.assertEqual(next_page['items'], [rows[2]])
+        self.assertFalse(next_page['has_more'])
+        self.assertEqual(conn.execute.call_args_list[-1].args[1][-4:-1], (NOW, NOW, second_id))
+
+    def test_cursor_requires_both_fields_and_timezone(self):
+        with self.assertRaises(WorkspaceError):
+            service.list_measurements(before_measurement_id=UUID(int=1))
+        with self.assertRaises(WorkspaceError):
+            service.list_measurements(before_submitted_at=datetime(2026, 11, 14),
+                                      before_measurement_id=UUID(int=1))
 
     def test_self_review_is_rejected(self):
         with patch.object(service.repo, 'insert_review', side_effect=ValueError('Không được duyệt phiếu do chính mình gửi.')):

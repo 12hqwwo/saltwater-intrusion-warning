@@ -106,7 +106,8 @@ class PostgresContractTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         items = response.json()['items']
         self.assertEqual(sorted(item['ec_mS_m'] for item in items), [100, 110])
-        self.assertTrue(all(item['water_temp_degC'] == 25 for item in items))
+        self.assertTrue(all('submitted_by' not in item and 'reviewer' not in item
+                            and 'water_temp_degC' not in item for item in items))
         label = field_measurements.candidate_field_label('MYTHO', date(2026, 11, 1))
         self.assertEqual(label['observed_ec_mS_m'], 105)
         self.assertEqual(label['obs_source'], 'FIELD_APPROVED')

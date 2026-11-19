@@ -53,7 +53,9 @@ export function createForecastIssuePanel(host, { load = () => requestJSON('/fore
         body.append(row);
       }
       metrics.textContent = scoreSummary(report.summary);
-      status.textContent = report.items.length ? `${report.items.length} slot trong sổ.` : 'Chưa có slot nào. Chưa có dữ liệu chấm vận hành.';
+      status.textContent = report.items.length
+        ? `${report.items.length} slot ${report.items_truncated ? 'mới nhất đang hiển thị' : 'trong sổ'}; thống kê tính trên toàn bộ kỳ lọc.`
+        : 'Chưa có slot nào. Chưa có dữ liệu chấm vận hành.';
     } catch (error) {
       status.textContent = `Không đọc được sổ phát hành: ${error.message}`;
     } finally {

@@ -66,6 +66,19 @@ class ModelLoadingTests(unittest.TestCase):
 
 
 class ReferenceStationTests(unittest.TestCase):
+    def test_overview_latest_ec_skips_estimates_and_invalid_observations(self):
+        rows = [dict(observed_or_estimated='O', quality_flag='VALIDATED',
+                     observed_date='2026-01-01', ec_mS_m=80),
+                dict(observed_or_estimated='E', quality_flag='VALIDATED',
+                     observed_date='2026-02-01', ec_mS_m=500),
+                dict(observed_or_estimated='O', quality_flag='INVALID',
+                     observed_date='2026-03-01', ec_mS_m=900)]
+        self.assertEqual(workspace._latest_display_observation(rows), rows[0])
+        self.assertIsNone(workspace._latest_display_observation(rows[1:]))
+        self.assertEqual(workspace._latest_display_observation([
+            dict(observed_or_estimated='O', quality_flag='UNVERIFIED',
+                 observed_date='2026-04-01', ec_mS_m=70)])['ec_mS_m'], 70)
+
     def test_postgres_restores_reference_fields_without_promoting_geometry(self):
         fallback = dict(site_code='RIA2_DT_01', source_coordinates=[105.3, 10.2],
                         admin_label_source='source label', coordinate_crs='EPSG:4326',

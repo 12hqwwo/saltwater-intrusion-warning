@@ -9,6 +9,7 @@ FROM python:3.12-slim
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
     WEBGIS_ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0 \
+    WEBGIS_RESEARCH_MODE=snapshot \
     WEBGIS_SECURITY_ENABLED=true
 COPY requirements-prototype.txt requirements-forecast-multivariate.txt ./
 COPY backend/requirements-api.txt backend/requirements-api.txt
@@ -22,5 +23,5 @@ COPY outputs/frozen_ec_remedies_20261108/ outputs/frozen_ec_remedies_20261108/
 COPY run_webgis.py ./
 COPY --from=frontend-build /web/dist/ frontend/dist/
 EXPOSE 8000
-HEALTHCHECK --interval=30s --timeout=5s CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/app-health', timeout=3)" || exit 1
-CMD ["python", "run_webgis.py", "--mode", "snapshot", "--host", "0.0.0.0", "--port", "8000"]
+HEALTHCHECK --interval=30s --timeout=5s CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/ready', timeout=3)" || exit 1
+CMD ["python", "run_webgis.py", "--host", "0.0.0.0", "--port", "8000"]

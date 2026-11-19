@@ -121,11 +121,14 @@ export function renderOverviewStations(collection) {
     return;
   }
   const table = node("table"), head = node("thead"), header = node("tr"), body = node("tbody");
-  for (const label of ["Trạm", "Mẫu EC gần nhất (mS/m)", "Ngày đo", "Xem lịch sử"]) header.append(node("th", label));
+  for (const label of ["Trạm", "Quan trắc EC gần nhất (mS/m)", "Chất lượng", "Ngày đo", "Xem lịch sử"]) header.append(node("th", label));
   head.append(header);
   for (const item of stations.slice(0, 8)) {
     const row = node("tr");
-    row.append(node("td", item.site_name || item.site_code), node("td", num(item.latest_ec_mS_m)), node("td", dateOnly(item.last_observed_date)));
+    row.append(node("td", item.site_name || item.site_code), node("td", num(item.latest_ec_mS_m)),
+      node("td", item.latest_ec_quality_flag === 'VALIDATED' ? 'Đã kiểm định'
+        : item.latest_ec_quality_flag === 'UNVERIFIED' ? 'Chưa kiểm định' : 'Chưa rõ'),
+      node("td", dateOnly(item.last_observed_date)));
     const cell = node("td"), link = node("a", "Mở trạm →");
     link.href = `#observations`;
     link.addEventListener("click", () => window.dispatchEvent(new CustomEvent("workspace:select-station", { detail: { site_code: item.site_code } })));

@@ -44,7 +44,7 @@ def insert_issue(conn, slot_id, issue):
          Jsonb(issue['payload']))).fetchone()
 
 
-def list_slots(station=None, date_from=None, date_to=None, limit=200):
+def list_slots(station=None, date_from=None, date_to=None, limit=201):
     with read_connection() as conn:
         return conn.execute('''SELECT s.*, e.event_id,e.event_type,e.reason_code,e.detected_at,
             i.issue_id,i.input_month,i.model_version,i.model_sha256,i.data_version,
@@ -62,6 +62,23 @@ def list_slots(station=None, date_from=None, date_to=None, limit=200):
               AND (%s::date IS NULL OR s.target_month <= %s)
             ORDER BY s.target_month DESC,s.station_key LIMIT %s''',
             (station, station, date_from, date_from, date_to, date_to, limit)).fetchall()
+
+
+def score_summary(station=None, date_from=None, date_to=None):
+    """Aggregate every scored slot in the requested range, independent of the display limit."""
+    with read_connection() as conn:
+        return conn.execute('''SELECT sc.obs_source,i.issue_status,
+            count(*) AS n_scored,avg(sc.abs_error_mS_m) AS mae_mS_m
+            FROM dss_reference.forecast_slot s
+            JOIN dss_reference.forecast_issue i ON i.slot_id=s.slot_id
+            JOIN dss_reference.forecast_score sc ON sc.issue_id=i.issue_id
+                AND sc.label_protocol_version=%s
+            WHERE (%s::text IS NULL OR s.station_key=%s)
+              AND (%s::date IS NULL OR s.target_month >= %s)
+              AND (%s::date IS NULL OR s.target_month <= %s)
+            GROUP BY sc.obs_source,i.issue_status''',
+            (LABEL_PROTOCOL_VERSION, station, station, date_from, date_from,
+             date_to, date_to)).fetchall()
 
 
 def insert_score(issue_id, score):

@@ -54,6 +54,24 @@ test('server agreement permits export and a mismatch blocks it', async t => {
   assert.equal(mismatch.all().find(item => item.textContent === 'Tải bảng kiểm tra JSON ↓').disabled, true);
 });
 
+test('server evaluation time replaces a stale local eligibility result', async t => {
+  const serverTime = '2026-11-01T17:00:00Z';
+  const h = harness(t, async payload => {
+    const result = evaluateGateIntakeCondition(payload.measurement, payload.profile,
+      payload.forecast_context, serverTime);
+    return { status: result.status, statusTitle: result.statusTitle,
+      summaryReason: result.summaryReason, criteriaChecks: result.criteriaChecks,
+      effectiveMaxSampleAgeHours: result.forecastAdvisory.effectiveMaxSampleAgeHours,
+      evaluatedAtIso: serverTime };
+  });
+  h.select(); h.fill();
+  assert.equal(h.app.evaluate().status, 'ELIGIBLE_FOR_REVIEW');
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(h.app.getResult().status, 'INSUFFICIENT_OR_EXPIRED_DATA');
+  assert.equal(h.id('gateIntakeConclusion').dataset.status, 'INSUFFICIENT_OR_EXPIRED_DATA');
+  assert.equal(h.all().find(item => item.textContent === 'Tải bảng kiểm tra JSON ↓').disabled, false);
+});
+
 test('new screening shows distinct forecast and field sections with independent empty measurements', t => {
   const h = harness(t); h.select();
   assert.match(h.host.textContent, /Phần A/); assert.match(h.host.textContent, /Phần B/);

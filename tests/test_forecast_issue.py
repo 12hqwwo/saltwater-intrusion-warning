@@ -125,7 +125,12 @@ class ForecastIssueServiceTests(unittest.TestCase):
             issued_at=ISSUED, score_id=1, label_protocol_version=LABEL_PROTOCOL_VERSION,
             observation_ref='ref', obs_source='MRC', observed_ec_mS_m=30,
             abs_error_mS_m=5.206, scored_at=ISSUED)
-        with patch.object(service.repo, 'list_slots', return_value=[base | dict(issue_status='ON_TIME'),
+        aggregates = [dict(obs_source='MRC', issue_status='ON_TIME', n_scored=1, mae_mS_m=5.206),
+                      dict(obs_source='MRC', issue_status='LATE', n_scored=1, mae_mS_m=5.206),
+                      dict(obs_source='FIELD_APPROVED', issue_status='ON_TIME', n_scored=1, mae_mS_m=90),
+                      dict(obs_source='FIELD_APPROVED', issue_status='LATE', n_scored=1, mae_mS_m=70)]
+        with patch.object(service.repo, 'score_summary', return_value=aggregates), \
+             patch.object(service.repo, 'list_slots', return_value=[base | dict(issue_status='ON_TIME'),
                 base | dict(issue_status='LATE', score_id=2),
                 base | dict(issue_status='ON_TIME', score_id=3, obs_source='FIELD_APPROVED', abs_error_mS_m=90),
                 base | dict(issue_status='LATE', score_id=4, obs_source='FIELD_APPROVED', abs_error_mS_m=70)]):
@@ -143,6 +148,19 @@ class ForecastIssueServiceTests(unittest.TestCase):
             self.assertEqual(metrics, dict(on_time_n_scored=0, on_time_mae_mS_m=None,
                                           late_n_scored=0, late_mae_mS_m=None))
         self.assertTrue(all(item['score'] is None for item in without_scores['items']))
+
+    def test_summary_is_not_limited_to_displayed_slots(self):
+        aggregate = dict(obs_source='MRC', issue_status='ON_TIME', n_scored=250, mae_mS_m=12.5)
+        with patch.object(service.repo, 'list_slots', return_value=[dict(
+                slot_id=str(index), station_key='MYTHO', target_month='2027-01-01',
+                schedule_code='MONTHLY_D06_PREV', scheduled_at=ISSUED,
+                event_id=None, issue_id=None, score_id=None) for index in range(201)]), \
+             patch.object(service.repo, 'score_summary', return_value=[aggregate]):
+            result = service.list_issues()
+        self.assertEqual(len(result['items']), 200)
+        self.assertTrue(result['items_truncated'])
+        self.assertEqual(result['summary']['on_time_n_scored'], 250)
+        self.assertEqual(result['summary']['on_time_mae_mS_m'], 12.5)
 
 
 if __name__ == '__main__':

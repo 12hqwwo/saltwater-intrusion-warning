@@ -18,5 +18,5 @@ export function mountFieldMeasurementPanelForRole(host, role = 'PUBLIC') {
   }
   if (role === ROLE_INSPECTOR) createFieldMeasurementReviewQueue(panel, loadApproved);
   host.replaceChildren(panel);
-  return { loadApproved, destroy() { destroyForm(); host.replaceChildren(); } };
+  return { loadApproved, destroy() { loadApproved.cancel?.(); destroyForm(); host.replaceChildren(); } };
 }

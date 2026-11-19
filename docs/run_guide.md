@@ -30,7 +30,7 @@ Phát triển frontend bằng `npm.cmd --prefix frontend run dev`; Vite chuyển
 
 - `snapshot`: đọc `data/research/workspace.json`, kiểm tra SHA-256 với `workspace_manifest.json`. Đây là quan trắc có nguồn và kết quả hồi cứu, không phải dữ liệu trực tiếp.
 - `postgres`: quan trắc đọc `public.measurement_site`, `public.source_dataset`, `public.conductivity_observation` qua tài khoản WEBGIS_DB_USER chỉ đọc. Mỗi trạm chọn RAW_EC được nhập gần nhất (hoặc phiên bản được ghim); không trộn phiên bản. Kết quả mô hình và danh mục cống vẫn đọc bộ tệp có manifest. Không fallback khi DB lỗi.
-- `/index.html` và `/api/v1/health`, `/api/v1/stations` luôn truy cập DB thật. `/api/v1/app-health` chỉ xác nhận tiến trình, không chứng nhận DB.
+- `/index.html` và `/api/v1/health`, `/api/v1/stations` luôn truy cập DB thật. `/api/v1/app-health` chỉ xác nhận tiến trình; `/api/v1/ready` kiểm tra DB khi chạy chế độ PostgreSQL và được Docker dùng làm healthcheck.
 - Tiếp nhận v3 luôn đọc tệp riêng; chưa nhập vào quan trắc hay huấn luyện, dù chọn chế độ PostgreSQL.
 - Ước tính EC từ khí tượng 2024–2026 luôn đọc artifact tệp. Đây là ước tính hồi cứu dùng khí tượng cùng tháng, không phải dự báo hiện tại hoặc căn cứ vận hành cống.
 - API chính của workspace là `/api/v1/workspace`. `/api/v1/research` chỉ còn các route workspace lõi và tiếp nhận cũ; không chứa route multivariate hoặc DSS storage. Lịch sử dự báo đã lưu vẫn có ở `/api/v1/workspace/multivariate/history` và `/api/v1/multivariate/history`, đều yêu cầu đăng nhập.
@@ -40,6 +40,24 @@ Phát triển frontend bằng `npm.cmd --prefix frontend run dev`; Vite chuyển
 `POST /api/v1/auth/login` và `/register` mặc định giới hạn 10 yêu cầu/IP trong 60 giây; login còn giới hạn 5 lần theo cặp `(IP, username viết thường)`. Có thể đặt `WEBGIS_AUTH_RATE_LIMIT_WINDOW_SECONDS`, `WEBGIS_AUTH_RATE_LIMIT_MAX_ATTEMPTS`, `WEBGIS_AUTH_USERNAME_RATE_LIMIT_MAX_ATTEMPTS` **trước khi khởi động** máy chủ. Bộ đếm ở trong bộ nhớ từng worker và tối đa 10.000 khóa; khởi động lại sẽ xóa bộ đếm. Khi đặt sau reverse proxy, cấu hình `--forwarded-allow-ips` của Uvicorn chỉ cho IP proxy tin cậy để `request.client.host` là IP người dùng. Ứng dụng không tự đọc `X-Forwarded-For`.
 
 File `sql/38_app_user_username_case_insensitive.sql` kiểm tra tài khoản trùng khác hoa/thường trước khi tạo unique index. Ngày 18/11/2026, migration đã được chạy riêng bằng `--apply` trên DB cục bộ `dongthap_gis`, phiên bản `38_app_user_username_case_insensitive`, checksum `93cbb62439f8ce7636787971555ef82f179e139e50d1654b8b0526ef7a1d5c92`. DB khác vẫn cần rà dữ liệu và triển khai migration riêng; không chạy lại chỉ vì file có trong repo.
+
+API phiếu EC thực địa dùng phân trang theo `(submitted_at, measurement_id)` với `limit` tối đa 200, `total`, `has_more` và `next_cursor`. Khi gọi trang tiếp, chuyển hai trường trong `next_cursor` thành `before_submitted_at` và `before_measurement_id`. Response `status=APPROVED` cho khách và nhân viên đo không chứa danh tính người gửi, người duyệt hoặc ghi chú duyệt; người kiểm tra xem được thông tin này sau đăng nhập. Để tăng tốc phân trang trên DB đã có bảng phiếu đo, xem kế hoạch rồi áp dụng migration bổ sung:
+
+```powershell
+.venv\Scripts\python.exe scripts/apply_dss_migration.py --file sql/39_field_measurement_pagination.sql --version 39_field_measurement_pagination
+.venv\Scripts\python.exe scripts/apply_dss_migration.py --file sql/39_field_measurement_pagination.sql --version 39_field_measurement_pagination --apply
+```
+
+Migration 39 đã áp dụng trên DB cục bộ `dongthap_gis` ngày 19/11/2026, checksum `6c82beda201af6eb5771e2b68fab9668c7e32a767b306898fb8edcbfcd5fd16e`. Đã xác minh bản ghi migration và hai index phân trang.
+
+Cache workspace PostgreSQL dùng `public.workspace_cache_version` (một dòng) thay cho `count(*)` trên toàn bảng quan trắc mỗi chu kỳ. Trigger mức statement trên `source_dataset`, `conductivity_observation`, `measurement_site`, `data_source` tăng `version` trong cùng giao dịch ETL; rollback không đổi version. Tài khoản `webgis_reader` chỉ được `SELECT` bảng phiên bản. Migration 40 đã áp dụng trên DB cục bộ `dongthap_gis` ngày 19/11/2026, checksum `97edf140f8455fe179372cf42b4c7d51797104e56fdcdb2a9be0bc7d6ab3da81`. Với DB khác, chạy:
+
+```powershell
+.venv-api\Scripts\python.exe scripts/apply_dss_migration.py --file sql/40_workspace_cache_version.sql --version 40_workspace_cache_version
+.venv-api\Scripts\python.exe scripts/apply_dss_migration.py --file sql/40_workspace_cache_version.sql --version 40_workspace_cache_version --apply
+```
+
+Không cần thêm cột vào bảng quan trắc hoặc chạy lại ETL. Cache có thể giữ dữ liệu cũ tối đa 30 giây sau một giao dịch nhập liệu; mỗi worker kiểm tra một dòng phiên bản rồi tự dựng lại bundle khi phiên bản đổi. Danh sách dataset trong workspace chỉ chứa dataset đang được chọn cho mỗi trạm; các mã phiên bản còn lại nằm trong `available_dataset_codes` và chi tiết đầy đủ vẫn ở `/api/v1/stations/{site_code}/datasets`.
 
 Hai test hợp đồng PostgreSQL trong `tests/test_dss_postgres_contract.py` đã đạt trên DB tách biệt `webgis_test_20261118` có PostGIS; chúng dùng bảng tạm và rollback. Migration 38 cũng được thử trên DB này với username trùng, chạy lặp và ràng buộc unique. Test bằng chứng nguồn Mỹ Thuận dùng bản manifest lịch sử đã khôi phục vào `outputs/mythuan_three_station_20261104/source_snapshots/`; checksum khớp với run cũ, trong khi manifest dữ liệu hiện tại được giữ nguyên.
 
@@ -59,7 +77,7 @@ Mỗi bên dùng 10 mẫu tuần tự trên cùng máy và payload trong script;
 
 ## Docker và CI
 
-`Dockerfile` tạo frontend rồi chạy API ở chế độ snapshot. Cần cấp `WEBGIS_AUTH_SECRET` (ít nhất 32 ký tự) lúc chạy container; không đưa bí mật vào image. Ví dụ sau khi đặt biến môi trường trên máy chủ: `docker build -t webgis-tlcn .` và `docker run --rm -p 127.0.0.1:8000:8000 -e WEBGIS_AUTH_SECRET webgis-tlcn`. Workflow `.github/workflows/ci.yml` chạy kiểm thử Python với DB PostGIS riêng, kiểm thử frontend, build Vite, đồng thời build và smoke-test Docker image khi push hoặc tạo PR. [Lượt GitHub Actions 44324276115](https://github.com/12hqwwo/saltwater-intrusion-warning/actions/runs/44324276115) trên commit `feaf5dc` đã đạt cả job `test` và `container-smoke`.
+`Dockerfile` tạo frontend rồi chạy API ở chế độ snapshot mặc định; có thể đổi bằng `-e WEBGIS_RESEARCH_MODE=postgres` cùng cấu hình DB. Healthcheck Docker gọi `/api/v1/ready`: chế độ PostgreSQL phải truy vấn DB thành công, chế độ snapshot chỉ kiểm tra tiến trình. Cần cấp `WEBGIS_AUTH_SECRET` (ít nhất 32 ký tự) lúc chạy container; không đưa bí mật vào image. Ví dụ sau khi đặt biến môi trường trên máy chủ: `docker build -t webgis-tlcn .` và `docker run --rm -p 127.0.0.1:8000:8000 -e WEBGIS_AUTH_SECRET webgis-tlcn`. Workflow `.github/workflows/ci.yml` chạy kiểm thử Python với DB PostGIS riêng, kiểm thử frontend, build Vite, đồng thời build và smoke-test Docker image khi push hoặc tạo PR. [Lượt GitHub Actions 44324276115](https://github.com/12hqwwo/saltwater-intrusion-warning/actions/runs/44324276115) trên commit `feaf5dc` đã đạt cả job `test` và `container-smoke`.
 
 `requirements-dev.txt` thêm `paramiko>=4.0,<5` để kiểm thử nhánh xử lý lỗi SFTP của `scripts/utilities/collect_fes2022b.py` trong CI; dịch vụ web không cần thư viện này khi chạy bình thường.
 

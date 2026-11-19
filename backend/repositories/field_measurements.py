@@ -23,20 +23,30 @@ def insert_measurement(value, raw):
              value['device'], value['submitted_by'], value['flags'], Jsonb(raw))).fetchone()
 
 
-def list_measurements(status, bbox, limit=200, submitted_by=None):
+def list_measurements(status, bbox, limit=200, submitted_by=None, before=None):
+    filters = ''' FROM dss_reference.v_field_measurement_status
+            WHERE (%s::text IS NULL OR status=%s)
+              AND (%s::text IS NULL OR submitted_by=%s)
+              AND (%s::float8 IS NULL OR ST_Intersects(geom,ST_MakeEnvelope(%s,%s,%s,%s,4326)))'''
+    params = (status, status, submitted_by, submitted_by, bbox[0] if bbox else None,
+              *(bbox or (None, None, None, None)))
     with read_connection() as conn:
-        return conn.execute('''SELECT measurement_id,ST_X(geom) AS longitude,ST_Y(geom) AS latitude,
+        total = conn.execute('SELECT count(*) AS total' + filters, params).fetchone()['total']
+        rows = conn.execute('''SELECT measurement_id,ST_X(geom) AS longitude,ST_Y(geom) AS latitude,
             ec_mS_m AS "ec_mS_m",unit_original,ec_basis,calibrated_at,
             water_temp_degC AS "water_temp_degC",
             observed_at,position_kind,device,submitted_by,flags,submitted_at,
-            status,review_id,reviewer,review_note,reviewed_at
-            FROM dss_reference.v_field_measurement_status
-            WHERE (%s::text IS NULL OR status=%s)
-              AND (%s::text IS NULL OR submitted_by=%s)
-              AND (%s::float8 IS NULL OR ST_Intersects(geom,ST_MakeEnvelope(%s,%s,%s,%s,4326)))
+            status,review_id,reviewer,review_note,reviewed_at''' + filters + '''
+              AND (%s::timestamptz IS NULL OR (submitted_at,measurement_id)<(%s::timestamptz,%s::uuid))
             ORDER BY submitted_at DESC,measurement_id DESC LIMIT %s''',
-            (status, status, submitted_by, submitted_by, bbox[0] if bbox else None,
-             *(bbox or (None, None, None, None)), limit)).fetchall()
+            (*params, before[0] if before else None, before[0] if before else None,
+             before[1] if before else None, limit + 1)).fetchall()
+    items = rows[:limit]
+    has_more = len(rows) > limit
+    last = items[-1] if has_more else None
+    return dict(items=items, total=total, has_more=has_more,
+                next_cursor=dict(before_submitted_at=last['submitted_at'],
+                                 before_measurement_id=last['measurement_id']) if last else None)
 
 
 def insert_review(measurement_id, decision, reviewer, note):

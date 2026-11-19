@@ -20,8 +20,13 @@ const response = (status, body) => ({ ok: status >= 200 && status < 300, status,
 test('temporary /auth/me failure retains the token', async () => {
   values.set('webgis.access_token', 'saved-token');
   globalThis.fetch = async () => response(503, { detail: 'Unavailable' });
+  let updates = 0;
+  const onChange = () => { updates++; };
+  window.addEventListener('workspace:auth-changed', onChange);
   assert.equal(await auth.restoreSessionFromStorage(), null);
+  window.removeEventListener('workspace:auth-changed', onChange);
   assert.equal(values.get('webgis.access_token'), 'saved-token');
+  assert.equal(updates, 1);
 });
 
 test('401 from /auth/me clears the matching token', async () => {
@@ -45,13 +50,13 @@ test('late 401 cannot log out a newer session', async () => {
   assert.equal(auth.getCurrentUser().username, 'staff');
 });
 
-test('401 on a working request requests re-login without discarding the session', async () => {
+test('401 on a working request clears the matching session and requests re-login', async () => {
   let expired = 0;
   window.addEventListener('workspace:session-expired', () => { expired++; }, { once: true });
   globalThis.fetch = async () => response(401, { detail: 'Expired' });
   await assert.rejects(requestJSON('/workspace/summary'), error =>
     error instanceof APIError && error.status === 401);
   assert.equal(expired, 1);
-  assert.equal(values.get('webgis.access_token'), 'new-token');
-  assert.equal(auth.getCurrentUser().username, 'staff');
+  assert.equal(values.has('webgis.access_token'), false);
+  assert.equal(auth.getCurrentUser(), null);
 });

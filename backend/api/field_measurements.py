@@ -1,5 +1,6 @@
 from typing import Annotated, Literal
 from uuid import UUID
+from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from starlette.concurrency import run_in_threadpool
@@ -49,20 +50,36 @@ async def submit(request: Request, user: AuthenticatedUser = Depends(require_rol
 
 
 @router.get('/mine')
-def mine(user: AuthenticatedUser = Depends(require_role(Role.FIELD_STAFF))):
-    return service.list_measurements(submitted_by=user.username)
+def mine(limit: Annotated[int, Query(ge=1, le=200)] = 200,
+         before_submitted_at: datetime | None = None, before_measurement_id: UUID | None = None,
+         user: AuthenticatedUser = Depends(require_role(Role.FIELD_STAFF))):
+    return service.list_measurements(submitted_by=user.username, limit=limit,
+                                     before_submitted_at=before_submitted_at,
+                                     before_measurement_id=before_measurement_id)
 
 
 @router.get('')
 def measurements(request: Request, status: Literal['PENDING', 'APPROVED', 'REJECTED'] | None = None,
                  bbox: Annotated[str | None, Query(max_length=100)] = None,
+                 limit: Annotated[int, Query(ge=1, le=200)] = 200,
+                 before_submitted_at: datetime | None = None,
+                 before_measurement_id: UUID | None = None,
                  user: AuthenticatedUser | None = Depends(read_optional_user)):
     if status != 'APPROVED':
         if user is None:
             raise HTTPException(401, 'Cần đăng nhập để xem phiếu chưa duyệt.')
         if user.role != Role.INSPECTOR:
             raise HTTPException(403, 'Chỉ cán bộ kiểm tra được xem hàng chờ duyệt.')
-    return service.list_measurements(status, bbox)
+    result = service.list_measurements(status, bbox, limit=limit,
+                                       before_submitted_at=before_submitted_at,
+                                       before_measurement_id=before_measurement_id)
+    if user is None or user.role != Role.INSPECTOR:
+        public_fields = ('measurement_id', 'longitude', 'latitude', 'ec_mS_m',
+                         'unit_original', 'ec_basis', 'observed_at', 'position_kind',
+                         'flags', 'submitted_at', 'status')
+        result['items'] = [{key: item[key] for key in public_fields if key in item}
+                           for item in result['items']]
+    return result
 
 
 @router.post('/{measurement_id}/review', dependencies=[Depends(same_origin_write)])

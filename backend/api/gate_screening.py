@@ -1,4 +1,6 @@
 from typing import Any
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -16,7 +18,8 @@ class ScreeningRequest(BaseModel):
     measurement: dict[str, Any]
     profile: dict[str, Any] | None = None
     forecast_context: dict[str, Any] | None = None
-    now_iso: str = Field(max_length=40)
+    # Accepted for older clients, but never trusted for freshness checks.
+    now_iso: str | None = Field(default=None, max_length=40)
 
 
 @router.post('/gate-screening/evaluate')
@@ -33,13 +36,15 @@ async def gate_screening(request: Request, user=Depends(read_optional_user)):
     if user is None and payload.profile is not None and payload.profile != DEFAULT_PROFILE:
         raise HTTPException(403, 'Khách chỉ được dùng ngưỡng mặc định.')
     try:
-        result = evaluate(payload.measurement, payload.profile, payload.forecast_context, payload.now_iso)
+        result = evaluate(payload.measurement, payload.profile, payload.forecast_context,
+                          datetime.now(ZoneInfo('Asia/Ho_Chi_Minh')).isoformat(timespec='milliseconds'))
         reasons = {
             'ELIGIBLE_FOR_REVIEW': 'Các điều kiện kiểm tra đạt; người vận hành cần xem xét trước khi thao tác.',
             'NOT_SUITABLE': 'Điều kiện đo hiện tại chưa phù hợp để xem xét lấy nước.',
             'INSUFFICIENT_OR_EXPIRED_DATA': 'Cần bổ sung hoặc đo lại dữ liệu hiện trường.',
         }
         result['summaryReason'] = reasons[result['status']]
-        return result if user else {key: result[key] for key in ('status', 'statusTitle', 'summaryReason')}
+        return result if user else {key: result[key] for key in
+                                    ('status', 'statusTitle', 'summaryReason', 'evaluatedAtIso')}
     except (ValueError, TypeError, OverflowError) as exc:
         raise HTTPException(422, str(exc)) from exc

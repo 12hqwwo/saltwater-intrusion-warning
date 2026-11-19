@@ -220,7 +220,7 @@ class AuthTests(unittest.TestCase):
         payload = {'measurement': {}, 'now_iso': '2026-11-17T10:00:00+07:00'}
         result = self.client.post('/api/v1/gate-screening/evaluate', json=payload)
         self.assertEqual(result.status_code, 200)
-        self.assertEqual(set(result.json()), {'status', 'statusTitle', 'summaryReason'})
+        self.assertEqual(set(result.json()), {'status', 'statusTitle', 'summaryReason', 'evaluatedAtIso'})
         changed = dict(DEFAULT_PROFILE, maxExteriorEcMsM=200)
         self.assertEqual(self.client.post('/api/v1/gate-screening/evaluate',
                                           json=payload | {'profile': changed}).status_code, 403)

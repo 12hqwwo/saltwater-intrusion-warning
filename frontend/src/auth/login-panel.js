@@ -117,7 +117,7 @@ export function createLoginPanel(host) {
   }
   window.addEventListener('workspace:auth-changed', refresh);
   window.addEventListener('workspace:session-expired', () => {
-    status.textContent = 'Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại để tiếp tục; nội dung đang nhập vẫn được giữ.';
+    status.textContent = 'Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại để tiếp tục.';
     if (!panel.open) panel.showModal();
     username.focus();
   });

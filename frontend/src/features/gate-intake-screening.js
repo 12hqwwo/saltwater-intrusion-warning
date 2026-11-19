@@ -110,21 +110,50 @@ export function createGateIntakeScreening(host, { now = () => new Date().toISOSt
       Promise.resolve().then(() => serverEvaluate({ measurement: measured, profile, forecast_context: context, now_iso: evaluatedAt }))
         .then(remote => {
           if (disposed || serial !== evaluationSerial || result !== localResult) return;
-          const localChecks = localResult.criteriaChecks.map(item => [item.id, item.status]);
+          const compared = remote.evaluatedAtIso
+            ? evaluateGateIntakeCondition(measured, profile, context, remote.evaluatedAtIso)
+            : localResult;
+          const localChecks = compared.criteriaChecks.map(item => [item.id, item.status]);
           const remoteChecks = (remote.criteriaChecks || []).map(item => [item.id, item.status]);
-          const matches = staff ? remote.status === localResult.status && JSON.stringify(remoteChecks) === JSON.stringify(localChecks) &&
-            remote.effectiveMaxSampleAgeHours === localResult.forecastAdvisory.effectiveMaxSampleAgeHours : remote.status === localResult.status;
+          const matches = staff ? remote.status === compared.status && JSON.stringify(remoteChecks) === JSON.stringify(localChecks) &&
+            remote.effectiveMaxSampleAgeHours === compared.forecastAdvisory.effectiveMaxSampleAgeHours : remote.status === compared.status;
           serverStatus.textContent = matches ? staff ? 'Máy chủ đã đối chiếu cùng kết quả và từng tiêu chí.' : 'Máy chủ đã đối chiếu kết luận.' :
-            `Kết quả khác nhau: giao diện ${localResult.status}, máy chủ ${remote.status || 'không rõ'}. Cần kiểm tra trước khi dùng.`;
+            `Kết quả khác nhau: giao diện ${compared.status}, máy chủ ${remote.status || 'không rõ'}. Cần kiểm tra trước khi dùng.`;
           serverStatus.dataset.status = matches ? 'MATCH' : 'MISMATCH';
           if (download) download.disabled = !matches;
+          if (matches && remote.evaluatedAtIso) {
+            result = { ...compared, measurementInput: measured };
+            renderGateIntakeConclusion(conclusion, result);
+            evaluationDetails?.render(result);
+            cancel(expiryTimer);
+            const remaining = result.sampleExpiresAtIso
+              ? Date.parse(result.sampleExpiresAtIso) - Date.parse(result.evaluatedAtIso) + 1 : 0;
+            expiryTimer = remaining > 0 ? schedule(runEvaluation, Math.min(remaining, 2_147_483_647)) : null;
+          } else if (matches) {
+            renderGateIntakeConclusion(conclusion, result);
+          } else if (!matches) {
+            cancel(expiryTimer); expiryTimer = null;
+            result = null;
+            evaluationDetails?.clear();
+            conclusion.dataset.status = 'UNVERIFIED';
+            conclusion.textContent = remote.statusTitle && remote.summaryReason
+              ? `${remote.statusTitle}. ${remote.summaryReason}`
+              : 'Chưa xác nhận được kết luận trên máy chủ. Cần kiểm tra lại.';
+          }
         }).catch(error => {
           if (disposed || serial !== evaluationSerial) return;
           serverStatus.textContent = `Chưa đối chiếu được với máy chủ: ${error.message}`;
           serverStatus.dataset.status = 'UNVERIFIED';
           if (download) download.disabled = true;
+          cancel(expiryTimer); expiryTimer = null;
+          result = null;
+          evaluationDetails?.clear();
+          conclusion.dataset.status = 'UNVERIFIED';
+          conclusion.textContent = 'Chưa xác nhận được kết luận trên máy chủ. Thử kiểm tra lại.';
         });
       renderGateIntakeConclusion(conclusion, result);
+      conclusion.dataset.status = 'PENDING';
+      conclusion.append(node('p', 'Kết quả tạm tính; đang chờ máy chủ xác nhận.'));
       evaluationDetails?.render(result);
       renderForecast();
       const delay = result.sampleExpiresAtIso ? Date.parse(result.sampleExpiresAtIso) - Date.parse(result.evaluatedAtIso) + 1 : 0;

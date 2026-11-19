@@ -5,11 +5,18 @@ export function createFieldMeasurementReviewQueue(host, onReviewed = () => {}) {
   const panel = node('details'); panel.open = true;
   panel.append(node('summary', 'Hàng chờ duyệt · cán bộ kiểm tra'));
   const status = node('p', 'Đang đọc hàng chờ…', 'subtle');
-  const queue = node('div'); panel.append(status, queue); host.append(panel);
-  async function load() {
+  const queue = node('div');
+  const more = node('button', 'Tải thêm phiếu', 'secondary'); more.type = 'button'; more.hidden = true;
+  panel.append(status, queue, more); host.append(panel);
+  let cursor = null, loaded = 0, serial = 0;
+  async function load(append = false) {
+    const ticket = ++serial;
+    if (!append) { cursor = null; loaded = 0; queue.replaceChildren(); }
+    more.disabled = true;
     try {
-      const data = await listPendingFieldMeasurements();
-      queue.replaceChildren();
+      const data = await listPendingFieldMeasurements(cursor);
+      if (ticket !== serial) return;
+      if (!Array.isArray(data.items) || !Number.isSafeInteger(data.total)) throw new Error('Trang hàng chờ không hợp lệ.');
       for (const item of data.items || []) {
         const row = node('article', undefined, 'source-card');
         row.append(node('p', `${item.measurement_id} · ${num(item.ec_mS_m)} mS/m · ${item.observed_at} · ${item.submitted_by}`));
@@ -27,9 +34,14 @@ export function createFieldMeasurementReviewQueue(host, onReviewed = () => {}) {
         }
         queue.append(row);
       }
-      status.textContent = `${(data.items || []).length} phiếu đang chờ duyệt.`;
-    } catch (error) { status.textContent = error.message; }
+      loaded += data.items.length;
+      cursor = data.next_cursor;
+      more.hidden = !data.has_more;
+      status.textContent = `Đang hiển thị ${loaded}/${data.total} phiếu chờ duyệt.`;
+    } catch (error) { if (ticket === serial) status.textContent = error.message; }
+    finally { if (ticket === serial) more.disabled = false; }
   }
+  more.addEventListener('click', () => load(true));
   load();
   return load;
 }

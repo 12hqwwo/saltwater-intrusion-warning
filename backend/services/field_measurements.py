@@ -27,9 +27,14 @@ def submit(raw):
 
 
 @storage_errors
-def list_measurements(status=None, bbox=None, submitted_by=None):
+def list_measurements(status=None, bbox=None, submitted_by=None, limit=200,
+                      before_submitted_at=None, before_measurement_id=None):
     if status not in (None, 'PENDING', 'APPROVED', 'REJECTED'):
         raise WorkspaceError(422, 'Trạng thái duyệt không hợp lệ.')
+    if (before_submitted_at is None) != (before_measurement_id is None):
+        raise WorkspaceError(422, 'Cần đủ thời gian và mã phiếu để phân trang.')
+    if before_submitted_at is not None and before_submitted_at.tzinfo is None:
+        raise WorkspaceError(422, 'Thời gian phân trang phải có múi giờ.')
     parsed = None
     if bbox is not None:
         try:
@@ -39,7 +44,10 @@ def list_measurements(status=None, bbox=None, submitted_by=None):
                 raise ValueError()
         except (ValueError, TypeError) as exc:
             raise WorkspaceError(422, 'bbox phải là minLon,minLat,maxLon,maxLat hợp lệ.') from exc
-    return dict(items=repo.list_measurements(status, parsed, submitted_by=submitted_by), status=status)
+    result = repo.list_measurements(status, parsed, limit=limit, submitted_by=submitted_by,
+                                    before=(before_submitted_at, before_measurement_id)
+                                    if before_submitted_at is not None else None)
+    return dict(result, status=status)
 
 
 @storage_errors

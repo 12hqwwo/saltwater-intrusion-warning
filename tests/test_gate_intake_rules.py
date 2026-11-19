@@ -45,7 +45,8 @@ class GateIntakeParityTests(unittest.TestCase):
         payload = dict(measurement=CASES['base_measurement'], forecast_context={}, now_iso=CASES['now_iso'])
         response = TestClient(app).post('/api/v1/gate-screening/evaluate', json=payload)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['status'], 'ELIGIBLE_FOR_REVIEW')
+        self.assertEqual(response.json()['status'], 'INSUFFICIENT_OR_EXPIRED_DATA')
+        self.assertNotEqual(response.json()['evaluatedAtIso'], CASES['now_iso'])
         payload['unexpected'] = 'field'
         self.assertEqual(TestClient(app).post('/api/v1/gate-screening/evaluate', json=payload).status_code, 422)
         payload.pop('unexpected')

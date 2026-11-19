@@ -20,6 +20,7 @@ export function logout() { clearAccessToken(); currentUser = null; changed(); }
 registerAuthorizationHeaderProvider(getAuthorizationHeader, authorization => {
   const token = readAccessToken();
   if (token && authorization === `Bearer ${token}`) {
+    logout();
     window.dispatchEvent(new CustomEvent('workspace:session-expired'));
   }
 });
@@ -48,12 +49,14 @@ export async function restoreSessionFromStorage() {
   const token = readAccessToken();
   if (!token) { changed(); return null; }
   try {
-    currentUser = await requestJSON('/auth/me');
+    const user = await requestJSON('/auth/me');
+    if (readAccessToken() !== token) return null;
+    currentUser = user;
     changed();
     return currentUser;
   } catch (error) {
     if (error.status === 401 && readAccessToken() === token) logout();
-    else if (currentUser === null) changed();
+    else if (currentUser === null && readAccessToken() === token) changed();
     return null;
   }
 }
