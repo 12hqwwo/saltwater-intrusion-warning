@@ -1,0 +1,141 @@
+SOURCE C:\Users\QUYNH\Downloads\Mau-5-TrinhBay-KLTN.docx
+PARAGRAPHS 170 TABLES 5 SECTIONS 1
+SECTION 0 width=21.00cm height=29.70cm margins=2.00,2.00,1.00,2.00
+P0001 [Title] Trường Đại học Sư Phạm Kỹ Thuật TP.HCM
+P0002 [Title] Khoa Công Nghệ Thông Tin
+P0005 [Title] MỘT SỐ QUI ĐỊNH VỀ BỐ CỤC, NỘI DUNG, HÌNH THỨC TRÌNH BÀY TLCN & KHÓA LUẬN TỐT NGHIỆP
+P0007 [normal] CẤU TRÚC CỦA KHOÁ LUẬN
+P0008 [normal] Bìa chính khóa luận (theo mẫu).
+P0009 [normal] Bìa phụ khóa luận (theo mẫu).
+P0010 [normal] Trang nhận xét của GVHD (theo mẫu).
+P0011 [normal] Trang nhận xét GVPB (theo mẫu).
+P0012 [normal] Lời cám ơn.
+P0013 [normal] Đề cương chi tiết có chữ kí của giáo viên hướng dẫn (theo mẫu).
+P0014 [normal] Mục lục.
+P0015 [normal] Danh mục các hình vẽ, bảng biểu, ký hiệu, chữ viết tắt (nếu có) xếp theo thứ tự bảng chữ cái. Không lạm dụng chữ viết tắt, các từ tiếng Anh thông dụng. Không viết tắt những cụm từ dài hoặc cụm từ ít xuất hiện trong khóa luận/ đồ án.
+P0016 [normal] Nội dung của khóa luận (xem phần Bố cục)
+P0017 [normal] BỐ CỤC CỦA KHÓA LUẬN
+P0018 [normal] Tóm tắt khóa luận: trình bày tóm tắt vấn đề nghiên cứu, các hướng tiếp cận, cách giải quyết vấn đề và một số kết quả đạt được.
+P0019 [normal] Nội dung khoá luận trình bày tối thiểu 50 trang khổ A4 và không nên vượt quá 100 trang (không kể các trang bìa, lời cám ơn, mục lục, tài liệu tham khảo…) theo trình tự như sau:
+P0020 [normal] Phần 1 : MỞ ĐẦU: Trình bày tính cấp thiết của đề tài, mục đích của đề tài, đối tượng và phạm vi nghiên cứu, phân tích đánh giá các công trình, các hướng nghiên cứu có liên quan của các tác giả trước đó, kết quả dự kiến đạt được (xem trong mẫu đề cương.)
+P0021 [normal] Phần 2 : NỘI DUNG : Chia ra các chương : Trình bày cơ sở lí thuyết, lí luận, giả thiết khoa học và phương pháp nghiên cứu, giải pháp để giải quyết vấn đề đã được sử dụng trong khoá luận. Đối với các đề tài ứng dụng có kết quả là sản phẩm phần mềm phải có mô hình, hồ sơ thiết kế, cài đặt, ... theo một trong các mô hình đã học (UML, ...)
+P0022 [normal] Phần 3 : KẾT LUẬN : Trình bày những kết quả đạt được, những đóng góp mới và những đề xuất mới. Ưu nhược điểm và hướng phát triển của đề tài. Phần kết luận cần ngắn gọn, không có lời bàn và bình luận thêm.
+P0023 [normal] DANH MỤC TÀI LIỆU THAM KHẢO: Chỉ bao gồm các tài liệu được trích dẫn, sử dụng và đề cập tới để bàn luận trong khoá luận .
+P0024 [normal] PHỤ LỤC.
+P0025 [normal] HÌNH THỨC TRÌNH BÀY
+P0026 [normal] Khóa luận phải được trình bày ngắn gọn, rõ ràng, mạch lạc, sạch sẽ, không được tẩy xóa, có đánh số trang, đánh số bảng biểu, hình vẽ, đồ thị. Phần Nội dung phân thành các chương.
+P0027 [normal] Khổ giấy A4, kiểu trang đứng
+P0028 [normal] Font chữ Unicode: Times New Roman
+P0029 [normal] Dãn dòng (line spacing) đặt ở chế độ 1.5 lines.
+P0030 [normal] Lề trên 2 cm, lề dưới 2 cm, lề trái 3 cm, lề phải 2 cm. Đánh số trang ở giữa bên dưới.
+P0031 [normal] Kích thước Font chữ
+TABLE 1 12x4
+  R01 Đề mục || Cỡ chữ || Định dạng || Canh lề trang
+  R02 Tên chương || 14 || In hoa, đậm || Giữa
+  R03 Tên tiểu mục mức 1 || 13 || In hoa, đậm || Trái
+  R04 Tên tiểu mục mức 2 || 13 || Chữ thường, đậm || Trái
+  R05 Tên tiểu mục mức 3 || 13 || Chữ thường, nghiêng || Trái
+  R06 Nội dung || 13 || Normal || Đều 2 bên
+  R07 Tên khoa học || 13 || Nghiêng || Đều 2 bên
+  R08 Bảng (table) || 12 || Normal || Giữa
+  R09 Chú thích bảng || 10 || Nghiêng || Giữa, dưới bảng
+  R10 Tên bảng || 11 || Đậm || Giữa, trên bảng
+  R11 Tên hình || 11 || Đậm || Giữa, dưới hình
+  R12 Tài liệu tham khảo || 11 || Thường || Trái
+P0033 [normal] Lưu ý :
+P0034 [normal] Số thứ tự của các chương, mục được đánh số bằng hệ thống số Ả-rập, không dùng số La mã. Các mục và tiểu mục được đánh số bằng các nhóm hai hoặc ba chữ số, cách nhau một dấu chấm: Số thứ nhất chỉ số chương, chỉ số thứ hai chỉ số mục, số thứ ba chỉ số tiểu mục. Ví dụ:
+P0036 [normal] Chương 2: LÝ THUYẾT LIÊN QUAN
+P0037 [normal] ADC
+P0038 [normal] Phương pháp xấp xỉ liên tiếp
+P0039 [normal] …
+P0040 [normal] …
+P0041 [normal] …
+P0042 [normal] Qui ước ghi tài liệu tham khảo:
+P0043 [normal] Đánh số thứ tự tài liệu tham khảo theo thứ tự từ điển.
+P0044 [normal] Bài đăng tạp chí: Tên tác giả, tên bài báo, tên tạp chí, tập, số, năm và các trang.
+P0045 [normal] Ví dụ: Kumar S, Superconvergence of a ..., IMA Journal of Numerial Analysis (7), 1987, pp. 313 - 325.
+P0046 [normal] Bài báo cáo hội nghị: Tên tác giả, Tên bài báo, Tên hội nghị, tên tuyển tập các báo cáo, nơi và thời gian tổ chức các trang. Ví dụ: B.K. Paradopop, Fuzzy sets and fuzzy realational structures as Chu spaces, Proceedings of the First International Workshop on ..., Thessaloniki, Greece, Oct. 16-20, 1998, pp….
+P0047 [normal] Sách: Tên tác giả, tên sách, lần xuất bản, nhà xuất bản, nơi xuất bản, năm xuất bản. Ví dụ: A.N.Tikhonov, Solutions of Ill-Posed Problems, Willey, NewYork, 1997.
+P0048 [normal] NỘP KHOÁ LUẬN
+P0049 [normal] Mỗi khoá luận sẽ nộp 02 cuốn báo cáo bìa mềm, bao phim, (Sinh viên nộp theo thời gian thông báo của Khoa) kèm theo :
+P0050 [normal] 02 đĩa CD ROM hoặc DVD (phải dán vào bìa sau của cuốn khóa luận), nội dung đĩa theo qui định bên dưới. Đĩa CD phải để trong bìa CD mềm, nộp kèm với Khóa luận.
+P0051 [normal] Đề cương chi tiết phải có chữ ký của GVHD (theo mẫu, có thể là bảng photocopy) và được đóng trực tiếp vào cuốn khóa luận.
+P0052 [normal] Khoá luận được trình bày theo qui định như trên.
+P0053 [normal] Sau trang Lời cám ơn, phải có trang “Đề cương chi tiết của khoá luận” có chữ ký của GVHD (chấp nhận bản Đề cương chi tiết photo).
+P0054 [normal] Sau khi bảo vệ xong, sinh viên phải chỉnh sửa theo yêu cầu của hội đồng, in lại cuốn báo cáo đã chỉnh sửa, sau trang bìa phụ phải có trang “Nhận xét của GVHD” và trang "Nhận xét của GVPB" (có chữ ký của GVPB xác nhận sinh viên đã chỉnh sửa báo cáo lại theo đúng yêu cầu của Hội đồng). Nếu không có yêu cầu chỉnh sửa vẫn phải có chữ ký của GVPB xác nhận Khóa luận đã đạt yêu cầu.
+P0056 [normal] NỘI DUNG VÀ CẤU TRÚC CỦA ĐĨA CD NỘP
+P0057 [normal] Đĩa CD ghi nhãn gồm các thông tin: Tên đề tài, tên SV thực hiện, tên GV hướng dẫn, Bộ môn, năm thực hiện.
+P0058 [normal] Tổ chức tập tin trên đĩa theo hướng dẫn sau :
+P0059 [normal] Hướng dẫn tổ chức cây thư mục trên đĩa:
+P0060 [normal] Thư mục <Tên phần mềm>: gồm hai thư mục
+P0061 [normal] SETUP: chứa các tập tin dùng để install chương trình thi hành, các tập tin chứa dữ liệu thử tương ứng với kết quả đã báo cáo trong khóa luận trước Hội đồng. Trong trường hợp vì lý do chính đáng, không thể lưu tất cả các thành phần cần thiết để có thể cài đặt, sinh viên cần có hướng dẫn cụ thể, có sơ đồ triển khai, để có thể setup được hệ thống khi cần thiết
+P0062 [normal] SOURCE: chứa các tập tin nguồn, các tập tin dữ liệu thử
+P0063 [normal] Thư mục THESIS: chứa các tập tin tài liệu văn bản của khóa luận /đồ án, với các thư mục con được tổ chức như sau:
+P0064 [normal] DOC: chứa tài liệu dạng .DOCX.
+P0065 [normal] PDF: chứa tài liệu dạng .PDF.
+P0066 [normal] Thư mục REF: chứa các tài liệu, văn bản dùng để tham khảo khi thực hiện khóa luận. Tên các tập tin tài liệu tham khảo được đặt theo qui ước ghi tài liệu tham khảo hoặc tên gợi nhớ.
+P0067 [normal] Thư mục SOFT: chứa các phần mềm liên quan trong quá trình thực hiện khóa luận.
+P0068 [normal] Ngoài thư mục gốc phải có tập tin hướng dẫn sử dụng cho việc sử dụng đĩa CD, có đầy đủ thông tin liên lạc với nhóm tác giả (email, điện thoại).
+P0069 [normal] Kết quả bảo vệ của Sinh viên chỉ  được công nhận khi sinh viên thực hiện đầy đủ các yêu cầu và nộp đúng hạn quy định. Sau thời hạn nộp, Khoa sẽ tiến hành kiểm tra và ra quyết định hủy kết quả bảo vệ, đề nghị Trường không công nhận tốt nghiệp đối với các sinh viên vi phạm những qui định này.
+TABLE 2 1x1
+  R01 TRƯỜNG ĐẠI HỌC SƯ PHẠM KỸ THUẬT TP.HCM / KHOA CÔNG NGHỆ THÔNG TIN / BỘ MÔN <TÊN BỘ MÔN> / <logo khoa CNTT> / <HỌ VÀ TÊN SINH VIÊN 1> – <MÃ SỐ SINH VIÊN> / <HỌ VÀ TÊN SINH VIÊN 2> – <MÃ SỐ SINH VIÊN> / Đề Tài : / <TÊN ĐỀ TÀI> / KHÓA LUẬN TỐT NGHIỆP KỸ SƯ CNTT / GIÁO VIÊN HƯỚNG DẪN / <TÊN GV HƯỚNG DẪN> / KHÓA xxxx - yyyy
+P0073 [Heading 1] MẪU VÍ DỤ TRANG BÌA KHÓA LUẬN
+TABLE 3 1x1
+  R01 TRƯỜNG ĐẠI HỌC SƯ PHẠM KỸ THUẬT TP.HCM / KHOA CÔNG NGHỆ THÔNG TIN / BỘ MÔN CÔNG NGHỆ PHẦN MỀM / <logo khoa CNTT> / TRẦN VĂN HỒNG : 1511001 / LƯƠNG VĂN THÔNG : 1511004 / Đề Tài : / XÂY DỰNG PHẦN MỀM NHẬN DẠNG 3D / KHÓA LUẬN TỐT NGHIỆP KỸ SƯ CNTT / GIÁO VIÊN HƯỚNG DẪN / TS. LÊ VĂN VINH / ThS. 	NGUYỄN MINH ĐẠO / KHÓA 1997 - 2001
+P0076 [normal] MẪU BÌA CD
+TABLE 4 1x2
+  R01 ĐH SƯ PHẠM KỸ THUẬT TP.HCM / KHOA CNTT / ******* || CỘNG HOÀ                                        XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc                                                        Độc lập – Tự do – Hạnh Phúc / *******
+P0080 [Heading 1] PHIẾU NHẬN XÉT CỦA GIÁO VIÊN HƯỚNG DẪN
+P0082 [normal] Họ và tên Sinh viên 1 :........................  [TAB] MSSV 1:
+P0083 [normal] Họ và tên Sinh viên 2 :........................ [TAB] MSSV 2:
+P0084 [normal] Ngành: Công nghệ Thông tin
+P0085 [normal] Tên đề tài:
+P0087 [normal] Họ và tên Giáo viên hướng dẫn:
+P0088 [Heading 2] NHẬN XÉT
+P0089 [normal] Về nội dung đề tài & khối lượng thực hiện:
+P0095 [normal] Ưu điểm:
+P0101 [normal] Khuyết điểm
+P0107 [normal] Đề nghị cho bảo vệ hay không ?
+P0108 [normal] Đánh giá loại :
+P0109 [normal] Điểm :
+P0111 [normal] Tp. Hồ Chí Minh, ngày    tháng    năm 201
+P0112 [normal] Giáo viên hướng dẫn
+P0113 [normal] (Ký & ghi rõ họ tên)
+TABLE 5 1x2
+  R01 ĐH SƯ PHẠM KỸ THUẬT TP.HCM / KHOA CNTT / ******* || CỘNG HOÀ                                        XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc                                                        Độc lập – Tự do – Hạnh Phúc / *******
+P0114 [Heading 1] PHIẾU NHẬN XÉT CỦA GIÁO VIÊN PHẢN BIỆN
+P0116 [normal] Họ và tên Sinh viên 1 :........................  [TAB] MSSV 1:
+P0117 [normal] Họ và tên Sinh viên 2 :........................ [TAB] MSSV 2:
+P0118 [normal] Ngành: Công nghệ Thông tin
+P0119 [normal] Tên đề tài:
+P0121 [normal] Họ và tên Giáo viên  phản biện:
+P0122 [Heading 2] NHẬN XÉT
+P0123 [normal] Về nội dung đề tài & khối lượng thực hiện:
+P0129 [normal] Ưu điểm:
+P0135 [normal] Khuyết điểm
+P0141 [normal] Đề nghị cho bảo vệ hay không ?
+P0142 [normal] Đánh giá loại :
+P0143 [normal] Điểm :
+P0144 [normal] Tp. Hồ Chí Minh, ngày    tháng    năm 201
+P0145 [normal] Giáo viên phản biện
+P0146 [normal] (Ký & ghi rõ họ tên)
+P0149 [normal] KIỂM TRA KHÓA LUẬN TỐT NGHIỆP
+P0150 [normal] (SV kiểm tra các mục bên dưới trước khi nộp KLTN )
+P0152 [normal] Tên Khóa luận
+P0153 [normal] SV thực hiện
+P0154 [normal] Tên Bộ môn trên bìa Khóa luận ( là Hội đồng bảo vệ của Khóa luận)
+P0155 [normal] Số lượng Khóa luận, số lượng đĩa CD: 2 cuốn bìa mềm, 2 đĩa CD
+P0156 [normal] Bìa Khóa luận (theo mẫu)
+P0157 [normal] Lời cảm ơn
+P0158 [normal] Đề cương chi tiết của Khóa luận (theo mẫu), có chữ ký của GVHD và SV thực hiện (chấp nhận bảng photo)
+P0159 [normal] Mục lục
+P0160 [normal] Bảng các hình vẽ, ký hiệu, chữ viết tắt,… (nếu có)
+P0161 [normal] Tóm tắt Khóa luận
+P0162 [normal] Nội dung Khóa luận (50 ≤ số trang ≤ 100)
+P0163 [normal] Phần Mở đầu
+P0164 [normal] Phần Nội dung
+P0165 [normal] Phần kết luận
+P0166 [normal] Danh mục tài liệu tham khảo
+P0167 [normal] Phụ lục
+P0168 [normal] Hình thức trình bày
+P0169 [normal] Bìa CD (theo mẫu), mỗi CD dán vào bìa sau của mỗi cuối của Khóa luận

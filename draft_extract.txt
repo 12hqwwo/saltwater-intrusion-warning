@@ -1,0 +1,207 @@
+SOURCE D:\Study\BAOCAOTLCN\BaoCao_TLCN.docx
+PARAGRAPHS 244 TABLES 4 SECTIONS 14
+SECTION 0 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 1 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 2 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 3 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 4 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 5 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 6 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 7 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 8 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 9 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 10 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 11 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 12 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+SECTION 13 width=21.00cm height=29.70cm margins=3.00,2.00,2.00,2.00
+P0003 [Normal] TRƯỜNG ĐẠI HỌC CÔNG NGHỆ KỸ THUẬT TP.HCM
+P0004 [Normal] KHOA CÔNG NGHỆ THÔNG TIN
+P0005 [Normal] BỘ MÔN HỆ THỐNG THÔNG TIN
+TABLE 1 2x2
+  R01 HÀ NHƯ QUỲNH || 23110298
+  R02 VÕ HỮU TÍN || 23110343
+P0010 [Normal] Đề tài:
+P0011 [Normal] XÂY DỰNG NỀN TẢNG WEBGIS CẢNH BÁO XÂM NHẬP MẶN VÀ HỖ TRỢ VẬN HÀNH CỐNG THỦY LỢI TẠI ĐỒNG THÁP
+P0013 [Normal] TIỂU LUẬN CHUYÊN NGÀNH: HỆ THỐNG THÔNG TIN
+P0015 [Normal] GIẢNG VIÊN HƯỚNG DẪN
+P0016 [Normal] ThS. TRẦN TRỌNG BÌNH
+P0018 [Normal] KHÓA 2023 – 2027
+P0022 [Normal] TP. Hồ Chí Minh, tháng 09 năm 2026
+P0025 [Normal] TRƯỜNG ĐẠI HỌC CÔNG NGHỆ KỸ THUẬT TP.HCM
+P0026 [Normal] KHOA CÔNG NGHỆ THÔNG TIN
+P0027 [Normal] BỘ MÔN HỆ THỐNG THÔNG TIN
+TABLE 2 2x2
+  R01 HÀ NHƯ QUỲNH || 23110298
+  R02 VÕ HỮU TÍN || 23110343
+P0032 [Normal] Đề tài:
+P0033 [Normal] XÂY DỰNG NỀN TẢNG WEBGIS CẢNH BÁO XÂM NHẬP MẶN VÀ HỖ TRỢ VẬN HÀNH CỐNG THỦY LỢI TẠI ĐỒNG THÁP
+P0035 [Normal] TIỂU LUẬN CHUYÊN NGÀNH: HỆ THỐNG THÔNG TIN
+P0037 [Normal] GIẢNG VIÊN HƯỚNG DẪN
+P0038 [Normal] ThS. TRẦN TRỌNG BÌNH
+P0041 [Normal] KHÓA 2023 – 2027
+P0044 [Normal] TP. Hồ Chí Minh, tháng 09 năm 2026
+TABLE 3 1x2
+  R01 ĐH CÔNG NGHỆ KỸ THUẬT TP.HCM / KHOA CÔNG NGHỆ THÔNG TIN / ****** || CỘNG HÒA XHCN VIỆT NAM / Độc lập – Tự do – Hạnh phúc / ******
+P0046 [Normal] PHIẾU NHẬN XÉT CỦA GIẢNG VIÊN HƯỚNG DẪN
+P0047 [Normal] Họ và tên Sinh viên 1 : Hà Như Quỳnh     [TAB] MSSV: 23110298
+P0048 [Normal] Họ và tên Sinh viên 2 : Võ Hữu Tín         [TAB] MSSV: 23110343
+P0049 [Normal] Chuyên ngành: Hệ thống Thông tin
+P0050 [Normal] Tên đề tài: Xây dựng nền tảng WebGIS cảnh báo xâm nhập mặn và hỗ trợ vận hành cống thủy lợi tại Đồng Tháp
+P0051 [Normal] Họ và tên giảng viên hướng dẫn: ThS. Trần Trọng Bình
+P0052 [Normal] NHẬN XÉT
+P0053 [Normal] 1.   [TAB] Về nội dung đề tài và khối lượng thực hiện:
+P0056 [Normal] 2.   [TAB] Ưu điểm:
+P0059 [Normal] 3.   [TAB] Khuyết điểm:
+P0062 [Normal] 4.   [TAB] Điểm:
+TABLE 4 1x2
+  R01  || TP. Hồ Chí Minh,ngày .... tháng .... năm .... / Giảng viên hướng dẫn / (Ký & ghi rõ họ tên) / ThS. Trần Trọng Bình
+P0065 [Normal] LỜI CẢM ƠN
+P0067 [Heading 1] TÓM TẮT
+P0069 [Heading 1] DANH MỤC BẢNG
+P0071 [Heading 1] DANH MỤC HÌNH
+P0085 [Heading 1] BẢNG PHÂN CÔNG NHIỆM VỤ VÀ TIẾN ĐỘ THỰC HIỆN
+P0088 [Heading 1] MỤC LỤC
+P0090 [Heading 1] PHẦN MỞ ĐẦU
+P0091 [KHONG CO CHUONG] 1. Lý do chọn đề tài
+P0092 [Normal] Đồng bằng sông Cửu Long là vùng có mạng lưới sông ngòi, kênh rạch dày đặc và hoạt động sản xuất nông nghiệp phụ thuộc lớn vào điều kiện nguồn nước. Trong mùa khô, sự suy giảm dòng chảy từ thượng nguồn kết hợp với ảnh hưởng thủy triều từ biển có thể làm nước mặn xâm nhập sâu vào hệ thống sông, kênh nội đồng. Xâm nhập mặn vì vậy không chỉ là vấn đề về chất lượng nước mà còn có tác động trực tiếp đến sản xuất nông nghiệp, cấp nước sinh hoạt và công tác vận hành các công trình thủy lợi.
+P0093 [Normal] Báo cáo State of the Basin 2023 của Ủy hội sông Mekong đánh giá xâm nhập mặn tại Đồng bằng sông Cửu Long ở mức đáng quan tâm. Báo cáo cũng chỉ ra rằng trong một số năm khô hạn, ranh mặn 1 g/L và 4 g/L đã xâm nhập sâu hơn đáng kể so với mức trung bình dài hạn. Đáng chú ý, tại trạm Mỹ Tho, dữ liệu quan trắc chất lượng nước của MRC cho thấy độ dẫn điện - Electrical Conductivity (EC) có xu hướng tăng và đã có thời điểm vượt các mức EC tương ứng với các ngưỡng mặn được MRC sử dụng trong đánh giá lưu vực.
+P0094 [Normal] Sau đợt sắp xếp đơn vị hành chính cấp tỉnh năm 2025, toàn bộ diện tích tự nhiên và dân số của tỉnh Tiền Giang và tỉnh Đồng Tháp được hợp nhất thành tỉnh Đồng Tháp mới. Tỉnh có diện tích 5.938,64 km² và dân số hơn 4,37 triệu người. Không gian của tỉnh mới trải dài từ khu vực đầu nguồn sông Tiền đến vùng ven Biển Đông, tạo ra đặc điểm thủy văn đa dạng và làm cho bài toán quản lý tài nguyên nước trở nên có tính liên vùng rõ nét hơn.
+P0095 [Normal] Trong phạm vi tỉnh Đồng Tháp mới, khu vực phía Đông, đặc biệt là vùng Gò Công và Tân Phú Đông, chịu ảnh hưởng trực tiếp của hạn hán và xâm nhập mặn. Năm 2026, Ủy ban nhân dân tỉnh Đồng Tháp tiếp tục ban hành văn bản về phòng, chống và ứng phó hạn, xâm nhập mặn trong mùa khô tại vùng dự án ngọt hóa Gò Công. Các cơ quan chuyên môn của tỉnh cũng duy trì việc theo dõi diễn biến mặn và vận hành linh hoạt các công trình thủy lợi nhằm bảo vệ sản xuất và nguồn nước.
+P0096 [Normal] Vùng dự án ngọt hóa Gò Công có diện tích tự nhiên trên 54.000 ha, với mạng lưới cống điều tiết, kênh dẫn, đê biển và đê sông tương đối hoàn chỉnh. Hệ thống này đang phục vụ kiểm soát nguồn nước và phòng, chống hạn, mặn cho khoảng 44.000 ha đất nông nghiệp. Điều này cho thấy hiệu quả vận hành các cống thủy lợi có vai trò trực tiếp trong công tác kiểm soát nguồn nước tại khu vực phía Đông tỉnh.
+P0097 [Normal] Tuy nhiên, dữ liệu phục vụ công tác theo dõi nguồn nước thường tồn tại ở nhiều dạng khác nhau như số liệu quan trắc chất lượng nước, khí tượng, mực nước, dữ liệu không gian của trạm và công trình thủy lợi. Nếu các dữ liệu này được khai thác riêng lẻ, người sử dụng khó có được một cái nhìn tổng hợp về diễn biến theo cả không gian và thời gian. Thực tế này đặt ra nhu cầu xây dựng một nền tảng có khả năng tập trung dữ liệu, phân tích chuỗi thời gian, trực quan hóa trên bản đồ và hỗ trợ người dùng đưa ra quyết định vận hành công trình.
+P0098 [Normal] Theo định hướng ban đầu của đề tài, hệ thống cần có khả năng lưu trữ dữ liệu không gian – thời gian, xây dựng pipeline dự báo chuỗi thời gian kết hợp nội suy không gian, đồng thời cung cấp giao diện WebGIS và module hỗ trợ khuyến nghị trạng thái vận hành cống.
+P0099 [Normal] Từ các lý do trên, đề tài “Xây dựng nền tảng WebGIS dự báo xâm nhập mặn và hỗ trợ điều phối vận hành cống thủy lợi tại Đồng Tháp” được lựa chọn thực hiện. Đề tài tập trung xây dựng một nguyên mẫu phần mềm có khả năng tích hợp dữ liệu đa nguồn, dự báo chỉ số Electrical Conductivity, biểu diễn kết quả theo không gian và hỗ trợ cung cấp thông tin cho quá trình ra quyết định vận hành cống.
+P0100 [KHONG CO CHUONG] 2. Mục tiêu nghiên cứu
+P0101 [Normal] Mục tiêu tổng quát của đề tài là xây dựng nguyên mẫu nền tảng WebGIS tích hợp dữ liệu không gian - thời gian phục vụ theo dõi và dự báo diễn biến chỉ số liên quan đến xâm nhập mặn tại tỉnh Đồng Tháp, đồng thời hỗ trợ cung cấp thông tin cho quá trình ra quyết định vận hành các cống thủy lợi thuộc khu vực nghiên cứu.
+P0102 [Normal] Hệ thống được xây dựng theo hướng hỗ trợ ra quyết định, không phải hệ thống điều khiển công trình thủy lợi tự động. Trạng thái đóng hoặc mở cống do hệ thống đưa ra chỉ mang tính chất khuyến nghị dựa trên dữ liệu, kết quả mô hình và tập luật được thiết lập.
+P0103 [KHONG CO CHUONG] 3. Đối tượng nghiên cứu
+P0104 [Normal] Đề tài hướng đến các mục tiêu cụ thể sau:
+P0105 [Normal] Thu thập, chuẩn hóa và tích hợp các nguồn dữ liệu cần thiết cho nghiên cứu, bao gồm dữ liệu Electrical Conductivity, khí tượng, thủy văn và dữ liệu không gian của trạm quan trắc, cống thủy lợi và ranh giới khu vực nghiên cứu.
+P0106 [Normal] Xây dựng cơ sở dữ liệu không gian - thời gian bằng PostgreSQL và PostGIS, phục vụ lưu trữ tập trung dữ liệu quan trắc, vị trí công trình và kết quả dự báo.
+P0107 [Normal] Xây dựng quy trình ETL nhằm tự động hóa các bước đọc dữ liệu, kiểm tra, làm sạch, chuẩn hóa thời gian, chuẩn hóa hệ tọa độ và nạp dữ liệu vào cơ sở dữ liệu.
+P0108 [Normal] Nghiên cứu và thử nghiệm các phương pháp dự báo chuỗi thời gian, trong đó tập trung vào ARIMA và Random Forest Regressor, nhằm dự báo Electrical Conductivity tại các trạm có dữ liệu phù hợp.
+P0109 [Normal] Áp dụng phương pháp nội suy không gian IDW để xây dựng bề mặt phân bố EC dự kiến từ các điểm quan trắc hoặc dự báo.
+P0110 [Normal] Xây dựng module hỗ trợ ra quyết định tại vị trí cống dựa trên giá trị EC dự báo hoặc nội suy và các ngưỡng vận hành được xác định từ nguồn dữ liệu, tài liệu chuyên ngành hoặc quy định phù hợp.
+P0111 [Normal] Xây dựng RESTful API bằng FastAPI và giao diện WebGIS bằng Leaflet để trực quan hóa trạm quan trắc, cống thủy lợi, dữ liệu lịch sử, kết quả dự báo và khuyến nghị vận hành.
+P0112 [Normal] Đánh giá kết quả dự báo bằng các chỉ số sai số thích hợp và kiểm thử tính đúng đắn của các chức năng chính của hệ thống.
+P0113 [KHONG CO CHUONG] 4. Phạm vi nghiên cứu
+P0114 [Normal] a. Đối tượng nghiên cứu
+P0115 [Normal] Đối tượng nghiên cứu của đề tài bao gồm:
+P0116 [Normal] Dữ liệu Electrical Conductivity của nước;
+P0117 [Normal] Dữ liệu khí tượng và thủy văn có khả năng liên quan đến biến động EC;
+P0118 [Normal] Dữ liệu không gian của các trạm quan trắc;
+P0119 [Normal] Dữ liệu vị trí cống và công trình thủy lợi;
+P0120 [Normal] Phương pháp dự báo chuỗi thời gian;
+P0121 [Normal] Phương pháp nội suy không gian;
+P0122 [Normal] Cơ sở dữ liệu không gian - thời gian;
+P0123 [Normal] Hệ thống WebGIS phục vụ trực quan hóa và hỗ trợ ra quyết định.
+P0124 [Normal] Electrical Conductivity được lựa chọn làm biến mục tiêu chính trong pipeline phân tích và dự báo. Đề tài không xem EC và độ mặn là hai đại lượng đồng nhất. Việc quy đổi giữa độ dẫn cụ thể và độ mặn phụ thuộc vào các điều kiện và phương trình hiệu chỉnh; Practical Salinity Scale cũng có liên hệ với conductivity, nhiệt độ và áp suất. Vì vậy, nghiên cứu không sử dụng một hệ số tuyến tính cố định để tự động chuyển EC sang độ mặn trong toàn bộ pipeline.
+P0125 [Normal] b. Phạm vi không gian
+P0126 [Normal] Phạm vi không gian chính của nghiên cứu là tỉnh Đồng Tháp mới, được hình thành từ tỉnh Đồng Tháp và tỉnh Tiền Giang trước đây. Trong đó, các khu vực phía Đông như Gò Công và Tân Phú Đông có ý nghĩa đặc biệt đối với bài toán xâm nhập mặn và vận hành công trình thủy lợi.
+P0127 [Normal] Đề tài có thể sử dụng một số trạm nằm ngoài ranh giới hành chính tỉnh như một biến giải thích thượng nguồn khi cần thiết. Cụ thể, trạm Tân Châu được xem là upstream explanatory station, không được xem là một trạm thuộc vùng nghiên cứu chính của tỉnh Đồng Tháp.
+P0128 [Normal] c. Phạm vi dữ liệu
+P0129 [Normal] Đề tài khai thác dữ liệu thứ cấp từ các nguồn đã được thu thập trong quá trình thực hiện, gồm dữ liệu MRC, dữ liệu khí tượng, dữ liệu mực nước và dữ liệu không gian.
+P0130 [Normal] Tùy theo nguồn, độ phân giải thời gian của dữ liệu có thể khác nhau. Trong phạm vi phiên bản nghiên cứu hiện tại, các chuỗi được chuẩn hóa về cùng độ phân giải phù hợp trước khi phân tích. Việc sử dụng dữ liệu thứ cấp đồng nghĩa kết quả nghiên cứu phụ thuộc vào mức độ đầy đủ, tần suất quan trắc và chất lượng của dữ liệu nguồn.
+P0131 [Normal] d. Phạm vi chức năng
+P0132 [Normal] Đề tài giới hạn ở mức prototype. Hệ thống thực hiện các chức năng chính gồm quản lý dữ liệu, phân tích, dự báo, nội suy không gian, trực quan hóa và cung cấp khuyến nghị.
+P0133 [Normal] Hệ thống không trực tiếp điều khiển thiết bị cơ khí tại cống; không thay thế quy trình vận hành chính thức của cơ quan quản lý; và không được xem là hệ thống cảnh báo nghiệp vụ đã được kiểm định để triển khai thực tế.
+P0134 [KHONG CO CHUONG] 5. Phương pháp nghiên cứu
+P0135 [Normal] Đề tài sử dụng kết hợp các phương pháp nghiên cứu sau:
+P0136 [Normal] Phương pháp nghiên cứu tài liệu: Tổng hợp các khái niệm về xâm nhập mặn, Electrical Conductivity, dữ liệu không gian - thời gian, dự báo chuỗi thời gian, nội suy không gian và kiến trúc WebGIS.
+P0137 [Normal] Phương pháp thu thập và xử lý dữ liệu: Khai thác dữ liệu thứ cấp từ các nguồn phù hợp; thực hiện kiểm tra, làm sạch, chuẩn hóa định dạng, đơn vị đo, thời gian và hệ tọa độ.
+P0138 [Normal] Phương pháp phân tích chuỗi thời gian: Khảo sát biến động của dữ liệu theo thời gian; xây dựng các biến trễ khi cần thiết; thử nghiệm mô hình ARIMA và Random Forest Regressor.
+P0139 [Normal] Phương pháp phân tích không gian: Chuẩn hóa dữ liệu về hệ tọa độ phù hợp và sử dụng IDW để ước lượng giá trị tại các vị trí chưa có quan trắc.
+P0140 [Normal] Phương pháp phát triển phần mềm: Xây dựng hệ thống theo kiến trúc client–server, sử dụng PostgreSQL/PostGIS ở tầng dữ liệu, FastAPI ở tầng backend và Leaflet ở tầng frontend.
+P0141 [Normal] Phương pháp thực nghiệm và đánh giá: Chia dữ liệu huấn luyện và kiểm thử theo trình tự thời gian, sử dụng MAE và RMSE để đánh giá mô hình; đồng thời xây dựng các test case nhằm kiểm tra chức năng của API và logic hỗ trợ vận hành cống.
+P0142 [KHONG CO CHUONG] 6. Bố cục Tiểu luận
+P0143 [Normal] Ngoài phần Mở đầu, Kết luận, Tài liệu tham khảo và Phụ lục, tiểu luận được tổ chức thành năm chương:
+P0144 [Normal] Chương 1 - Tổng quan đề tài: trình bày bối cảnh xâm nhập mặn, khu vực nghiên cứu, bài toán vận hành cống, các hướng nghiên cứu liên quan và hướng tiếp cận của đề tài.
+P0145 [Normal] Chương 2 - Cơ sở lý thuyết và công nghệ: trình bày kiến thức nền về dữ liệu không gian - thời gian, EC, dự báo chuỗi thời gian, IDW, cơ sở dữ liệu không gian và WebGIS.
+P0146 [Normal] Chương 3 - Phân tích và thiết kế hệ thống: trình bày yêu cầu, kiến trúc, ERD, ETL, các module xử lý và thiết kế giao diện.
+P0147 [Normal] Chương 4 - Xây dựng và triển khai hệ thống: mô tả quá trình cài đặt cơ sở dữ liệu, pipeline, mô hình, API và frontend.
+P0148 [Normal] Chương 5 - Thực nghiệm và đánh giá: trình bày tập dữ liệu kiểm thử, kết quả mô hình, kiểm thử module hỗ trợ ra quyết định và đánh giá hệ thống.
+P0149 [Heading 1] PHẦN NỘI DUNG
+P0150 [Heading 2] TỔNG QUAN ĐỀ TÀI
+P0151 [Heading 3] Tổng quan về xâm nhập mặn
+P0152 [Normal] Xâm nhập mặn là hiện tượng nước có hàm lượng muối cao từ biển hoặc cửa sông lan truyền vào sâu trong hệ thống sông, kênh và vùng nước ngọt. Trong vùng đồng bằng ven biển, mức độ xâm nhập mặn là kết quả tổng hợp của nhiều yếu tố như lưu lượng nước ngọt từ thượng nguồn, chế độ thủy triều, hình thái sông, lượng mưa, khai thác nước, vận hành công trình thủy lợi và biến đổi khí hậu.
+P0153 [Normal] Đối với Đồng bằng sông Cửu Long, xâm nhập mặn thường trở nên đáng chú ý trong mùa khô khi lưu lượng nước ngọt giảm. Theo MRC, độ sâu xâm nhập của các ngưỡng 1 g/L và 4 g/L trong một số năm khô hạn đã vượt đáng kể mức trung bình dài hạn tại các nhánh sông Mekong và Bassac. MRC cũng nhận định tình trạng xâm nhập mặn có liên quan đến nhiều yếu tố, trong đó có điều kiện dòng chảy thượng nguồn, mực nước biển và các tác động tại địa phương.
+P0154 [Normal] Tác động của xâm nhập mặn không chỉ thể hiện ở sự thay đổi thành phần nước mà còn ảnh hưởng đến sản xuất nông nghiệp, sinh thái và khả năng khai thác nước. Khi nguồn nước trên sông hoặc kênh vượt mức phù hợp cho một mục đích sử dụng cụ thể, việc tiếp tục lấy nước vào vùng nội đồng có thể tạo ra rủi ro cho sản xuất. Vì vậy, các cống thủy lợi đóng vai trò quan trọng trong việc điều tiết nguồn nước, đặc biệt ở khu vực ven biển.
+P0156 [Caption] Hình 1: Cơ chế khái quát của quá trình xâm nhập mặn từ cửa sông vào nội đồng
+P0157 [Heading 3] Đặc điểm khu vực nghiên cứu
+P0158 [Heading 4] Khái quát tỉnh Đồng Tháp mới
+P0159 [Normal] Tỉnh Đồng Tháp hiện nay được hình thành trên cơ sở sắp xếp toàn bộ diện tích và dân số của hai tỉnh Đồng Tháp và Tiền Giang trước đây. Sau sắp xếp, tỉnh có diện tích tự nhiên 5.938,64 km² và dân số 4.370.046 người.
+P0160 [Normal] Sự thay đổi về phạm vi hành chính khiến tỉnh Đồng Tháp mới có đặc trưng địa lý khá đa dạng. Phía thượng nguồn liên hệ trực tiếp với hệ thống sông Mekong; trong khi phần phía Đông kéo dài đến Biển Đông và bao gồm vùng Gò Công. Do đó, tỉnh mới vừa chịu ảnh hưởng của các quá trình thủy văn từ thượng nguồn vừa chịu tác động của thủy triều và xâm nhập mặn từ phía biển.
+P0161 [Normal] Đây là đặc điểm thuận lợi cho việc lựa chọn tỉnh Đồng Tháp làm case study của một hệ thống WebGIS tích hợp dữ liệu không gian – thời gian. Không gian nghiên cứu cho phép phân tích mối liên hệ giữa các yếu tố thượng nguồn và diễn biến chất lượng nước ở khu vực hạ lưu.
+P0162 [Heading 4] Khu vực phía Đông và hệ thống thủy lợi Gò Công
+P0163 [Normal] Vùng phía Đông của tỉnh có ý nghĩa đặc biệt đối với bài toán nghiên cứu do tiếp giáp Biển Đông và thường xuyên chịu tác động của hạn, mặn trong mùa khô.
+P0164 [Normal] Vùng dự án ngọt hóa Gò Công được giới hạn bởi các hệ thống sông, kênh và khu vực ven biển, với tổng diện tích trên 54.000 ha. Qua nhiều giai đoạn đầu tư, khu vực đã hình thành mạng lưới cống điều tiết, kênh dẫn, đê sông và đê biển liên hoàn. Hệ thống này phục vụ kiểm soát nguồn nước cho khoảng 44.000 ha đất nông nghiệp.
+P0165 [Normal] Trong năm 2026, tỉnh Đồng Tháp vẫn tiếp tục triển khai các biện pháp phòng, chống hạn và xâm nhập mặn tại vùng dự án ngọt hóa Gò Công. Công tác quản lý nguồn nước được thực hiện thông qua theo dõi diễn biến mặn, tích trữ nước và điều chỉnh vận hành công trình.
+P0166 [Normal] Một số cống trong khu vực vì vậy có giá trị như các điểm quyết định trong bài toán nghiên cứu. Tại các vị trí này, nếu có thể xác định được EC dự kiến theo thời điểm, hệ thống có thể cung cấp thêm một lớp thông tin nhằm hỗ trợ người quản lý đánh giá khả năng lấy nước hoặc ngăn nước.
+P0168 [Heading 3] Bài toán giám sát và hỗ trợ vận hành cống
+P0169 [Normal] Vận hành cống trong điều kiện xâm nhập mặn về bản chất là một bài toán ra quyết định dựa trên trạng thái nguồn nước. Khi nước bên ngoài cống phù hợp với mục đích khai thác, công trình có thể được xem xét vận hành để lấy nước; ngược lại, trong điều kiện nước có mức độ nhiễm mặn cao, việc ngăn nước có thể cần thiết nhằm hạn chế ảnh hưởng vào khu vực phía trong.
+P0170 [Normal] Trong thực tế, quyết định này không phụ thuộc vào duy nhất một chỉ số. Người quản lý còn phải cân nhắc mực nước, thủy triều, dự báo khí tượng – thủy văn, nhu cầu dùng nước, trạng thái nội đồng và quy trình vận hành của từng công trình.
+P0171 [Normal] Vì vậy, mục tiêu của đề tài không phải thay thế người vận hành bằng một thuật toán đóng/mở tự động. Hệ thống được thiết kế để tổng hợp một số thông tin quan trọng, bao gồm diễn biến EC, dự báo tại trạm, giá trị nội suy tại cống và ngưỡng được thiết lập, từ đó sinh ra một recommendation hỗ trợ người sử dụng.
+P0172 [Heading 3] Các hệ thống/nghiên cứu liên quan
+P0173 [Heading 3] Những hạn chế của các nghiên cứu hiện có
+P0174 [Heading 3] Hướng tiếp cận của đề tài
+P0175 [Heading 3] Tiểu kết chương
+P0179 [Heading 2] CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ
+P0180 [Heading 3] Dữ liệu không gian – thời gian
+P0181 [Heading 3] Hệ tọa độ và dữ liệu GIS
+P0182 [Heading 3] Electrical Conductivity và mối liên hệ với xâm nhập mặn
+P0183 [Heading 3] Xử lý chuỗi thời gian
+P0184 [Heading 3] ARIMA
+P0185 [Heading 3] Random Forest Regressor
+P0186 [Heading 3] Chỉ số đánh giá MAE, RMSE
+P0187 [Heading 3] Nội suy không gian IDW
+P0188 [Heading 3] PostgreSQL/PostGIS
+P0189 [Heading 3] FastAPI và RESTful API
+P0190 [Heading 3] GeoJSON
+P0191 [Heading 3] Leaflet.js
+P0192 [Heading 3] Tiểu kết chương
+P0194 [Heading 2] PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG
+P0195 [Heading 3] Phân tích yêu cầu
+P0196 [Heading 4] Yêu cầu chức năng
+P0197 [Heading 4] Yêu cầu phi chức năng
+P0198 [Heading 3] Quy trình nghiên cứu và luồng dữ liệu
+P0199 [Heading 3] Thiết kế kiến trúc hệ thống
+P0200 [Heading 3] Thiết kế cơ sở dữ liệu
+P0201 [Heading 4] ERD
+P0202 [Heading 4] Các bảng dữ liệu
+P0203 [Heading 4] Quan hệ giữa các bảng
+P0204 [Heading 4] Dữ liệu không gian PostGIS
+P0205 [Heading 3] Thiết kế ETL Pipeline
+P0206 [Heading 3] Thiết kế module dự báo
+P0207 [Heading 3] Thiết kế module IDW
+P0208 [Heading 3] Thiết kế Decision Logic
+P0209 [Heading 3] Thiết kế API
+P0210 [Heading 3] Thiết kế giao diện WebGIS
+P0211 [Heading 3] Tiểu kết chương
+P0214 [Heading 2] XÂY DỰNG VÀ TRIỂN KHAI HỆ THỐNG
+P0215 [Heading 3] Môi trường phát triển
+P0216 [Heading 3] Xây dựng cơ sở dữ liệu PostgreSQL/PostGIS
+P0217 [Heading 3] Xây dựng ETL Pipeline
+P0218 [Heading 3] Xây dựng mô hình forecasting
+P0219 [Heading 3] Xây dựng Spatial Interpolation
+P0220 [Heading 3] Xây dựng Decision Logic
+P0221 [Heading 3] Xây dựng Backend FastAP
+P0222 [Heading 3] Xây dựng Frontend WebGIS
+P0223 [Heading 3] Tích hợp hệ thống
+P0224 [Heading 3] Một số giao diện kết quả
+P0225 [Heading 3] Tiểu kết chương
+P0227 [Heading 2] KỂ CHUYỆN VÀ ĐỀ XUẤT
+P0228 [Heading 3] Mô tả dữ liệu thực nghiệm
+P0229 [Heading 3] Phương pháp chia Train/Test
+P0230 [Heading 3] Kết quả dự báo
+P0231 [Heading 4] ARIMA
+P0232 [Heading 4] Random Forest
+P0233 [Heading 3] So sánh MAE và RMSE
+P0234 [Heading 3] Kết quả nội suy không gian
+P0235 [Heading 3] Kiểm thử Decision Logic
+P0236 [Heading 3] Kiểm thử API
+P0237 [Heading 3] Đánh giá WebGIS
+P0238 [Heading 3] Thảo luận kết quả
+P0239 [Heading 3] Hạn chế nghiên cứu
+P0240 [Heading 3] Tiểu kết chương
+P0241 [Heading 1] PHẦN KẾT LUẬN
+P0243 [Heading 1] TÀI LIỆU THAM KHẢO

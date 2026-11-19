@@ -43,6 +43,8 @@ File `sql/38_app_user_username_case_insensitive.sql` kiểm tra tài khoản tr�
 
 Hai test hợp đồng PostgreSQL trong `tests/test_dss_postgres_contract.py` đã đạt trên DB tách biệt `webgis_test_20261118` có PostGIS; chúng dùng bảng tạm và rollback. Migration 38 cũng được thử trên DB này với username trùng, chạy lặp và ràng buộc unique. Test bằng chứng nguồn Mỹ Thuận dùng bản manifest lịch sử đã khôi phục vào `outputs/mythuan_three_station_20261104/source_snapshots/`; checksum khớp với run cũ, trong khi manifest dữ liệu hiện tại được giữ nguyên.
 
+`tools/feature_building.py` hiện loại file `*_daily.csv` khi chọn CSV mực nước MRC, để luôn đọc file quan trắc gốc có cột `observed_at`, `value`, `unit`. Trước bản sửa, thứ tự liệt kê file có thể khiến script chọn nhầm file tổng hợp ngày. Chưa xác định từng run nghiên cứu cũ đã chọn file nào; giữ nguyên `outputs/` đã công bố, không tái tạo chúng chỉ để khớp mã hiện tại.
+
 ## Đo hiệu năng cục bộ
 
 Chạy `.venv\Scripts\python.exe -m scripts.benchmark_api --samples 10` khi PostgreSQL cục bộ và một tài khoản nhân viên đang hoạt động. Script dùng TestClient trong cùng tiến trình, đọc DB thật, bỏ lượt khởi động đầu tiên của từng endpoint và đếm lệnh `Connection.execute`; nó không đo mạng hay tải đồng thời.
@@ -57,7 +59,9 @@ Mỗi bên dùng 10 mẫu tuần tự trên cùng máy và payload trong script;
 
 ## Docker và CI
 
-`Dockerfile` tạo frontend rồi chạy API ở chế độ snapshot. Cần cấp `WEBGIS_AUTH_SECRET` (ít nhất 32 ký tự) lúc chạy container; không đưa bí mật vào image. Ví dụ sau khi đặt biến môi trường trên máy chủ: `docker build -t webgis-tlcn .` và `docker run --rm -p 127.0.0.1:8000:8000 -e WEBGIS_AUTH_SECRET webgis-tlcn`. Workflow `.github/workflows/ci.yml` chạy kiểm thử Python với DB PostGIS riêng, kiểm thử frontend, build Vite, đồng thời build và smoke-test Docker image khi push hoặc tạo PR. Kết quả CI phải được xác nhận từ một lượt chạy GitHub Actions thực tế.
+`Dockerfile` tạo frontend rồi chạy API ở chế độ snapshot. Cần cấp `WEBGIS_AUTH_SECRET` (ít nhất 32 ký tự) lúc chạy container; không đưa bí mật vào image. Ví dụ sau khi đặt biến môi trường trên máy chủ: `docker build -t webgis-tlcn .` và `docker run --rm -p 127.0.0.1:8000:8000 -e WEBGIS_AUTH_SECRET webgis-tlcn`. Workflow `.github/workflows/ci.yml` chạy kiểm thử Python với DB PostGIS riêng, kiểm thử frontend, build Vite, đồng thời build và smoke-test Docker image khi push hoặc tạo PR. [Lượt GitHub Actions 44324276115](https://github.com/12hqwwo/saltwater-intrusion-warning/actions/runs/44324276115) trên commit `feaf5dc` đã đạt cả job `test` và `container-smoke`.
+
+`requirements-dev.txt` thêm `paramiko>=4.0,<5` để kiểm thử nhánh xử lý lỗi SFTP của `scripts/utilities/collect_fes2022b.py` trong CI; dịch vụ web không cần thư viện này khi chạy bình thường.
 
 ## PostgreSQL/PostGIS
 

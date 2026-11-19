@@ -1,0 +1,170 @@
+{
+  "schema_version": 2,
+  "protocol_id": "FROZEN_EC_PEAK_RISK_RESEARCH_V2",
+  "station": "MYTHO",
+  "experiments": {
+    "gap_2019_2021": [
+      "2019-01-01",
+      "2021-12-01"
+    ],
+    "gap_2021_2023": [
+      "2021-01-01",
+      "2023-12-01"
+    ],
+    "gap_2022_2023": [
+      "2022-01-01",
+      "2023-12-01"
+    ]
+  },
+  "lag_scenarios_days": {
+    "ec": [
+      5,
+      35
+    ],
+    "weather": [
+      5,
+      35
+    ],
+    "hydrology": [
+      5,
+      35,
+      90
+    ]
+  },
+  "issue_rule": "Day 6 of target-1 (local calendar).",
+  "anchor_rule": "Each source uses its latest month with month_end + lag <= issue; lag 5 -> t-2, 35 -> t-3, 90 -> t-5. Rolling/season features end at that month; same-month medians use earlier years only.",
+  "oni_rule": "ONI centred on target-4 (needs SST through target-3). No vintage; revisions unknown. Ablated by ...NoONI.",
+  "unit": "mS/m",
+  "event_threshold_mS_m": 150.0,
+  "regressors": {
+    "WeatherHydrology": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2"
+    ],
+    "WeatherHydrologySeason": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2",
+      "kratie_dry_deficit_t2",
+      "kratie_wet_ratio_last",
+      "oni_t4"
+    ],
+    "WeatherHydrologySeasonNoONI": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2",
+      "kratie_dry_deficit_t2",
+      "kratie_wet_ratio_last"
+    ]
+  },
+  "classifier_features": {
+    "LogitSeason": [
+      "month_sin",
+      "month_cos",
+      "kratie_dry_deficit_t2",
+      "kratie_wet_ratio_last",
+      "oni_t4"
+    ],
+    "RFClassSeason": [
+      "rainfall_mm",
+      "temperature_degC",
+      "wind_source_units",
+      "month_sin",
+      "month_cos",
+      "kratie_q_t2",
+      "kratie_q3_t2",
+      "kratie_q_ratio_t2",
+      "tc_stage_t2",
+      "tc_stage3_t2",
+      "kratie_dry_deficit_t2",
+      "kratie_wet_ratio_last",
+      "oni_t4"
+    ]
+  },
+  "limitations": [
+    "All lags are assumptions; no historical publication timestamps exist for EC, Kratie, Tan Chau or ONI.",
+    "Source files were downloaded in 2026 and may contain later revisions (e.g. Kratie rating curves).",
+    "All three windows were inspected before; not a blind test.",
+    "150 mS/m is a visual reference level, not an irrigation or gate rule.",
+    "No deployed model, registry or WebGIS output is changed."
+  ],
+  "sklearn_version": "1.9.1",
+  "pandas_version": "2.3.3",
+  "numpy_version": "2.5.3",
+  "source_sha256": {
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "data/external/climate_indices_20261029/oni_monthly.csv": "f128e6262960f5516779a6d54ea001bf1d53586dc448a36ef93d9c7b8117d649",
+    "data/raw/meteorology/openmeteo/openmeteo_all_stations_daily.csv": "5bd8dce444598367c87b857a0d5a9cabdb7c977194bba4db0bd3eb133bb780c6",
+    "data/external/multivariate_weather/manifest.json": "97898949f67329bc768f20214806d8f46d0062be11d3336dc334c68ad48110d8",
+    "data/external/multivariate_weather/era5_MyTho_1985-01-01_1989-12-31.json": "b7a44f1bc437e4e9232d96997f999238ed7811367831a6bfe805aa2859a95e37",
+    "data/external/multivariate_weather/era5_MyTho_1990-01-01_1994-12-31.json": "de14505996122950cbed03ee58394df29a46a9708699494a13140cef8b979088",
+    "data/external/multivariate_weather/era5_MyTho_1995-01-01_1999-12-31.json": "756665880ca14fe873fd24cdf535cd1f035189d94da66b6074fff912d1170ecb",
+    "data/external/multivariate_weather/era5_MyTho_2000-01-01_2004-12-31.json": "07bbcb21705c6acf53945f8858a40317002181b9deaf00a9fe625e347149dd95",
+    "data/external/multivariate_weather/era5_MyTho_2005-01-01_2009-12-31.json": "e371ef1a44f215485b7d5c2bba72c37a355df3b103f1dd9eca36ad1b3c8b4a48",
+    "data/external/multivariate_weather/era5_MyTho_2010-01-01_2014-12-31.json": "5b61bf193585eb3c114a80f12e44269f1b96ca98462417fcf70c8846c60a83dc",
+    "data/external/multivariate_weather/era5_MyTho_2015-01-01_2019-12-31.json": "70954940bece8bdbbf545ce3b35ccf72eed62ee57a2593505fc4bed08876e515",
+    "data/external/multivariate_weather/era5_MyTho_2020-01-01_2024-12-31.json": "44ae7303979eae69a11a4c2dce51391970cb56fe24d8e6266b7f51489bac26b7",
+    "data/external/multivariate_weather/era5_MyTho_2025-01-01_2026-09-30.json": "e1df13d4745072b8f439ccd3fddd8e080b40b7dc2c30292104a1ddcd396067c5",
+    "data/external/multivariate_weather/era5_MyTho_2026-10-01_2026-10-31.json": "3af8bea9f0d8139cd8736f88621b253362872bd96246edec9ee0a4422ea4d269",
+    "data/external/multivariate_weather/era5_MyThuan_2026-10-01_2026-10-31.json": "182082351ebc3c15fcdd082adede077e54e4c23cfd5963531e000b059198c684",
+    "data/external/multivariate_weather/era5_TanChau_1985-01-01_1989-12-31.json": "b6eaef2bbaa3985db3e2f89f1f5ac682738ab37d0e0c7aedb8ca803219f46657",
+    "data/external/multivariate_weather/era5_TanChau_1990-01-01_1994-12-31.json": "8eefee5b5e63ea116c76da0c267a8043d449958db2abddaa4d3c1548f74a3742",
+    "data/external/multivariate_weather/era5_TanChau_1995-01-01_1999-12-31.json": "1e0927dbb089cc7a47c54af64656d179e07c4952a98500047599e0acb29126aa",
+    "data/external/multivariate_weather/era5_TanChau_2000-01-01_2004-12-31.json": "b10c51d00915f042665383f00a74353d63e85ec279a1e8b97bc327d36911d3c4",
+    "data/external/multivariate_weather/era5_TanChau_2005-01-01_2009-12-31.json": "d513aace4198d682cb9e4ac9b244487938c955fdc7b86017f646e8e7822ad6b4",
+    "data/external/multivariate_weather/era5_TanChau_2010-01-01_2014-12-31.json": "4a26c8c8f644bb978daa5c01a31ef03fd323bd9f79fbb3993b87415092e53a32",
+    "data/external/multivariate_weather/era5_TanChau_2015-01-01_2019-12-31.json": "abc00a9db129ea38e4c720ce8a04eb96d18600a10e6be18174d561b17e11ccaf",
+    "data/external/multivariate_weather/era5_TanChau_2020-01-01_2024-12-31.json": "9058526e3833ed8ea53174c4e2ffa3f3edd2e894a36dea815f82e6e0fc56084f",
+    "data/external/multivariate_weather/era5_TanChau_2025-01-01_2026-09-30.json": "f87718b0b6d4a9acbae1ba4bd4477bacc87549905ff70b7f7fc096ebbc036fa7",
+    "data/external/multivariate_weather/era5_TanChau_2026-10-01_2026-10-31.json": "9e634f7328e1e06ebb806e7eb39af8708a601d40a13dec0d140cf91eb14c608e",
+    "data/external/ec_feature_research_20261019/era5_extra_MyTho.json": "ca879c723c61b4fc263eba23200294c59e779fb392534aca53390a894519f3d9",
+    "data/external/ec_feature_research_20261019/era5_extra_TanChau.json": "4f2aa9ff2a24a7a07c5e431f4e8c153538868d19235a1ab348c29d50a824b538",
+    "data/external/mrc_kratie_discharge_20261029/014901_Discharge_Calculated daily discharge_22a8130e.csv": "3e3e1953614c1e9764bac53722a3e5c07e57229fbc3ed879b4ca34f4a83875c2",
+    "data/external/tien_manual_long_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "5d461321271099559d84e07d73c949171945ffc0e8fa32a813e722026cda72f8",
+    "data/external/tien_manual_2024_2026_20261029/019803_Water_Level_Manual_3bd17f3a.csv": "f7ee1fb6fee877373fc341496eee8580502fe56e5e870f501252c0167140aab4",
+    "data/external/tien_manual_long_20261029/019804_Water_Level_Manual_cd6c69a7.csv": "39ea7345e3f32952cf751280e25064137f71486751c6717385fee92925b49dbf",
+    "data/external/tien_manual_history_20261029/019804_Water_Level_Manual_cd6c69a7.csv": "006000d2859a6ca9f5fee03223df88dedc6df8a90f55281531814fae818c7e9c",
+    "data/external/tien_multisite_supplement_20261029/019804_Water_Level_Manual_cd6c69a7.csv": "33365a0bd1e66f3334952b8a04ff55bb2285f90fd433ba13c2ba8c9c663d3f20",
+    "data/external/tien_manual_long_20261029/985203_Water_Level_Manual_54d4a565.csv": "5f6959da749c9b17a9802af0ac7322c3c45c8e045a8bca992e824c992eab3ccf",
+    "data/external/tien_manual_history_20261029/985203_Water_Level_Manual_54d4a565.csv": "6476c4188183caed1b8134b14e37d9cc46bf3df5f5080f7295e509c2ed39bb1a",
+    "data/external/tien_multisite_supplement_20261029/985203_Water_Level_Manual_54d4a565.csv": "7d0898795e3db8cc8af9f112062b2dfdaf6c8aedf0e475991fcfe73bfc8d0f6a",
+    "data/external/tien_manual_long_20261029/980601_Water_Level_Manual_23b97124.csv": "72935a94e91787d0907b682f61269fdb4e75f5278493a635f237072a58558908",
+    "data/external/tien_manual_history_20261029/980601_Water_Level_Manual_23b97124.csv": "701dbacb4ca663e55e3bd18c314f16e05d4780ef0cc51fe3536b911702d19e54",
+    "data/external/tien_multisite_supplement_20261029/980601_Water_Level_Manual_23b97124.csv": "c602b98d0260d541bdf5a4c4ffa1ededb7d1f5cf9a04616e4384ab17767fa604",
+    "scripts/experiment_ec_peak_risk_20261112.py": "f4611f2df51e504e3e62095e1d9e0323106485e790fd614071a54acabcd744e1",
+    "scripts/experiment_ec_long_hydrology.py": "0e7ce71187d2e9e4d88a7ff8573536e8d55a219027a85eb4fbc89aaedefaf567",
+    "scripts/experiment_ec_upstream_asof.py": "17fe67e6de867bed59e70e1a328eb692989da196ce9014efba12a373615c578b",
+    "scripts/backtest_asof_ec.py": "a30e212a9eb52679979ffb2988dc8c75e9bbad0b066130b737d17c13753fc5f7",
+    "scripts/evaluate_frozen_ec_gap.py": "d37bdfc85910bda1f29a73c64dbabc7e8c25d9381e91b7a6c583cab4811cedfa",
+    "scripts/evaluate_mythuan_three_station.py": "3828e7ebd2ede041223ddce810ce31390528239369cad7fd66dc872d817f7303",
+    "scripts/train_multivariate_ec.py": "a2c85da74923c56e46a9b9290743f2e038fa633b6c0feeedf2e73d6bc4609255",
+    "backend/repositories/multivariate_inputs.py": "0b9108a2f455d2e2e031151d18151abd4ae9ec9ee98330504a15af4c21dda8f4",
+    "backend/domain/multivariate_ec.py": "216cad46842cac84b2d63defd865b46d8f448cc533121182d63a916bfb3d721f"
+  },
+  "output_sha256": {
+    "predictions.csv": "481418a29ffff6837e7a305d28939bfca5551220405afb40bacfe2df67429556",
+    "metrics.csv": "bf3bbbf905430340f07ce5723e1d63a2cc24a7eb78ad25fe799ddc8364463c6a"
+  }
+}

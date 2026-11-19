@@ -1,0 +1,85 @@
+SOURCE C:\Users\QUYNH\Downloads\Mau-3-HuongDanLam-LuanVan.docx
+PARAGRAPHS 85 TABLES 1 SECTIONS 1
+SECTION 0 width=21.00cm height=29.70cm margins=2.00,2.00,1.00,2.00
+TABLE 1 1x2
+  R01 Trường ĐH Sư Phạm Kỹ Thuật TP.HCM / Khoa : CNTT || 
+P0003 [normal] TÀI LIỆU HƯỚNG DẪN SINH VIÊN
+P0004 [normal] KHI LÀM TLCN & LUẬN VĂN TN
+P0005 [normal] Chú ý : những nội dung sau áp dụng cho luận văn tốt nghiệp và tiểu luận chuyên ngành.
+P0006 [normal] Mục đích làm luận văn
+P0007 [normal] Luận văn tốt nghiệp là một dịp rất tốt để sinh viên :
+P0008 [normal] Rèn luyện kĩ năng tổng hợp các kiến thức đã học trên mọi phương diện
+P0009 [normal] Rèn luyện tính tự chủ và tinh thần trách nhiệm trong công việc.
+P0010 [normal] Độc lập, tự chủ tạo ra một bản thiết kế, một bản luận văn hay đồ án [BR] hoàn chỉnh
+P0011 [normal] Những câu hỏi lớn khi làm luận văn
+P0012 [normal] Quá trình làm luận văn tốt nghiệp hay nhận nhiệm vụ thực tập, sinh viên [BR] cần nhớ và trả lời được 3 câu hỏi lớn như sau:
+P0013 [normal] Làm gì ?
+P0014 [normal] Làm như thế nào ?
+P0015 [normal] Kết quả ra sao ?
+P0016 [normal] Làm gì ?
+P0017 [normal] Nhiệm vụ được giao hoặc tự mình xác định cần phải giải [BR] quyết.
+P0018 [normal] Làm như thế nào ? Phần này bao gồm những ý chính như sau:
+P0019 [normal] Tổng hợp, phân tích, đánh giá những cái người khác đã làm
+P0020 [normal] Ghi chép lại các tài liệu tham khảo, website, phần mềm…tham khảo [BR] để trích dẫn và để xếp vào phần phụ lục.
+P0021 [normal] Đề xuất ra phương án giải quyết của mình và chứng minh, lí giải vì sao chọn phương án như thế
+P0022 [normal] Thiết kế chi tiết theo đề xuất của mình.
+P0023 [normal] Trao đổi và tham khảo ý kiến của GV hướng dẫn là vô cùng quan [BR] trọng. Nhưng điều kiện tiên quyết để có kết quả tốt là SV phải động não, [BR] phải lao động, tránh tình trạng ỷ lại
+P0024 [normal] Kết quả ra sao ?
+P0025 [normal] Kết quả mình đã làm như các kết quả điều tra, kết quả phần cứng, phần [BR] mềm, các bảng biểu, hình vẽ…
+P0026 [normal] Đánh giá kết quả, so sánh với mong muốn ban đầu, so sánh với kết quả của [BR] người khác…
+P0027 [normal] Đề ra phương hướng khắc phục những cái chưa giải quyết được …
+P0029 [normal] Yêu cầu đối với sinh viên
+P0030 [normal] Sinh viên phải có trách nhiệm định kỳ gặp GV hướng dẫn (tối đa là 2 tuần/lần) để báo cáo công việc đã làm và thảo luận với GVHD định hướng về các công việc tiếp theo.
+P0031 [normal] Liên hệ và thoả thuận với GVHD về điều kiện và phương tiện làm việc. Khi [BR] được GVHD bố trí nơi làm việc thì sinh viên phải làm việc tại phòng [BR] máy và có trách nhiệm bảo quản máy móc, các trang thiết bị khác và tuân thủ [BR] nội qui phòng máy hoặc phòng thí ngiệm.
+P0032 [normal] Xử lý
+P0033 [normal] Trước khi bảo vệ tốt nghiệp, Các GVHD xét duyệt tư cách bảo [BR] vệ tốt nghiệp của SV, báo về cho Khoa, nhớ xem xét nghiêm túc các trường hợp sau :
+P0034 [normal] Sinh viên cả đợt làm luận văn tốt nghiệp không gặp thầy giáo hướng dẫn [BR] sau lần giao nhiệm vụ đầu tiên, hàng tuần (hoặc định kỳ) không báo cáo tiến độ thực hiện sẽ bị xử lí như là không làm luận văn và bị đình chỉ, không được bảo vệ luận văn.
+P0035 [normal] Đến hạn không nộp báo cáo sẽ bị coi như không làm luận văn.
+P0036 [normal] Người hướng dẫn đánh giá luận văn không đạt yêu cầu thì luận văn sẽ [BR] không được xét cho bảo vệ.
+P0037 [normal] Các bước tiến hành khi làm luận văn
+P0038 [normal] Nhận đề tài
+P0039 [normal] Tìm tài liệu tham khảo : Đây là khâu rất quan trọng. Có tài liệu tham [BR] khảo tốt sẽ đảm bảo luận văn thành công tốt.
+P0040 [normal] Nghiên cứu sơ bộ tài liệu và đề tài, sau đó viết đề cương (sơ bộ) của [BR] luận văn và thông qua giáo viên hướng dẫn. Đề cương sẽ giúp sinh [BR] viên khái quát vấn đề trước khi đi vào chi tiết. Cái tổng thể phải [BR] được hình dung trước cái chi tiết.
+P0041 [normal] Lưu ý: Sau khi nhận đề tài, sinh viên liên hệ ngay với GVHD để nhận nhiệm vụ cụ thể, thống nhất cách làm việc, viết đề cương và trình cho GVHD phê duyệt trong vòng 2 tuần là tối đa.
+P0042 [normal] Tiến hành nghiên cứu lí thuyết, làm thực nghiệm theo nội dung đề tài [BR] đã được vạch ra trong đề cương. Sinh viên nên Vừa làm vừa viết luận văn để kịp [BR] thời gian và dễ xử lí.
+P0043 [normal] Báo cáo sơ bộ với thầy giáo hướng dẫn tình hình thực hiện đề cương [BR] và kết quả nghiên cứu.
+P0044 [normal] Hoàn chỉnh luận văn tốt nghiệp : Bố cục, nội dung, hình thức trình bày của luận văn phải tuân theo mẫu chung của khoa CNTT ban hành
+P0045 [normal] Nộp luận văn cho thầy hướng dẫn duyệt lần cuối
+P0046 [normal] Chỉ nên đóng bìa bản in giấy hoàn chỉnh sau khi có ý kiến của giáo viên [BR] hướng dẫn.
+P0047 [normal] Nộp luận văn cho bộ môn hoặc khoa.
+P0048 [normal] Chuẩn bị bảo vệ: Chuẩn bị file Powerpoint trình chiếu, chương trình phần mềm, quay phim demo, bảo vệ thử, viết tóm tắt nội dung bảo vệ, chuẩn bị máy tính, bản vẽ các loại.
+P0049 [normal] Yêu cầu đối với  Giảng Viên hướng dẫn
+P0050 [normal] Ra đề
+P0051 [normal] Đề ra các yêu cầu, nhiệm vụ cho đề tài
+P0052 [normal] Phê duyệt đề cương và theo dõi tiến độ của sinh viên mình hướng dẫn : Sau khi sinh viên nhận đề tài, GV hướng dẫn có trách nhiệm lên lịch trực để gặp sinh viên, giao nhiệm vụ. Yêu cầu mỗi nhóm sinh viên viết đề cương theo mẫu, chỉnh sửa và phê duyệt đề cương. Mỗi GV cần có 1 sổ logbook để theo dõi tiến độ làm việc của sinh viên, ghi rõ và ký xác nhận :
+P0053 [normal] Ngày gặp
+P0054 [normal] Nội dung công việc (theo đề cương) đã hoàn thành
+P0055 [normal] Nội dung công việc chưa hoàn thành
+P0056 [normal] Nhận xét thái độ làm việc của sinh viên
+P0057 [normal] Lời dặn
+P0058 [normal] Góp ý cho sinh viên chỉnh sửa báo cáo toàn văn của luận văn trước khi in nộp
+P0059 [normal] Viết nhận xét của GV hướng dẫn theo mẫu
+P0060 [normal] Tham gia ngồi hội đồng, chấm điểm theo mẫu Rubric
+P0061 [normal] Vấn đề bản quyền
+P0062 [normal] Luận văn tốt nghiệp thường được hiểu là có hai loại:
+P0063 [normal] Thực hiện một nhiệm vụ nào đó để hoàn thành quá trình học tập, nhận [BR] bằng tốt nghiệp. Sinh viên có thể tự xoay sở điều kiện làm việc để hoàn thành [BR] luận văn. Sinh viên có quyền khai thác và sử dụng luận văn của mình vào [BR] những việc khác.
+P0064 [normal] Thực hiện một đề tài, một nhiệm vụ trong ý đồ chiến lược, trong chương [BR] trình và đề tài nghiên cứu khoa học và lao động sản xuất của thầy giáo, của cơ [BR] sở đào tạo (Trung tâm, Viện nghiên cứu, các Công ty). Cơ sở đào tạo cung cấp [BR] các phương tiện và điều kiện làm việc khác: máy móc, sách vở, điện thoại, truy [BR] cập Internet, máy in, dụng cụ thiết bị thí nghiệm ... Trong trường hợp này, toàn [BR] bộ bản quyền không thuộc về sinh viên. Sinh viên chỉ là một người tham gia, thực hiện. Sản phẩm làm ra, sinh viên không được tuỳ tiện sử dụng ở những [BR] nơi khác với mục đích khác.
+P0065 [normal] Nộp báo cáo toàn văn
+P0066 [normal] Sau khi được sự góp ý của GV hướng dẫn, sinh viên tiến hành in, nộp đĩa như sau :
+P0067 [normal] Mỗi sinh viên nộp 2 cuốn báo cáo (in bìa thường, lót bìa kiếng) cho khoa kèm 2 đĩa CD chứa : file word, pdf toàn văn báo cáo, file powerpoint chuẩn bị nội dung trình bày, chương trình, tài liệu tham khảo.
+P0068 [normal] Quy cách trình bày file word và đĩa CD theo quy định
+P0069 [normal] Bảo vệ
+P0070 [normal] Mỗi sinh viên nên tập trung trình bày 15 phút, tối đa không quá 20 phút.
+P0071 [normal] Tránh nói quá dài về tổng quan lí luận, nên đi thẳng vào vấn đề: Mục đích chính của đề tài, phương pháp nghiên cứu, giải pháp đã được chọn, cách giải quyết vấn đề,  kết quả đạt được.
+P0072 [normal] Sinh viên Chạy thử chương trình 5 phút
+P0073 [normal] Hỏi và trả lời câu hỏi khoảng 10 phút
+P0074 [normal] Nên tổ chức tập bảo vệ thử giữa các sinh viên với nhau để tập trình bày [BR] với các mục tiêu: nói năng lưu loát, rõ ràng, ngắn gọn và căn giờ. Sau đó cần [BR] chỉnh sửa hoặc bổ sung thêm hoặc cắt đi những cái rườm rà. Nhấn mạnh và chỉ [BR] rõ cái mình làm được.
+P0075 [normal] Chấm điểm
+P0076 [normal] Mỗi hội đồng gồm ít nhất 3 thành viên : GVHD, GVPB, CTHĐ
+P0077 [normal] Mỗi thành viên chấm điểm riêng theo các tiêu chí trong bảng Rubric đã được công bố cho sinh viên
+P0078 [normal] Điểm cuối cùng là trung bình của 3 điểm thành phần.
+P0079 [normal] Các điểm thành phần không lệch nhau quá 1.5 đ, nếu có sự chênh lệch trên 1.5đ thì các thành viên trong hội đồng cần phải thương thảo lại dưới sự chủ trì của CTHĐ.
+P0080 [normal] Nộp báo cáo và đĩa sau khi có ý kiến chỉnh sửa từ hội đồng
+P0081 [normal] Các nhóm thực hiện điều chỉnh, sửa chữa báo cáo, chương trình theo ý kiến của hội đồng, sau đó in lại và nộp báo cáo hoàn chỉnh + đĩa CD cho khoa.
+P0084 [normal] TP.HCM, ngày 26 tháng 11 năm 2018
+P0085 [normal] BCN KHOA

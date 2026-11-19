@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "protocol_id": "ROLLING_ONLINE_CONFORMAL_HYDROLOGY_PRIMARY_CONFIG_V1",
+  "model_configuration_of": "20261108T_HYDROLOGY_PRIMARY_V1",
+  "refit_rule": "Same features/parameters as the served manifest; re-fitted at every monthly issue on labels available then.",
+  "nominal_coverage": 0.9,
+  "aci_gamma": 0.02,
+  "score": "|log1p(actual) - log1p(forecast)|",
+  "order_statistic": "k = ceil((n+1)(1-alpha)); unbounded when k > n",
+  "warmup_from": "2010-01-01",
+  "seasons": {
+    "dry": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      12
+    ]
+  },
+  "availability": {
+    "ec_days": [
+      5,
+      35
+    ],
+    "weather_days": 5,
+    "hydrology_days": 5
+  },
+  "limitations": [
+    "Online/sequential conformal on a rolling model sequence, not split conformal for one fixed artifact.",
+    "Availability lags are assumptions.",
+    "2019-2023 has been inspected before; not a blind test.",
+    "Interval is a statistical band, not a safe EC ceiling or gate rule."
+  ],
+  "sklearn_version": "1.9.1",
+  "source_sha256": {
+    "scripts/experiment_ec_conformal_20261112.py": "71eb100222d49c35a1123baea4d6edac5835c68c20b32f6e76363134a13b353b",
+    "scripts/experiment_ec_long_hydrology.py": "0e7ce71187d2e9e4d88a7ff8573536e8d55a219027a85eb4fbc89aaedefaf567",
+    "scripts/experiment_ec_upstream_asof.py": "17fe67e6de867bed59e70e1a328eb692989da196ce9014efba12a373615c578b",
+    "scripts/backtest_asof_ec.py": "a30e212a9eb52679979ffb2988dc8c75e9bbad0b066130b737d17c13753fc5f7",
+    "scripts/train_multivariate_ec.py": "a2c85da74923c56e46a9b9290743f2e038fa633b6c0feeedf2e73d6bc4609255",
+    "backend/domain/multivariate_ec.py": "216cad46842cac84b2d63defd865b46d8f448cc533121182d63a916bfb3d721f",
+    "backend/repositories/multivariate_inputs.py": "0b9108a2f455d2e2e031151d18151abd4ae9ec9ee98330504a15af4c21dda8f4",
+    "data/research/mrc_ec_monthly_samples.csv": "2df6ea770320a779ff2f2ac84b0f54c5f5f29b2259032a1a4ae5d0cbb62ab21f",
+    "runs/multivariate_ec/mytho/20261108T_HYDROLOGY_PRIMARY_V1/manifest.json": "9be8b8786bd379c8f30dac67ef78d42ac4ea5211d085f8f8f589e34463c1a7b2",
+    "data/external/multivariate_weather/manifest.json": "97898949f67329bc768f20214806d8f46d0062be11d3336dc334c68ad48110d8"
+  },
+  "output_sha256": {
+    "predictions.csv": "7ee3e6a568f96b6293f82a872ff03afd22cde0042a1b3df55a282ea48d185c0d",
+    "metrics.csv": "7ae2e6582db8453454101d69c983b5582a012d59b6562b27c83b93db6a6c0f32"
+  }
+}

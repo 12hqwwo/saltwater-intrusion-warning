@@ -1,0 +1,27 @@
+SOURCE C:\Users\QUYNH\Downloads\Mau-2-Rubric-KLTN-Edit.docx
+PARAGRAPHS 11 TABLES 3 SECTIONS 1
+SECTION 0 width=29.70cm height=21.00cm margins=0.95,0.79,0.63,0.79
+P0001 [normal] ĐẠI HỌC SƯ PHẠM KỸ THUẬT TP. HCM [TAB] Bộ Môn :
+P0002 [normal] KHOA CÔNG NGHỆ THÔNG TIN
+P0003 [normal] BẢNG CHẤM ĐIỂM KHÓA LUẬN TỐT NGHIỆP
+TABLE 1 2x6
+  R01 MaSV (1) || Họ tên (1) || MaSV (2) || Họ tên (2) || MaSV (3) || Họ tên (3)
+  R02  ||  ||  ||  ||  || 
+TABLE 2 10x11
+  R01 STT || Tiêu chí || Thang điểm || Mức độ đạt được || Mức độ đạt được || Mức độ đạt được || Mức độ đạt được || Mức độ đạt được || Điểm đạt được || Điểm đạt được || Điểm đạt được
+  R02 STT || Tiêu chí || Thang điểm || 1 || 2 || 3 || 4 || 5 || (1) || (2) || (3)
+  R03 1 || Tính thực tiễn của đề tài, sự hiểu biết về vấn đề nghiên cứu || 10 ||  ||  ||  ||  ||  ||  ||  || 
+  R04 2 || Tính đúng đắn và hợp lí của phương pháp nghiên cứu, của thiết kế, của giải pháp được nêu ra trong luận văn. Mức độ hoàn thiện của sản phẩm, mức độ hoàn thành công việc của sinh viên. || 40 ||  ||  ||  ||  ||  ||  ||  || 
+  R05 3 || Chất lượng của bài thuyết trình || 10 ||  ||  ||  ||  ||  ||  ||  || 
+  R06 4 || Khả năng đọc sách ngoại ngữ tham khảo || 5 ||  ||  ||  ||  ||  ||  ||  || 
+  R07 5 || Khả năng tổng hợp kiến thức, viết luận văn || 10 ||  ||  ||  ||  ||  ||  ||  || 
+  R08 6 || Chất lượng về hình thức của luận văn (Cấu trúc, định dạng, chính tả,…) || 5 ||  ||  ||  ||  ||  ||  ||  || 
+  R09 7 || Chất lượng trả lời các câu hỏi của hội đồng || 20 ||  ||  ||  ||  ||  ||  ||  || 
+  R10 Tổng điểm || Tổng điểm || Tổng điểm || Tổng điểm || Tổng điểm || Tổng điểm || Tổng điểm || Tổng điểm ||  ||  || 
+P0006 [normal] Ghi chú : mức độ đạt được chia thành 5 thang bậc, ký hiệu 1, 2, 3, 4, 5 (Sinh viên đạt mức độ nào thì GV ghi kí hiệu của SV (VD : (1)) vào ô tương ứng)
+P0007 [normal] Không đạt (0%) [TAB] 2.Yếu [TAB] (20%)
+P0008 [normal] 3.Trung Bình (50%) [TAB] 4. Khá [TAB] (70%) [TAB] 5. Giỏi (100%)
+P0009 [normal] Tp.HCM, ngày…. tháng…. năm 201
+P0010 [normal] Giảng viên chấm điểm
+TABLE 3 1x1
+  R01 Đề nghị :
