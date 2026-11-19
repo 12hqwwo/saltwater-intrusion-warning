@@ -91,7 +91,8 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   const persistLabel = node('label', 'Lưu lượt chạy vào PostgreSQL');
   persistLabel.prepend(persistRun);
   action.append(persistLabel);
-  form.append(source, action);
+  const writeKeyHost = node('div', undefined, 'wide');
+  form.append(source, writeKeyHost, action);
   const status = node("p", "Đang tải danh mục mô hình…", "subtle mv-status");
   status.setAttribute("role", "status");
   const modelInfo = node("p", "", "subtle mv-model-info");
@@ -129,6 +130,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   host.append(evaluation);
   createForecastIssuePanel(host);
   const predictionHistory = createPredictionHistory(host, {
+    keyHost: writeKeyHost,
     onSaved(data) {
       result = data;
       renderResult(data);
@@ -392,6 +394,12 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
   form.addEventListener("submit", async event => {
     event.preventDefault();
     if (!form.reportValidity() || submit.disabled) return;
+    const persist = persistRun.checked;
+    let headers = {};
+    if (persist) {
+      try { headers = predictionHistory.writeHeaders(); }
+      catch (error) { status.textContent = error.message; return; }
+    }
     clearResult("Đang chạy mô hình dự báo đa biến…");
     const req = predictionRequests.next();
     const payload = { station: station.value, target_month: month.value, input_mode: mode.value };
@@ -408,8 +416,7 @@ export function createMultivariateForecast({ onStation, onPrediction } = {}) {
     busy = true;
     refreshButton();
     try {
-      const persist = persistRun.checked;
-      const response = await api(persist ? '/multivariate/history' : '/multivariate/predict', { ...req, method: 'POST', body: payload, timeoutMs: 120_000 });
+      const response = await api(persist ? '/multivariate/history' : '/multivariate/predict', { ...req, method: 'POST', headers, body: payload, timeoutMs: 120_000 });
       const data = persist ? response.prediction : response;
       if (!req.isCurrent()) return;
       if (!validPrediction(data, { ...payload, site_code: currentStation()?.site_code })) throw new Error("Kết quả dự báo không khớp yêu cầu, đầu vào hoặc đơn vị hợp lệ.");

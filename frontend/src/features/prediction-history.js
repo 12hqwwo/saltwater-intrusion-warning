@@ -3,7 +3,7 @@ import { workspaceAPI as api } from "../shared/workspace-api.js";
 import { createRequestGate } from "../api.js";
 import { validPrediction, validMonth } from '../shared/forecast-contract.js';
 
-export function createPredictionHistory(host, { onSaved } = {}) {
+export function createPredictionHistory(host, { onSaved, keyHost = host } = {}) {
   const requests = createRequestGate();
   let candidate = null, candidateVersion = 0, saving = false, rows = [], offset = 0, total = 0, knownStations = [];
   const catalogIdentity = name => {
@@ -11,6 +11,21 @@ export function createPredictionHistory(host, { onSaved } = {}) {
     return item ? { site_code: item.site_code } : {};
   };
   const session = [];
+  const writeKey = node('input');
+  writeKey.type = 'password'; writeKey.name = 'forecast_write_key';
+  writeKey.autocomplete = 'off'; writeKey.spellcheck = false;
+  writeKey.setAttribute('autocapitalize', 'off');
+  const writeKeyLabel = node('label', 'API key lưu dự báo');
+  writeKeyLabel.append(writeKey);
+  keyHost.append(writeKeyLabel, node('p', 'Dùng chung cho hai nút lưu dự báo. Key chỉ giữ trong trang hiện tại; cần nhập lại khi tải lại trang. Bỏ chọn lưu để chạy dự báo không cần key.', 'subtle'));
+  function writeHeaders() {
+    const key = writeKey.value.trim();
+    if (!key) {
+      writeKey.focus();
+      throw new Error('Nhập API key lưu dự báo để lưu vào PostgreSQL.');
+    }
+    return { 'X-API-Key': key };
+  }
   const saveButton = node("button", "Chạy và lưu dự báo vào PostgreSQL", "secondary");
   saveButton.type = "button"; saveButton.disabled = true;
   const saveStatus = node("p", "Lưu sẽ chạy lại mô hình trên máy chủ với cùng yêu cầu và lưu kết quả máy chủ tạo ra.", "subtle");
@@ -106,11 +121,14 @@ export function createPredictionHistory(host, { onSaved } = {}) {
   }
   saveButton.addEventListener("click", async () => {
     if (!candidate || saving) return;
+    let headers;
+    try { headers = writeHeaders(); }
+    catch (error) { saveStatus.textContent = error.message; return; }
     const payload = { ...candidate }, version = candidateVersion;
     saving = true; saveButton.disabled = true;
     saveStatus.textContent = "Máy chủ đang chạy lại mô hình và lưu dự báo vào PostgreSQL…";
     try {
-      const saved = await api("/multivariate/history", { method: "POST", body: payload, timeoutMs: 120_000 });
+      const saved = await api("/multivariate/history", { method: "POST", headers, body: payload, timeoutMs: 120_000 });
       const prediction = saved.prediction;
       if (!validPrediction(prediction, { ...payload, ...catalogIdentity(payload.station) })) throw new Error("Phản hồi lưu dự báo không khớp yêu cầu.");
       record(prediction);
@@ -132,6 +150,7 @@ export function createPredictionHistory(host, { onSaved } = {}) {
   clear.addEventListener("click", () => { session.length = 0; renderComparison(); });
   return {
     record,
+    writeHeaders,
     setCandidate(payload) { candidate = payload ? { ...payload } : null; candidateVersion++; saveButton.disabled = saving || !candidate; },
     setStations(items) {
       knownStations = items;

@@ -48,6 +48,8 @@ SELECT * FROM webgis_security.audit_log ORDER BY audit_id DESC LIMIT 20;
 
 ## API key tùy chọn và phạm vi
 
-Mặc định web local không yêu cầu API key. Đặt `WEBGIS_WRITE_API_KEY` trong `.env` nếu muốn yêu cầu header `X-API-Key` trên hai POST lưu lịch sử/nháp; đọc dữ liệu và chạy dự báo không lưu vẫn được phép. Không đưa key vào frontend hoặc URL. Giao diện mặc định không gửi key; khi bật cấu hình này, dùng API client có header hoặc bổ sung proxy xác thực phù hợp. CORS, Origin và Host được kiểm tra nhưng không thay thế xác thực người dùng.
+Backend yêu cầu header `X-API-Key` trên các POST lưu lịch sử/nháp khi đặt `WEBGIS_WRITE_API_KEY` trong `.env`; các alias `/api/v1/workspace/...` và `/api/v1/research/...` được bảo vệ như nhau. Đọc dữ liệu và chạy dự báo không lưu vẫn được phép. Không nhúng key vào frontend build hoặc URL.
+
+Trong Dự báo EC đa biến, nhập `WEBGIS_WRITE_API_KEY` vào ô mật khẩu **API key lưu dự báo**. Một ô dùng chung cho tùy chọn **Lưu lượt chạy vào PostgreSQL** và nút **Chạy và lưu dự báo vào PostgreSQL**. Key chỉ giữ trong ô nhập của trang hiện tại, không lưu localStorage/sessionStorage hay file xuất; cần nhập lại khi tải lại trang. Bỏ chọn lưu để chạy dự báo không cần key. Các yêu cầu đọc lịch sử và chạy không lưu không gửi key. API lưu nháp cống cần client có header tương ứng. CORS, Origin và Host được kiểm tra nhưng không thay thế xác thực người dùng.
 
 Server chạy ở `127.0.0.1`; phân quyền DB bảo vệ dữ liệu khỏi các thao tác mà ứng dụng không được phép thực hiện, không giới hạn ai được truy cập web local. Triển khai qua mạng cần xác thực ở reverse proxy, HTTPS, firewall và chính sách sao lưu riêng. PostgreSQL ở máy khác cần TLS với `PGSSLMODE=verify-full` và chứng chỉ tin cậy; thiết lập này không tự thay pg_hba.conf, firewall hoặc mã hóa ổ đĩa/backup. Máy hiện tại chưa được cấu hình các phần triển khai từ xa đó.

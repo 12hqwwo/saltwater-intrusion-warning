@@ -19,6 +19,7 @@ class Element {
   get firstChild() { return this.children[0]; }
   setAttribute(name, value) { this[name] = value; }
   removeAttribute(name) { delete this[name]; }
+  focus() { this.focused = true; }
   addEventListener(name, callback) { (this.listeners[name] ||= []).push(callback); }
   async emit(name) { await Promise.all((this.listeners[name] || []).map(callback => callback({ preventDefault() {} }))); }
   reportValidity() { return true; }
@@ -41,7 +42,7 @@ function environment() {
         items: [], summary: { on_time_n_scored: 0, late_n_scored: 0 },
       }) });
     }
-    return new Promise(resolve => pending.push({ url, options, respond(data, ok = true) { resolve({ ok, status: ok ? 200 : 503, json: async () => data }); } }));
+    return new Promise(resolve => pending.push({ url, options, respond(data, ok = true, status = ok ? 200 : 503) { resolve({ ok, status, json: async () => data }); } }));
   };
   return { get: id => document.getElementById(id), pending, events, downloads };
 }
@@ -70,7 +71,9 @@ async function loadMultivariate(env) {
   env.pending.find(row => row.url.includes('/evaluation')).respond(frozenEvaluation());
   env.pending.find(row => row.url.includes('/inputs')).respond(input()); await loading;
   const all = descendants(env.get('multivariateForecastHost'));
-  return { feature, all, form: all.find(row => row.tagName === 'form'), month: all.find(row => row.name === 'target_month'), mode: all.find(row => row.name === 'input_mode'), station: all.find(row => row.name === 'station'), submit: all.find(row => row.type === 'submit'), output: all.find(row => row.className === 'mv-result'), status: all.find(row => row.className === 'subtle mv-status') };
+  const writeKey = all.find(row => row.name === 'forecast_write_key');
+  writeKey.value = 'test-write-key';
+  return { feature, all, writeKey, persistRun: all.find(row => row.type === 'checkbox'), form: all.find(row => row.tagName === 'form'), month: all.find(row => row.name === 'target_month'), mode: all.find(row => row.name === 'input_mode'), station: all.find(row => row.name === 'station'), submit: all.find(row => row.type === 'submit'), output: all.find(row => row.className === 'mv-result'), status: all.find(row => row.className === 'subtle mv-status') };
 }
 
 test('multivariate requests frozen-label evidence and renders baseline availability instead of full-period direct seasonal scores', async () => {
@@ -225,6 +228,7 @@ test('saved prediction cannot replace a newer form candidate and history rejects
   const env = environment(), host = new Element(), saved = [];
   const feature = createPredictionHistory(host, { onSaved: value => saved.push(value) });
   const all = descendants(host), save = all.find(row => row.textContent === 'Chạy và lưu dự báo vào PostgreSQL');
+  all.find(row => row.name === 'forecast_write_key').value = 'test-write-key';
   feature.setCandidate({ station: 'MyTho', target_month: '2026-11', input_mode: 'ARCHIVE' });
   const saving = save.emit('click'); feature.setCandidate(null);
   env.pending.at(-1).respond({ prediction: prediction(), saved_at: '2026-10-28' }); await saving;
@@ -235,6 +239,93 @@ test('saved prediction cannot replace a newer form candidate and history rejects
   env.pending.at(-1).respond({ items: [{ prediction: prediction() }], total: 1, offset: 0 }); await loading; await flush();
   assert.match(host.textContent, /không khớp bộ lọc/);
   assert.equal(descendants(host).some(row => row.textContent === 'Bản đồ'), false);
+});
+
+test('history save requires a password key and keeps it out of history reads, exports and new pages', async () => {
+  const env = environment(), host = new Element();
+  const feature = createPredictionHistory(host), all = descendants(host);
+  const key = all.find(row => row.name === 'forecast_write_key');
+  const save = all.find(row => row.textContent === 'Chạy và lưu dự báo vào PostgreSQL');
+  feature.setCandidate({ station: 'MyTho', target_month: '2026-11', input_mode: 'ARCHIVE' });
+  assert.equal(key.type, 'password'); assert.equal(key.autocomplete, 'off');
+  assert.equal(key.value, '');
+  for (const value of ['', '   ']) {
+    key.value = value; await save.click();
+    assert.equal(env.pending.length, 0); assert.equal(key.focused, true);
+    assert.match(host.textContent, /Nhập API key lưu dự báo/);
+  }
+  key.value = 'private-history-test-key';
+  const saving = save.click(), request = env.pending.at(-1);
+  assert.equal(request.options.headers['X-API-Key'], key.value);
+  assert.equal(request.options.method, 'POST');
+  assert.doesNotMatch(request.url + request.options.body, /private-history-test-key|forecast_write_key/);
+  request.respond({ prediction: prediction(), saved_at: '2026-11-16' }); await saving;
+  const history = env.pending.at(-1);
+  assert.equal(history.options.method, 'GET');
+  assert.equal(history.options.headers['X-API-Key'], undefined);
+  history.respond({ items: [], total: 0, offset: 0 }); await flush();
+  await all.find(row => row.textContent === 'Tải bảng so sánh CSV').click();
+  assert.doesNotMatch(await env.downloads.at(-1).text(), /private-history-test-key|forecast_write_key/);
+  const freshHost = new Element(); createPredictionHistory(freshHost);
+  assert.equal(descendants(freshHost).find(row => row.name === 'forecast_write_key').value, '');
+});
+
+test('both forecast save actions use one page key while preview requests omit it', async () => {
+  const env = environment(), ui = await loadMultivariate(env);
+  assert.equal(ui.all.filter(row => row.name === 'forecast_write_key').length, 1);
+  ui.writeKey.value = 'shared-forecast-test-key';
+  let submission = ui.form.emit('submit'), request = env.pending.at(-1);
+  assert.equal(request.url, '/api/v1/workspace/multivariate/history');
+  assert.equal(request.options.headers['X-API-Key'], ui.writeKey.value);
+  assert.doesNotMatch(request.url + request.options.body, /shared-forecast-test-key|forecast_write_key/);
+  request.respond({ prediction: prediction(), saved_at: '2026-11-16' }); await submission;
+  ui.persistRun.checked = false;
+  submission = ui.form.emit('submit'); request = env.pending.at(-1);
+  assert.equal(request.url, '/api/v1/workspace/multivariate/predict');
+  assert.equal(request.options.headers['X-API-Key'], undefined);
+  request.respond(prediction()); await submission;
+  const save = ui.all.find(row => row.textContent === 'Chạy và lưu dự báo vào PostgreSQL');
+  const saving = save.click(); request = env.pending.at(-1);
+  assert.equal(request.options.headers['X-API-Key'], ui.writeKey.value);
+  request.respond({ prediction: prediction(), saved_at: '2026-11-16' }); await saving;
+  assert.equal(env.pending.at(-1).options.headers['X-API-Key'], undefined);
+  env.pending.at(-1).respond({ items: [], total: 0, offset: 0 }); await flush();
+});
+
+test('missing key blocks persisted runs without clearing the result and preview still works', async () => {
+  const env = environment(), ui = await loadMultivariate(env);
+  ui.persistRun.checked = false; ui.writeKey.value = '';
+  const submission = ui.form.emit('submit');
+  assert.equal(env.pending.at(-1).url, '/api/v1/workspace/multivariate/predict');
+  env.pending.at(-1).respond(prediction()); await submission;
+  const previous = ui.output.textContent, requestCount = env.pending.length;
+  ui.persistRun.checked = true;
+  await ui.form.emit('submit');
+  assert.equal(env.pending.length, requestCount);
+  assert.equal(ui.output.textContent, previous);
+  assert.match(ui.status.textContent, /Nhập API key lưu dự báo/);
+  assert.equal(ui.writeKey.focused, true); assert.equal(ui.submit.disabled, false);
+});
+
+test('wrong forecast keys report API errors and allow retry with a corrected key', async () => {
+  const env = environment(), ui = await loadMultivariate(env);
+  const detail = 'API key ghi dữ liệu không hợp lệ hoặc còn thiếu.';
+  let submission = ui.form.emit('submit');
+  env.pending.at(-1).respond({ detail }, false, 401); await submission;
+  assert.equal(ui.output.children.length, 0); assert.equal(ui.submit.disabled, false);
+  assert.match(ui.status.textContent, /API key ghi dữ liệu không hợp lệ/);
+  assert.equal(ui.all.find(row => row.textContent === 'Tải dự báo JSON ↓').disabled, true);
+  ui.persistRun.checked = false;
+  submission = ui.form.emit('submit'); env.pending.at(-1).respond(prediction()); await submission;
+  const save = ui.all.find(row => row.textContent === 'Chạy và lưu dự báo vào PostgreSQL');
+  let saving = save.click(); env.pending.at(-1).respond({ detail }, false, 401); await saving;
+  assert.equal(save.disabled, false);
+  assert.match(env.get('multivariateForecastHost').textContent, /Chưa lưu được: API key ghi dữ liệu/);
+  ui.writeKey.value = 'corrected-test-key';
+  saving = save.click(); assert.equal(env.pending.at(-1).options.headers['X-API-Key'], 'corrected-test-key');
+  env.pending.at(-1).respond({ prediction: prediction(), saved_at: '2026-11-16' }); await saving;
+  env.pending.at(-1).respond({ items: [], total: 0, offset: 0 }); await flush();
+  assert.match(env.get('multivariateForecastHost').textContent, /Đã lưu lượt máy chủ tạo/);
 });
 
 test('weather estimates reject wrong station/unit and ignore a late response after switching stations', async () => {
