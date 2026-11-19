@@ -1,11 +1,11 @@
 # Biên bản bàn giao WebGIS Đồng Tháp
 
-**Cập nhật trạng thái Git và migration 38:** 18/11/2026 (giờ Việt Nam). **Dự án chính:** `D:\Study\TLCN`. Các phần nghiên cứu bên dưới ghi lại mốc cũ; đọc trạng thái Git và mã hiện tại trước khi sửa.
+**Cập nhật trạng thái Git:** 19/11/2026 (giờ Việt Nam). **Dự án chính:** `D:\Study\TLCN`. Các phần nghiên cứu bên dưới ghi lại mốc cũ; đọc trạng thái Git và mã hiện tại trước khi sửa.
 
 ## 1. Việc đang làm và phiên bản chính thức
 
 - Ứng dụng là WebGIS quan trắc EC, dự báo EC theo tháng tại trạm và rà soát hồ sơ cống. Trang chính là `http://127.0.0.1:8000/workspace.html` khi chạy tại máy chủ cục bộ.
-- Checkout `D:\Study\TLCN` hiện ở nhánh `refactor`; mốc đã kiểm tra và push là `feaf5dc` trên `origin/refactor`. Trước đây checkout này từng ở `TinBranch` và commit `d124473` đã được đẩy lên `temp`; đó là lịch sử ngày 12/11, không mô tả HEAD hiện tại. Worktree `C:\Users\QUYNH\.codex\worktrees\tinbranch-map-ui\TLCN` ở nhánh riêng `codex/tinbranch-map-ui`.
+- Tại lần tích hợp ngày 19/11, checkout `D:\Study\TLCN` ở `TinBranch` (`990f6e5`). Nhánh `refactor` local là đích nhận TinBranch; `origin/refactor` ở `feaf5dc` trước lần tích hợp. Luôn kiểm tra trạng thái Git trước khi chạy vì checkout chính có thể đổi nhánh. Worktree `C:\Users\QUYNH\.codex\worktrees\tinbranch-map-ui\TLCN` ở nhánh riêng `codex/tinbranch-map-ui`.
 - Tệp chưa theo dõi `outputs/ec_error_reduction_20261108/experiment_ec_error_reduction.original.py` và các file untracked khác thuộc công việc riêng; đừng tự đưa vào Git hoặc xóa. `.claude/`, `.security/`, `.venv/`, `.venv-api/`, `.vscode/`, `.env`, `frontend/node_modules/` và `frontend/dist/` được `.gitignore` loại khỏi Git.
 
 ## 2. Chạy bản đúng và kiểm tra nhanh
@@ -152,7 +152,7 @@ Tất cả `outputs/` nêu trên là bằng chứng tái lập, không phải r�
 
 ## 12. Quy trình làm việc cho phiên Claude/Codex sau
 
-1. Bắt đầu tại `D:\Study\TLCN`, đọc tài liệu này, `README.md`, `docs/README.md`; chạy `git status --short --branch` và `git log -3 --oneline --decorate`. Ngày 18/11/2026, checkout này ở nhánh `refactor`, HEAD `feaf5dc`, đã push lên `origin/refactor`; [CI run 44324276115](https://github.com/12hqwwo/saltwater-intrusion-warning/actions/runs/44324276115) đạt ở chính commit đó, gồm test Python/PostGIS, frontend và Docker smoke. Mốc `beb9b8d`/`TinBranch` ngày 12/11 là lịch sử, không phải HEAD hiện tại. Vẫn có nhiều file untracked của công việc khác, gồm `outputs/ec_error_reduction_20261108/experiment_ec_error_reduction.original.py`; không tự commit hoặc xóa. Trạng thái này là ảnh chụp, luôn kiểm tra lại.
+1. Bắt đầu tại `D:\Study\TLCN`, đọc tài liệu này, `README.md`, `docs/README.md`; chạy `git status --short --branch` và `git log -3 --oneline --decorate`. Ngày 19/11/2026 checkout chính ở `TinBranch`; nhánh `refactor` local nhận tích hợp riêng. [CI run 44324276115](https://github.com/12hqwwo/saltwater-intrusion-warning/actions/runs/44324276115) chỉ xác nhận commit cũ `feaf5dc`, không xác nhận merge mới. Luôn kiểm tra lại các file untracked của công việc khác trước khi sửa.
 2. Nếu cần sửa giao diện, mở `frontend/workspace.html` và `frontend/src/app/workspace.js` trước, rồi file feature trong mục 9. Đọc test liên quan trước khi đổi. Sau khi sửa, build `npm.cmd --prefix frontend run build`; chạy test Node sát chức năng. Để xem bản mới ở cổng 8000, khởi động lại bằng `.\start.ps1` từ **checkout chính** và xem tab/nguồn/tháng thực tế.
 3. Nếu cần sửa model hoặc dữ liệu, kiểm `data/models/multivariate_registry.json`, manifest run, `backend/repositories/{multivariate_inputs,hydrology_inputs}.py`, `backend/domain/multivariate_ec.py`, các script/test ở mục 10–11. Ghi rõ giả định ngày phát hành và thời gian công bố của từng nguồn. Chỉ so các mô hình cùng cohort và giao thức; không ghi đè artifact chính bằng thí nghiệm. Nếu muốn đổi model phục vụ, tạo version/artifact/manifest mới và kiểm hash, test, hồi cứu cùng giao thức rồi mới đổi registry có chủ đích.
 4. Nếu cần sửa bản đồ/cống, giữ ba loại điểm (MRC, RIA2, cống), màu trước cống và đoạn sau cống chưa có EC. Chạy `tests/observations_map_gates.test.mjs`, `tests/gated_waterways.test.mjs`, `tests/river_interpolation.test.mjs`, `tests/test_spatial_simulation.py`, `tests/gate_dossiers.test.mjs` tùy phạm vi. Nếu thay màn hình, kiểm cả thao tác bàn phím, chú giải và không che bản đồ.

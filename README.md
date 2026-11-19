@@ -13,18 +13,23 @@ Từ gốc repository, dùng môi trường Python hiện có. Chuẩn bị depe
 npm.cmd --prefix frontend ci
 .venv\Scripts\python.exe scripts/apply_dss_storage.py --apply
 .venv\Scripts\python.exe -m tools.security_setup roles --apply
+.venv\Scripts\python.exe -m tools.security_setup auth-secret --apply
 .\start.ps1
 ```
 
+Thiết lập tài khoản và các migration 36–38 theo [hướng dẫn chạy](docs/run_guide.md) trước khi dùng chức năng cần đăng nhập. Các lệnh `--apply` ghi vào PostgreSQL/cấu hình cục bộ.
+
 Mở http://127.0.0.1:8000/ để vào trang Tổng quan mới; `/workspace.html` mở cùng không gian làm việc. `start.ps1` build giao diện rồi chạy một máy chủ phục vụ cả API và web; Ctrl+C để dừng. Mặc định dùng PostgreSQL; dùng `-Mode snapshot` để xem bộ tệp, `-Port 8016` để đổi cổng hoặc `-SkipBuild` khi đã có bản build mới nhất.
 
-Trong checkout chính `D:\Study\TLCN`, dùng `start.ps1` để chạy bản `TinBranch` hiện tại. `start-tinbranch.ps1` chỉ dành cho trường hợp chạy một worktree khác với cấu hình của checkout chính; không cần nó khi đang ở chính `D:\Study\TLCN`.
+Trong checkout chính `D:\Study\TLCN`, dùng `start.ps1` để chạy mã của nhánh đang được checkout (`git status --short --branch` cho biết nhánh). `start-tinbranch.ps1` dành cho trường hợp chạy một worktree khác với cấu hình của checkout chính.
 
 `snapshot` đọc tệp có nguồn và kiểm tra checksum. `postgres` đọc trạm và EC trực tiếp từ các bảng `public` hiện có, mỗi trạm chọn một phiên bản RAW_EC; lỗi DB được báo rõ. Lịch sử PostgreSQL đã nằm ngay trong mục Quan trắc; `/index.html` chuyển tới trang Tổng quan. Thí nghiệm, danh mục cống, hồ sơ tiếp nhận và ước tính khí tượng đọc từ bộ tệp riêng; phần Tổng quan ghi rõ nguồn. Trang `/research.html` chuyển tới workspace.
 
 ## Luồng sử dụng
 
 Mục **Dự báo EC đa biến** chạy suy luận thật từ model đã lưu; không huấn luyện theo request và không lấy kết quả từ CSV ước tính cũ. Dùng ERA5 tháng `t−2` để dự báo EC tháng `t`; ví dụ tháng 11/2026 dùng khí tượng tháng 9/2026. Mô hình khí tượng không yêu cầu EC trễ mới để chạy. Chuỗi EC mới vẫn cần để đánh giá chất lượng dự báo ở giai đoạn hiện tại. [Chi tiết mô hình và cách cập nhật](docs/multivariate-forecast.md).
+
+Đăng nhập bằng tài khoản `FIELD_STAFF` hoặc `INSPECTOR` để chạy và lưu dự báo; giao diện dùng phiên Bearer cho thao tác ghi. API key cũ không cấp quyền người dùng. [Quy tắc bảo mật](docs/database-security.md).
 
 1. **Tổng quan:** xem phạm vi dữ liệu, số trạm và tình trạng nguồn; mở nhanh mô phỏng mùa khô 04/2024, mùa mưa 10/2022, ngưỡng mẫu sầu riêng hoặc công cụ dự báo. Nếu thiếu đúng tháng, dòng thời gian chọn tháng gần nhất và hiển thị tháng thực sự đang xem.
 2. **Quan trắc:** chọn trạm → lọc ngày → xem bản đồ, biểu đồ, nguồn → xuất CSV. Nhập ngưỡng EC hoặc chọn ví dụ từ danh mục PostgreSQL để đổi màu điểm và vẽ đường đối chiếu. Các ví dụ chưa được xác nhận là ngưỡng cây trồng/cấp nước. Tra cứu PostgreSQL có chọn nguồn, trạm, phiên bản, QA và phân trang ngay trong cùng mục.

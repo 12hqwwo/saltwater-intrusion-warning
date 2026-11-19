@@ -7,6 +7,9 @@ from backend.main import app
 from backend.db_security import assert_application_role
 from backend.repositories import dss_storage as dss_store
 from backend.repositories.dss_storage import write_connection, StorageDisabled
+from backend.auth.access_tokens import issue_access_token
+from backend.repositories import app_users
+from uuid import UUID
 
 
 class SecurityTests(unittest.TestCase):
@@ -32,6 +35,27 @@ class SecurityTests(unittest.TestCase):
                     '/api/v1/multivariate/history', '/api/v1/forecast-issues']:
             self.assertEqual(self.client.post(url, json={}).status_code, 401)
         self.assertEqual(self.client.get('/api/v1/workspace/summary').status_code, 200)
+
+    def test_write_key_does_not_replace_login(self):
+        with patch.dict(os.environ, WEBGIS_WRITE_API_KEY='test-key'):
+            for url in ['/api/v1/workspace/gate-drafts', '/api/v1/workspace/multivariate/history',
+                        '/api/v1/research/gate-drafts', '/api/v1/research/multivariate/history',
+                        '/api/v1/multivariate/history']:
+                with self.subTest(url=url):
+                    self.assertEqual(self.client.post(url, json={}).status_code, 401)
+                    self.assertEqual(self.client.post(url, json={}, headers={'X-API-Key': 'wrong'}).status_code, 401)
+                    expected = 404 if '/research/' in url else 401
+                    self.assertEqual(self.client.post(url, json={}, headers={'X-API-Key': 'test-key'}).status_code, expected)
+
+    def test_signed_user_can_write_without_api_key(self):
+        user = {'user_id': UUID('00000000-0000-0000-0000-000000000123'), 'username': 'staff',
+                'display_name': 'Cán bộ', 'role': 'FIELD_STAFF', 'is_active': True}
+        with patch.dict(os.environ, WEBGIS_WRITE_API_KEY='test-key', WEBGIS_AUTH_SECRET='test-secret-' * 5), \
+             patch.object(app_users, 'find_active_user_by_id', return_value=user):
+            token = issue_access_token(user)
+            headers = {'Authorization': f'Bearer {token}'}
+            self.assertEqual(self.client.post('/api/v1/workspace/gate-drafts', json={}, headers=headers).status_code, 422)
+            self.assertEqual(self.client.post('/api/v1/workspace/multivariate/history', json={}, headers=headers).status_code, 422)
 
     def test_cross_site_write_and_untrusted_hosts_denied(self):
         url = '/api/v1/workspace/gate-drafts'

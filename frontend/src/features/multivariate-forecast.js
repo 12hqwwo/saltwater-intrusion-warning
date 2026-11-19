@@ -400,7 +400,9 @@ export function createMultivariateForecast({ onStation, onPrediction, role = get
   form.addEventListener("submit", async event => {
     event.preventDefault();
     if (!form.reportValidity() || submit.disabled) return;
-    clearResult("Đang chạy mô hình dự báo đa biến…");
+    const persist = persistRun.checked;
+    if (persist && result) status.textContent = "Đang chạy mô hình và lưu dự báo…";
+    else clearResult("Đang chạy mô hình dự báo đa biến…");
     const req = predictionRequests.next();
     const payload = { station: station.value, target_month: month.value, input_mode: mode.value };
     if (mode.value === "MANUAL") {
@@ -416,7 +418,6 @@ export function createMultivariateForecast({ onStation, onPrediction, role = get
     busy = true;
     refreshButton();
     try {
-      const persist = persistRun.checked;
       const response = await api(persist ? '/multivariate/history' : '/multivariate/predict', { ...req, method: 'POST', body: payload, timeoutMs: 120_000 });
       const data = persist ? response.prediction : response;
       if (!req.isCurrent()) return;

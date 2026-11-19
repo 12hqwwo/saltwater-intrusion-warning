@@ -150,7 +150,7 @@ export function createPredictionHistory(host, { onSaved, role = getCurrentRole }
       saveStatus.textContent = ''; saveButton.disabled = true;
       previous.disabled = next.disabled = true;
     },
-    setCandidate(payload) { candidate = payload ? { ...payload } : null; candidateVersion++; saveButton.disabled = saving || !candidate; },
+    setCandidate(payload) { candidate = payload ? { ...payload } : null; candidateVersion++; saveButton.disabled = saving || !candidate || role() === ROLE_PUBLIC; },
     setStations(items) {
       knownStations = items;
       const selected = station.value;

@@ -1,3 +1,4 @@
+import hmac
 import os
 import time
 from contextvars import ContextVar
@@ -18,6 +19,10 @@ _RATE_LIMIT_WINDOW_SECONDS = max(1, int(os.getenv('WEBGIS_AUTH_RATE_LIMIT_WINDOW
 _RATE_LIMIT_MAX_ATTEMPTS = max(1, int(os.getenv('WEBGIS_AUTH_RATE_LIMIT_MAX_ATTEMPTS', '10')))
 _RATE_LIMIT_USERNAME_MAX_ATTEMPTS = max(1, int(os.getenv('WEBGIS_AUTH_USERNAME_RATE_LIMIT_MAX_ATTEMPTS', '5')))
 _RATE_LIMIT_MAX_KEYS = 10_000
+WRITE_PATHS = {'/api/v1/workspace/gate-drafts', '/api/v1/workspace/multivariate/history',
+               '/api/v1/research/gate-drafts', '/api/v1/research/multivariate/history',
+               '/api/v1/multivariate/history', '/api/v1/forecast-issues',
+               '/api/v1/field-measurements'}
 
 
 def enabled():
@@ -86,6 +91,12 @@ class SecurityMiddleware(BaseHTTPMiddleware):
                         application_actor = f"USER:{claims['username']}"
                 except (HTTPException, psycopg.Error):
                     pass
+            writing = request.method == 'POST' and request.url.path.rstrip('/') in WRITE_PATHS
+            key = os.getenv('WEBGIS_WRITE_API_KEY', '')
+            if writing and key and application_actor == 'LOCAL_APPLICATION':
+                if not hmac.compare_digest(request.headers.get('x-api-key', '').encode(), key.encode()):
+                    raise HTTPException(401, 'API key ghi dữ liệu không hợp lệ hoặc còn thiếu.')
+                application_actor = 'API_KEY_CLIENT'
             marker = actor.set(application_actor)
             try:
                 response = await call_next(request)
